@@ -458,10 +458,39 @@
        SECTION 6: SERVICES & PRICING
        ======================================== */
     .services { background: var(--warm-white); }
+    .services-self-guided { background: var(--sand); }
+    .pricing-subsection {
+      margin-bottom: 0;
+    }
+    .pricing-subsection-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .pricing-subsection-header h3 {
+      font-family: var(--heading-font);
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+    .pricing-subsection-header p {
+      color: #666;
+      font-size: 16px;
+    }
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
+    }
+    .pricing-grid.single-card {
+      grid-template-columns: 1fr;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+    .programs-note {
+      text-align: center;
+      margin-top: 24px;
+      color: #999;
+      font-size: 14px;
+      font-style: italic;
     }
     .pricing-card {
       background: var(--white);
@@ -707,6 +736,7 @@
        ======================================== */
     @media (max-width: 1024px) {
       .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid.single-card { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
       :root {
@@ -785,6 +815,7 @@
     .cards-grid[data-lang="es"],
     .steps-grid[data-lang="es"],
     .pricing-grid[data-lang="es"],
+    .pricing-subsection[data-lang="es"],
     .inquiry-grid[data-lang="es"],
     .footer-grid[data-lang="es"],
     .ig-grid[data-lang="es"] { display: none; }
@@ -795,10 +826,12 @@
     body.lang-es .inquiry-grid[data-lang="es"],
     body.lang-es .footer-grid[data-lang="es"],
     body.lang-es .ig-grid[data-lang="es"] { display: grid; }
+    body.lang-es .pricing-subsection[data-lang="es"] { display: block; }
     body.lang-es .credentials-grid[data-lang="en"],
     body.lang-es .cards-grid[data-lang="en"],
     body.lang-es .steps-grid[data-lang="en"],
     body.lang-es .pricing-grid[data-lang="en"],
+    body.lang-es .pricing-subsection[data-lang="en"],
     body.lang-es .inquiry-grid[data-lang="en"],
     body.lang-es .footer-grid[data-lang="en"],
     body.lang-es .ig-grid[data-lang="en"] { display: none; }
@@ -810,6 +843,10 @@
     .free-quiz-bar[data-lang="es"] { display: none; }
     body.lang-es .free-quiz-bar[data-lang="es"] { display: block; }
     body.lang-es .free-quiz-bar[data-lang="en"] { display: none; }
+    /* programs note */
+    .programs-note[data-lang="es"] { display: none; }
+    body.lang-es .programs-note[data-lang="es"] { display: block; }
+    body.lang-es .programs-note[data-lang="en"] { display: none; }
 
     /* ========================================
        CSS SCROLL-DRIVEN ANIMATIONS (progressive enhancement)
@@ -1029,7 +1066,7 @@
     </div>
   </section>
 
-  <!-- ============ SECTION 6: SERVICES & PRICING ============ -->
+  <!-- ============ SECTION 6A: SERVICES & PRICING - TRAIN WITH LAURA ============ -->
   <section class="services section-pad">
     <div class="container">
       <div class="section-header">
@@ -1039,7 +1076,13 @@
         <p class="subtitle" data-lang="es">Coaching premium, precios transparentes. Sin contratos, sin compromisos.</p>
       </div>
 
-      <!-- EN pricing -->
+      <!-- EN: Train With Laura -->
+      <div class="pricing-subsection" data-lang="en">
+        <div class="pricing-subsection-header">
+          <h3>Train With Laura</h3>
+          <p>Premium one-on-one coaching, in person in Key West</p>
+        </div>
+      </div>
       <div class="pricing-grid" data-lang="en">
         <div class="pricing-card highlighted">
           <span class="badge">Most Popular</span>
@@ -1060,15 +1103,15 @@
           <p class="details">Save $160. Eight private sessions. Maximum results. Priority scheduling.</p>
           <a href="#inquiry" class="btn btn-outline-dark btn-full">Get Started</a>
         </div>
-        <div class="pricing-card">
-          <h3>Strong Lean Athletic</h3>
-          <div class="price">$149</div>
-          <p class="details">12-week online program. Video-guided workouts, progressive programming. Train anywhere.</p>
-          <a href="#" class="btn btn-outline-dark btn-full">Learn More</a>
-        </div>
       </div>
 
-      <!-- ES pricing -->
+      <!-- ES: Entrena con Laura -->
+      <div class="pricing-subsection" data-lang="es">
+        <div class="pricing-subsection-header">
+          <h3>Entrena con Laura</h3>
+          <p>Coaching premium uno a uno, en persona en Key West</p>
+        </div>
+      </div>
       <div class="pricing-grid" data-lang="es">
         <div class="pricing-card highlighted">
           <span class="badge">M&aacute;s Popular</span>
@@ -1089,13 +1132,46 @@
           <p class="details">Ahorra $160. Ocho sesiones privadas. Resultados m&aacute;ximos. Programaci&oacute;n prioritaria.</p>
           <a href="#inquiry" class="btn btn-outline-dark btn-full">Comenzar</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 6B: SELF-GUIDED PROGRAMS ============ -->
+  <section class="services-self-guided section-pad">
+    <div class="container">
+      <!-- EN: Self-Guided Programs -->
+      <div class="pricing-subsection" data-lang="en">
+        <div class="pricing-subsection-header">
+          <h3>Self-Guided Programs</h3>
+          <p>Expert-designed programs you can do anywhere, at your own pace</p>
+        </div>
+      </div>
+      <div class="pricing-grid single-card" data-lang="en">
         <div class="pricing-card">
           <h3>Strong Lean Athletic</h3>
           <div class="price">$149</div>
-          <p class="details">Programa en l&iacute;nea de 12 semanas. Entrenamientos guiados por video, programaci&oacute;n progresiva. Entrena donde quieras.</p>
+          <p class="details">12-week online program. Video-guided workouts, progressive programming. Train anywhere. No live coaching required.</p>
+          <a href="#" class="btn btn-outline-dark btn-full">Learn More</a>
+        </div>
+      </div>
+      <p class="programs-note" data-lang="en">More programs coming soon</p>
+
+      <!-- ES: Programas Autoguiados -->
+      <div class="pricing-subsection" data-lang="es">
+        <div class="pricing-subsection-header">
+          <h3>Programas Autoguiados</h3>
+          <p>Programas dise&ntilde;ados por expertos que puedes hacer donde quieras, a tu ritmo</p>
+        </div>
+      </div>
+      <div class="pricing-grid single-card" data-lang="es">
+        <div class="pricing-card">
+          <h3>Strong Lean Athletic</h3>
+          <div class="price">$149</div>
+          <p class="details">Programa en l&iacute;nea de 12 semanas. Entrenamientos guiados por video, programaci&oacute;n progresiva. Entrena donde quieras. Sin coaching en vivo requerido.</p>
           <a href="#" class="btn btn-outline-dark btn-full">M&aacute;s Informaci&oacute;n</a>
         </div>
       </div>
+      <p class="programs-note" data-lang="es">M&aacute;s programas pr&oacute;ximamente</p>
 
       <!-- Free quiz -->
       <div class="free-quiz-bar" data-lang="en">

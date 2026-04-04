@@ -93,6 +93,7 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 | Client | Type | Schedule | Location |
 |--------|------|----------|----------|
 | Carol Whiteman | In-person kettlebell | Mon/Wed/Fri 9:00-10:00 AM | Carol's House, Key West |
+| Emma | In-person | Tue 9:00-10:00 AM | Key West |
 | Tony | Virtual coaching | Tue 11:00-11:30 AM | Virtual |
 | Gina | Virtual coaching | Tue 9:00-9:30 PM | Virtual |
 
@@ -157,7 +158,7 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 | Instagram ID | 17841403861596917 |
 | IG Handle | @coachlauratreto |
 | Permissions | instagram_basic, instagram_content_publish, instagram_manage_insights, instagram_manage_comments, instagram_manage_messages, pages_manage_posts, pages_read_engagement, + more |
-| Token Status | Short-lived (in .credentials/api_keys.json). Need App Secret exchange for long-lived. |
+| Token Status | Permanent page token (in .credentials/api_keys.json). Exchanged 2026-04-04. |
 
 ---
 

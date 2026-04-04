@@ -4,19 +4,28 @@
 
 | # | Task | Priority | Due | Owner | Status |
 |---|------|----------|-----|-------|--------|
-| 1 | Swap website placeholder images with real photos from shoot | high | Apr 5 | Max | todo |
-| 2 | Build Movement Readiness quiz (Tally) | high | Apr 14 | Kai | todo |
-| 3 | Set up ConvertKit email capture + 5-email nurture sequence | high | Apr 14 | Kai | todo |
-| 4 | Set up ManyChat + Claude integration (DM auto-responses) | medium | Apr 7 | Kai | todo |
-| 5 | Connect custom domain SSL (verify HTTPS on lauratreto.com) | medium | Apr 5 | Kai | todo |
-| 6 | Set up GA4 property for lauratreto.com | medium | Apr 15 | Kai | todo |
-| 7 | Exchange Meta short-lived token for long-lived token | medium | -- | Alex | todo |
-| 8 | Sign up for Opus Clip Pro ($29/mo) | medium | Apr 5 | Alex | todo |
+| 1 | Deploy quiz to Netlify + link from website | critical | Apr 5 | Kai | in progress |
+| 2 | Restructure website pricing (1-on-1 vs Products) | critical | Apr 6 | Max/Lux | in progress |
+| 3 | Update Trainerize links on website | critical | Apr 6 | Max | todo |
+| 4 | Swap website placeholder images (after shoot) | high | Apr 5 | Max | todo |
+| 5 | Extend Saturday batch to 5 hours in calendar | high | Apr 5 | Alpha | todo |
+| 6 | Add Emma (Tue 9-10 AM) to schedule/docs | high | Apr 5 | Alpha | todo |
+| 7 | Add bilingual content guidelines | high | Apr 10 | Alpha/Max | todo |
+| 8 | Build AI infographic content pipeline | high | Apr 10 | Kai | todo |
+| 9 | Review Laura's ConvertKit setup | medium | TBD | Alpha | waiting |
+| 10 | Review Laura's quiz version | medium | TBD | Alpha | waiting |
+| 11 | Design group coaching product | medium | Apr 25 | Alpha/Laura | todo |
+| 12 | Salsa Sunset Event logistics (talk to Derek) | medium | Apr 28 | Alex | todo |
+| 13 | Plan paid ads strategy (Month 2) | medium | Apr 20 | Alpha | todo |
+| 14 | Set up GA4 for lauratreto.com | low | Apr 15 | Kai | todo |
+| 15 | Verify HTTPS/SSL on lauratreto.com | low | Apr 5 | Kai | todo |
 
 ## Completed Tasks
 | # | Task | Completed |
 |---|------|-----------|
-| -- | Website overhaul (static HTML/CSS/JS, deployed to Netlify at lauratreto.netlify.app + lauratreto.com, all 9 sections, bilingual EN/ES, responsive, animated) | 2026-04-04 |
+| -- | Website built + deployed to Netlify (lauratreto.com) | 2026-04-04 |
+| -- | Meta token exchanged (permanent page token) | 2026-04-04 |
+| -- | DNS pointed from Squarespace to Netlify | 2026-04-04 |
 | -- | Strategic recommendations document | 2026-04-02 |
 | -- | Connect Meta Business Suite | 2026-04-02 |
 | -- | Regenerate Meta token with IG insights | 2026-04-02 |
