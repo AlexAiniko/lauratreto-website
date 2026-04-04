@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movement Readiness Score | Laura Treto</title>
+<meta name="description" content="Take the free 2-minute Movement Readiness Quiz. Discover your score and get personalized recommendations from Laura Treto, former Acosta Danza member and NASM-certified trainer.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+  :root {
+    --sunset-deep: #1a1a2e;
+    --sunset-navy: #16213e;
+    --sunset-coral: #e94560;
+    --sunset-orange: #f5764a;
+    --sunset-gold: #f5a623;
+    --sunset-peach: #fdd7aa;
+    --sunset-warm: #fff5eb;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --text-light: #8888a0;
+    --white: #ffffff;
+    --green: #2ecc71;
+    --yellow: #f5a623;
+    --orange-tier: #e67e22;
+    --red-tier: #e74c3c;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(26, 26, 46, 0.08);
+    --shadow-lg: 0 12px 48px rgba(26, 26, 46, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--sunset-warm);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .quiz-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  .quiz-header {
+    text-align: center;
+    padding: 32px 0 24px;
+  }
+  .quiz-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--sunset-deep);
+    line-height: 1.2;
+  }
+  .quiz-header p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-wrapper {
+    margin-bottom: 32px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-light);
+  }
+  .progress-track {
+    height: 6px;
+    background: rgba(26, 26, 46, 0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sunset-coral), var(--sunset-orange), var(--sunset-gold));
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    box-shadow: var(--shadow);
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    animation: fadeUp 0.4s ease;
+  }
+  .question-card.active { display: flex; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-number {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sunset-coral);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--sunset-deep);
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
+
+  /* ── Answer Options ── */
+  .options-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid rgba(26, 26, 46, 0.08);
+    border-radius: 12px;
+    background: var(--white);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    line-height: 1.4;
+  }
+  .option-btn:hover {
+    border-color: var(--sunset-coral);
+    background: rgba(233, 69, 96, 0.03);
+  }
+  .option-btn.selected {
+    border-color: var(--sunset-coral);
+    background: rgba(233, 69, 96, 0.06);
+  }
+  .option-radio {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 50%;
+    border: 2px solid rgba(26, 26, 46, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .option-btn.selected .option-radio {
+    border-color: var(--sunset-coral);
+    background: var(--sunset-coral);
+  }
+  .option-btn.selected .option-radio::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--white);
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 28px;
+    gap: 12px;
+  }
+  .btn {
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+  .btn-back {
+    background: transparent;
+    color: var(--text-light);
+  }
+  .btn-back:hover { color: var(--text-primary); }
+  .btn-next {
+    background: linear-gradient(135deg, var(--sunset-coral), var(--sunset-orange));
+    color: var(--white);
+    margin-left: auto;
+    box-shadow: 0 4px 16px rgba(233, 69, 96, 0.3);
+  }
+  .btn-next:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+  }
+  .btn-next:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ── Results Page ── */
+  .results-page {
+    display: none;
+    flex-direction: column;
+    gap: 28px;
+    animation: fadeUp 0.5s ease;
+  }
+  .results-page.active { display: flex; }
+
+  .score-display {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 40px 28px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+  .score-label-top {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
+  .score-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .score-tier-label {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  /* Arc meter */
+  .score-meter {
+    width: 200px;
+    height: 110px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+  .score-meter svg { width: 100%; height: 100%; }
+  .meter-bg {
+    fill: none;
+    stroke: rgba(26, 26, 46, 0.06);
+    stroke-width: 12;
+    stroke-linecap: round;
+  }
+  .meter-fill {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .score-description {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Recommendations */
+  .recs-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+  }
+  .recs-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--sunset-deep);
+  }
+  .rec-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(26, 26, 46, 0.05);
+  }
+  .rec-item:last-child { border-bottom: none; }
+  .rec-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .rec-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .rec-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* CTA Cards */
+  .cta-card {
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .cta-primary {
+    background: linear-gradient(135deg, var(--sunset-deep), var(--sunset-navy));
+    color: var(--white);
+  }
+  .cta-primary h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .cta-primary p {
+    font-size: 14px;
+    line-height: 1.65;
+    opacity: 0.85;
+    margin-bottom: 20px;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 16px 36px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+  .cta-btn-coral {
+    background: linear-gradient(135deg, var(--sunset-coral), var(--sunset-orange));
+    color: var(--white);
+    box-shadow: 0 4px 16px rgba(233, 69, 96, 0.4);
+  }
+  .cta-btn-coral:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(233, 69, 96, 0.5);
+  }
+
+  .cta-secondary {
+    background: var(--white);
+  }
+  .cta-secondary h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--sunset-deep);
+    margin-bottom: 8px;
+  }
+  .cta-secondary p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+
+  .email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  .email-form input {
+    padding: 14px 18px;
+    border: 2px solid rgba(26, 26, 46, 0.08);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .email-form input:focus {
+    border-color: var(--sunset-coral);
+  }
+  .email-form button {
+    padding: 14px;
+    border-radius: 10px;
+    background: var(--sunset-deep);
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .email-form button:hover {
+    background: var(--sunset-navy);
+    transform: translateY(-1px);
+  }
+  .email-form .form-success {
+    display: none;
+    color: var(--green);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Credential bar */
+  .credential-bar {
+    text-align: center;
+    padding: 24px 0;
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.8;
+  }
+  .credential-bar span {
+    display: inline-block;
+    padding: 0 8px;
+  }
+  .credential-bar span:not(:last-child) {
+    border-right: 1px solid rgba(26, 26, 46, 0.12);
+  }
+
+  /* ── Intro Screen ── */
+  .intro-screen {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 40px 28px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    animation: fadeUp 0.4s ease;
+  }
+  .intro-screen.hidden { display: none; }
+  .intro-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+  .intro-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--sunset-deep);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .intro-screen p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 8px;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .intro-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 24px auto;
+    text-align: left;
+    max-width: 320px;
+  }
+  .intro-features li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .intro-features li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    border-radius: 50%;
+    background: var(--sunset-coral);
+  }
+  .intro-start {
+    margin-top: 28px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .quiz-container { padding: 16px 16px 32px; }
+    .quiz-header h1 { font-size: 24px; }
+    .question-card { padding: 24px 20px; }
+    .question-text { font-size: 19px; }
+    .option-btn { padding: 14px 16px; font-size: 14px; }
+    .score-number { font-size: 64px; }
+    .cta-card { padding: 24px 20px; }
+    .credential-bar span { display: block; border-right: none !important; padding: 2px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+
+  <!-- Header -->
+  <header class="quiz-header">
+    <h1>Movement Readiness Score</h1>
+    <p>A 2-minute self-assessment by Laura Treto</p>
+  </header>
+
+  <!-- Progress -->
+  <div class="progress-wrapper" id="progressWrapper" style="display:none;">
+    <div class="progress-meta">
+      <span id="progressLabel">Question 1 of 7</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Intro Screen -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-icon">&#x1F9D8;</div>
+    <h2>How ready is your body to move?</h2>
+    <p>Answer 7 quick questions. Get your personalized Movement Readiness Score and find out exactly where your body needs attention.</p>
+    <ul class="intro-features">
+      <li>Takes under 2 minutes</li>
+      <li>No equipment needed</li>
+      <li>Personalized recommendations</li>
+      <li>100% free</li>
+    </ul>
+    <button class="btn btn-next intro-start" onclick="startQuiz()">Take the Quiz</button>
+  </div>
+
+  <!-- Questions -->
+  <div class="question-card" id="q0">
+    <div class="question-number">Question 1 of 7</div>
+    <div class="question-text">How would you rate your overall mobility?</div>
+    <ul class="options-list">
+      <li><button class="option-btn" data-q="0" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>I move freely with no restrictions</button></li>
+      <li><button class="option-btn" data-q="0" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Some areas feel tight</button></li>
+      <li><button class="option-btn" data-q="0" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>I feel stiff most of the time</button></li>
+      <li><button class="option-btn" data-q="0" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>I avoid certain movements because of discomfort</button></li>
+    </ul>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-next" id="next0" disabled onclick="goNext()">Next</button>
+    </div>
+  </div>
+
+  <div class="question-card" id="q1">
+    <div class="question-number">Question 2 of 7</div>
+    <div class="question-text">Can you stand on one leg for 30 seconds without wobbling?</div>
+    <ul class="options-list">
+      <li><button class="option-btn" data-q="1" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Easily, both sides</button></li>
+      <li><button class="option-btn" data-q="1" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>One side yes, one side no</button></li>
+      <li><button class="option-btn" data-q="1" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>I can for about 10-15 seconds</button></li>
+      <li><button class="option-btn" data-q="1" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>I need to hold onto something</button></li>
+    </ul>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-next" id="next1" disabled onclick="goNext()">Next</button>
+    </div>
+  </div>
+
+  <div class="question-card" id="q2">
+    <div class="question-number">Question 3 of 7</div>
+    <div class="question-text">How often do you experience joint stiffness when waking up?</div>
+    <ul class="options-list">
+      <li><button class="option-btn" data-q="2" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Never</button></li>
+      <li><button class="option-btn" data-q="2" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Occasionally, goes away quickly</button></li>
+      <li><button class="option-btn" data-q="2" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Most mornings</button></li>
+      <li><button class="option-btn" data-q="2" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Every day, takes a while to loosen up</button></li>
+    </ul>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-next" id="next2" disabled onclick="goNext()">Next</button>
+    </div>
+  </div>
+
+  <div class="question-card" id="q3">
+    <div class="question-number">Question 4 of 7</div>
+    <div class="question-text">Can you get up from the floor without using your hands?</div>
+    <ul class="options-list">
+      <li><button class="option-btn" data-q="3" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Easily</button></li>
+      <li><button class="option-btn" data-q="3" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>With some effort</button></li>
+      <li><button class="option-btn" data-q="3" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Only with support</button></li>
+      <li><button class="option-btn" data-q="3" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>I avoid getting on the floor</button></li>
+    </ul>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-next" id="next3" disabled onclick="goNext()">Next</button>
+    </div>
+  </div>
+
+  <div class="question-card" id="q4">
+    <div class="question-number">Question 5 of 7</div>
+    <div class="question-text">In the past month, has pain or discomfort stopped you from doing something you wanted to do?</div>
+    <ul class="options-list">
+      <li><button class="option-btn" data-q="4" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Never</button></li>
+      <li><button class="option-btn" data-q="4" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Once or twice</button></li>
+      <li><button class="option-btn" data-q="4" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Several times</button></li>
+      <li><button class="option-btn" data-q="4" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Regularly</button></li>
+    </ul>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-next" id="next4" disabled onclick="goNext()">Next</button>
+    </div>
+  </div>
+
+  <div class="question-card" id="q5">
+    <div class="question-number">Question 6 of 7</div>
+    <div class="question-text">How confident are you in your body during physical activity?</div>
+    <ul class="options-list">
+      <li><button class="option-btn" data-q="5" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Very confident</button></li>
+      <li><button class="option-btn" data-q="5" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Mostly confident but careful</button></li>
+      <li><button class="option-btn" data-q="5" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Cautious -- I worry about injury</button></li>
+      <li><button class="option-btn" data-q="5" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>I avoid most physical activity</button></li>
+    </ul>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-next" id="next5" disabled onclick="goNext()">Next</button>
+    </div>
+  </div>
+
+  <div class="question-card" id="q6">
+    <div class="question-number">Question 7 of 7</div>
+    <div class="question-text">What's your #1 goal right now?</div>
+    <ul class="options-list">
+      <li><button class="option-btn" data-q="6" data-tag="pain_focus" onclick="selectOption(this)"><span class="option-radio"></span>Move without pain</button></li>
+      <li><button class="option-btn" data-q="6" data-tag="strength_focus" onclick="selectOption(this)"><span class="option-radio"></span>Build strength I can feel</button></li>
+      <li><button class="option-btn" data-q="6" data-tag="balance_focus" onclick="selectOption(this)"><span class="option-radio"></span>Improve balance and stability</button></li>
+      <li><button class="option-btn" data-q="6" data-tag="confidence_focus" onclick="selectOption(this)"><span class="option-radio"></span>Feel confident in my body again</button></li>
+    </ul>
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-next" id="next6" disabled onclick="showResults()">See My Score</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-page" id="resultsPage">
+
+    <div class="score-display">
+      <div class="score-label-top">Your Movement Readiness Score</div>
+      <div class="score-meter">
+        <svg viewBox="0 0 200 110">
+          <path class="meter-bg" d="M 20 100 A 80 80 0 0 1 180 100" />
+          <path class="meter-fill" id="meterArc" d="M 20 100 A 80 80 0 0 1 180 100" />
+        </svg>
+      </div>
+      <div class="score-number" id="scoreNumber">--</div>
+      <div class="score-tier-label" id="scoreTier"></div>
+      <p class="score-description" id="scoreDesc"></p>
+    </div>
+
+    <div class="recs-card">
+      <h3>Your Personalized Recommendations</h3>
+      <div id="recsContainer"></div>
+    </div>
+
+    <div class="cta-card cta-primary">
+      <h3>Ready to understand your body?</h3>
+      <p>In a 60-minute private movement assessment, I'll map your movement patterns, find the gaps, and give you a clear plan to move and feel better.</p>
+      <a href="#book" class="cta-btn cta-btn-coral" id="bookBtn">Book Your Assessment ($125)</a>
+    </div>
+
+    <div class="cta-card cta-secondary">
+      <h3>Get My Free 5-Day Movement Guide</h3>
+      <p>One exercise per day, tailored to your score range. Delivered straight to your inbox.</p>
+      <form class="email-form" id="emailForm" onsubmit="submitEmail(event)">
+        <input type="text" name="first_name" placeholder="First name" required>
+        <input type="email" name="email" placeholder="Email address" required>
+        <input type="hidden" name="score" id="hiddenScore">
+        <input type="hidden" name="tier" id="hiddenTier">
+        <input type="hidden" name="goal_tag" id="hiddenGoal">
+        <input type="hidden" name="weakest" id="hiddenWeakest">
+        <button type="submit">Send Me the Guide</button>
+        <div class="form-success" id="formSuccess">You're in! Check your inbox.</div>
+      </form>
+    </div>
+
+    <div class="credential-bar">
+      <span>Acosta Danza founding member</span>
+      <span>O-1B visa holder</span>
+      <span>1,000+ performances</span>
+      <span>NASM CPT</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const TOTAL_Q = 7;
+  const SCORED_Q = 6; // Q7 is tag-only
+  const MAX_RAW = 90;
+  let current = -1; // -1 = intro
+  let answers = new Array(TOTAL_Q).fill(null);
+  let goalTag = '';
+
+  const questionLabels = [
+    'Overall Mobility',
+    'Single-Leg Balance',
+    'Morning Stiffness',
+    'Floor-to-Stand',
+    'Pain Interference',
+    'Physical Confidence',
+    'Primary Goal'
+  ];
+
+  window.startQuiz = function() {
+    document.getElementById('introScreen').classList.add('hidden');
+    document.getElementById('progressWrapper').style.display = 'block';
+    current = 0;
+    showQuestion(0);
+  };
+
+  window.selectOption = function(btn) {
+    const q = parseInt(btn.dataset.q);
+    // Deselect siblings
+    btn.closest('.options-list').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+
+    if (btn.dataset.pts !== undefined) {
+      answers[q] = parseInt(btn.dataset.pts);
+    }
+    if (btn.dataset.tag) {
+      goalTag = btn.dataset.tag;
+      answers[q] = 0; // placeholder
+    }
+
+    // Enable next
+    document.getElementById('next' + q).disabled = false;
+  };
+
+  window.goNext = function() {
+    if (current < TOTAL_Q - 1) {
+      current++;
+      showQuestion(current);
+    }
+  };
+
+  window.goBack = function() {
+    if (current > 0) {
+      current--;
+      showQuestion(current);
+    } else if (current === 0) {
+      // Back to intro
+      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('introScreen').classList.remove('hidden');
+      document.getElementById('progressWrapper').style.display = 'none';
+      current = -1;
+    }
+  };
+
+  function showQuestion(idx) {
+    document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
+    const card = document.getElementById('q' + idx);
+    card.classList.add('active');
+    // Force re-animation
+    card.style.animation = 'none';
+    card.offsetHeight;
+    card.style.animation = '';
+
+    updateProgress(idx);
+  }
+
+  function updateProgress(idx) {
+    const pct = Math.round(((idx) / TOTAL_Q) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = 'Question ' + (idx + 1) + ' of ' + TOTAL_Q;
+    document.getElementById('progressPct').textContent = pct + '%';
+  }
+
+  window.showResults = function() {
+    // Calculate score
+    const rawScore = answers.slice(0, SCORED_Q).reduce((a, b) => a + (b || 0), 0);
+    const normalizedScore = Math.round((rawScore / MAX_RAW) * 100);
+
+    // Determine tier
+    let tier, tierColor, desc;
+    if (normalizedScore >= 85) {
+      tier = 'Movement Strong';
+      tierColor = '#2ecc71';
+      desc = 'Your body is working well. You have strong mobility, good balance, and minimal limitations. Private coaching can take you from good to exceptional \u2014 refining movement quality, building longevity, and unlocking performance you didn\'t know you had.';
+    } else if (normalizedScore >= 60) {
+      tier = 'Movement Ready';
+      tierColor = '#f5a623';
+      desc = 'You have a solid foundation but there are gaps. Maybe one side is tighter than the other, or balance isn\'t what it used to be. A targeted assessment would reveal exactly where to focus so you can train smarter, not just harder.';
+    } else if (normalizedScore >= 40) {
+      tier = 'Movement Rebuilder';
+      tierColor = '#e67e22';
+      desc = 'Your body is asking for attention. Stiffness, instability, or discomfort are showing up in ways that limit what you can do. You\'re in the perfect position to make dramatic improvements with guided coaching \u2014 small, targeted changes can transform how you feel within weeks.';
+    } else {
+      tier = 'Movement Priority';
+      tierColor = '#e74c3c';
+      desc = 'Don\'t worry \u2014 this is exactly why I do what I do. Your score tells me your body needs focused, expert attention. The good news? The people who start here often see the most dramatic improvements. Small, targeted changes can transform how you feel. Let\'s talk.';
+    }
+
+    // Hide quiz, show results
+    document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('progressWrapper').style.display = 'none';
+    document.getElementById('resultsPage').classList.add('active');
+
+    // Animate score number
+    const scoreEl = document.getElementById('scoreNumber');
+    animateNumber(scoreEl, 0, normalizedScore, 1200);
+
+    // Tier label + color
+    const tierEl = document.getElementById('scoreTier');
+    tierEl.textContent = tier;
+    tierEl.style.color = tierColor;
+    scoreEl.style.color = tierColor;
+
+    // Description
+    document.getElementById('scoreDesc').textContent = desc;
+
+    // Animate arc meter
+    const arc = document.getElementById('meterArc');
+    arc.style.stroke = tierColor;
+    const totalLen = arc.getTotalLength();
+    arc.style.strokeDasharray = totalLen;
+    arc.style.strokeDashoffset = totalLen;
+    requestAnimationFrame(() => {
+      arc.style.strokeDashoffset = totalLen * (1 - normalizedScore / 100);
+    });
+
+    // Build recommendations
+    buildRecommendations(normalizedScore);
+
+    // Fill hidden fields
+    document.getElementById('hiddenScore').value = normalizedScore;
+    document.getElementById('hiddenTier').value = tier;
+    document.getElementById('hiddenGoal').value = goalTag;
+    document.getElementById('hiddenWeakest').value = getWeakestAreas().join(',');
+
+    // Update progress to 100%
+    document.getElementById('progressFill').style.width = '100%';
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  function animateNumber(el, from, to, duration) {
+    const start = performance.now();
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease out cubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(from + (to - from) * ease);
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function getWeakestAreas() {
+    const areas = [];
+    const labels = [
+      { idx: 0, name: 'mobility', label: 'Overall Mobility' },
+      { idx: 1, name: 'balance', label: 'Single-Leg Balance' },
+      { idx: 2, name: 'stiffness', label: 'Morning Stiffness' },
+      { idx: 3, name: 'floor_mobility', label: 'Floor-to-Stand' },
+      { idx: 4, name: 'pain', label: 'Pain Interference' },
+      { idx: 5, name: 'confidence', label: 'Physical Confidence' }
+    ];
+    labels.sort((a, b) => (answers[a.idx] || 0) - (answers[b.idx] || 0));
+    return labels.slice(0, 3).filter(l => (answers[l.idx] || 0) < 15).map(l => l.name);
+  }
+
+  function buildRecommendations(score) {
+    const container = document.getElementById('recsContainer');
+    container.innerHTML = '';
+
+    const recs = [];
+    const a = answers;
+
+    // Generate recs from weakest areas
+    if (a[1] <= 5) {
+      recs.push({
+        icon: '\u{1F9B6}',
+        bg: 'rgba(233,69,96,0.08)',
+        text: '<strong>Balance needs attention.</strong> Single-leg stability is a key indicator of fall risk and joint health. Try standing on one leg while brushing your teeth \u2014 start with a wall nearby for safety.'
+      });
+    }
+    if (a[3] <= 5) {
+      recs.push({
+        icon: '\u{1F4AA}',
+        bg: 'rgba(245,118,74,0.08)',
+        text: '<strong>Floor-to-stand mobility is limited.</strong> This affects everything from playing with grandkids to getting out of a car. Practice sitting down to and rising from a low chair without arm support.'
+      });
+    }
+    if (a[2] <= 5) {
+      recs.push({
+        icon: '\u{2600}\u{FE0F}',
+        bg: 'rgba(245,166,35,0.08)',
+        text: '<strong>Morning stiffness is frequent.</strong> Joint stiffness that lingers can signal the need for gentle mobility work before bed and upon waking. Try 2 minutes of slow, full-range arm circles and hip circles each morning.'
+      });
+    }
+    if (a[0] <= 5) {
+      recs.push({
+        icon: '\u{1F3C3}',
+        bg: 'rgba(46,204,113,0.08)',
+        text: '<strong>Overall mobility is restricted.</strong> When your body avoids certain movements, compensations build up elsewhere. A guided assessment can identify exactly which patterns need work.'
+      });
+    }
+    if (a[4] <= 5) {
+      recs.push({
+        icon: '\u{26A0}\u{FE0F}',
+        bg: 'rgba(231,76,60,0.08)',
+        text: '<strong>Pain is limiting your activity.</strong> Regular pain interference is your body\'s signal that something needs professional attention. Movement coaching can find pain-free paths back to the activities you love.'
+      });
+    }
+    if (a[5] <= 5) {
+      recs.push({
+        icon: '\u{1F4A1}',
+        bg: 'rgba(155,89,182,0.08)',
+        text: '<strong>Physical confidence is low.</strong> When you don\'t trust your body, you move less \u2014 and moving less makes the problem worse. Rebuilding confidence starts with small, successful movement experiences in a safe environment.'
+      });
+    }
+
+    // Fallback if they scored well everywhere
+    if (recs.length === 0) {
+      recs.push({
+        icon: '\u{2B50}',
+        bg: 'rgba(46,204,113,0.08)',
+        text: '<strong>You\'re in great shape.</strong> Your mobility, balance, and confidence are all strong. Private coaching can focus on longevity, performance optimization, and movement quality refinement.'
+      });
+    }
+
+    // Show top 3
+    recs.slice(0, 3).forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'rec-item';
+      div.innerHTML = '<div class="rec-icon" style="background:' + r.bg + '">' + r.icon + '</div><div class="rec-text">' + r.text + '</div>';
+      container.appendChild(div);
+    });
+  }
+
+  window.submitEmail = function(e) {
+    e.preventDefault();
+    const form = document.getElementById('emailForm');
+    const data = new FormData(form);
+
+    // ── ConvertKit Integration ──
+    // Replace FORM_ID with your ConvertKit form ID
+    // Endpoint: https://api.convertkit.com/v3/forms/FORM_ID/subscribe
+    //
+    // Uncomment the fetch block below once ConvertKit is set up:
+    //
+    // const CK_FORM_ID = 'YOUR_FORM_ID';
+    // const CK_API_KEY = 'YOUR_PUBLIC_API_KEY';
+    // fetch(`https://api.convertkit.com/v3/forms/${CK_FORM_ID}/subscribe`, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     api_key: CK_API_KEY,
+    //     email: data.get('email'),
+    //     first_name: data.get('first_name'),
+    //     fields: {
+    //       score: data.get('score'),
+    //       tier: data.get('tier'),
+    //       goal_tag: data.get('goal_tag'),
+    //       weakest_areas: data.get('weakest')
+    //     },
+    //     tags: [getTagIdForTier(data.get('tier'))]
+    //   })
+    // }).then(r => r.json()).then(d => {
+    //   showSuccess();
+    // }).catch(err => {
+    //   console.error('ConvertKit error:', err);
+    //   showSuccess(); // still show success to user
+    // });
+
+    // For now, just show success (no backend connected yet)
+    showSuccess();
+  };
+
+  function showSuccess() {
+    const form = document.getElementById('emailForm');
+    form.querySelector('input[name="first_name"]').style.display = 'none';
+    form.querySelector('input[name="email"]').style.display = 'none';
+    form.querySelector('button[type="submit"]').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+})();
+</script>
+
+</body>
+</html>
