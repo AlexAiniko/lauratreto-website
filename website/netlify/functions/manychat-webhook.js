@@ -118,15 +118,22 @@ exports.handler = async (event) => {
     const claudeData = await claudeRes.json();
     const replyText = claudeData.content[0].text;
 
-    // Return the response for ManyChat to map to a custom field.
-    // ManyChat External Request maps JSON keys to custom fields.
-    // Flow: External Request -> save `claude_response` to custom field ->
-    //       Smart Delay (1-2 min) -> Send message using {{claude_response}}
+    // Return ManyChat Dynamic Content v2 format.
+    // This tells ManyChat to send the text directly as a message —
+    // no separate custom field or text step needed.
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        claude_response: replyText
+        version: 'v2',
+        content: {
+          messages: [
+            {
+              type: 'text',
+              text: replyText
+            }
+          ]
+        }
       })
     };
 
