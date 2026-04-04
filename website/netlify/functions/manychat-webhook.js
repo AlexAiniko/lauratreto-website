@@ -60,16 +60,19 @@ exports.handler = async (event) => {
   try {
     const payload = JSON.parse(event.body);
 
+    // Handle ManyChat Full Contact Data (may be nested under 'contact' key)
+    const data = payload.contact || payload;
+
     // ManyChat External Request sends subscriber fields.
     // Common field names for the user's last message:
     const userMessage =
-      payload.last_input_text ||
-      payload.last_text_input ||
-      payload.message ||
+      data.last_input_text ||
+      data.last_text_input ||
+      data.message ||
       '';
 
-    const subscriberId = payload.id || payload.subscriber_id || null;
-    const firstName = payload.first_name || '';
+    const subscriberId = data.id || data.subscriber_id || null;
+    const firstName = data.first_name || '';
 
     if (!userMessage) {
       return {
