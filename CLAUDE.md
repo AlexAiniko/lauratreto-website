@@ -151,7 +151,7 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 | Item | Value |
 |------|-------|
 | Meta App Name | Alpha |
-| App ID | 178221487607084 |
+| App ID | 1598180568111788 |
 | FB Page ID | 599537857146045 |
 | FB Page Name | Laura Treto, Fitness Trainer |
 | Instagram ID | 17841403861596917 |
