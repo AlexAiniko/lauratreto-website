@@ -971,37 +971,31 @@
     const data = new FormData(form);
 
     // ── ConvertKit Integration ──
-    // Replace FORM_ID with your ConvertKit form ID
-    // Endpoint: https://api.convertkit.com/v3/forms/FORM_ID/subscribe
-    //
-    // Uncomment the fetch block below once ConvertKit is set up:
-    //
-    // const CK_FORM_ID = 'YOUR_FORM_ID';
-    // const CK_API_KEY = 'YOUR_PUBLIC_API_KEY';
-    // fetch(`https://api.convertkit.com/v3/forms/${CK_FORM_ID}/subscribe`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     api_key: CK_API_KEY,
-    //     email: data.get('email'),
-    //     first_name: data.get('first_name'),
-    //     fields: {
-    //       score: data.get('score'),
-    //       tier: data.get('tier'),
-    //       goal_tag: data.get('goal_tag'),
-    //       weakest_areas: data.get('weakest')
-    //     },
-    //     tags: [getTagIdForTier(data.get('tier'))]
-    //   })
-    // }).then(r => r.json()).then(d => {
-    //   showSuccess();
-    // }).catch(err => {
-    //   console.error('ConvertKit error:', err);
-    //   showSuccess(); // still show success to user
-    // });
-
-    // For now, just show success (no backend connected yet)
-    showSuccess();
+    const CK_FORM_ID = '9284599';
+    const CK_API_KEY = 'kit_8f32159218b9601ced4de3754f02a01d';
+    fetch('https://api.convertkit.com/v3/forms/' + CK_FORM_ID + '/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: CK_API_KEY,
+        email: data.get('email'),
+        first_name: data.get('first_name'),
+        fields: {
+          score: data.get('score'),
+          tier: data.get('tier'),
+          goal_tag: data.get('goal_tag'),
+          weakest_areas: data.get('weakest')
+        }
+      })
+    }).then(function(r) {
+      if (!r.ok) throw new Error('ConvertKit responded with ' + r.status);
+      return r.json();
+    }).then(function() {
+      showSuccess();
+    }).catch(function(err) {
+      console.error('ConvertKit error:', err);
+      alert('Something went wrong. Please try again or email laura@lauratreto.com directly.');
+    });
   };
 
   function showSuccess() {
