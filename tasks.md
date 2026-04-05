@@ -4,25 +4,26 @@
 
 | # | Task | Priority | Due | Owner | Status |
 |---|------|----------|-----|-------|--------|
-| 1 | Deploy quiz to Netlify + link from website | critical | Apr 5 | Kai | in progress |
-| 2 | Restructure website pricing (1-on-1 vs Products) | critical | Apr 6 | Max/Lux | in progress |
-| 3 | Update Trainerize links on website | critical | Apr 6 | Max | todo |
-| 4 | Swap website placeholder images (after shoot) | high | Apr 5 | Max | todo |
-| 5 | Extend Saturday batch to 5 hours in calendar | high | Apr 5 | Alpha | todo |
-| 6 | Add Emma (Tue 9-10 AM) to schedule/docs | high | Apr 5 | Alpha | todo |
-| 7 | Add bilingual content guidelines | high | Apr 10 | Alpha/Max | todo |
-| 8 | Build AI infographic content pipeline | high | Apr 10 | Kai | todo |
-| 9 | Review Laura's ConvertKit setup | medium | TBD | Alpha | waiting |
-| 10 | Review Laura's quiz version | medium | TBD | Alpha | waiting |
-| 11 | Design group coaching product | medium | Apr 25 | Alpha/Laura | todo |
-| 12 | Salsa Sunset Event logistics (talk to Derek) | medium | Apr 28 | Alex | todo |
-| 13 | Plan paid ads strategy (Month 2) | medium | Apr 20 | Alpha | todo |
-| 14 | Set up GA4 for lauratreto.com | low | Apr 15 | Kai | todo |
-| 15 | Verify HTTPS/SSL on lauratreto.com | low | Apr 5 | Kai | todo |
+| 1 | Update Trainerize links on website | critical | Apr 6 | Max | todo |
+| 2 | Swap website placeholder images (shoot tomorrow 5pm) | high | Apr 5 | Max | todo |
+| 3 | Extend Saturday batch to 5 hours in calendar | high | Apr 5 | Alpha | todo |
+| 4 | Add bilingual content guidelines | high | Apr 10 | Alpha/Max | todo |
+| 5 | Build AI infographic content pipeline | high | Apr 10 | Kai | todo |
+| 6 | Migrate ConvertKit to MailerLite (before trial ends ~Apr 17) | medium | Apr 17 | Kai | todo |
+| 7 | Review Laura's quiz version | medium | TBD | Alpha | waiting |
+| 8 | Design group coaching product | medium | Apr 25 | Alpha/Laura | todo |
+| 9 | Salsa Sunset Event logistics (talk to Derek) | medium | Apr 28 | Alex | todo |
+| 10 | Plan paid ads strategy (Month 2) | medium | Apr 20 | Alpha | todo |
+| 11 | Set up GA4 for lauratreto.com | low | Apr 15 | Kai | todo |
+| 12 | Verify HTTPS/SSL on lauratreto.com | low | Apr 5 | Kai | blocked (waiting on Netlify support to clear stale NS1 DNS zone) |
 
 ## Completed Tasks
 | # | Task | Completed |
 |---|------|-----------|
+| -- | Deploy quiz to Netlify + link from website | 2026-04-04 |
+| -- | Restructure website pricing (1-on-1 vs Products) | 2026-04-04 |
+| -- | ManyChat + Claude intelligent DM auto-responses (Instagram) | 2026-04-04 |
+| -- | Add Emma (Tue 9-10 AM) to schedule/docs | 2026-04-04 |
 | -- | Website built + deployed to Netlify (lauratreto.com) | 2026-04-04 |
 | -- | Meta token exchanged (permanent page token) | 2026-04-04 |
 | -- | DNS pointed from Squarespace to Netlify | 2026-04-04 |
