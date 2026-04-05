@@ -241,28 +241,14 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, #2B2B2B 0%, #1A7A7A 50%, #E8654A 100%);
+      background: url('/images/hero.jpg') center center / cover no-repeat;
       z-index: 0;
     }
     .hero-bg::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
-    }
-    .hero-placeholder {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-sans);
-      font-weight: 500;
-      font-size: 18px;
-      color: rgba(255,255,255,0.3);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      z-index: 0;
+      background: rgba(0,0,0,0.4);
     }
     .hero-content {
       position: relative;
@@ -407,17 +393,10 @@
       align-items: center;
     }
     .about-photo {
-      background: linear-gradient(135deg, var(--coral), var(--turquoise));
+      width: 100%;
       border-radius: var(--card-radius);
       aspect-ratio: 3/4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,0.4);
-      font-size: 16px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+      object-fit: cover;
       box-shadow: var(--card-shadow);
     }
     .about-text h2 { margin-bottom: 24px; }
@@ -700,15 +679,7 @@
       width: 180px;
       height: 180px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--sand), var(--coral));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,0.5);
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      object-fit: cover;
     }
     .form-group {
       margin-bottom: 20px;
@@ -859,7 +830,7 @@
         grid-template-columns: 1fr;
         gap: 32px;
       }
-      .about-photo { max-height: 400px; aspect-ratio: 4/3; }
+      .about-photo { max-height: 400px; aspect-ratio: 4/3; width: 100%; object-fit: cover; }
 
       .inquiry-grid {
         grid-template-columns: 1fr;
@@ -967,8 +938,6 @@
   <!-- ============ SECTION 1: HERO ============ -->
   <section class="hero" id="hero">
     <div class="hero-bg"></div>
-    <!-- REPLACE: Drop hero.webp here after shoot -->
-    <div class="hero-placeholder">[HERO VIDEO / PHOTO]</div>
     <div class="hero-content">
       <h1 data-lang="en">World-Class Movement Coaching.<br>Now in Key West.</h1>
       <h1 data-lang="es">Coaching de Movimiento de Clase Mundial.<br>Ahora en Key West.</h1>
@@ -1113,8 +1082,7 @@
   <section class="about section-pad">
     <div class="container">
       <div class="about-grid">
-        <!-- REPLACE: Drop laura-portrait.webp here after shoot -->
-        <div class="about-photo">[LAURA PORTRAIT]</div>
+        <img src="/images/laura-portrait.jpg" alt="Laura Treto, movement coach" class="about-photo" loading="lazy" />
         <div class="about-text">
           <h2 data-lang="en">Meet Laura</h2>
           <h2 data-lang="es">Conoce a Laura</h2>
@@ -1321,8 +1289,7 @@
             <li>Online options available</li>
             <li>All ages and fitness levels welcome</li>
           </ul>
-          <!-- REPLACE: Drop laura-form.webp here after shoot -->
-          <div class="form-photo">[LAURA PHOTO]</div>
+          <img src="/images/laura-form.jpg" alt="Laura Treto with kettlebell" class="form-photo" loading="lazy" />
         </div>
         <form id="inquiry-form-en" name="contact-en" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleSubmit(event, 'en')">
           <input type="hidden" name="form-name" value="contact-en">
@@ -1365,8 +1332,7 @@
             <li>Opciones en l&iacute;nea disponibles</li>
             <li>Todas las edades y niveles de fitness</li>
           </ul>
-          <!-- REPLACE: Drop laura-form.webp here after shoot -->
-          <div class="form-photo">[LAURA PHOTO]</div>
+          <img src="/images/laura-form.jpg" alt="Laura Treto con pesa rusa" class="form-photo" loading="lazy" />
         </div>
         <form id="inquiry-form-es" name="contact-es" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleSubmit(event, 'es')">
           <input type="hidden" name="form-name" value="contact-es">
