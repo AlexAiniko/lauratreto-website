@@ -19,6 +19,10 @@
 ## Completed Tasks
 | # | Task | Completed |
 |---|------|-----------|
+| -- | Hero auto-rotate slideshow (3 silhouettes, 5s timer) | 2026-04-05 |
+| -- | Laura Treto carousel swipe in Meet Laura section (scroll-snap) | 2026-04-05 |
+| -- | Raul Malo testimonial added, moved below social grid | 2026-04-05 |
+| -- | First Instagram carousel published via API (balance test infographic) | 2026-04-05 |
 | -- | Swap website placeholder images | 2026-04-05 |
 | -- | Website photos deployed: hero slideshow, about portrait, form image | 2026-04-05 |
 | -- | Scroll-driven hero slideshow with 4 silhouette crossfade | 2026-04-05 |
