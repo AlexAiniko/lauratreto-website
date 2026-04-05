@@ -12,7 +12,7 @@
 | 9 | Salsa Sunset Event logistics (talk to Derek) | medium | Apr 28 | Alex | todo |
 | 10 | Plan paid ads strategy (Month 2) | medium | Apr 20 | Alpha | todo |
 | 11 | Set up GA4 for lauratreto.com | low | Apr 15 | Kai | todo |
-| 12 | Verify HTTPS/SSL on lauratreto.com | low | Apr 5 | Kai | blocked (waiting on Netlify support to clear stale NS1 DNS zone) |
+| 12 | Clean up DNS: email Squarespace to remove NS1 zone, then verify SSL | low | Apr 7 | Alex | todo (draft email ready in Gmail, send to Squarespace) |
 | 13 | Connect TikTok API to social feed (register at developers.tiktok.com, app review, add to social-feed.js) | medium | Apr 20 | Alex/Kai | todo |
 | 14 | Add "gif old lady" as scroll animation on the website (Alex's note) | low | TBD | Max | todo |
 
