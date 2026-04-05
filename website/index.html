@@ -580,6 +580,92 @@
       letter-spacing: 0.05em;
     }
 
+    /* Skeleton loading animation */
+    .ig-skeleton {
+      animation: shimmer 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes shimmer {
+      from { background: rgba(255,255,255,0.05); }
+      to { background: rgba(255,255,255,0.12); }
+    }
+
+    /* Social post image tiles */
+    .ig-post {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      display: block;
+    }
+    .ig-post img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease-out;
+    }
+    .ig-post:hover img {
+      transform: scale(1.05);
+    }
+    .ig-post::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.3s ease-out;
+      pointer-events: none;
+    }
+    .ig-post:hover::after {
+      background: rgba(0,0,0,0.1);
+    }
+    .ig-post .source-badge {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      z-index: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Fallback block */
+    .ig-fallback {
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .ig-fallback p {
+      color: rgba(255,255,255,0.8);
+      font-size: 17px;
+      margin-bottom: 24px;
+    }
+    .ig-fallback-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .ig-fallback-links a {
+      display: inline-block;
+      padding: 10px 24px;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 8px;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .ig-fallback-links a:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.8);
+      text-decoration: none;
+    }
+
     /* ========================================
        SECTION 8: INQUIRY FORM
        ======================================== */
@@ -817,15 +903,13 @@
     .pricing-grid[data-lang="es"],
     .pricing-subsection[data-lang="es"],
     .inquiry-grid[data-lang="es"],
-    .footer-grid[data-lang="es"],
-    .ig-grid[data-lang="es"] { display: none; }
+    .footer-grid[data-lang="es"] { display: none; }
     body.lang-es .credentials-grid[data-lang="es"],
     body.lang-es .cards-grid[data-lang="es"],
     body.lang-es .steps-grid[data-lang="es"],
     body.lang-es .pricing-grid[data-lang="es"],
     body.lang-es .inquiry-grid[data-lang="es"],
-    body.lang-es .footer-grid[data-lang="es"],
-    body.lang-es .ig-grid[data-lang="es"] { display: grid; }
+    body.lang-es .footer-grid[data-lang="es"] { display: grid; }
     body.lang-es .pricing-subsection[data-lang="es"] { display: block; }
     body.lang-es .credentials-grid[data-lang="en"],
     body.lang-es .cards-grid[data-lang="en"],
@@ -833,8 +917,7 @@
     body.lang-es .pricing-grid[data-lang="en"],
     body.lang-es .pricing-subsection[data-lang="en"],
     body.lang-es .inquiry-grid[data-lang="en"],
-    body.lang-es .footer-grid[data-lang="en"],
-    body.lang-es .ig-grid[data-lang="en"] { display: none; }
+    body.lang-es .footer-grid[data-lang="en"] { display: none; }
     /* list containers */
     ul[data-lang="es"] { display: none; }
     body.lang-es ul[data-lang="es"] { display: block; }
@@ -1195,27 +1278,25 @@
         <p class="subtitle" data-lang="es">S&iacute;guenos en redes sociales para consejos de movimiento, insights de coaching y vida en Key West.</p>
       </div>
 
-      <div class="ig-grid" data-lang="en">
-        <div class="ig-placeholder">[IG Post 1]</div>
-        <div class="ig-placeholder">[IG Post 2]</div>
-        <div class="ig-placeholder">[IG Post 3]</div>
-        <div class="ig-placeholder">[IG Post 4]</div>
-        <div class="ig-placeholder">[IG Post 5]</div>
-        <div class="ig-placeholder">[IG Post 6]</div>
-        <div class="ig-placeholder">[IG Post 7]</div>
-        <div class="ig-placeholder">[IG Post 8]</div>
-        <div class="ig-placeholder">[IG Post 9]</div>
+      <div class="ig-grid" id="social-grid">
+        <div class="ig-placeholder ig-skeleton"></div>
+        <div class="ig-placeholder ig-skeleton"></div>
+        <div class="ig-placeholder ig-skeleton"></div>
+        <div class="ig-placeholder ig-skeleton"></div>
+        <div class="ig-placeholder ig-skeleton"></div>
+        <div class="ig-placeholder ig-skeleton"></div>
+        <div class="ig-placeholder ig-skeleton"></div>
+        <div class="ig-placeholder ig-skeleton"></div>
+        <div class="ig-placeholder ig-skeleton"></div>
       </div>
-      <div class="ig-grid" data-lang="es">
-        <div class="ig-placeholder">[IG Post 1]</div>
-        <div class="ig-placeholder">[IG Post 2]</div>
-        <div class="ig-placeholder">[IG Post 3]</div>
-        <div class="ig-placeholder">[IG Post 4]</div>
-        <div class="ig-placeholder">[IG Post 5]</div>
-        <div class="ig-placeholder">[IG Post 6]</div>
-        <div class="ig-placeholder">[IG Post 7]</div>
-        <div class="ig-placeholder">[IG Post 8]</div>
-        <div class="ig-placeholder">[IG Post 9]</div>
+      <div class="ig-fallback" id="social-fallback" style="display:none">
+        <p data-lang="en">Follow Laura for daily movement tips</p>
+        <p data-lang="es">Sigue a Laura para consejos diarios de movimiento</p>
+        <div class="ig-fallback-links">
+          <a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer">TikTok</a>
+        </div>
       </div>
     </div>
   </section>
@@ -1430,6 +1511,51 @@
       });
     }
 
+    // Social feed loader
+    async function loadSocialFeed() {
+      var grid = document.getElementById('social-grid');
+      var fallback = document.getElementById('social-fallback');
+      if (!grid) return;
+
+      try {
+        var res = await fetch('/.netlify/functions/social-feed');
+        if (!res.ok) throw new Error('Status ' + res.status);
+
+        var data = await res.json();
+        if (!data.posts || data.posts.length === 0) throw new Error('No posts');
+
+        // Clear skeleton placeholders
+        grid.innerHTML = '';
+
+        // Render posts
+        var posts = data.posts.slice(0, 9);
+        posts.forEach(function(post) {
+          var a = document.createElement('a');
+          a.href = post.permalink;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.className = 'ig-post';
+
+          var img = document.createElement('img');
+          img.src = post.imageUrl;
+          img.alt = post.caption || 'Social media post by Laura Treto';
+          img.loading = 'lazy';
+          img.onerror = function() { a.style.display = 'none'; };
+
+          var badge = document.createElement('span');
+          badge.className = 'source-badge';
+          badge.textContent = post.source === 'instagram' ? 'IG' : 'FB';
+
+          a.appendChild(img);
+          a.appendChild(badge);
+          grid.appendChild(a);
+        });
+      } catch (err) {
+        grid.style.display = 'none';
+        if (fallback) fallback.style.display = 'block';
+      }
+    }
+
     // Scroll-triggered fade-in
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -1450,6 +1576,7 @@
         el.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
         observer.observe(el);
       });
+      loadSocialFeed();
     });
   </script>
 
