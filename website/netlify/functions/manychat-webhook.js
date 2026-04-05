@@ -118,22 +118,14 @@ exports.handler = async (event) => {
     const claudeData = await claudeRes.json();
     const replyText = claudeData.content[0].text;
 
-    // Return ManyChat Dynamic Content v2 format.
-    // This tells ManyChat to send the text directly as a message —
-    // no separate custom field or text step needed.
+    // Return flat JSON for ManyChat Actions External Request.
+    // ManyChat maps 'claude_response' to a custom field, then uses
+    // that field in a subsequent Send Message step.
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        version: 'v2',
-        content: {
-          messages: [
-            {
-              type: 'text',
-              text: replyText
-            }
-          ]
-        }
+        claude_response: replyText
       })
     };
 
