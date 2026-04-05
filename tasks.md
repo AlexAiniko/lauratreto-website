@@ -14,6 +14,7 @@
 | 11 | Set up GA4 for lauratreto.com | low | Apr 15 | Kai | todo |
 | 12 | Verify HTTPS/SSL on lauratreto.com | low | Apr 5 | Kai | blocked (waiting on Netlify support to clear stale NS1 DNS zone) |
 | 13 | Connect TikTok API to social feed (register at developers.tiktok.com, app review, add to social-feed.js) | medium | Apr 20 | Alex/Kai | todo |
+| 14 | Add "gif old lady" as scroll animation on the website (Alex's note) | low | TBD | Max | todo |
 
 ## Completed Tasks
 | # | Task | Completed |
