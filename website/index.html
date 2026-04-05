@@ -269,19 +269,60 @@
       text-align: center;
       overflow: hidden;
     }
-    /* Hero background (single static image) */
-    .hero-bg {
+    /* Hero carousel (swipeable background images) */
+    .hero-carousel {
       position: absolute;
       inset: 0;
-      background: url('/images/hero.jpg') center center / cover no-repeat;
       z-index: 0;
+      overflow: hidden;
     }
-    .hero-bg::after {
+    .hero-carousel-track {
+      display: flex;
+      height: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .hero-carousel-track::-webkit-scrollbar { display: none; }
+    .hero-carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+      scroll-snap-align: center;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      position: relative;
+    }
+    .hero-carousel-slide::after {
       content: '';
       position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.35);
-      z-index: 1;
+    }
+    .hero-carousel-dots {
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      z-index: 2;
+    }
+    .hero-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.7);
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.3s;
+    }
+    .hero-dot.active {
+      background: rgba(255,255,255,0.9);
     }
 
     .hero-content {
@@ -460,9 +501,12 @@
     }
     .carousel-track {
       display: flex;
-      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      touch-action: pan-y;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
+    .carousel-track::-webkit-scrollbar { display: none; }
     .carousel-slide {
       min-width: 100%;
       width: 100%;
@@ -470,6 +514,7 @@
       object-fit: cover;
       display: block;
       flex-shrink: 0;
+      scroll-snap-align: center;
     }
     .carousel-dots {
       position: absolute;
@@ -1052,7 +1097,20 @@
   <!-- ============ SECTION 1: HERO ============ -->
   <div class="hero-scroll-wrapper">
     <section class="hero" id="hero">
-      <div class="hero-bg"></div>
+      <div class="hero-carousel">
+        <div class="hero-carousel-track">
+          <div class="hero-carousel-slide" style="background-image: url('/images/hero.jpg')"></div>
+          <div class="hero-carousel-slide" style="background-image: url('/images/hero-2.jpg')"></div>
+          <div class="hero-carousel-slide" style="background-image: url('/images/hero-3.jpg')"></div>
+          <div class="hero-carousel-slide" style="background-image: url('/images/hero-4.jpg')"></div>
+        </div>
+        <div class="hero-carousel-dots">
+          <button class="hero-dot active" data-index="0"></button>
+          <button class="hero-dot" data-index="1"></button>
+          <button class="hero-dot" data-index="2"></button>
+          <button class="hero-dot" data-index="3"></button>
+        </div>
+      </div>
       <div class="hero-content">
         <h1 data-lang="en">World-Class Movement Coaching.<br>Now in Key West.</h1>
         <h1 data-lang="es">Coaching de Movimiento de Clase Mundial.<br>Ahora en Key West.</h1>
@@ -1731,68 +1789,55 @@
       updateLogo();
     })();
 
-    // About section photo carousel
+    // About carousel dot sync (native scroll-snap)
     (function() {
       var carousel = document.querySelector('.about-carousel');
       if (!carousel) return;
       var track = carousel.querySelector('.carousel-track');
-      var slides = carousel.querySelectorAll('.carousel-slide');
       var dots = carousel.querySelectorAll('.carousel-dot');
-      var current = 0;
-      var startX = 0;
-      var diffX = 0;
-      var dragging = false;
 
-      function goTo(index) {
-        if (index < 0) index = 0;
-        if (index >= slides.length) index = slides.length - 1;
-        current = index;
-        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      function updateDots() {
+        var scrollLeft = track.scrollLeft;
+        var slideWidth = track.offsetWidth;
+        var index = Math.round(scrollLeft / slideWidth);
         dots.forEach(function(dot, i) {
-          dot.classList.toggle('active', i === current);
+          dot.classList.toggle('active', i === index);
         });
       }
 
-      // Dot click
+      track.addEventListener('scroll', updateDots, { passive: true });
+
+      // Dot click scrolls to slide
       dots.forEach(function(dot) {
         dot.addEventListener('click', function() {
-          goTo(parseInt(dot.dataset.index));
+          var index = parseInt(dot.dataset.index);
+          track.scrollTo({ left: index * track.offsetWidth, behavior: 'smooth' });
         });
       });
+    })();
 
-      // Touch swipe
-      track.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-        diffX = 0;
-        dragging = true;
-        track.style.transition = 'none';
-      }, { passive: true });
+    // Hero carousel dot sync (native scroll-snap)
+    (function() {
+      var track = document.querySelector('.hero-carousel-track');
+      var dots = document.querySelectorAll('.hero-dot');
+      if (!track || !dots.length) return;
 
-      track.addEventListener('touchmove', function(e) {
-        if (!dragging) return;
-        diffX = e.touches[0].clientX - startX;
-        var offset = -(current * 100) + (diffX / carousel.offsetWidth * 100);
-        track.style.transform = 'translateX(' + offset + '%)';
-      }, { passive: true });
+      function updateDots() {
+        var scrollLeft = track.scrollLeft;
+        var slideWidth = track.offsetWidth;
+        var index = Math.round(scrollLeft / slideWidth);
+        dots.forEach(function(dot, i) {
+          dot.classList.toggle('active', i === index);
+        });
+      }
 
-      track.addEventListener('touchend', function() {
-        dragging = false;
-        track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        if (diffX > 50) {
-          goTo(current - 1);
-        } else if (diffX < -50) {
-          goTo(current + 1);
-        } else {
-          goTo(current);
-        }
-        diffX = 0;
-      });
+      track.addEventListener('scroll', updateDots, { passive: true });
 
-      track.addEventListener('touchcancel', function() {
-        dragging = false;
-        diffX = 0;
-        track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        goTo(current);
+      dots.forEach(function(dot) {
+        dot.addEventListener('click', function() {
+          var index = parseInt(dot.dataset.index);
+          track.scrollTo({ left: index * track.offsetWidth, behavior: 'smooth' });
+        });
       });
     })();
   </script>
