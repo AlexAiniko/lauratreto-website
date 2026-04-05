@@ -1763,6 +1763,7 @@
       // Touch swipe
       track.addEventListener('touchstart', function(e) {
         startX = e.touches[0].clientX;
+        diffX = 0;
         dragging = true;
         track.style.transition = 'none';
       }, { passive: true });
@@ -1785,6 +1786,13 @@
           goTo(current);
         }
         diffX = 0;
+      });
+
+      track.addEventListener('touchcancel', function() {
+        dragging = false;
+        diffX = 0;
+        track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        goTo(current);
       });
     })();
   </script>
