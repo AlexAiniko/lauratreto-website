@@ -14,12 +14,37 @@ const IG_ACCOUNT_ID = '17841403861596917';
 const FB_PAGE_ID = '599537857146045';
 const API_VERSION = 'v19.0';
 
+// Safety cap: maximum posts to fetch per platform via pagination
+const MAX_POSTS_PER_PLATFORM = 500;
+
 // Standard response headers
 const RESPONSE_HEADERS = {
   'Content-Type': 'application/json',
   'Cache-Control': 'public, s-maxage=3600, max-age=1800',
   'Access-Control-Allow-Origin': '*'
 };
+
+/**
+ * Paginate through a Meta Graph API endpoint, collecting all results
+ * up to maxPosts. Follows paging.next links until exhausted or capped.
+ */
+async function fetchAllPages(initialUrl, maxPosts) {
+  let allData = [];
+  let url = initialUrl;
+
+  while (url && allData.length < maxPosts) {
+    const res = await fetch(url);
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`API returned ${res.status}: ${errText}`);
+    }
+    const json = await res.json();
+    allData = allData.concat(json.data || []);
+    url = json.paging?.next || null;
+  }
+
+  return allData;
+}
 
 /**
  * Fetch Instagram posts, score by engagement, and normalize.
@@ -34,20 +59,12 @@ async function fetchInstagramPosts(token) {
 
   const url =
     `https://graph.facebook.com/${API_VERSION}/${IG_ACCOUNT_ID}/media` +
-    `?fields=${fields}&limit=25&access_token=${token}`;
+    `?fields=${fields}&limit=100&access_token=${token}`;
 
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    const errText = await res.text();
-    console.error('Instagram API error:', res.status, errText);
-    throw new Error(`Instagram API returned ${res.status}`);
-  }
-
-  const data = await res.json();
+  const items = await fetchAllPages(url, MAX_POSTS_PER_PLATFORM);
   const posts = [];
 
-  for (const item of (data.data || [])) {
+  for (const item of items) {
     // Pick the right image URL based on media type
     let imageUrl = null;
     if (item.media_type === 'VIDEO') {
@@ -92,20 +109,12 @@ async function fetchFacebookPosts(token) {
 
   const url =
     `https://graph.facebook.com/${API_VERSION}/${FB_PAGE_ID}/posts` +
-    `?fields=${fields}&limit=25&access_token=${token}`;
+    `?fields=${fields}&limit=100&access_token=${token}`;
 
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    const errText = await res.text();
-    console.error('Facebook API error:', res.status, errText);
-    throw new Error(`Facebook API returned ${res.status}`);
-  }
-
-  const data = await res.json();
+  const items = await fetchAllPages(url, MAX_POSTS_PER_PLATFORM);
   const posts = [];
 
-  for (const item of (data.data || [])) {
+  for (const item of items) {
     // Skip text-only posts (no image)
     if (!item.full_picture) continue;
 
