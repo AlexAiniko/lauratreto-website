@@ -15,6 +15,7 @@
 | 12 | Clean up DNS: email Squarespace to remove NS1 zone, then verify SSL | low | Apr 7 | Alex | todo (draft email ready in Gmail, send to Squarespace) |
 | 13 | Connect TikTok API to social feed (register at developers.tiktok.com, app review, add to social-feed.js) | medium | Apr 20 | Alex/Kai | todo |
 | 14 | Add "gif old lady" as scroll animation on the website (Alex's note) | low | TBD | Max | todo |
+| 15 | Research Trainerize API for booking integration (check if API exists, what endpoints are available) | medium | Apr 7 | Alex/Kai | todo |
 
 ## Completed Tasks
 | # | Task | Completed |
