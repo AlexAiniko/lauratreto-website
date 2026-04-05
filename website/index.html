@@ -228,17 +228,21 @@
     /* ========================================
        SECTION 1: HERO
        ======================================== */
-    .hero {
+    .hero-scroll-wrapper {
+      height: 350vh;
       position: relative;
-      min-height: 100vh; /* fallback */
-      min-height: 100dvh;
+    }
+    .hero {
+      position: sticky;
+      top: 0;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       overflow: hidden;
     }
-    /* Hero Slideshow */
+    /* Hero Slideshow (scroll-driven) */
     .hero-slide {
       position: absolute;
       inset: 0;
@@ -246,12 +250,11 @@
       background-position: center center;
       background-repeat: no-repeat;
       opacity: 0;
-      transition: opacity 1.5s ease-in-out;
+      transition: opacity 0.15s ease-out;
       z-index: 0;
     }
     .hero-slide.active {
       opacity: 1;
-      animation: kenBurns 8s ease-in-out forwards;
     }
     .hero-slide::after {
       content: '';
@@ -265,10 +268,6 @@
     .hero-slide-3 { background-image: url('/images/hero-3.jpg'); }
     .hero-slide-4 { background-image: url('/images/hero-4.jpg'); }
 
-    @keyframes kenBurns {
-      from { transform: scale(1); }
-      to { transform: scale(1.08); }
-    }
     .hero-content {
       position: relative;
       z-index: 2;
@@ -279,8 +278,8 @@
     .hero-content h1 {
       color: var(--white);
       opacity: 0;
-      transform: translateY(30px);
-      animation: heroTextIn 1s ease-out 0.3s forwards;
+      transform: translateY(25px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
     .hero-content .subtitle {
       color: rgba(255,255,255,0.85);
@@ -288,8 +287,8 @@
       max-width: 600px;
       margin: 20px auto 0;
       opacity: 0;
-      transform: translateY(20px);
-      animation: heroTextIn 1s ease-out 0.6s forwards;
+      transform: translateY(25px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
     .hero-buttons {
       display: flex;
@@ -297,15 +296,25 @@
       justify-content: center;
       margin-top: 36px;
       opacity: 0;
-      transform: translateY(20px);
-      animation: heroTextIn 1s ease-out 0.9s forwards;
+      transform: translateY(25px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
 
-    @keyframes heroTextIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* Text entrance via class toggle */
+    .hero-content.text-visible h1 {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0s;
+    }
+    .hero-content.text-visible .subtitle {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0.2s;
+    }
+    .hero-content.text-visible .hero-buttons {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0.4s;
     }
 
     /* ========================================
@@ -822,6 +831,9 @@
       .pricing-grid.single-card { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
+      .hero-scroll-wrapper {
+        height: 250vh;
+      }
       :root {
         --section-pad: 64px;
         --content-pad: 20px;
@@ -962,28 +974,30 @@
   </div>
 
   <!-- ============ SECTION 1: HERO ============ -->
-  <section class="hero" id="hero">
-    <div class="hero-slide hero-slide-1 active"></div>
-    <div class="hero-slide hero-slide-2"></div>
-    <div class="hero-slide hero-slide-3"></div>
-    <div class="hero-slide hero-slide-4"></div>
-    <div class="hero-content hero-animated">
-      <h1 data-lang="en">World-Class Movement Coaching.<br>Now in Key West.</h1>
-      <h1 data-lang="es">Coaching de Movimiento de Clase Mundial.<br>Ahora en Key West.</h1>
+  <div class="hero-scroll-wrapper">
+    <section class="hero" id="hero">
+      <div class="hero-slide hero-slide-1 active"></div>
+      <div class="hero-slide hero-slide-2"></div>
+      <div class="hero-slide hero-slide-3"></div>
+      <div class="hero-slide hero-slide-4"></div>
+      <div class="hero-content text-visible">
+        <h1 data-lang="en">World-Class Movement Coaching.<br>Now in Key West.</h1>
+        <h1 data-lang="es">Coaching de Movimiento de Clase Mundial.<br>Ahora en Key West.</h1>
 
-      <p class="subtitle" data-lang="en">Elite athlete turned movement coach. O-1B visa recipient. 1,000+ international performances. Now helping adults move with strength, confidence, and joy.</p>
-      <p class="subtitle" data-lang="es">Atleta de elite convertida en coach de movimiento. Receptora de visa O-1B. Mas de 1,000 presentaciones internacionales. Ahora ayudando a adultos a moverse con fuerza, confianza y alegria.</p>
+        <p class="subtitle" data-lang="en">Elite athlete turned movement coach. O-1B visa recipient. 1,000+ international performances. Now helping adults move with strength, confidence, and joy.</p>
+        <p class="subtitle" data-lang="es">Atleta de elite convertida en coach de movimiento. Receptora de visa O-1B. Mas de 1,000 presentaciones internacionales. Ahora ayudando a adultos a moverse con fuerza, confianza y alegria.</p>
 
-      <div class="hero-buttons" data-lang="en">
-        <a href="#inquiry" class="btn btn-coral">Book Your Assessment</a>
-        <a href="/quiz.html" class="btn btn-outline-white">Take the Free Movement Test</a>
+        <div class="hero-buttons" data-lang="en">
+          <a href="#inquiry" class="btn btn-coral">Book Your Assessment</a>
+          <a href="/quiz.html" class="btn btn-outline-white">Take the Free Movement Test</a>
+        </div>
+        <div class="hero-buttons" data-lang="es">
+          <a href="#inquiry" class="btn btn-coral">Reserva Tu Evaluaci&oacute;n</a>
+          <a href="/quiz.html" class="btn btn-outline-white">Haz el Test de Movimiento Gratis</a>
+        </div>
       </div>
-      <div class="hero-buttons" data-lang="es">
-        <a href="#inquiry" class="btn btn-coral">Reserva Tu Evaluaci&oacute;n</a>
-        <a href="/quiz.html" class="btn btn-outline-white">Haz el Test de Movimiento Gratis</a>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- ============ SECTION 2: CREDENTIAL BAR ============ -->
   <section class="credentials">
@@ -1574,16 +1588,45 @@
       loadSocialFeed();
     });
 
-    // Hero slideshow
+    // Scroll-driven hero slideshow
     (function() {
+      var wrapper = document.querySelector('.hero-scroll-wrapper');
       var slides = document.querySelectorAll('.hero-slide');
-      if (slides.length < 2) return;
-      var current = 0;
-      setInterval(function() {
-        slides[current].classList.remove('active');
-        current = (current + 1) % slides.length;
-        slides[current].classList.add('active');
-      }, 6000);
+      if (!wrapper || slides.length < 2) return;
+
+      var totalSlides = slides.length;
+
+      function onScroll() {
+        var rect = wrapper.getBoundingClientRect();
+        var wrapperHeight = wrapper.offsetHeight;
+        var viewportHeight = window.innerHeight;
+
+        // How far we've scrolled into the wrapper (0 to 1)
+        var scrolled = -rect.top / (wrapperHeight - viewportHeight);
+        scrolled = Math.max(0, Math.min(1, scrolled));
+
+        // Map scroll position to slide index
+        var slidePosition = scrolled * (totalSlides - 1);
+        var currentIndex = Math.floor(slidePosition);
+        var progress = slidePosition - currentIndex;
+
+        // Set opacity for each slide
+        for (var i = 0; i < slides.length; i++) {
+          if (i === currentIndex) {
+            slides[i].style.opacity = 1;
+            slides[i].classList.add('active');
+          } else if (i === currentIndex + 1) {
+            slides[i].style.opacity = progress;
+            slides[i].classList.toggle('active', progress > 0.5);
+          } else {
+            slides[i].style.opacity = 0;
+            slides[i].classList.remove('active');
+          }
+        }
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     })();
   </script>
 
