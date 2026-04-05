@@ -226,6 +226,32 @@
     }
 
     /* ========================================
+       SITE LOGO (fixed top-left)
+       ======================================== */
+    .site-logo {
+      position: fixed;
+      top: 20px;
+      left: 24px;
+      z-index: 1000;
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+    .site-logo:hover {
+      text-decoration: none;
+      opacity: 0.9;
+    }
+    .site-logo.logo-dark {
+      color: var(--charcoal);
+      text-shadow: none;
+    }
+
+    /* ========================================
        SECTION 1: HERO
        ======================================== */
     .hero-scroll-wrapper {
@@ -888,6 +914,14 @@
       .card:hover, .pricing-card:hover { transform: none; }
     }
 
+    @media (max-width: 480px) {
+      .site-logo {
+        font-size: 17px;
+        top: 18px;
+        left: 16px;
+      }
+    }
+
     /* ========================================
        HIDDEN LANGUAGE
        ======================================== */
@@ -963,6 +997,9 @@
   </style>
 </head>
 <body>
+
+  <!-- ============ SITE LOGO ============ -->
+  <a href="/" class="site-logo">Laura Treto</a>
 
   <!-- ============ LANGUAGE TOGGLE ============ -->
   <div class="lang-toggle">
@@ -1646,6 +1683,24 @@
 
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
+    })();
+
+    // Logo color toggle (white on hero, charcoal on light sections)
+    (function() {
+      var siteLogo = document.querySelector('.site-logo');
+      if (!siteLogo) return;
+      var heroWrapper = document.querySelector('.hero-scroll-wrapper');
+      function updateLogo() {
+        if (!heroWrapper) return;
+        var rect = heroWrapper.getBoundingClientRect();
+        if (rect.bottom <= 80) {
+          siteLogo.classList.add('logo-dark');
+        } else {
+          siteLogo.classList.remove('logo-dark');
+        }
+      }
+      window.addEventListener('scroll', updateLogo, { passive: true });
+      updateLogo();
     })();
   </script>
 
