@@ -410,136 +410,157 @@
     .card p { font-size: 16px; color: #555; line-height: 1.6; }
 
     /* ========================================
-       SECTION 4: HOW IT WORKS (Parallax Redesign)
+       SECTION 4: HOW IT WORKS (Full-bleed GIF background)
        ======================================== */
     .how-it-works {
-      background: var(--warm-white);
       position: relative;
-      overflow: visible;
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-    .how-it-works .section-header {
-      padding-top: var(--section-pad);
-    }
-    .hiw-parallax-wrap {
-      position: relative;
-      min-height: 160vh;
-    }
-    .hiw-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: start;
-      position: relative;
+      overflow: hidden;
+      padding: 0;
+      /* The GIF IS the background -- no solid color */
     }
 
-    /* Steps column */
-    .hiw-steps-col {
-      padding: 40px 0 120px;
-    }
-    .hiw-step {
-      position: relative;
-      padding: 48px 0;
+    /* Full-bleed GIF background */
+    .hiw-gif-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
       opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.5s ease;
     }
-    .hiw-step.hiw-visible {
+    .hiw-gif-bg.hiw-bg-visible {
       opacity: 1;
-      transform: translateY(0);
     }
-    .hiw-step + .hiw-step {
-      border-top: 1px solid rgba(197, 151, 62, 0.15);
+    .hiw-gif-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
+    /* Dark overlay for text readability */
+    .hiw-gif-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(43, 43, 43, 0.55) 0%,
+        rgba(43, 43, 43, 0.45) 40%,
+        rgba(43, 43, 43, 0.50) 100%
+      );
+    }
+
+    /* Scrollable content area */
+    .hiw-scroll-area {
+      position: relative;
+      z-index: 2;
+      min-height: 280vh;
+    }
+
+    /* Section header pinned at top initially */
+    .hiw-header {
+      text-align: center;
+      padding: 120px var(--content-pad) 60px;
+    }
+    .hiw-header h2 {
+      color: var(--white);
+      text-shadow: 0 2px 16px rgba(0,0,0,0.3);
+    }
+    .hiw-header .subtitle {
+      color: rgba(255,255,255,0.8);
+      text-shadow: 0 1px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Step cards that fade in on scroll */
+    .hiw-step-card {
+      position: relative;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 48px 40px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(60px) scale(0.95);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      /* Semi-transparent card backdrop */
+      background: rgba(43, 43, 43, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .hiw-step-card.hiw-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Generous spacing between step cards */
+    .hiw-step-card + .hiw-step-card {
+      margin-top: 50vh;
+    }
+
+    /* First card gets top spacing */
+    .hiw-steps-list .hiw-step-card:first-child {
+      margin-top: 20vh;
+    }
+    /* Last card gets bottom spacing */
+    .hiw-steps-list .hiw-step-card:last-child {
+      margin-bottom: 20vh;
+    }
+
     .hiw-step-number {
       font-family: var(--font-serif);
       font-weight: 700;
-      font-size: 56px;
+      font-size: 72px;
       color: var(--gold);
       line-height: 1;
-      margin-bottom: 8px;
-      opacity: 0.7;
-    }
-    .hiw-step-icon {
-      font-size: 32px;
-      color: var(--coral);
-      margin-bottom: 14px;
-    }
-    .hiw-step h3 {
       margin-bottom: 12px;
-      font-size: 22px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
     }
-    .hiw-step p {
-      font-size: 16px;
-      color: #555;
-      max-width: 400px;
+    .hiw-step-card h3 {
+      color: var(--white);
+      font-size: 28px;
+      margin-bottom: 16px;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.2);
+    }
+    .hiw-step-card p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.85);
       line-height: 1.7;
-    }
-
-    /* Gold progress line connecting steps */
-    .hiw-steps-col::before {
-      content: '';
-      position: absolute;
-      top: 60px;
-      bottom: 140px;
-      left: -24px;
-      width: 2px;
-      background: linear-gradient(180deg, transparent, var(--gold) 15%, var(--gold) 85%, transparent);
-      opacity: 0.2;
-    }
-
-    /* Dancing lady column */
-    .hiw-gif-col {
-      position: sticky;
-      top: 15vh;
-      height: auto;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 40px 0;
-    }
-    .hiw-gif-container {
-      position: relative;
-      width: 100%;
-      max-width: 420px;
-    }
-    .hiw-gif-container img {
-      width: 100%;
-      height: auto;
-      border-radius: 16px;
-      box-shadow: 0 12px 48px rgba(0,0,0,0.08);
-    }
-    /* Soft decorative glow behind the GIF */
-    .hiw-gif-container::before {
-      content: '';
-      position: absolute;
-      inset: -20px;
-      border-radius: 24px;
-      background: radial-gradient(ellipse at center, rgba(232,101,74,0.06) 0%, transparent 70%);
-      z-index: -1;
+      max-width: 440px;
+      margin: 0 auto;
     }
 
     /* Bottom CTA area */
     .hiw-bottom-cta {
       text-align: center;
-      padding: 48px 0 var(--section-pad);
+      padding: 0 var(--content-pad) 100px;
+      position: relative;
+      z-index: 2;
     }
     .hiw-bottom-cta p {
       font-family: var(--font-serif);
       font-style: italic;
-      font-size: 20px;
-      color: var(--charcoal);
+      font-size: 22px;
+      color: var(--white);
       margin-bottom: 24px;
-      opacity: 0.8;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
     }
 
     /* Reduced motion: show everything immediately */
     @media (prefers-reduced-motion: reduce) {
-      .hiw-step {
+      .hiw-step-card {
         opacity: 1;
         transform: none;
         transition: none;
+      }
+      .hiw-gif-bg {
+        position: absolute;
+        opacity: 1;
+        height: 100%;
       }
     }
 
@@ -1028,33 +1049,30 @@
       }
 
       /* How It Works mobile */
-      .hiw-layout {
-        grid-template-columns: 1fr;
-        gap: 0;
+      .hiw-scroll-area {
+        min-height: 240vh;
       }
-      .hiw-gif-col {
-        position: relative;
-        top: auto;
-        order: -1;
-        padding: 0 0 24px;
+      .hiw-header {
+        padding: 80px var(--content-pad) 40px;
       }
-      .hiw-gif-container {
-        max-width: 280px;
-        margin: 0 auto;
-        opacity: 0.85;
+      .hiw-step-card {
+        max-width: 90%;
+        padding: 36px 24px;
       }
-      .hiw-steps-col::before {
-        display: none;
+      .hiw-step-card + .hiw-step-card {
+        margin-top: 40vh;
       }
-      .hiw-step {
-        padding: 32px 0;
-        text-align: center;
+      .hiw-step-number {
+        font-size: 52px;
       }
-      .hiw-step p {
-        margin: 0 auto;
+      .hiw-step-card h3 {
+        font-size: 22px;
       }
-      .hiw-parallax-wrap {
-        min-height: auto;
+      .hiw-step-card p {
+        font-size: 15px;
+      }
+      .hiw-bottom-cta p {
+        font-size: 18px;
       }
 
       .about-grid {
@@ -1077,7 +1095,6 @@
       }
       .social-links a { justify-content: center; }
 
-      .hiw-step-number { font-size: 40px; }
       .price { font-size: 30px; }
       .social-testimonial blockquote { font-size: 18px; }
 
@@ -1110,21 +1127,21 @@
     /* grid containers */
     .credentials-grid[data-lang="es"],
     .cards-grid[data-lang="es"],
-    .hiw-layout[data-lang="es"],
+    .hiw-steps-list[data-lang="es"],
     .pricing-grid[data-lang="es"],
     .pricing-subsection[data-lang="es"],
     .inquiry-grid[data-lang="es"],
     .footer-grid[data-lang="es"] { display: none; }
     body.lang-es .credentials-grid[data-lang="es"],
     body.lang-es .cards-grid[data-lang="es"],
-    body.lang-es .hiw-layout[data-lang="es"],
     body.lang-es .pricing-grid[data-lang="es"],
     body.lang-es .inquiry-grid[data-lang="es"],
     body.lang-es .footer-grid[data-lang="es"] { display: grid; }
+    body.lang-es .hiw-steps-list[data-lang="es"] { display: block; }
     body.lang-es .pricing-subsection[data-lang="es"] { display: block; }
     body.lang-es .credentials-grid[data-lang="en"],
     body.lang-es .cards-grid[data-lang="en"],
-    body.lang-es .hiw-layout[data-lang="en"],
+    body.lang-es .hiw-steps-list[data-lang="en"],
     body.lang-es .pricing-grid[data-lang="en"],
     body.lang-es .pricing-subsection[data-lang="en"],
     body.lang-es .inquiry-grid[data-lang="en"],
@@ -1275,76 +1292,61 @@
     </div>
   </section>
 
-  <!-- ============ SECTION 4: HOW IT WORKS (Parallax) ============ -->
+  <!-- ============ SECTION 4: HOW IT WORKS (Full-bleed GIF) ============ -->
   <section class="how-it-works" id="how-it-works">
-    <div class="container">
-      <div class="section-header">
+    <!-- Full-bleed dancing lady GIF background (fixed) -->
+    <div class="hiw-gif-bg" id="hiwGifBg">
+      <img src="/images/dancing-lady.gif" alt="Dancing with joy at any age" loading="lazy" />
+    </div>
+
+    <div class="hiw-scroll-area">
+      <!-- Section header -->
+      <div class="hiw-header">
         <h2 data-lang="en">How It Works</h2>
         <h2 data-lang="es">C&oacute;mo Funciona</h2>
         <p class="subtitle" data-lang="en">Three steps to moving with confidence again.</p>
         <p class="subtitle" data-lang="es">Tres pasos para volver a moverte con confianza.</p>
       </div>
 
-      <div class="hiw-parallax-wrap">
-        <!-- EN Steps + GIF -->
-        <div class="hiw-layout" data-lang="en">
-          <div class="hiw-steps-col">
-            <div class="hiw-step" data-hiw-step="1">
-              <div class="hiw-step-number">01</div>
-              <div class="hiw-step-icon">&#128203;</div>
-              <h3>Take the Free Assessment</h3>
-              <p>A 2-minute online quiz that reveals your movement strengths and blind spots. No camera, no gym. Just honest answers.</p>
-            </div>
-            <div class="hiw-step" data-hiw-step="2">
-              <div class="hiw-step-number">02</div>
-              <div class="hiw-step-icon">&#128197;</div>
-              <h3>Book a Private Session</h3>
-              <p>Meet Laura in person in Key West. She watches how you move, identifies patterns, and builds your plan. $125 for your first session.</p>
-            </div>
-            <div class="hiw-step" data-hiw-step="3">
-              <div class="hiw-step-number">03</div>
-              <div class="hiw-step-icon">&#10004;</div>
-              <h3>Move With Confidence</h3>
-              <p>A personalized coaching plan built around YOUR body. Not a template. Not an app. Real coaching from a world-class mover.</p>
-            </div>
-          </div>
-          <div class="hiw-gif-col">
-            <div class="hiw-gif-container">
-              <img src="/images/dancing-lady.gif" alt="Dancing with joy at any age" loading="lazy" />
-            </div>
-          </div>
+      <!-- EN Steps -->
+      <div class="hiw-steps-list" data-lang="en">
+        <div class="hiw-step-card" data-hiw-step="1">
+          <div class="hiw-step-number">01</div>
+          <h3>Take the Free Assessment</h3>
+          <p>A 2-minute online quiz that reveals your movement strengths and blind spots. No camera, no gym. Just honest answers.</p>
         </div>
-
-        <!-- ES Steps + GIF -->
-        <div class="hiw-layout" data-lang="es">
-          <div class="hiw-steps-col">
-            <div class="hiw-step" data-hiw-step="1">
-              <div class="hiw-step-number">01</div>
-              <div class="hiw-step-icon">&#128203;</div>
-              <h3>Haz la Evaluaci&oacute;n Gratuita</h3>
-              <p>Un test en l&iacute;nea de 2 minutos que revela tus fortalezas y puntos ciegos de movimiento. Sin c&aacute;mara, sin gimnasio. Solo respuestas honestas.</p>
-            </div>
-            <div class="hiw-step" data-hiw-step="2">
-              <div class="hiw-step-number">02</div>
-              <div class="hiw-step-icon">&#128197;</div>
-              <h3>Reserva una Sesi&oacute;n Privada</h3>
-              <p>Conoce a Laura en persona en Key West. Ella observa c&oacute;mo te mueves, identifica patrones y construye tu plan. $125 por tu primera sesi&oacute;n.</p>
-            </div>
-            <div class="hiw-step" data-hiw-step="3">
-              <div class="hiw-step-number">03</div>
-              <div class="hiw-step-icon">&#10004;</div>
-              <h3>Mu&eacute;vete con Confianza</h3>
-              <p>Un plan de coaching personalizado construido alrededor de TU cuerpo. No es una plantilla. No es una app. Coaching real de una profesional de clase mundial.</p>
-            </div>
-          </div>
-          <div class="hiw-gif-col">
-            <div class="hiw-gif-container">
-              <img src="/images/dancing-lady.gif" alt="Bailando con alegr&iacute;a a cualquier edad" loading="lazy" />
-            </div>
-          </div>
+        <div class="hiw-step-card" data-hiw-step="2">
+          <div class="hiw-step-number">02</div>
+          <h3>Book a Private Session</h3>
+          <p>Meet Laura in person in Key West. She watches how you move, identifies patterns, and builds your plan. $125 for your first session.</p>
+        </div>
+        <div class="hiw-step-card" data-hiw-step="3">
+          <div class="hiw-step-number">03</div>
+          <h3>Move With Confidence</h3>
+          <p>A personalized coaching plan built around YOUR body. Not a template. Not an app. Real coaching from a world-class mover.</p>
         </div>
       </div>
 
+      <!-- ES Steps -->
+      <div class="hiw-steps-list" data-lang="es">
+        <div class="hiw-step-card" data-hiw-step="1">
+          <div class="hiw-step-number">01</div>
+          <h3>Haz la Evaluaci&oacute;n Gratuita</h3>
+          <p>Un test en l&iacute;nea de 2 minutos que revela tus fortalezas y puntos ciegos de movimiento. Sin c&aacute;mara, sin gimnasio. Solo respuestas honestas.</p>
+        </div>
+        <div class="hiw-step-card" data-hiw-step="2">
+          <div class="hiw-step-number">02</div>
+          <h3>Reserva una Sesi&oacute;n Privada</h3>
+          <p>Conoce a Laura en persona en Key West. Ella observa c&oacute;mo te mueves, identifica patrones y construye tu plan. $125 por tu primera sesi&oacute;n.</p>
+        </div>
+        <div class="hiw-step-card" data-hiw-step="3">
+          <div class="hiw-step-number">03</div>
+          <h3>Mu&eacute;vete con Confianza</h3>
+          <p>Un plan de coaching personalizado construido alrededor de TU cuerpo. No es una plantilla. No es una app. Coaching real de una profesional de clase mundial.</p>
+        </div>
+      </div>
+
+      <!-- Bottom CTA -->
       <div class="hiw-bottom-cta">
         <p data-lang="en">Movement has no age limit.</p>
         <p data-lang="es">El movimiento no tiene l&iacute;mite de edad.</p>
@@ -1936,70 +1938,55 @@
       });
     })();
 
-    // How It Works: Staggered step reveal + GIF parallax
+    // How It Works: Full-bleed GIF background with scroll-reveal steps
     (function() {
       var section = document.getElementById('how-it-works');
-      if (!section) return;
+      var gifBg = document.getElementById('hiwGifBg');
+      if (!section || !gifBg) return;
 
-      var steps = section.querySelectorAll('.hiw-step');
-      var gifContainers = section.querySelectorAll('.hiw-gif-container');
-
-      // Check for reduced motion preference
+      var stepCards = section.querySelectorAll('.hiw-step-card');
       var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       if (prefersReducedMotion) {
-        // Show all steps immediately
-        steps.forEach(function(step) {
-          step.classList.add('hiw-visible');
+        stepCards.forEach(function(card) {
+          card.classList.add('hiw-visible');
         });
+        gifBg.classList.add('hiw-bg-visible');
         return;
       }
 
-      // Staggered step reveal using Intersection Observer with generous thresholds
-      var stepObserver = new IntersectionObserver(function(entries) {
+      // Show/hide the fixed GIF background only when section is in viewport
+      function updateGifVisibility() {
+        var rect = section.getBoundingClientRect();
+        var viewportH = window.innerHeight;
+        // Section is in view if its top hasn't scrolled past bottom AND its bottom hasn't scrolled past top
+        var inView = rect.top < viewportH && rect.bottom > 0;
+        if (inView) {
+          gifBg.classList.add('hiw-bg-visible');
+        } else {
+          gifBg.classList.remove('hiw-bg-visible');
+        }
+      }
+
+      window.addEventListener('scroll', updateGifVisibility, { passive: true });
+      updateGifVisibility();
+
+      // Step cards fade in via Intersection Observer
+      var cardObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            // Delay based on step number for stagger effect
-            var stepNum = parseInt(entry.target.getAttribute('data-hiw-step')) || 1;
-            var delay = (stepNum - 1) * 200; // 200ms stagger between steps
-            setTimeout(function() {
-              entry.target.classList.add('hiw-visible');
-            }, delay);
-            stepObserver.unobserve(entry.target);
+            entry.target.classList.add('hiw-visible');
+            cardObserver.unobserve(entry.target);
           }
         });
       }, {
-        threshold: 0.05,
-        rootMargin: '0px 0px -5% 0px'
+        threshold: 0.2,
+        rootMargin: '0px 0px -10% 0px'
       });
 
-      steps.forEach(function(step) {
-        stepObserver.observe(step);
+      stepCards.forEach(function(card) {
+        cardObserver.observe(card);
       });
-
-      // Parallax effect on the GIF: subtle vertical offset based on scroll
-      function parallaxGif() {
-        var sectionRect = section.getBoundingClientRect();
-        var viewportH = window.innerHeight;
-
-        // Only apply when section is in view
-        if (sectionRect.bottom < 0 || sectionRect.top > viewportH) return;
-
-        // Calculate how far through the section we are (0 to 1)
-        var sectionH = section.offsetHeight;
-        var progress = (viewportH - sectionRect.top) / (viewportH + sectionH);
-        progress = Math.max(0, Math.min(1, progress));
-
-        // Move GIF slower than scroll (parallax factor 0.3 = 30% of scroll speed offset)
-        var offset = (progress - 0.5) * sectionH * 0.12;
-
-        gifContainers.forEach(function(container) {
-          container.style.transform = 'translateY(' + offset + 'px)';
-        });
-      }
-
-      window.addEventListener('scroll', parallaxGif, { passive: true });
-      parallaxGif();
     })();
   </script>
 
