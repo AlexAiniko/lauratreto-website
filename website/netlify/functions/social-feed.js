@@ -193,10 +193,16 @@ exports.handler = async (event) => {
     };
   }
 
-  // Combine, sort by score descending, take top 9
-  const allPosts = [...igPosts, ...fbPosts];
-  allPosts.sort((a, b) => b._score - a._score);
-  const topPosts = allPosts.slice(0, 9);
+  // Balance the feed: 6 from Instagram (fitness/coaching), 3 from Facebook (Mavericks/stage)
+  // This prevents high-engagement FB posts from dominating the grid
+  igPosts.sort((a, b) => b._score - a._score);
+  fbPosts.sort((a, b) => b._score - a._score);
+  const topIg = igPosts.slice(0, 6);
+  const topFb = fbPosts.slice(0, 3);
+
+  // Combine the balanced pool, then sort by score for final grid ordering
+  const topPosts = [...topIg, ...topFb];
+  topPosts.sort((a, b) => b._score - a._score);
 
   // Strip internal score before returning
   const cleanPosts = topPosts.map(({ _score, ...post }) => post);

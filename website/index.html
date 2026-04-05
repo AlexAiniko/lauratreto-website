@@ -1518,7 +1518,7 @@
       if (!grid) return;
 
       try {
-        var res = await fetch('/.netlify/functions/social-feed?v=2');
+        var res = await fetch('/.netlify/functions/social-feed?v=3');
         if (!res.ok) throw new Error('Status ' + res.status);
 
         var data = await res.json();
