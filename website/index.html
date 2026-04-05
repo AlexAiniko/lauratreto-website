@@ -238,48 +238,74 @@
       text-align: center;
       overflow: hidden;
     }
-    .hero-bg {
+    /* Hero Slideshow */
+    .hero-slide {
       position: absolute;
       inset: 0;
-      background: url('/images/hero.jpg') center center / cover no-repeat;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
       z-index: 0;
     }
-    .hero-bg::after {
+    .hero-slide.active {
+      opacity: 1;
+      animation: kenBurns 8s ease-in-out forwards;
+    }
+    .hero-slide::after {
       content: '';
       position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.4);
+      z-index: 1;
+    }
+    .hero-slide-1 { background-image: url('/images/hero.jpg'); }
+    .hero-slide-2 { background-image: url('/images/hero-2.jpg'); }
+    .hero-slide-3 { background-image: url('/images/hero-3.jpg'); }
+    .hero-slide-4 { background-image: url('/images/hero-4.jpg'); }
+
+    @keyframes kenBurns {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
     }
     .hero-content {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       color: var(--white);
       max-width: 800px;
       padding: 0 var(--content-pad);
-      animation: fadeUp 0.6s ease-out 0.3s both;
     }
-    .hero-content h1 { color: var(--white); }
+    .hero-content h1 {
+      color: var(--white);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroTextIn 1s ease-out 0.3s forwards;
+    }
     .hero-content .subtitle {
       color: rgba(255,255,255,0.85);
       font-size: 19px;
       max-width: 600px;
       margin: 20px auto 0;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroTextIn 1s ease-out 0.6s forwards;
     }
     .hero-buttons {
       display: flex;
       gap: 16px;
       justify-content: center;
       margin-top: 36px;
-      animation: fadeIn 0.4s ease-out 0.5s both;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroTextIn 1s ease-out 0.9s forwards;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes heroTextIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ========================================
@@ -937,8 +963,11 @@
 
   <!-- ============ SECTION 1: HERO ============ -->
   <section class="hero" id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
+    <div class="hero-slide hero-slide-1 active"></div>
+    <div class="hero-slide hero-slide-2"></div>
+    <div class="hero-slide hero-slide-3"></div>
+    <div class="hero-slide hero-slide-4"></div>
+    <div class="hero-content hero-animated">
       <h1 data-lang="en">World-Class Movement Coaching.<br>Now in Key West.</h1>
       <h1 data-lang="es">Coaching de Movimiento de Clase Mundial.<br>Ahora en Key West.</h1>
 
@@ -1544,6 +1573,18 @@
       });
       loadSocialFeed();
     });
+
+    // Hero slideshow
+    (function() {
+      var slides = document.querySelectorAll('.hero-slide');
+      if (slides.length < 2) return;
+      var current = 0;
+      setInterval(function() {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      }, 6000);
+    })();
   </script>
 
 </body>
