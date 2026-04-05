@@ -269,31 +269,20 @@
       text-align: center;
       overflow: hidden;
     }
-    /* Hero Slideshow (scroll-driven) */
-    .hero-slide {
+    /* Hero background (single static image) */
+    .hero-bg {
       position: absolute;
       inset: 0;
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      opacity: 0;
-      transition: opacity 0.15s ease-out;
+      background: url('/images/hero.jpg') center center / cover no-repeat;
       z-index: 0;
     }
-    .hero-slide.active {
-      opacity: 1;
-    }
-    .hero-slide::after {
+    .hero-bg::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.35);
       z-index: 1;
     }
-    .hero-slide-1 { background-image: url('/images/hero.jpg'); }
-    .hero-slide-2 { background-image: url('/images/hero-2.jpg'); }
-    .hero-slide-3 { background-image: url('/images/hero-3.jpg'); }
-    .hero-slide-4 { background-image: url('/images/hero-4.jpg'); }
 
     .hero-content {
       position: relative;
@@ -1012,10 +1001,7 @@
   <!-- ============ SECTION 1: HERO ============ -->
   <div class="hero-scroll-wrapper">
     <section class="hero" id="hero">
-      <div class="hero-slide hero-slide-1 active"></div>
-      <div class="hero-slide hero-slide-2"></div>
-      <div class="hero-slide hero-slide-3"></div>
-      <div class="hero-slide hero-slide-4"></div>
+      <div class="hero-bg"></div>
       <div class="hero-content">
         <h1 data-lang="en">World-Class Movement Coaching.<br>Now in Key West.</h1>
         <h1 data-lang="es">Coaching de Movimiento de Clase Mundial.<br>Ahora en Key West.</h1>
@@ -1626,14 +1612,11 @@
       loadSocialFeed();
     });
 
-    // Scroll-driven hero slideshow + progressive text reveal
+    // Scroll-driven progressive text reveal
     (function() {
       var wrapper = document.querySelector('.hero-scroll-wrapper');
-      var slides = document.querySelectorAll('.hero-slide');
       var heroContent = document.querySelector('.hero-content');
-      if (!wrapper || slides.length < 2) return;
-
-      var totalSlides = slides.length;
+      if (!wrapper || !heroContent) return;
 
       function onScroll() {
         var rect = wrapper.getBoundingClientRect();
@@ -1643,25 +1626,6 @@
         // How far we've scrolled into the wrapper (0 to 1)
         var scrolled = -rect.top / (wrapperHeight - viewportHeight);
         scrolled = Math.max(0, Math.min(1, scrolled));
-
-        // Map scroll position to slide index
-        var slidePosition = scrolled * (totalSlides - 1);
-        var currentIndex = Math.floor(slidePosition);
-        var progress = slidePosition - currentIndex;
-
-        // Set opacity for each slide
-        for (var i = 0; i < slides.length; i++) {
-          if (i === currentIndex) {
-            slides[i].style.opacity = 1;
-            slides[i].classList.add('active');
-          } else if (i === currentIndex + 1) {
-            slides[i].style.opacity = progress;
-            slides[i].classList.toggle('active', progress > 0.5);
-          } else {
-            slides[i].style.opacity = 0;
-            slides[i].classList.remove('active');
-          }
-        }
 
         // Progressive text reveal based on scroll position
         if (scrolled >= 0.08) {
