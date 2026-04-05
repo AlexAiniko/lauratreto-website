@@ -1628,19 +1628,19 @@
         scrolled = Math.max(0, Math.min(1, scrolled));
 
         // Progressive text reveal based on scroll position
-        if (scrolled >= 0.08) {
+        if (scrolled >= 0.15) {
           heroContent.classList.add('show-title');
         } else {
           heroContent.classList.remove('show-title');
         }
 
-        if (scrolled >= 0.18) {
+        if (scrolled >= 0.35) {
           heroContent.classList.add('show-subtitle');
         } else {
           heroContent.classList.remove('show-subtitle');
         }
 
-        if (scrolled >= 0.28) {
+        if (scrolled >= 0.55) {
           heroContent.classList.add('show-cta');
         } else {
           heroContent.classList.remove('show-cta');
