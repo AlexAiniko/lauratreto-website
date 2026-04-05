@@ -264,7 +264,7 @@
       top: 0;
       height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
       text-align: center;
       overflow: hidden;
@@ -290,9 +290,19 @@
       color: var(--white);
       max-width: 800px;
       padding: 0 var(--content-pad);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+      justify-content: center;
+      padding-top: 15vh;
+      padding-bottom: 12vh;
+      gap: 0;
     }
     .hero-content h1 {
       color: var(--white);
+      margin-top: auto;
       opacity: 0;
       transform: translateY(40px) scale(0.95);
       transition: opacity 1s ease-out, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -310,7 +320,7 @@
       display: flex;
       gap: 16px;
       justify-content: center;
-      margin-top: 36px;
+      margin-top: auto;
       opacity: 0;
       transform: translateY(25px);
       transition: opacity 0.7s ease-out, transform 0.7s ease-out;
@@ -856,6 +866,10 @@
       h3 { font-size: 20px; }
       body { font-size: 16px; }
 
+      .hero-content {
+        padding-top: 12vh;
+        padding-bottom: 10vh;
+      }
       .hero-content .subtitle { font-size: 16px; }
 
       .hero-buttons {
