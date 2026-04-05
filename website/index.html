@@ -1092,13 +1092,11 @@
       <div class="hero-carousel" id="heroCarousel">
         <div class="hero-carousel-slide active" style="background-image: url('/images/hero.jpg')"></div>
         <div class="hero-carousel-slide" style="background-image: url('/images/hero-2.jpg')"></div>
-        <div class="hero-carousel-slide" style="background-image: url('/images/hero-3.jpg')"></div>
         <div class="hero-carousel-slide" style="background-image: url('/images/hero-4.jpg')"></div>
         <div class="hero-carousel-dots">
           <button class="hero-dot active" data-index="0"></button>
           <button class="hero-dot" data-index="1"></button>
           <button class="hero-dot" data-index="2"></button>
-          <button class="hero-dot" data-index="3"></button>
         </div>
       </div>
       <div class="hero-content">
@@ -1804,10 +1802,10 @@
         });
       });
 
-      // Auto-rotate every 5 seconds
+      // Auto-rotate every 4 seconds
       setInterval(function() {
         showSlide(current + 1);
-      }, 5000);
+      }, 4000);
     })();
 
     // About carousel (scroll-snap) dot sync
