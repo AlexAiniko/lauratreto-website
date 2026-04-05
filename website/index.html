@@ -233,22 +233,23 @@
       top: 20px;
       left: 24px;
       z-index: 1000;
-      font-family: var(--font-serif);
-      font-size: 20px;
-      font-weight: 700;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
       color: var(--white);
       text-decoration: none;
-      letter-spacing: 0.02em;
       text-shadow: 0 1px 8px rgba(0,0,0,0.3);
-      transition: color 0.3s ease, text-shadow 0.3s ease;
+      transition: opacity 0.4s ease, color 0.3s ease, text-shadow 0.3s ease;
     }
     .site-logo:hover {
       text-decoration: none;
       opacity: 0.9;
     }
-    .site-logo.logo-dark {
-      color: var(--charcoal);
-      text-shadow: none;
+    .site-logo.logo-hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
     /* ========================================
@@ -916,8 +917,9 @@
 
     @media (max-width: 480px) {
       .site-logo {
-        font-size: 17px;
-        top: 18px;
+        font-size: 13px;
+        letter-spacing: 0.25em;
+        top: 19px;
         left: 16px;
       }
     }
@@ -1685,18 +1687,18 @@
       onScroll();
     })();
 
-    // Logo color toggle (white on hero, charcoal on light sections)
+    // Logo fade out after credentials section scrolls past
     (function() {
       var siteLogo = document.querySelector('.site-logo');
       if (!siteLogo) return;
-      var heroWrapper = document.querySelector('.hero-scroll-wrapper');
+      var credSection = document.querySelector('.credentials');
       function updateLogo() {
-        if (!heroWrapper) return;
-        var rect = heroWrapper.getBoundingClientRect();
+        if (!credSection) return;
+        var rect = credSection.getBoundingClientRect();
         if (rect.bottom <= 80) {
-          siteLogo.classList.add('logo-dark');
+          siteLogo.classList.add('logo-hidden');
         } else {
-          siteLogo.classList.remove('logo-dark');
+          siteLogo.classList.remove('logo-hidden');
         }
       }
       window.addEventListener('scroll', updateLogo, { passive: true });
