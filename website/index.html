@@ -491,22 +491,22 @@
       border-radius: var(--card-radius);
       box-shadow: var(--card-shadow);
     }
-    .carousel-slides {
-      position: relative;
+    .carousel-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-slide {
+      min-width: 100%;
       width: 100%;
       aspect-ratio: 3/4;
-    }
-    .carousel-slide {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
       object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.6s ease-in-out;
-    }
-    .carousel-slide.active {
-      opacity: 1;
+      display: block;
+      flex-shrink: 0;
+      scroll-snap-align: center;
     }
     .carousel-dots {
       position: absolute;
@@ -1249,8 +1249,8 @@
     <div class="container">
       <div class="about-grid">
         <div class="about-carousel" id="aboutCarousel">
-          <div class="carousel-slides">
-            <img src="/images/laura-portrait.jpg" alt="Laura Treto, movement coach" class="carousel-slide active" loading="lazy" />
+          <div class="carousel-track">
+            <img src="/images/laura-portrait.jpg" alt="Laura Treto, movement coach" class="carousel-slide" loading="lazy" />
             <img src="/images/laura-active.jpg" alt="Laura Treto, full body" class="carousel-slide" loading="lazy" />
             <img src="/images/laura-form.jpg" alt="Laura Treto with kettlebell" class="carousel-slide" loading="lazy" />
           </div>
@@ -1779,14 +1779,13 @@
       updateLogo();
     })();
 
-    // Infinite hero carousel
+    // Infinite hero carousel (auto-rotate)
     (function() {
       var container = document.getElementById('heroCarousel');
       if (!container) return;
       var slides = container.querySelectorAll('.hero-carousel-slide');
       var dots = container.querySelectorAll('.hero-dot');
       var current = 0;
-      var startX = 0;
 
       function showSlide(index) {
         current = ((index % slides.length) + slides.length) % slides.length;
@@ -1805,51 +1804,36 @@
         });
       });
 
-      // Touch swipe
-      container.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-      }, { passive: true });
-
-      container.addEventListener('touchend', function(e) {
-        var diff = e.changedTouches[0].clientX - startX;
-        if (diff > 50) showSlide(current - 1);
-        else if (diff < -50) showSlide(current + 1);
-      });
+      // Auto-rotate every 5 seconds
+      setInterval(function() {
+        showSlide(current + 1);
+      }, 5000);
     })();
 
-    // Infinite about carousel
+    // About carousel (scroll-snap) dot sync
     (function() {
       var container = document.getElementById('aboutCarousel');
       if (!container) return;
-      var slides = container.querySelectorAll('.carousel-slide');
+      var track = container.querySelector('.carousel-track');
       var dots = container.querySelectorAll('.carousel-dot');
-      var current = 0;
-      var startX = 0;
+      if (!track) return;
 
-      function showSlide(index) {
-        current = ((index % slides.length) + slides.length) % slides.length;
-        slides.forEach(function(s, i) {
-          s.classList.toggle('active', i === current);
-        });
-        dots.forEach(function(d, i) {
-          d.classList.toggle('active', i === current);
+      function updateDots() {
+        var scrollLeft = track.scrollLeft;
+        var slideWidth = track.offsetWidth;
+        var index = Math.round(scrollLeft / slideWidth);
+        dots.forEach(function(dot, i) {
+          dot.classList.toggle('active', i === index);
         });
       }
 
+      track.addEventListener('scroll', updateDots, { passive: true });
+
       dots.forEach(function(dot) {
         dot.addEventListener('click', function() {
-          showSlide(parseInt(dot.dataset.index));
+          var index = parseInt(dot.dataset.index);
+          track.scrollTo({ left: index * track.offsetWidth, behavior: 'smooth' });
         });
-      });
-
-      container.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-      }, { passive: true });
-
-      container.addEventListener('touchend', function(e) {
-        var diff = e.changedTouches[0].clientX - startX;
-        if (diff > 50) showSlide(current - 1);
-        else if (diff < -50) showSlide(current + 1);
       });
     })();
   </script>
