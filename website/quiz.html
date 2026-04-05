@@ -39,6 +39,61 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ── Language Toggle ── */
+  .lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+    display: flex;
+    background: rgba(255,255,255,0.95);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    backdrop-filter: blur(10px);
+  }
+  .lang-toggle button {
+    padding: 7px 16px;
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: all 0.2s;
+  }
+  .lang-toggle button.active {
+    background: var(--sunset-coral);
+    color: var(--white);
+  }
+
+  /* ── Bilingual display rules ── */
+  [data-lang="es"] { display: none; }
+  body.lang-es [data-lang="es"] { display: block; }
+  body.lang-es [data-lang="en"] { display: none; }
+
+  span[data-lang="es"], button[data-lang="es"], a[data-lang="es"] { display: none; }
+  body.lang-es span[data-lang="es"], body.lang-es button[data-lang="es"], body.lang-es a[data-lang="es"] { display: inline; }
+  body.lang-es span[data-lang="en"], body.lang-es button[data-lang="en"], body.lang-es a[data-lang="en"] { display: none; }
+
+  li[data-lang="es"] { display: none; }
+  body.lang-es li[data-lang="es"] { display: flex; }
+  body.lang-es li[data-lang="en"] { display: none; }
+
+  ul[data-lang="es"] { display: none; }
+  body.lang-es ul[data-lang="es"] { display: flex; flex-direction: column; gap: 8px; }
+  body.lang-es ul[data-lang="en"] { display: none; }
+
+  div.credential-bar[data-lang="es"] { display: none; }
+  body.lang-es div.credential-bar[data-lang="es"] { display: block; }
+  body.lang-es div.credential-bar[data-lang="en"] { display: none; }
+
+  /* Intro start button: inline-block by default */
+  button.intro-start[data-lang="es"] { display: none; }
+  body.lang-es button.intro-start[data-lang="es"] { display: inline-block; }
+  body.lang-es button.intro-start[data-lang="en"] { display: none; }
+
   .quiz-container {
     max-width: 640px;
     margin: 0 auto;
@@ -371,6 +426,7 @@
   .cta-btn-coral:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 24px rgba(233, 69, 96, 0.5);
+    text-decoration: none;
   }
 
   .cta-secondary {
@@ -526,12 +582,20 @@
 </head>
 <body>
 
+<!-- Language Toggle -->
+<div class="lang-toggle">
+  <button class="active" onclick="setLang('en')">EN</button>
+  <button onclick="setLang('es')">ES</button>
+</div>
+
 <div class="quiz-container">
 
   <!-- Header -->
   <header class="quiz-header">
-    <h1>Movement Readiness Score</h1>
-    <p>A 2-minute self-assessment by Laura Treto</p>
+    <h1 data-lang="en">Movement Readiness Score</h1>
+    <h1 data-lang="es">Puntuaci&#243;n de Preparaci&#243;n al Movimiento</h1>
+    <p data-lang="en">A 2-minute self-assessment by Laura Treto</p>
+    <p data-lang="es">Una autoevaluaci&#243;n de 2 minutos por Laura Treto</p>
   </header>
 
   <!-- Progress -->
@@ -548,120 +612,192 @@
   <!-- Intro Screen -->
   <div class="intro-screen" id="introScreen">
     <div class="intro-icon">&#x1F9D8;</div>
-    <h2>How ready is your body to move?</h2>
-    <p>Answer 7 quick questions. Get your personalized Movement Readiness Score and find out exactly where your body needs attention.</p>
-    <ul class="intro-features">
+    <h2 data-lang="en">How ready is your body to move?</h2>
+    <h2 data-lang="es">&#191;Qu&#233; tan preparado est&#225; tu cuerpo para moverse?</h2>
+    <p data-lang="en">Answer 7 quick questions. Get your personalized Movement Readiness Score and find out exactly where your body needs attention.</p>
+    <p data-lang="es">Responde 7 preguntas r&#225;pidas. Obt&#233;n tu Puntuaci&#243;n de Preparaci&#243;n al Movimiento personalizada y descubre exactamente d&#243;nde tu cuerpo necesita atenci&#243;n.</p>
+    <ul class="intro-features" data-lang="en">
       <li>Takes under 2 minutes</li>
       <li>No equipment needed</li>
       <li>Personalized recommendations</li>
       <li>100% free</li>
     </ul>
-    <button class="btn btn-next intro-start" onclick="startQuiz()">Take the Quiz</button>
+    <ul class="intro-features" data-lang="es">
+      <li>Toma menos de 2 minutos</li>
+      <li>Sin equipo necesario</li>
+      <li>Recomendaciones personalizadas</li>
+      <li>100% gratis</li>
+    </ul>
+    <button class="btn btn-next intro-start" data-lang="en" onclick="startQuiz()">Take the Quiz</button>
+    <button class="btn btn-next intro-start" data-lang="es" onclick="startQuiz()">Hacer el Test</button>
   </div>
 
   <!-- Questions -->
+  <!-- Q1: Overall Mobility -->
   <div class="question-card" id="q0">
-    <div class="question-number">Question 1 of 7</div>
-    <div class="question-text">How would you rate your overall mobility?</div>
-    <ul class="options-list">
+    <div class="question-number" data-lang="en">Question 1 of 7</div>
+    <div class="question-number" data-lang="es">Pregunta 1 de 7</div>
+    <div class="question-text" data-lang="en">How would you rate your overall mobility?</div>
+    <div class="question-text" data-lang="es">&#191;C&#243;mo calificar&#237;as tu movilidad general?</div>
+    <ul class="options-list" data-lang="en">
       <li><button class="option-btn" data-q="0" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>I move freely with no restrictions</button></li>
       <li><button class="option-btn" data-q="0" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Some areas feel tight</button></li>
       <li><button class="option-btn" data-q="0" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>I feel stiff most of the time</button></li>
       <li><button class="option-btn" data-q="0" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>I avoid certain movements because of discomfort</button></li>
     </ul>
+    <ul class="options-list" data-lang="es">
+      <li><button class="option-btn" data-q="0" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Me muevo libremente sin restricciones</button></li>
+      <li><button class="option-btn" data-q="0" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Algunas &#225;reas se sienten tensas</button></li>
+      <li><button class="option-btn" data-q="0" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Me siento r&#237;gido/a la mayor parte del tiempo</button></li>
+      <li><button class="option-btn" data-q="0" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Evito ciertos movimientos por molestias</button></li>
+    </ul>
     <div class="nav-row">
-      <button class="btn btn-back" onclick="goBack()">Back</button>
-      <button class="btn btn-next" id="next0" disabled onclick="goNext()">Next</button>
+      <button class="btn btn-back" onclick="goBack()"><span data-lang="en">Back</span><span data-lang="es">Atr&#225;s</span></button>
+      <button class="btn btn-next" id="next0" disabled onclick="goNext()"><span data-lang="en">Next</span><span data-lang="es">Siguiente</span></button>
     </div>
   </div>
 
+  <!-- Q2: Single-Leg Balance -->
   <div class="question-card" id="q1">
-    <div class="question-number">Question 2 of 7</div>
-    <div class="question-text">Can you stand on one leg for 30 seconds without wobbling?</div>
-    <ul class="options-list">
+    <div class="question-number" data-lang="en">Question 2 of 7</div>
+    <div class="question-number" data-lang="es">Pregunta 2 de 7</div>
+    <div class="question-text" data-lang="en">Can you stand on one leg for 30 seconds without wobbling?</div>
+    <div class="question-text" data-lang="es">&#191;Puedes pararte en una pierna por 30 segundos sin tambalearte?</div>
+    <ul class="options-list" data-lang="en">
       <li><button class="option-btn" data-q="1" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Easily, both sides</button></li>
       <li><button class="option-btn" data-q="1" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>One side yes, one side no</button></li>
       <li><button class="option-btn" data-q="1" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>I can for about 10-15 seconds</button></li>
       <li><button class="option-btn" data-q="1" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>I need to hold onto something</button></li>
     </ul>
+    <ul class="options-list" data-lang="es">
+      <li><button class="option-btn" data-q="1" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>F&#225;cilmente, ambos lados</button></li>
+      <li><button class="option-btn" data-q="1" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Un lado s&#237;, el otro no</button></li>
+      <li><button class="option-btn" data-q="1" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Puedo por unos 10-15 segundos</button></li>
+      <li><button class="option-btn" data-q="1" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Necesito agarrarme de algo</button></li>
+    </ul>
     <div class="nav-row">
-      <button class="btn btn-back" onclick="goBack()">Back</button>
-      <button class="btn btn-next" id="next1" disabled onclick="goNext()">Next</button>
+      <button class="btn btn-back" onclick="goBack()"><span data-lang="en">Back</span><span data-lang="es">Atr&#225;s</span></button>
+      <button class="btn btn-next" id="next1" disabled onclick="goNext()"><span data-lang="en">Next</span><span data-lang="es">Siguiente</span></button>
     </div>
   </div>
 
+  <!-- Q3: Morning Stiffness -->
   <div class="question-card" id="q2">
-    <div class="question-number">Question 3 of 7</div>
-    <div class="question-text">How often do you experience joint stiffness when waking up?</div>
-    <ul class="options-list">
+    <div class="question-number" data-lang="en">Question 3 of 7</div>
+    <div class="question-number" data-lang="es">Pregunta 3 de 7</div>
+    <div class="question-text" data-lang="en">How often do you experience joint stiffness when waking up?</div>
+    <div class="question-text" data-lang="es">&#191;Con qu&#233; frecuencia sientes rigidez en las articulaciones al despertar?</div>
+    <ul class="options-list" data-lang="en">
       <li><button class="option-btn" data-q="2" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Never</button></li>
       <li><button class="option-btn" data-q="2" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Occasionally, goes away quickly</button></li>
       <li><button class="option-btn" data-q="2" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Most mornings</button></li>
       <li><button class="option-btn" data-q="2" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Every day, takes a while to loosen up</button></li>
     </ul>
+    <ul class="options-list" data-lang="es">
+      <li><button class="option-btn" data-q="2" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Nunca</button></li>
+      <li><button class="option-btn" data-q="2" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Ocasionalmente, desaparece r&#225;pido</button></li>
+      <li><button class="option-btn" data-q="2" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>La mayor&#237;a de las ma&#241;anas</button></li>
+      <li><button class="option-btn" data-q="2" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Todos los d&#237;as, toma un rato aflojarse</button></li>
+    </ul>
     <div class="nav-row">
-      <button class="btn btn-back" onclick="goBack()">Back</button>
-      <button class="btn btn-next" id="next2" disabled onclick="goNext()">Next</button>
+      <button class="btn btn-back" onclick="goBack()"><span data-lang="en">Back</span><span data-lang="es">Atr&#225;s</span></button>
+      <button class="btn btn-next" id="next2" disabled onclick="goNext()"><span data-lang="en">Next</span><span data-lang="es">Siguiente</span></button>
     </div>
   </div>
 
+  <!-- Q4: Floor-to-Stand -->
   <div class="question-card" id="q3">
-    <div class="question-number">Question 4 of 7</div>
-    <div class="question-text">Can you get up from the floor without using your hands?</div>
-    <ul class="options-list">
+    <div class="question-number" data-lang="en">Question 4 of 7</div>
+    <div class="question-number" data-lang="es">Pregunta 4 de 7</div>
+    <div class="question-text" data-lang="en">Can you get up from the floor without using your hands?</div>
+    <div class="question-text" data-lang="es">&#191;Puedes levantarte del suelo sin usar las manos?</div>
+    <ul class="options-list" data-lang="en">
       <li><button class="option-btn" data-q="3" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Easily</button></li>
       <li><button class="option-btn" data-q="3" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>With some effort</button></li>
       <li><button class="option-btn" data-q="3" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Only with support</button></li>
       <li><button class="option-btn" data-q="3" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>I avoid getting on the floor</button></li>
     </ul>
+    <ul class="options-list" data-lang="es">
+      <li><button class="option-btn" data-q="3" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>F&#225;cilmente</button></li>
+      <li><button class="option-btn" data-q="3" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Con algo de esfuerzo</button></li>
+      <li><button class="option-btn" data-q="3" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Solo con apoyo</button></li>
+      <li><button class="option-btn" data-q="3" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Evito sentarme en el suelo</button></li>
+    </ul>
     <div class="nav-row">
-      <button class="btn btn-back" onclick="goBack()">Back</button>
-      <button class="btn btn-next" id="next3" disabled onclick="goNext()">Next</button>
+      <button class="btn btn-back" onclick="goBack()"><span data-lang="en">Back</span><span data-lang="es">Atr&#225;s</span></button>
+      <button class="btn btn-next" id="next3" disabled onclick="goNext()"><span data-lang="en">Next</span><span data-lang="es">Siguiente</span></button>
     </div>
   </div>
 
+  <!-- Q5: Pain Interference -->
   <div class="question-card" id="q4">
-    <div class="question-number">Question 5 of 7</div>
-    <div class="question-text">In the past month, has pain or discomfort stopped you from doing something you wanted to do?</div>
-    <ul class="options-list">
+    <div class="question-number" data-lang="en">Question 5 of 7</div>
+    <div class="question-number" data-lang="es">Pregunta 5 de 7</div>
+    <div class="question-text" data-lang="en">In the past month, has pain or discomfort stopped you from doing something you wanted to do?</div>
+    <div class="question-text" data-lang="es">En el &#250;ltimo mes, &#191;el dolor o las molestias te han impedido hacer algo que quer&#237;as hacer?</div>
+    <ul class="options-list" data-lang="en">
       <li><button class="option-btn" data-q="4" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Never</button></li>
       <li><button class="option-btn" data-q="4" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Once or twice</button></li>
       <li><button class="option-btn" data-q="4" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Several times</button></li>
       <li><button class="option-btn" data-q="4" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Regularly</button></li>
     </ul>
+    <ul class="options-list" data-lang="es">
+      <li><button class="option-btn" data-q="4" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Nunca</button></li>
+      <li><button class="option-btn" data-q="4" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Una o dos veces</button></li>
+      <li><button class="option-btn" data-q="4" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Varias veces</button></li>
+      <li><button class="option-btn" data-q="4" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Regularmente</button></li>
+    </ul>
     <div class="nav-row">
-      <button class="btn btn-back" onclick="goBack()">Back</button>
-      <button class="btn btn-next" id="next4" disabled onclick="goNext()">Next</button>
+      <button class="btn btn-back" onclick="goBack()"><span data-lang="en">Back</span><span data-lang="es">Atr&#225;s</span></button>
+      <button class="btn btn-next" id="next4" disabled onclick="goNext()"><span data-lang="en">Next</span><span data-lang="es">Siguiente</span></button>
     </div>
   </div>
 
+  <!-- Q6: Physical Confidence -->
   <div class="question-card" id="q5">
-    <div class="question-number">Question 6 of 7</div>
-    <div class="question-text">How confident are you in your body during physical activity?</div>
-    <ul class="options-list">
+    <div class="question-number" data-lang="en">Question 6 of 7</div>
+    <div class="question-number" data-lang="es">Pregunta 6 de 7</div>
+    <div class="question-text" data-lang="en">How confident are you in your body during physical activity?</div>
+    <div class="question-text" data-lang="es">&#191;Qu&#233; tan seguro/a te sientes de tu cuerpo durante la actividad f&#237;sica?</div>
+    <ul class="options-list" data-lang="en">
       <li><button class="option-btn" data-q="5" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Very confident</button></li>
       <li><button class="option-btn" data-q="5" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Mostly confident but careful</button></li>
       <li><button class="option-btn" data-q="5" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Cautious -- I worry about injury</button></li>
       <li><button class="option-btn" data-q="5" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>I avoid most physical activity</button></li>
     </ul>
+    <ul class="options-list" data-lang="es">
+      <li><button class="option-btn" data-q="5" data-pts="15" onclick="selectOption(this)"><span class="option-radio"></span>Muy seguro/a</button></li>
+      <li><button class="option-btn" data-q="5" data-pts="10" onclick="selectOption(this)"><span class="option-radio"></span>Bastante seguro/a pero con cuidado</button></li>
+      <li><button class="option-btn" data-q="5" data-pts="5" onclick="selectOption(this)"><span class="option-radio"></span>Con precauci&#243;n, me preocupa lesionarme</button></li>
+      <li><button class="option-btn" data-q="5" data-pts="0" onclick="selectOption(this)"><span class="option-radio"></span>Evito la mayor&#237;a de la actividad f&#237;sica</button></li>
+    </ul>
     <div class="nav-row">
-      <button class="btn btn-back" onclick="goBack()">Back</button>
-      <button class="btn btn-next" id="next5" disabled onclick="goNext()">Next</button>
+      <button class="btn btn-back" onclick="goBack()"><span data-lang="en">Back</span><span data-lang="es">Atr&#225;s</span></button>
+      <button class="btn btn-next" id="next5" disabled onclick="goNext()"><span data-lang="en">Next</span><span data-lang="es">Siguiente</span></button>
     </div>
   </div>
 
+  <!-- Q7: Primary Goal -->
   <div class="question-card" id="q6">
-    <div class="question-number">Question 7 of 7</div>
-    <div class="question-text">What's your #1 goal right now?</div>
-    <ul class="options-list">
+    <div class="question-number" data-lang="en">Question 7 of 7</div>
+    <div class="question-number" data-lang="es">Pregunta 7 de 7</div>
+    <div class="question-text" data-lang="en">What's your #1 goal right now?</div>
+    <div class="question-text" data-lang="es">&#191;Cu&#225;l es tu meta principal ahora mismo?</div>
+    <ul class="options-list" data-lang="en">
       <li><button class="option-btn" data-q="6" data-tag="pain_focus" onclick="selectOption(this)"><span class="option-radio"></span>Move without pain</button></li>
       <li><button class="option-btn" data-q="6" data-tag="strength_focus" onclick="selectOption(this)"><span class="option-radio"></span>Build strength I can feel</button></li>
       <li><button class="option-btn" data-q="6" data-tag="balance_focus" onclick="selectOption(this)"><span class="option-radio"></span>Improve balance and stability</button></li>
       <li><button class="option-btn" data-q="6" data-tag="confidence_focus" onclick="selectOption(this)"><span class="option-radio"></span>Feel confident in my body again</button></li>
     </ul>
+    <ul class="options-list" data-lang="es">
+      <li><button class="option-btn" data-q="6" data-tag="pain_focus" onclick="selectOption(this)"><span class="option-radio"></span>Moverme sin dolor</button></li>
+      <li><button class="option-btn" data-q="6" data-tag="strength_focus" onclick="selectOption(this)"><span class="option-radio"></span>Desarrollar fuerza que pueda sentir</button></li>
+      <li><button class="option-btn" data-q="6" data-tag="balance_focus" onclick="selectOption(this)"><span class="option-radio"></span>Mejorar el equilibrio y la estabilidad</button></li>
+      <li><button class="option-btn" data-q="6" data-tag="confidence_focus" onclick="selectOption(this)"><span class="option-radio"></span>Sentirme seguro/a en mi cuerpo otra vez</button></li>
+    </ul>
     <div class="nav-row">
-      <button class="btn btn-back" onclick="goBack()">Back</button>
-      <button class="btn btn-next" id="next6" disabled onclick="showResults()">See My Score</button>
+      <button class="btn btn-back" onclick="goBack()"><span data-lang="en">Back</span><span data-lang="es">Atr&#225;s</span></button>
+      <button class="btn btn-next" id="next6" disabled onclick="showResults()"><span data-lang="en">See My Score</span><span data-lang="es">Ver Mi Puntuaci&#243;n</span></button>
     </div>
   </div>
 
@@ -669,7 +805,7 @@
   <div class="results-page" id="resultsPage">
 
     <div class="score-display">
-      <div class="score-label-top">Your Movement Readiness Score</div>
+      <div class="score-label-top" id="scoreLabelTop">Your Movement Readiness Score</div>
       <div class="score-meter">
         <svg viewBox="0 0 200 110">
           <path class="meter-bg" d="M 20 100 A 80 80 0 0 1 180 100" />
@@ -682,35 +818,41 @@
     </div>
 
     <div class="recs-card">
-      <h3>Your Personalized Recommendations</h3>
+      <h3 id="recsTitle">Your Personalized Recommendations</h3>
       <div id="recsContainer"></div>
     </div>
 
     <div class="cta-card cta-primary">
-      <h3>Ready to understand your body?</h3>
-      <p>In a 60-minute private movement assessment, I'll map your movement patterns, find the gaps, and give you a clear plan to move and feel better.</p>
-      <a href="#book" class="cta-btn cta-btn-coral" id="bookBtn">Book Your Assessment ($125)</a>
+      <h3 id="ctaPrimaryTitle">Ready to understand your body?</h3>
+      <p id="ctaPrimaryDesc">In a 60-minute private movement assessment, I'll map your movement patterns, find the gaps, and give you a clear plan to move and feel better.</p>
+      <a href="/#inquiry" class="cta-btn cta-btn-coral" id="bookBtn">Book Your Assessment ($125)</a>
     </div>
 
     <div class="cta-card cta-secondary">
-      <h3>Get My Free 5-Day Movement Guide</h3>
-      <p>One exercise per day, tailored to your score range. Delivered straight to your inbox.</p>
+      <h3 id="ctaSecondaryTitle">Get My Free 5-Day Movement Guide</h3>
+      <p id="ctaSecondaryDesc">One exercise per day, tailored to your score range. Delivered straight to your inbox.</p>
       <form class="email-form" id="emailForm" onsubmit="submitEmail(event)">
-        <input type="text" name="first_name" placeholder="First name" required>
-        <input type="email" name="email" placeholder="Email address" required>
+        <input type="text" name="first_name" id="inputFirstName" placeholder="First name" required>
+        <input type="email" name="email" id="inputEmail" placeholder="Email address" required>
         <input type="hidden" name="score" id="hiddenScore">
         <input type="hidden" name="tier" id="hiddenTier">
         <input type="hidden" name="goal_tag" id="hiddenGoal">
         <input type="hidden" name="weakest" id="hiddenWeakest">
-        <button type="submit">Send Me the Guide</button>
+        <button type="submit" id="emailSubmitBtn">Send Me the Guide</button>
         <div class="form-success" id="formSuccess">You're in! Check your inbox.</div>
       </form>
     </div>
 
-    <div class="credential-bar">
+    <div class="credential-bar" data-lang="en">
       <span>Acosta Danza founding member</span>
       <span>O-1B visa holder</span>
       <span>1,000+ performances</span>
+      <span>NASM CPT</span>
+    </div>
+    <div class="credential-bar" data-lang="es">
+      <span>Miembro fundador de Acosta Danza</span>
+      <span>Titular de visa O-1B</span>
+      <span>M&#225;s de 1,000 presentaciones</span>
       <span>NASM CPT</span>
     </div>
   </div>
@@ -719,23 +861,180 @@
 
 <script>
 (function() {
-  const TOTAL_Q = 7;
-  const SCORED_Q = 6; // Q7 is tag-only
-  const MAX_RAW = 90;
-  let current = -1; // -1 = intro
-  let answers = new Array(TOTAL_Q).fill(null);
-  let goalTag = '';
+  var TOTAL_Q = 7;
+  var SCORED_Q = 6; // Q7 is tag-only
+  var MAX_RAW = 90;
+  var current = -1; // -1 = intro
+  var answers = new Array(TOTAL_Q).fill(null);
+  var goalTag = '';
+  var currentLang = 'en';
 
-  const questionLabels = [
-    'Overall Mobility',
-    'Single-Leg Balance',
-    'Morning Stiffness',
-    'Floor-to-Stand',
-    'Pain Interference',
-    'Physical Confidence',
-    'Primary Goal'
-  ];
+  // ── Translations for dynamic JS content ──
+  var T = {
+    progressLabel: {
+      en: function(n) { return 'Question ' + n + ' of ' + TOTAL_Q; },
+      es: function(n) { return 'Pregunta ' + n + ' de ' + TOTAL_Q; }
+    },
+    scoreLabelTop: {
+      en: 'Your Movement Readiness Score',
+      es: 'Tu Puntuaci\u00f3n de Preparaci\u00f3n al Movimiento'
+    },
+    recsTitle: {
+      en: 'Your Personalized Recommendations',
+      es: 'Tus Recomendaciones Personalizadas'
+    },
+    ctaPrimaryTitle: {
+      en: 'Ready to understand your body?',
+      es: '\u00bfLista/o para entender tu cuerpo?'
+    },
+    ctaPrimaryDesc: {
+      en: 'In a 60-minute private movement assessment, I\'ll map your movement patterns, find the gaps, and give you a clear plan to move and feel better.',
+      es: 'En una evaluaci\u00f3n privada de movimiento de 60 minutos, mapear\u00e9 tus patrones de movimiento, encontrar\u00e9 las brechas y te dar\u00e9 un plan claro para moverte y sentirte mejor.'
+    },
+    bookBtn: {
+      en: 'Book Your Assessment ($125)',
+      es: 'Reserva Tu Evaluaci\u00f3n ($125)'
+    },
+    ctaSecondaryTitle: {
+      en: 'Get My Free 5-Day Movement Guide',
+      es: 'Obt\u00e9n Mi Gu\u00eda Gratuita de Movimiento de 5 D\u00edas'
+    },
+    ctaSecondaryDesc: {
+      en: 'One exercise per day, tailored to your score range. Delivered straight to your inbox.',
+      es: 'Un ejercicio por d\u00eda, adaptado a tu rango de puntuaci\u00f3n. Directo a tu bandeja de entrada.'
+    },
+    emailSubmitBtn: {
+      en: 'Send Me the Guide',
+      es: 'Env\u00edame la Gu\u00eda'
+    },
+    inputFirstName: {
+      en: 'First name',
+      es: 'Nombre'
+    },
+    inputEmail: {
+      en: 'Email address',
+      es: 'Correo electr\u00f3nico'
+    },
+    formSuccess: {
+      en: 'You\'re in! Check your inbox.',
+      es: '\u00a1Listo! Revisa tu bandeja de entrada.'
+    },
+    tiers: {
+      en: {
+        strong: 'Movement Strong',
+        ready: 'Movement Ready',
+        rebuilder: 'Movement Rebuilder',
+        priority: 'Movement Priority'
+      },
+      es: {
+        strong: 'Movimiento Fuerte',
+        ready: 'Movimiento Preparado',
+        rebuilder: 'Reconstruyendo el Movimiento',
+        priority: 'Movimiento Prioritario'
+      }
+    },
+    tierDescs: {
+      en: {
+        strong: 'Your body is working well. You have strong mobility, good balance, and minimal limitations. Private coaching can take you from good to exceptional, refining movement quality, building longevity, and unlocking performance you didn\'t know you had.',
+        ready: 'You have a solid foundation but there are gaps. Maybe one side is tighter than the other, or balance isn\'t what it used to be. A targeted assessment would reveal exactly where to focus so you can train smarter, not just harder.',
+        rebuilder: 'Your body is asking for attention. Stiffness, instability, or discomfort are showing up in ways that limit what you can do. You\'re in the perfect position to make dramatic improvements with guided coaching. Small, targeted changes can transform how you feel within weeks.',
+        priority: 'Don\'t worry, this is exactly why I do what I do. Your score tells me your body needs focused, expert attention. The good news? The people who start here often see the most dramatic improvements. Let\'s talk.'
+      },
+      es: {
+        strong: 'Tu cuerpo funciona muy bien. Tienes buena movilidad, buen equilibrio y limitaciones m\u00ednimas. El coaching privado puede llevarte de bien a excepcional, refinando la calidad de movimiento, construyendo longevidad y desbloqueando un rendimiento que no sab\u00edas que ten\u00edas.',
+        ready: 'Tienes una base s\u00f3lida pero hay brechas. Quiz\u00e1s un lado est\u00e1 m\u00e1s tenso que el otro, o el equilibrio ya no es lo que era. Una evaluaci\u00f3n enfocada revelar\u00eda exactamente d\u00f3nde concentrarte para entrenar de manera m\u00e1s inteligente.',
+        rebuilder: 'Tu cuerpo est\u00e1 pidiendo atenci\u00f3n. La rigidez, inestabilidad o molestias aparecen de formas que limitan lo que puedes hacer. Est\u00e1s en la posici\u00f3n perfecta para lograr mejoras dram\u00e1ticas con coaching guiado. Cambios peque\u00f1os y enfocados pueden transformar c\u00f3mo te sientes en semanas.',
+        priority: 'No te preocupes, esto es exactamente por lo que hago lo que hago. Tu puntuaci\u00f3n me dice que tu cuerpo necesita atenci\u00f3n experta y enfocada. \u00bfLa buena noticia? Las personas que comienzan aqu\u00ed suelen ver las mejoras m\u00e1s dram\u00e1ticas. Hablemos.'
+      }
+    },
+    recs: {
+      en: {
+        balance: '<strong>Balance needs attention.</strong> Single-leg stability is a key indicator of fall risk and joint health. Try standing on one leg while brushing your teeth, with a wall nearby for safety.',
+        floor: '<strong>Floor-to-stand mobility is limited.</strong> This affects everything from playing with grandkids to getting out of a car. Practice sitting down to and rising from a low chair without arm support.',
+        stiffness: '<strong>Morning stiffness is frequent.</strong> Joint stiffness that lingers can signal the need for gentle mobility work before bed and upon waking. Try 2 minutes of slow, full-range arm circles and hip circles each morning.',
+        mobility: '<strong>Overall mobility is restricted.</strong> When your body avoids certain movements, compensations build up elsewhere. A guided assessment can identify exactly which patterns need work.',
+        pain: '<strong>Pain is limiting your activity.</strong> Regular pain interference is your body\'s signal that something needs professional attention. Movement coaching can find pain-free paths back to the activities you love.',
+        confidence: '<strong>Physical confidence is low.</strong> When you don\'t trust your body, you move less, and moving less makes the problem worse. Rebuilding confidence starts with small, successful movement experiences in a safe environment.',
+        great: '<strong>You\'re in great shape.</strong> Your mobility, balance, and confidence are all strong. Private coaching can focus on longevity, performance optimization, and movement quality refinement.'
+      },
+      es: {
+        balance: '<strong>El equilibrio necesita atenci\u00f3n.</strong> La estabilidad en una pierna es un indicador clave de riesgo de ca\u00eddas y salud articular. Intenta pararte en una pierna mientras te cepillas los dientes, con una pared cerca por seguridad.',
+        floor: '<strong>La movilidad suelo-a-pie es limitada.</strong> Esto afecta desde jugar con los nietos hasta salir del auto. Practica sentarte y levantarte de una silla baja sin usar los brazos.',
+        stiffness: '<strong>La rigidez matutina es frecuente.</strong> La rigidez articular que persiste puede indicar la necesidad de trabajo suave de movilidad antes de dormir y al despertar. Prueba 2 minutos de c\u00edrculos lentos de brazos y caderas cada ma\u00f1ana.',
+        mobility: '<strong>La movilidad general est\u00e1 restringida.</strong> Cuando tu cuerpo evita ciertos movimientos, las compensaciones se acumulan en otros lugares. Una evaluaci\u00f3n guiada puede identificar exactamente qu\u00e9 patrones necesitan trabajo.',
+        pain: '<strong>El dolor est\u00e1 limitando tu actividad.</strong> La interferencia regular del dolor es la se\u00f1al de tu cuerpo de que algo necesita atenci\u00f3n profesional. El coaching de movimiento puede encontrar caminos sin dolor de vuelta a las actividades que amas.',
+        confidence: '<strong>La confianza f\u00edsica es baja.</strong> Cuando no conf\u00edas en tu cuerpo, te mueves menos, y moverte menos empeora el problema. Reconstruir la confianza comienza con peque\u00f1as experiencias de movimiento exitosas en un ambiente seguro.',
+        great: '<strong>Est\u00e1s en excelente forma.</strong> Tu movilidad, equilibrio y confianza son fuertes. El coaching privado puede enfocarse en longevidad, optimizaci\u00f3n de rendimiento y refinamiento de la calidad de movimiento.'
+      }
+    }
+  };
 
+  // ── Last results cache (for re-rendering on lang switch) ──
+  var lastScore = null;
+  var lastTierKey = null;
+  var lastTierColor = null;
+
+  // ── Language detection and toggle ──
+  function detectLang() {
+    // Check URL param first
+    var params = new URLSearchParams(window.location.search);
+    var langParam = params.get('lang');
+    if (langParam === 'es' || langParam === 'en') return langParam;
+    // Check localStorage
+    try {
+      var stored = localStorage.getItem('lang');
+      if (stored === 'es' || stored === 'en') return stored;
+    } catch(e) {}
+    return 'en';
+  }
+
+  window.setLang = function(lang) {
+    currentLang = lang;
+    document.body.classList.toggle('lang-es', lang === 'es');
+    document.documentElement.lang = lang;
+    document.querySelectorAll('.lang-toggle button').forEach(function(btn) {
+      btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+    });
+    try { localStorage.setItem('lang', lang); } catch(e) {}
+
+    // Update all dynamic text
+    updateDynamicText();
+  };
+
+  function updateDynamicText() {
+    // Progress label
+    if (current >= 0) {
+      document.getElementById('progressLabel').textContent = T.progressLabel[currentLang](current + 1);
+    }
+
+    // Results page dynamic text (only if results are visible)
+    if (lastScore !== null) {
+      document.getElementById('scoreLabelTop').textContent = T.scoreLabelTop[currentLang];
+      document.getElementById('scoreTier').textContent = T.tiers[currentLang][lastTierKey];
+      document.getElementById('scoreDesc').textContent = T.tierDescs[currentLang][lastTierKey];
+      document.getElementById('recsTitle').textContent = T.recsTitle[currentLang];
+      buildRecommendations(lastScore);
+    }
+
+    // CTA cards (always update, they exist in DOM)
+    document.getElementById('ctaPrimaryTitle').textContent = T.ctaPrimaryTitle[currentLang];
+    document.getElementById('ctaPrimaryDesc').textContent = T.ctaPrimaryDesc[currentLang];
+    document.getElementById('bookBtn').textContent = T.bookBtn[currentLang];
+    document.getElementById('ctaSecondaryTitle').textContent = T.ctaSecondaryTitle[currentLang];
+    document.getElementById('ctaSecondaryDesc').textContent = T.ctaSecondaryDesc[currentLang];
+    document.getElementById('emailSubmitBtn').textContent = T.emailSubmitBtn[currentLang];
+    document.getElementById('inputFirstName').placeholder = T.inputFirstName[currentLang];
+    document.getElementById('inputEmail').placeholder = T.inputEmail[currentLang];
+    document.getElementById('formSuccess').textContent = T.formSuccess[currentLang];
+  }
+
+  // Initialize language on load
+  var initLang = detectLang();
+  if (initLang === 'es') {
+    setLang('es');
+  }
+
+  // ── Quiz Logic ──
   window.startQuiz = function() {
     document.getElementById('introScreen').classList.add('hidden');
     document.getElementById('progressWrapper').style.display = 'block';
@@ -744,10 +1043,20 @@
   };
 
   window.selectOption = function(btn) {
-    const q = parseInt(btn.dataset.q);
-    // Deselect siblings
-    btn.closest('.options-list').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    var q = parseInt(btn.dataset.q);
+    // Deselect siblings in the same options-list
+    btn.closest('.options-list').querySelectorAll('.option-btn').forEach(function(b) { b.classList.remove('selected'); });
     btn.classList.add('selected');
+
+    // Also sync selection in the other language list for same question
+    var card = document.getElementById('q' + q);
+    var allLists = card.querySelectorAll('.options-list');
+    var btnIndex = Array.from(btn.closest('.options-list').querySelectorAll('.option-btn')).indexOf(btn);
+    allLists.forEach(function(list) {
+      var buttons = list.querySelectorAll('.option-btn');
+      buttons.forEach(function(b) { b.classList.remove('selected'); });
+      if (buttons[btnIndex]) buttons[btnIndex].classList.add('selected');
+    });
 
     if (btn.dataset.pts !== undefined) {
       answers[q] = parseInt(btn.dataset.pts);
@@ -774,7 +1083,7 @@
       showQuestion(current);
     } else if (current === 0) {
       // Back to intro
-      document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.question-card').forEach(function(c) { c.classList.remove('active'); });
       document.getElementById('introScreen').classList.remove('hidden');
       document.getElementById('progressWrapper').style.display = 'none';
       current = -1;
@@ -782,8 +1091,8 @@
   };
 
   function showQuestion(idx) {
-    document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
-    const card = document.getElementById('q' + idx);
+    document.querySelectorAll('.question-card').forEach(function(c) { c.classList.remove('active'); });
+    var card = document.getElementById('q' + idx);
     card.classList.add('active');
     // Force re-animation
     card.style.animation = 'none';
@@ -794,71 +1103,89 @@
   }
 
   function updateProgress(idx) {
-    const pct = Math.round(((idx) / TOTAL_Q) * 100);
+    var pct = Math.round(((idx) / TOTAL_Q) * 100);
     document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressLabel').textContent = 'Question ' + (idx + 1) + ' of ' + TOTAL_Q;
+    document.getElementById('progressLabel').textContent = T.progressLabel[currentLang](idx + 1);
     document.getElementById('progressPct').textContent = pct + '%';
   }
 
   window.showResults = function() {
     // Calculate score
-    const rawScore = answers.slice(0, SCORED_Q).reduce((a, b) => a + (b || 0), 0);
-    const normalizedScore = Math.round((rawScore / MAX_RAW) * 100);
+    var rawScore = answers.slice(0, SCORED_Q).reduce(function(a, b) { return a + (b || 0); }, 0);
+    var normalizedScore = Math.round((rawScore / MAX_RAW) * 100);
 
     // Determine tier
-    let tier, tierColor, desc;
+    var tierKey, tierColor;
     if (normalizedScore >= 85) {
-      tier = 'Movement Strong';
+      tierKey = 'strong';
       tierColor = '#2ecc71';
-      desc = 'Your body is working well. You have strong mobility, good balance, and minimal limitations. Private coaching can take you from good to exceptional \u2014 refining movement quality, building longevity, and unlocking performance you didn\'t know you had.';
     } else if (normalizedScore >= 60) {
-      tier = 'Movement Ready';
+      tierKey = 'ready';
       tierColor = '#f5a623';
-      desc = 'You have a solid foundation but there are gaps. Maybe one side is tighter than the other, or balance isn\'t what it used to be. A targeted assessment would reveal exactly where to focus so you can train smarter, not just harder.';
     } else if (normalizedScore >= 40) {
-      tier = 'Movement Rebuilder';
+      tierKey = 'rebuilder';
       tierColor = '#e67e22';
-      desc = 'Your body is asking for attention. Stiffness, instability, or discomfort are showing up in ways that limit what you can do. You\'re in the perfect position to make dramatic improvements with guided coaching \u2014 small, targeted changes can transform how you feel within weeks.';
     } else {
-      tier = 'Movement Priority';
+      tierKey = 'priority';
       tierColor = '#e74c3c';
-      desc = 'Don\'t worry \u2014 this is exactly why I do what I do. Your score tells me your body needs focused, expert attention. The good news? The people who start here often see the most dramatic improvements. Small, targeted changes can transform how you feel. Let\'s talk.';
     }
 
+    // Cache for lang-switch re-render
+    lastScore = normalizedScore;
+    lastTierKey = tierKey;
+    lastTierColor = tierColor;
+
     // Hide quiz, show results
-    document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.question-card').forEach(function(c) { c.classList.remove('active'); });
     document.getElementById('progressWrapper').style.display = 'none';
     document.getElementById('resultsPage').classList.add('active');
 
+    // Score label
+    document.getElementById('scoreLabelTop').textContent = T.scoreLabelTop[currentLang];
+
     // Animate score number
-    const scoreEl = document.getElementById('scoreNumber');
+    var scoreEl = document.getElementById('scoreNumber');
     animateNumber(scoreEl, 0, normalizedScore, 1200);
 
     // Tier label + color
-    const tierEl = document.getElementById('scoreTier');
-    tierEl.textContent = tier;
+    var tierEl = document.getElementById('scoreTier');
+    tierEl.textContent = T.tiers[currentLang][tierKey];
     tierEl.style.color = tierColor;
     scoreEl.style.color = tierColor;
 
     // Description
-    document.getElementById('scoreDesc').textContent = desc;
+    document.getElementById('scoreDesc').textContent = T.tierDescs[currentLang][tierKey];
+
+    // Recommendations title
+    document.getElementById('recsTitle').textContent = T.recsTitle[currentLang];
+
+    // CTA text
+    document.getElementById('ctaPrimaryTitle').textContent = T.ctaPrimaryTitle[currentLang];
+    document.getElementById('ctaPrimaryDesc').textContent = T.ctaPrimaryDesc[currentLang];
+    document.getElementById('bookBtn').textContent = T.bookBtn[currentLang];
+    document.getElementById('ctaSecondaryTitle').textContent = T.ctaSecondaryTitle[currentLang];
+    document.getElementById('ctaSecondaryDesc').textContent = T.ctaSecondaryDesc[currentLang];
+    document.getElementById('emailSubmitBtn').textContent = T.emailSubmitBtn[currentLang];
+    document.getElementById('inputFirstName').placeholder = T.inputFirstName[currentLang];
+    document.getElementById('inputEmail').placeholder = T.inputEmail[currentLang];
+    document.getElementById('formSuccess').textContent = T.formSuccess[currentLang];
 
     // Animate arc meter
-    const arc = document.getElementById('meterArc');
+    var arc = document.getElementById('meterArc');
     arc.style.stroke = tierColor;
-    const totalLen = arc.getTotalLength();
+    var totalLen = arc.getTotalLength();
     arc.style.strokeDasharray = totalLen;
     arc.style.strokeDashoffset = totalLen;
-    requestAnimationFrame(() => {
+    requestAnimationFrame(function() {
       arc.style.strokeDashoffset = totalLen * (1 - normalizedScore / 100);
     });
 
     // Build recommendations
     buildRecommendations(normalizedScore);
 
-    // Fill hidden fields
+    // Fill hidden fields (always English for data)
     document.getElementById('hiddenScore').value = normalizedScore;
-    document.getElementById('hiddenTier').value = tier;
+    document.getElementById('hiddenTier').value = T.tiers.en[tierKey];
     document.getElementById('hiddenGoal').value = goalTag;
     document.getElementById('hiddenWeakest').value = getWeakestAreas().join(',');
 
@@ -870,12 +1197,12 @@
   };
 
   function animateNumber(el, from, to, duration) {
-    const start = performance.now();
+    var start = performance.now();
     function tick(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / duration, 1);
       // ease out cubic
-      const ease = 1 - Math.pow(1 - progress, 3);
+      var ease = 1 - Math.pow(1 - progress, 3);
       el.textContent = Math.round(from + (to - from) * ease);
       if (progress < 1) requestAnimationFrame(tick);
     }
@@ -883,8 +1210,8 @@
   }
 
   function getWeakestAreas() {
-    const areas = [];
-    const labels = [
+    var areas = [];
+    var labels = [
       { idx: 0, name: 'mobility', label: 'Overall Mobility' },
       { idx: 1, name: 'balance', label: 'Single-Leg Balance' },
       { idx: 2, name: 'stiffness', label: 'Morning Stiffness' },
@@ -892,58 +1219,59 @@
       { idx: 4, name: 'pain', label: 'Pain Interference' },
       { idx: 5, name: 'confidence', label: 'Physical Confidence' }
     ];
-    labels.sort((a, b) => (answers[a.idx] || 0) - (answers[b.idx] || 0));
-    return labels.slice(0, 3).filter(l => (answers[l.idx] || 0) < 15).map(l => l.name);
+    labels.sort(function(a, b) { return (answers[a.idx] || 0) - (answers[b.idx] || 0); });
+    return labels.slice(0, 3).filter(function(l) { return (answers[l.idx] || 0) < 15; }).map(function(l) { return l.name; });
   }
 
   function buildRecommendations(score) {
-    const container = document.getElementById('recsContainer');
+    var container = document.getElementById('recsContainer');
     container.innerHTML = '';
 
-    const recs = [];
-    const a = answers;
+    var recs = [];
+    var a = answers;
+    var lang = currentLang;
 
     // Generate recs from weakest areas
     if (a[1] <= 5) {
       recs.push({
         icon: '\u{1F9B6}',
         bg: 'rgba(233,69,96,0.08)',
-        text: '<strong>Balance needs attention.</strong> Single-leg stability is a key indicator of fall risk and joint health. Try standing on one leg while brushing your teeth \u2014 start with a wall nearby for safety.'
+        text: T.recs[lang].balance
       });
     }
     if (a[3] <= 5) {
       recs.push({
         icon: '\u{1F4AA}',
         bg: 'rgba(245,118,74,0.08)',
-        text: '<strong>Floor-to-stand mobility is limited.</strong> This affects everything from playing with grandkids to getting out of a car. Practice sitting down to and rising from a low chair without arm support.'
+        text: T.recs[lang].floor
       });
     }
     if (a[2] <= 5) {
       recs.push({
         icon: '\u{2600}\u{FE0F}',
         bg: 'rgba(245,166,35,0.08)',
-        text: '<strong>Morning stiffness is frequent.</strong> Joint stiffness that lingers can signal the need for gentle mobility work before bed and upon waking. Try 2 minutes of slow, full-range arm circles and hip circles each morning.'
+        text: T.recs[lang].stiffness
       });
     }
     if (a[0] <= 5) {
       recs.push({
         icon: '\u{1F3C3}',
         bg: 'rgba(46,204,113,0.08)',
-        text: '<strong>Overall mobility is restricted.</strong> When your body avoids certain movements, compensations build up elsewhere. A guided assessment can identify exactly which patterns need work.'
+        text: T.recs[lang].mobility
       });
     }
     if (a[4] <= 5) {
       recs.push({
         icon: '\u{26A0}\u{FE0F}',
         bg: 'rgba(231,76,60,0.08)',
-        text: '<strong>Pain is limiting your activity.</strong> Regular pain interference is your body\'s signal that something needs professional attention. Movement coaching can find pain-free paths back to the activities you love.'
+        text: T.recs[lang].pain
       });
     }
     if (a[5] <= 5) {
       recs.push({
         icon: '\u{1F4A1}',
         bg: 'rgba(155,89,182,0.08)',
-        text: '<strong>Physical confidence is low.</strong> When you don\'t trust your body, you move less \u2014 and moving less makes the problem worse. Rebuilding confidence starts with small, successful movement experiences in a safe environment.'
+        text: T.recs[lang].confidence
       });
     }
 
@@ -952,13 +1280,13 @@
       recs.push({
         icon: '\u{2B50}',
         bg: 'rgba(46,204,113,0.08)',
-        text: '<strong>You\'re in great shape.</strong> Your mobility, balance, and confidence are all strong. Private coaching can focus on longevity, performance optimization, and movement quality refinement.'
+        text: T.recs[lang].great
       });
     }
 
     // Show top 3
-    recs.slice(0, 3).forEach(r => {
-      const div = document.createElement('div');
+    recs.slice(0, 3).forEach(function(r) {
+      var div = document.createElement('div');
       div.className = 'rec-item';
       div.innerHTML = '<div class="rec-icon" style="background:' + r.bg + '">' + r.icon + '</div><div class="rec-text">' + r.text + '</div>';
       container.appendChild(div);
@@ -967,12 +1295,12 @@
 
   window.submitEmail = function(e) {
     e.preventDefault();
-    const form = document.getElementById('emailForm');
-    const data = new FormData(form);
+    var form = document.getElementById('emailForm');
+    var data = new FormData(form);
 
     // ── ConvertKit Integration ──
-    const CK_FORM_ID = '9284599';
-    const CK_API_KEY = 'OKImRG4WMh2aCjDnXprZaw';
+    var CK_FORM_ID = '9284599';
+    var CK_API_KEY = 'OKImRG4WMh2aCjDnXprZaw';
     fetch('https://api.convertkit.com/v3/forms/' + CK_FORM_ID + '/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -999,7 +1327,7 @@
   };
 
   function showSuccess() {
-    const form = document.getElementById('emailForm');
+    var form = document.getElementById('emailForm');
     form.querySelector('input[name="first_name"]').style.display = 'none';
     form.querySelector('input[name="email"]').style.display = 'none';
     form.querySelector('button[type="submit"]').style.display = 'none';
