@@ -278,8 +278,8 @@
     .hero-content h1 {
       color: var(--white);
       opacity: 0;
-      transform: translateY(25px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      transform: translateY(40px) scale(0.95);
+      transition: opacity 1s ease-out, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .hero-content .subtitle {
       color: rgba(255,255,255,0.85);
@@ -287,8 +287,8 @@
       max-width: 600px;
       margin: 20px auto 0;
       opacity: 0;
-      transform: translateY(25px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out 0.1s, transform 0.8s ease-out 0.1s;
     }
     .hero-buttons {
       display: flex;
@@ -297,24 +297,21 @@
       margin-top: 36px;
       opacity: 0;
       transform: translateY(25px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
     }
 
-    /* Text entrance via class toggle */
-    .hero-content.text-visible h1 {
+    /* Scroll-triggered reveal states */
+    .hero-content.show-title h1 {
       opacity: 1;
-      transform: translateY(0);
-      transition-delay: 0s;
+      transform: translateY(0) scale(1);
     }
-    .hero-content.text-visible .subtitle {
+    .hero-content.show-subtitle .subtitle {
       opacity: 1;
       transform: translateY(0);
-      transition-delay: 0.2s;
     }
-    .hero-content.text-visible .hero-buttons {
+    .hero-content.show-cta .hero-buttons {
       opacity: 1;
       transform: translateY(0);
-      transition-delay: 0.4s;
     }
 
     /* ========================================
@@ -980,7 +977,7 @@
       <div class="hero-slide hero-slide-2"></div>
       <div class="hero-slide hero-slide-3"></div>
       <div class="hero-slide hero-slide-4"></div>
-      <div class="hero-content text-visible">
+      <div class="hero-content">
         <h1 data-lang="en">World-Class Movement Coaching.<br>Now in Key West.</h1>
         <h1 data-lang="es">Coaching de Movimiento de Clase Mundial.<br>Ahora en Key West.</h1>
 
@@ -1588,10 +1585,11 @@
       loadSocialFeed();
     });
 
-    // Scroll-driven hero slideshow
+    // Scroll-driven hero slideshow + progressive text reveal
     (function() {
       var wrapper = document.querySelector('.hero-scroll-wrapper');
       var slides = document.querySelectorAll('.hero-slide');
+      var heroContent = document.querySelector('.hero-content');
       if (!wrapper || slides.length < 2) return;
 
       var totalSlides = slides.length;
@@ -1622,6 +1620,25 @@
             slides[i].style.opacity = 0;
             slides[i].classList.remove('active');
           }
+        }
+
+        // Progressive text reveal based on scroll position
+        if (scrolled >= 0.08) {
+          heroContent.classList.add('show-title');
+        } else {
+          heroContent.classList.remove('show-title');
+        }
+
+        if (scrolled >= 0.18) {
+          heroContent.classList.add('show-subtitle');
+        } else {
+          heroContent.classList.remove('show-subtitle');
+        }
+
+        if (scrolled >= 0.28) {
+          heroContent.classList.add('show-cta');
+        } else {
+          heroContent.classList.remove('show-cta');
         }
       }
 
