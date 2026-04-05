@@ -269,31 +269,23 @@
       text-align: center;
       overflow: hidden;
     }
-    /* Hero carousel (swipeable background images) */
+    /* Hero carousel (crossfade background images) */
     .hero-carousel {
       position: absolute;
       inset: 0;
       z-index: 0;
-      overflow: hidden;
     }
-    .hero-carousel-track {
-      display: flex;
-      height: 100%;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .hero-carousel-track::-webkit-scrollbar { display: none; }
     .hero-carousel-slide {
-      min-width: 100%;
-      height: 100%;
-      flex-shrink: 0;
-      scroll-snap-align: center;
+      position: absolute;
+      inset: 0;
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
-      position: relative;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+    .hero-carousel-slide.active {
+      opacity: 1;
     }
     .hero-carousel-slide::after {
       content: '';
@@ -499,22 +491,22 @@
       border-radius: var(--card-radius);
       box-shadow: var(--card-shadow);
     }
-    .carousel-track {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .carousel-track::-webkit-scrollbar { display: none; }
-    .carousel-slide {
-      min-width: 100%;
+    .carousel-slides {
+      position: relative;
       width: 100%;
       aspect-ratio: 3/4;
+    }
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      display: block;
-      flex-shrink: 0;
-      scroll-snap-align: center;
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+    }
+    .carousel-slide.active {
+      opacity: 1;
     }
     .carousel-dots {
       position: absolute;
@@ -1097,13 +1089,11 @@
   <!-- ============ SECTION 1: HERO ============ -->
   <div class="hero-scroll-wrapper">
     <section class="hero" id="hero">
-      <div class="hero-carousel">
-        <div class="hero-carousel-track">
-          <div class="hero-carousel-slide" style="background-image: url('/images/hero.jpg')"></div>
-          <div class="hero-carousel-slide" style="background-image: url('/images/hero-2.jpg')"></div>
-          <div class="hero-carousel-slide" style="background-image: url('/images/hero-3.jpg')"></div>
-          <div class="hero-carousel-slide" style="background-image: url('/images/hero-4.jpg')"></div>
-        </div>
+      <div class="hero-carousel" id="heroCarousel">
+        <div class="hero-carousel-slide active" style="background-image: url('/images/hero.jpg')"></div>
+        <div class="hero-carousel-slide" style="background-image: url('/images/hero-2.jpg')"></div>
+        <div class="hero-carousel-slide" style="background-image: url('/images/hero-3.jpg')"></div>
+        <div class="hero-carousel-slide" style="background-image: url('/images/hero-4.jpg')"></div>
         <div class="hero-carousel-dots">
           <button class="hero-dot active" data-index="0"></button>
           <button class="hero-dot" data-index="1"></button>
@@ -1258,8 +1248,8 @@
   <section class="about section-pad">
     <div class="container">
       <div class="about-grid">
-        <div class="about-carousel">
-          <div class="carousel-track">
+        <div class="about-carousel" id="aboutCarousel">
+          <div class="carousel-slides">
             <img src="/images/laura-portrait.jpg" alt="Laura Treto, movement coach" class="carousel-slide active" loading="lazy" />
             <img src="/images/laura-active.jpg" alt="Laura Treto, full body" class="carousel-slide" loading="lazy" />
             <img src="/images/laura-form.jpg" alt="Laura Treto with kettlebell" class="carousel-slide" loading="lazy" />
@@ -1789,55 +1779,77 @@
       updateLogo();
     })();
 
-    // About carousel dot sync (native scroll-snap)
+    // Infinite hero carousel
     (function() {
-      var carousel = document.querySelector('.about-carousel');
-      if (!carousel) return;
-      var track = carousel.querySelector('.carousel-track');
-      var dots = carousel.querySelectorAll('.carousel-dot');
+      var container = document.getElementById('heroCarousel');
+      if (!container) return;
+      var slides = container.querySelectorAll('.hero-carousel-slide');
+      var dots = container.querySelectorAll('.hero-dot');
+      var current = 0;
+      var startX = 0;
 
-      function updateDots() {
-        var scrollLeft = track.scrollLeft;
-        var slideWidth = track.offsetWidth;
-        var index = Math.round(scrollLeft / slideWidth);
-        dots.forEach(function(dot, i) {
-          dot.classList.toggle('active', i === index);
+      function showSlide(index) {
+        current = ((index % slides.length) + slides.length) % slides.length;
+        slides.forEach(function(s, i) {
+          s.classList.toggle('active', i === current);
+        });
+        dots.forEach(function(d, i) {
+          d.classList.toggle('active', i === current);
         });
       }
 
-      track.addEventListener('scroll', updateDots, { passive: true });
-
-      // Dot click scrolls to slide
+      // Dot clicks
       dots.forEach(function(dot) {
         dot.addEventListener('click', function() {
-          var index = parseInt(dot.dataset.index);
-          track.scrollTo({ left: index * track.offsetWidth, behavior: 'smooth' });
+          showSlide(parseInt(dot.dataset.index));
         });
+      });
+
+      // Touch swipe
+      container.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+      }, { passive: true });
+
+      container.addEventListener('touchend', function(e) {
+        var diff = e.changedTouches[0].clientX - startX;
+        if (diff > 50) showSlide(current - 1);
+        else if (diff < -50) showSlide(current + 1);
       });
     })();
 
-    // Hero carousel dot sync (native scroll-snap)
+    // Infinite about carousel
     (function() {
-      var track = document.querySelector('.hero-carousel-track');
-      var dots = document.querySelectorAll('.hero-dot');
-      if (!track || !dots.length) return;
+      var container = document.getElementById('aboutCarousel');
+      if (!container) return;
+      var slides = container.querySelectorAll('.carousel-slide');
+      var dots = container.querySelectorAll('.carousel-dot');
+      var current = 0;
+      var startX = 0;
 
-      function updateDots() {
-        var scrollLeft = track.scrollLeft;
-        var slideWidth = track.offsetWidth;
-        var index = Math.round(scrollLeft / slideWidth);
-        dots.forEach(function(dot, i) {
-          dot.classList.toggle('active', i === index);
+      function showSlide(index) {
+        current = ((index % slides.length) + slides.length) % slides.length;
+        slides.forEach(function(s, i) {
+          s.classList.toggle('active', i === current);
+        });
+        dots.forEach(function(d, i) {
+          d.classList.toggle('active', i === current);
         });
       }
 
-      track.addEventListener('scroll', updateDots, { passive: true });
-
       dots.forEach(function(dot) {
         dot.addEventListener('click', function() {
-          var index = parseInt(dot.dataset.index);
-          track.scrollTo({ left: index * track.offsetWidth, behavior: 'smooth' });
+          showSlide(parseInt(dot.dataset.index));
         });
+      });
+
+      container.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+      }, { passive: true });
+
+      container.addEventListener('touchend', function(e) {
+        var diff = e.changedTouches[0].clientX - startX;
+        if (diff > 50) showSlide(current - 1);
+        else if (diff < -50) showSlide(current + 1);
       });
     })();
   </script>
