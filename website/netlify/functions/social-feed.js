@@ -193,16 +193,45 @@ exports.handler = async (event) => {
     };
   }
 
-  // Balance the feed: 6 from Instagram (fitness/coaching), 3 from Facebook (Mavericks/stage)
-  // This prevents high-engagement FB posts from dominating the grid
-  igPosts.sort((a, b) => b._score - a._score);
-  fbPosts.sort((a, b) => b._score - a._score);
-  const topIg = igPosts.slice(0, 6);
-  const topFb = fbPosts.slice(0, 3);
+  // Step 1: Combine all posts from both platforms
+  var allPosts = [...igPosts, ...fbPosts];
 
-  // Combine the balanced pool, then sort by score for final grid ordering
-  const topPosts = [...topIg, ...topFb];
-  topPosts.sort((a, b) => b._score - a._score);
+  // Step 2: Deduplicate cross-platform posts (same caption = same content)
+  var seen = {};
+  var dedupedPosts = [];
+  for (var post of allPosts) {
+    var key = (post.caption || '').toLowerCase().trim().slice(0, 50);
+    if (key && seen[key]) {
+      // Keep the one with higher score
+      if (post._score > seen[key]._score) {
+        dedupedPosts = dedupedPosts.filter(function(p) { return p.id !== seen[key].id; });
+        dedupedPosts.push(post);
+        seen[key] = post;
+      }
+    } else {
+      if (key) seen[key] = post;
+      dedupedPosts.push(post);
+    }
+  }
+
+  // Step 3: Filter by minimum engagement threshold
+  var MIN_SCORE = 10;
+  var qualifiedPosts = dedupedPosts.filter(function(p) { return p._score >= MIN_SCORE; });
+
+  // Step 4: Sort by score descending
+  qualifiedPosts.sort(function(a, b) { return b._score - a._score; });
+
+  // Step 5: Select top 9 with max 6 per platform
+  var MAX_PER_PLATFORM = 6;
+  var platformCount = {};
+  var topPosts = [];
+  for (var post of qualifiedPosts) {
+    if (topPosts.length >= 9) break;
+    var count = platformCount[post.source] || 0;
+    if (count >= MAX_PER_PLATFORM) continue;
+    topPosts.push(post);
+    platformCount[post.source] = count + 1;
+  }
 
   // Strip internal score before returning
   const cleanPosts = topPosts.map(({ _score, ...post }) => post);
