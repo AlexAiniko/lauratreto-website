@@ -397,57 +397,39 @@
       min-height: 400vh;
     }
 
-    /* Credential cards — one at a time, floating up */
-    .cred-card {
-      position: relative;
-      max-width: 620px;
-      margin: 0 auto;
-      padding: 36px 48px;
+    /* Credential text overlay — fixed at top, cycles on scroll */
+    .cred-text-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 33vh;
       display: flex;
       align-items: center;
-      gap: 24px;
+      justify-content: center;
+      z-index: 3;
+      pointer-events: none;
       opacity: 0;
-      transform: translateY(60px) scale(0.95);
-      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-      /* Glass-morphism */
-      background: rgba(43, 43, 43, 0.5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--white);
+      transition: opacity 0.5s ease;
     }
-    .cred-card.cred-visible {
+    .cred-text-container.cred-bg-visible {
       opacity: 1;
-      transform: translateY(0) scale(1);
     }
-
-    /* Spacing between cards */
-    .cred-card + .cred-card {
-      margin-top: 40vh;
+    .cred-text-item {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 600;
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      padding: 0 24px;
     }
-    /* First card top spacing */
-    .cred-cards-list .cred-card:first-child {
-      margin-top: 25vh;
-    }
-    /* Last card bottom spacing */
-    .cred-cards-list .cred-card:last-child {
-      margin-bottom: 20vh;
-    }
-
-    .cred-icon {
-      font-size: 40px;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-    .cred-text {
-      font-weight: 500;
-      font-size: 15px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      line-height: 1.4;
-      color: rgba(255,255,255,0.9);
+    .cred-text-item.cred-active {
+      opacity: 1;
     }
 
     /* ========================================
@@ -624,7 +606,7 @@
       .hero-bg {
         animation: none;
       }
-      .cred-card {
+      .cred-text-item {
         opacity: 1;
         transform: none;
         transition: none;
@@ -1182,6 +1164,8 @@
       background: var(--charcoal);
       color: rgba(255,255,255,0.8);
       padding: 60px 0 0;
+      position: relative;
+      z-index: 10;
     }
     .footer-grid {
       display: grid;
@@ -1266,19 +1250,7 @@
       .cred-scroll-area {
         min-height: 350vh;
       }
-      .cred-card {
-        max-width: 90%;
-        padding: 28px 24px;
-      }
-      .cred-card + .cred-card {
-        margin-top: 35vh;
-      }
-      .cred-icon {
-        font-size: 32px;
-      }
-      .cred-text {
-        font-size: 13px;
-      }
+      .cred-text-item { font-size: 20px; }
 
       .cards-grid,
       .pricing-grid {
@@ -1488,23 +1460,24 @@
     <div class="cred-scroll-area">
       <!-- EN credentials -->
       <div class="cred-cards-list" data-lang="en">
-        <div class="cred-card"><span class="cred-icon">&#9834;</span><span class="cred-text">Cuban-Trained Athlete &amp; Dancer</span></div>
-        <div class="cred-card"><span class="cred-icon">&#9733;</span><span class="cred-text">O-1B Visa: Extraordinary Ability</span></div>
-        <div class="cred-card"><span class="cred-icon">&#127760;</span><span class="cred-text">1,000+ International Performances</span></div>
-        <div class="cred-card"><span class="cred-icon">&#127891;</span><span class="cred-text">University of Havana: Clinical Psychology</span></div>
-        <div class="cred-card"><span class="cred-icon">&#9989;</span><span class="cred-text">NASM Certified Personal Trainer</span></div>
-        <div class="cred-card"><span class="cred-icon">&#128172;</span><span class="cred-text">Bilingual: English &amp; Spanish</span></div>
+        <div class="cred-text-item" data-cred="0">Cuban-Trained Athlete &amp; Dancer</div>
+        <div class="cred-text-item" data-cred="1">O-1B Visa: Extraordinary Ability</div>
+        <div class="cred-text-item" data-cred="2">1,000+ International Performances</div>
+        <div class="cred-text-item" data-cred="3">University of Havana: Clinical Psychology</div>
+        <div class="cred-text-item" data-cred="4">NASM Certified Personal Trainer</div>
+        <div class="cred-text-item" data-cred="5">Bilingual: English &amp; Spanish</div>
       </div>
       <!-- ES credentials -->
       <div class="cred-cards-list" data-lang="es">
-        <div class="cred-card"><span class="cred-icon">&#9834;</span><span class="cred-text">Atleta y Bailarina Cubana</span></div>
-        <div class="cred-card"><span class="cred-icon">&#9733;</span><span class="cred-text">Visa O-1B (Habilidad Extraordinaria)</span></div>
-        <div class="cred-card"><span class="cred-icon">&#127760;</span><span class="cred-text">M&aacute;s de 1,000 Presentaciones Internacionales</span></div>
-        <div class="cred-card"><span class="cred-icon">&#127891;</span><span class="cred-text">Universidad de La Habana, Psicolog&iacute;a Cl&iacute;nica</span></div>
-        <div class="cred-card"><span class="cred-icon">&#9989;</span><span class="cred-text">Entrenadora Personal Certificada NASM</span></div>
-        <div class="cred-card"><span class="cred-icon">&#128172;</span><span class="cred-text">Biling&uuml;e: Ingl&eacute;s y Espa&ntilde;ol</span></div>
+        <div class="cred-text-item" data-cred="0">Atleta y Bailarina Cubana</div>
+        <div class="cred-text-item" data-cred="1">Visa O-1B (Habilidad Extraordinaria)</div>
+        <div class="cred-text-item" data-cred="2">M&aacute;s de 1,000 Presentaciones Internacionales</div>
+        <div class="cred-text-item" data-cred="3">Universidad de La Habana, Psicolog&iacute;a Cl&iacute;nica</div>
+        <div class="cred-text-item" data-cred="4">Entrenadora Personal Certificada NASM</div>
+        <div class="cred-text-item" data-cred="5">Biling&uuml;e: Ingl&eacute;s y Espa&ntilde;ol</div>
       </div>
     </div>
+    <div class="cred-text-container" id="credTextContainer"></div>
   </section>
 
   <!-- ============ SECTION 3: WHO I HELP ============ -->
@@ -2179,24 +2152,43 @@
       updateLogo();
     })();
 
-    // Credentials section: fixed background + scroll-driven frame animation + card reveal
+    // Credentials section: fixed background + scroll-driven frame animation + text cycling
     (function() {
-      var TOTAL_FRAMES = 40;
+      var TOTAL_FRAMES = 49;
       var section = document.getElementById('credentials-section');
       var frameBg = document.getElementById('credFrameBg');
       var frameImg = document.getElementById('credFrameImg');
-      if (!section || !frameBg || !frameImg) return;
+      var credTextContainer = document.getElementById('credTextContainer');
+      if (!section || !frameBg || !frameImg || !credTextContainer) return;
 
-      var credCards = section.querySelectorAll('.cred-card');
       var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+      // Clone text items into the fixed container for overlay display
+      function updateCredTextItems() {
+        var lang = document.body.classList.contains('lang-es') ? 'es' : 'en';
+        credTextContainer.innerHTML = '';
+        var items = document.querySelectorAll('.cred-cards-list[data-lang="' + lang + '"] .cred-text-item');
+        items.forEach(function(item) {
+          var clone = item.cloneNode(true);
+          credTextContainer.appendChild(clone);
+        });
+      }
+      updateCredTextItems();
+
+      // Re-clone on language toggle
+      document.querySelectorAll('.lang-btn, .lang-toggle button').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          setTimeout(updateCredTextItems, 50);
+        });
+      });
+
       if (prefersReducedMotion) {
-        credCards.forEach(function(card) { card.classList.add('cred-visible'); });
         frameBg.classList.add('cred-bg-visible');
+        credTextContainer.classList.add('cred-bg-visible');
         return;
       }
 
-      // Preload all 40 frames for smooth playback
+      // Preload all frames for smooth playback
       var frames = [];
       for (var i = 1; i <= TOTAL_FRAMES; i++) {
         var img = new Image();
@@ -2213,12 +2205,14 @@
         var inView = rect.top < viewportH && rect.bottom > 0;
         if (inView) {
           frameBg.classList.add('cred-bg-visible');
+          credTextContainer.classList.add('cred-bg-visible');
         } else {
           frameBg.classList.remove('cred-bg-visible');
+          credTextContainer.classList.remove('cred-bg-visible');
         }
       }
 
-      // Update frame based on scroll progress through the section
+      // Update frame and credential text based on scroll progress through the section
       function updateFrame() {
         var rect = section.getBoundingClientRect();
         var sectionHeight = section.offsetHeight;
@@ -2234,6 +2228,15 @@
           frameImg.src = frames[targetFrame].src;
           currentFrame = targetFrame;
         }
+
+        // Cycle through credential text items
+        var credItems = credTextContainer.querySelectorAll('.cred-text-item');
+        if (credItems.length > 0) {
+          var activeIndex = Math.min(credItems.length - 1, Math.floor(scrollProgress * credItems.length));
+          credItems.forEach(function(item, i) {
+            item.classList.toggle('cred-active', i === activeIndex);
+          });
+        }
       }
 
       function onScroll() {
@@ -2243,23 +2246,6 @@
 
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
-
-      // Card fade-in via IntersectionObserver (like HIW step cards)
-      var credCardObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('cred-visible');
-            credCardObserver.unobserve(entry.target);
-          }
-        });
-      }, {
-        threshold: 0.2,
-        rootMargin: '0px 0px -10% 0px'
-      });
-
-      credCards.forEach(function(card) {
-        credCardObserver.observe(card);
-      });
     })();
 
     // About carousel (scroll-snap) dot sync
