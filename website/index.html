@@ -403,10 +403,11 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 33vh;
+      height: 50vh;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
+      padding-bottom: 5vh;
       z-index: 3;
       pointer-events: none;
       opacity: 0;
@@ -420,16 +421,21 @@
       width: 100%;
       text-align: center;
       font-family: var(--font-serif);
-      font-size: 26px;
+      font-size: 34px;
       font-weight: 600;
       color: #fff;
       text-shadow: 0 2px 20px rgba(0,0,0,0.5);
       opacity: 0;
-      transition: opacity 0.6s ease;
+      transition: opacity 1.2s ease-in-out;
       padding: 0 24px;
     }
     .cred-text-item.cred-active {
       opacity: 1;
+      animation: credFloat 4s ease-in-out infinite;
+    }
+    @keyframes credFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.02); }
     }
 
     /* ========================================
@@ -1250,7 +1256,7 @@
       .cred-scroll-area {
         min-height: 350vh;
       }
-      .cred-text-item { font-size: 20px; }
+      .cred-text-item { font-size: 24px; }
 
       .cards-grid,
       .pricing-grid {
@@ -1454,7 +1460,7 @@
   <section class="credentials-section" id="credentials-section">
     <!-- Fixed background with scroll-driven frame animation -->
     <div class="cred-frame-bg" id="credFrameBg">
-      <img id="credFrameImg" src="/images/scroll-frames/frame-001.jpg" alt="Laura Treto kettlebell exercise by the ocean" />
+      <img id="credFrameImg" src="/images/scroll-frames/frame-001.jpg?v=2" alt="Laura Treto kettlebell exercise by the ocean" />
     </div>
 
     <div class="cred-scroll-area">
@@ -2192,7 +2198,7 @@
       var frames = [];
       for (var i = 1; i <= TOTAL_FRAMES; i++) {
         var img = new Image();
-        img.src = '/images/scroll-frames/frame-' + String(i).padStart(3, '0') + '.jpg';
+        img.src = '/images/scroll-frames/frame-' + String(i).padStart(3, '0') + '.jpg?v=2';
         frames.push(img);
       }
 
