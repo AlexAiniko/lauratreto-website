@@ -835,39 +835,67 @@
     }
     .social-proof .section-header .subtitle { color: rgba(255,255,255,0.7); }
     .social-proof h2 { color: var(--white); }
-    /* Curated social embed grid */
-    .social-embed-grid {
+    /* Curated social image grid */
+    .social-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      max-width: 1080px;
+      gap: 4px;
+      max-width: 900px;
       margin: 0 auto;
     }
-    .social-embed-cell {
+    .social-post {
+      position: relative;
+      aspect-ratio: 1;
       overflow: hidden;
-      border-radius: 12px;
-      max-height: 560px;
-      background: rgba(255,255,255,0.06);
+      display: block;
+      background: rgba(255,255,255,0.08);
+    }
+    .social-post img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+    .social-post:hover img {
+      transform: scale(1.07);
+    }
+    .social-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.0);
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
+      transition: background 0.3s ease;
     }
-    /* Force embeds to fill cell width */
-    .social-embed-cell .instagram-media,
-    .social-embed-cell .tiktok-embed {
-      width: 100% !important;
-      min-width: unset !important;
-      max-width: 100% !important;
-      margin: 0 !important;
+    .social-post:hover .social-overlay {
+      background: rgba(0,0,0,0.38);
     }
-    @media (max-width: 900px) {
-      .social-embed-grid {
+    .platform-icon {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      color: #fff;
+      font-size: 28px;
+      line-height: 1;
+    }
+    .social-post:hover .platform-icon {
+      opacity: 1;
+    }
+    /* Platform icon SVGs */
+    .platform-icon.ig::before { content: ''; display: inline-block; width: 28px; height: 28px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'/%3E%3C/svg%3E") no-repeat center/contain; }
+    .platform-icon.tt::before { content: ''; display: inline-block; width: 28px; height: 28px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.95a8.2 8.2 0 004.79 1.52V7.02a4.85 4.85 0 01-1.02-.33z'/%3E%3C/svg%3E") no-repeat center/contain; }
+    /* Loading shimmer for thumbnails */
+    .social-post.loading img {
+      opacity: 0;
+    }
+    .social-post img.loaded {
+      opacity: 1;
+      transition: opacity 0.4s ease, transform 0.35s ease;
+    }
+    @media (max-width: 600px) {
+      .social-grid {
         grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (max-width: 540px) {
-      .social-embed-grid {
-        grid-template-columns: 1fr;
       }
     }
 
@@ -1697,60 +1725,61 @@
         <p class="subtitle" data-lang="es">S&iacute;guenos en redes sociales para consejos de movimiento, insights de coaching y vida en Key West.</p>
       </div>
 
-      <div class="social-embed-grid">
+      <div class="social-grid" id="socialGrid">
 
-        <!-- 1: IG Testimonial -->
-        <div class="social-embed-cell">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DTJw4lDEa9C/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
-        </div>
+        <!-- 1: IG - Testimonial Max -->
+        <a href="https://www.instagram.com/p/DTJw4lDEa9C/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DTJw4lDEa9C/media/?size=l">
+          <img alt="Laura Treto coaching testimonial on Instagram" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon ig"></span></div>
+        </a>
 
-        <!-- 2: IG Testimonial -->
-        <div class="social-embed-cell">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DQ-cwNCkT07/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
-        </div>
+        <!-- 2: IG - Testimonial Annie -->
+        <a href="https://www.instagram.com/p/DQ-cwNCkT07/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DQ-cwNCkT07/media/?size=l">
+          <img alt="Client testimonial on Instagram" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon ig"></span></div>
+        </a>
 
-        <!-- 3: TikTok -->
-        <div class="social-embed-cell">
-          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942" data-video-id="7566784390789958942" style="max-width:605px; min-width:325px; width:100%;">
-            <section><a target="_blank" href="https://www.tiktok.com/@coachlauratreto">@coachlauratreto</a></section>
-          </blockquote>
-        </div>
+        <!-- 3: TikTok - Wall sit 267K -->
+        <a href="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942">
+          <img alt="Wall sit challenge - 267K views on TikTok" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon tt"></span></div>
+        </a>
 
-        <!-- 4: TikTok -->
-        <div class="social-embed-cell">
-          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478" data-video-id="7577168789930888478" style="max-width:605px; min-width:325px; width:100%;">
-            <section><a target="_blank" href="https://www.tiktok.com/@coachlauratreto">@coachlauratreto</a></section>
-          </blockquote>
-        </div>
+        <!-- 4: TikTok - Mobility test -->
+        <a href="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478">
+          <img alt="Mobility test on TikTok" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon tt"></span></div>
+        </a>
 
-        <!-- 5: TikTok -->
-        <div class="social-embed-cell">
-          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494" data-video-id="7573494950017502494" style="max-width:605px; min-width:325px; width:100%;">
-            <section><a target="_blank" href="https://www.tiktok.com/@coachlauratreto">@coachlauratreto</a></section>
-          </blockquote>
-        </div>
+        <!-- 5: TikTok - Kettlebells -->
+        <a href="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494">
+          <img alt="Kettlebell training on TikTok" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon tt"></span></div>
+        </a>
 
-        <!-- 6: IG -->
-        <div class="social-embed-cell">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DSFvY2BEURa/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
-        </div>
+        <!-- 6: IG - Dancing with Raul -->
+        <a href="https://www.instagram.com/p/DSFvY2BEURa/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DSFvY2BEURa/media/?size=l">
+          <img alt="Laura dancing with Raul Malo on Instagram" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon ig"></span></div>
+        </a>
 
-        <!-- 7: IG -->
-        <div class="social-embed-cell">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DWXNzUMRtYK/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
-        </div>
+        <!-- 7: IG - Middle age crisis -->
+        <a href="https://www.instagram.com/p/DWXNzUMRtYK/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DWXNzUMRtYK/media/?size=l">
+          <img alt="Middle age crisis post on Instagram" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon ig"></span></div>
+        </a>
 
-        <!-- 8: IG -->
-        <div class="social-embed-cell">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DURgP5Ckc1_/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
-        </div>
+        <!-- 8: IG - Ballet roots -->
+        <a href="https://www.instagram.com/p/DURgP5Ckc1_/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DURgP5Ckc1_/media/?size=l">
+          <img alt="Ballet roots on Instagram" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon ig"></span></div>
+        </a>
 
-        <!-- 9: TikTok -->
-        <div class="social-embed-cell">
-          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982" data-video-id="7479955696470215982" style="max-width:605px; min-width:325px; width:100%;">
-            <section><a target="_blank" href="https://www.tiktok.com/@coachlauratreto">@coachlauratreto</a></section>
-          </blockquote>
-        </div>
+        <!-- 9: TikTok - Cuban personality -->
+        <a href="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982">
+          <img alt="Cuban personality on TikTok" loading="lazy" />
+          <div class="social-overlay"><span class="platform-icon tt"></span></div>
+        </a>
 
       </div>
 
@@ -2009,7 +2038,7 @@
     }, { threshold: 0.1 });
 
     document.addEventListener('DOMContentLoaded', () => {
-      const animateEls = document.querySelectorAll('.card, .pricing-card, .section-header, .about-grid, .social-embed-grid');
+      const animateEls = document.querySelectorAll('.card, .pricing-card, .section-header, .about-grid, .social-grid');
       animateEls.forEach(el => {
         el.classList.add('fade-up');
         el.style.opacity = '0';
@@ -2308,9 +2337,45 @@
     })();
   </script>
 
-  <!-- Social embed scripts -->
-  <script async src="//www.instagram.com/embed.js"></script>
-  <script async src="https://www.tiktok.com/embed.js"></script>
+  <!-- Social grid thumbnail loader -->
+  <script>
+    (function() {
+      // Set IG thumbnails directly (public redirect)
+      document.querySelectorAll('.social-post[data-platform="ig"]').forEach(function(post) {
+        var img = post.querySelector('img');
+        var src = post.getAttribute('data-src');
+        if (img && src) {
+          img.src = src;
+          img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
+          img.onerror = function() {
+            // Fallback: coral placeholder with IG icon
+            post.style.background = 'rgba(232,101,74,0.25)';
+            post.classList.remove('loading');
+          };
+        }
+      });
+
+      // Fetch TikTok thumbnails via public oEmbed API (CORS-friendly, no auth needed)
+      document.querySelectorAll('.social-post[data-platform="tt"]').forEach(function(post) {
+        var img = post.querySelector('img');
+        var ttUrl = post.getAttribute('data-tt-url');
+        if (!img || !ttUrl) return;
+        fetch('https://www.tiktok.com/oembed?url=' + encodeURIComponent(ttUrl))
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data && data.thumbnail_url) {
+              img.src = data.thumbnail_url;
+              img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
+            }
+          })
+          .catch(function() {
+            // Fallback: turquoise placeholder
+            post.style.background = 'rgba(26,122,122,0.3)';
+            post.classList.remove('loading');
+          });
+      });
+    })();
+  </script>
 
 </body>
 </html>
