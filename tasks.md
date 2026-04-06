@@ -1,10 +1,9 @@
 # Laura Treto Coaching -- Active Tasks
 
-**Last updated:** 2026-04-05
+**Last updated:** 2026-04-06
 
 | # | Task | Priority | Due | Owner | Status |
 |---|------|----------|-----|-------|--------|
-| 1 | Update Trainerize checkout links on website | critical | Apr 6 | Max | todo (Alex: get checkout URLs from Trainerize, no API needed) |
 | 5 | Build AI infographic content pipeline | high | Apr 10 | Kai | todo |
 | 6 | Migrate ConvertKit to MailerLite (before trial ends ~Apr 17) | medium | Apr 17 | Kai | todo |
 | 8 | Design group coaching product | medium | Apr 25 | Alpha/Laura | todo |
@@ -16,6 +15,14 @@
 ## Completed Tasks
 | # | Task | Completed |
 |---|------|-----------|
+| 1 | Update Trainerize checkout links on website | 2026-04-06 |
+| -- | Netlify auto-deploy linked to GitHub (continuous deployment from main) | 2026-04-06 |
+| -- | Hero simplified: single image with slow zoom, removed carousel | 2026-04-06 |
+| -- | Credentials section: scroll-driven video with floating text overlay | 2026-04-06 |
+| -- | Meet Laura carousel: updated to 4 new photos | 2026-04-06 |
+| -- | Inquiry section redesigned: sunset silhouette background, scroll reveals, glass-morphism form | 2026-04-06 |
+| -- | Most Popular badge moved to 4-Session Pack ($460) | 2026-04-06 |
+| -- | Pricing strategy research: keep prices visible (confirmed best practice) | 2026-04-06 |
 | 4 | Add bilingual content guidelines (strategy/BILINGUAL-CONTENT-GUIDELINES.md) | 2026-04-05 |
 | 10 | Plan paid ads strategy (strategy/PAID-ADS-STRATEGY-MONTH2.md) | 2026-04-05 |
 | 14 | Add "gif old lady" as scroll animation on the website | 2026-04-05 |
