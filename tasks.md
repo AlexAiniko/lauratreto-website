@@ -4,22 +4,23 @@
 
 | # | Task | Priority | Due | Owner | Status |
 |---|------|----------|-----|-------|--------|
-| 1 | Update Trainerize links on website | critical | Apr 6 | Max | todo (Alex getting links Apr 6) |
-| 4 | Add bilingual content guidelines | high | Apr 10 | Alpha/Max | todo |
+| 1 | Update Trainerize checkout links on website | critical | Apr 6 | Max | todo (Alex: get checkout URLs from Trainerize, no API needed) |
 | 5 | Build AI infographic content pipeline | high | Apr 10 | Kai | todo |
 | 6 | Migrate ConvertKit to MailerLite (before trial ends ~Apr 17) | medium | Apr 17 | Kai | todo |
 | 8 | Design group coaching product | medium | Apr 25 | Alpha/Laura | todo |
 | 9 | Salsa Sunset Event logistics (talk to Derek) | medium | Apr 28 | Alex | todo |
-| 10 | Plan paid ads strategy (Month 2) | medium | Apr 20 | Alpha | todo |
 | 11 | Set up GA4 for lauratreto.com | low | Apr 15 | Kai | todo |
 | 12 | Clean up DNS: email Squarespace to remove NS1 zone, then verify SSL | low | Apr 7 | Alex | todo (draft email ready in Gmail, send to Squarespace) |
 | 13 | Connect TikTok API to social feed (register at developers.tiktok.com, app review, add to social-feed.js) | medium | Apr 20 | Alex/Kai | todo |
-| 14 | Add "gif old lady" as scroll animation on the website (Alex's note) | low | TBD | Max | todo |
-| 15 | Research Trainerize API for booking integration (check if API exists, what endpoints are available) | medium | Apr 7 | Alex/Kai | todo |
 
 ## Completed Tasks
 | # | Task | Completed |
 |---|------|-----------|
+| 4 | Add bilingual content guidelines (strategy/BILINGUAL-CONTENT-GUIDELINES.md) | 2026-04-05 |
+| 10 | Plan paid ads strategy (strategy/PAID-ADS-STRATEGY-MONTH2.md) | 2026-04-05 |
+| 14 | Add "gif old lady" as scroll animation on the website | 2026-04-05 |
+| 15 | Research Trainerize API (no API viable, use checkout links) | 2026-04-05 |
+| 16 | Connect Higgsfield AI MCP to Claude Code | 2026-04-05 |
 | -- | Hero auto-rotate slideshow (3 silhouettes, 5s timer) | 2026-04-05 |
 | -- | Laura Treto carousel swipe in Meet Laura section (scroll-snap) | 2026-04-05 |
 | -- | Raul Malo testimonial added, moved below social grid | 2026-04-05 |

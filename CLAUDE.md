@@ -162,6 +162,80 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 
 ---
 
+## Connected Tools & Integrations
+
+### MCP Servers (available to all agents)
+| Server | Purpose | Key Tools |
+|--------|---------|-----------|
+| Higgsfield AI | AI video/image generation | generate_image_soul, generate_video_dop, generate_speech_video, create_character |
+| Netlify | Website deploy & management | deploy, env vars, project settings |
+| Gmail | Email drafts & search | gmail_create_draft, gmail_search_messages |
+| Google Calendar | Scheduling & availability | gcal_create_event, gcal_list_events, gcal_find_free_time |
+| n8n | Workflow automation | create_workflow, execute_workflow, validate_workflow |
+| Playwright | Browser automation & QA | browser_navigate, browser_click, browser_snapshot |
+| GitHub | Repo management | create_pull_request, list_issues, push_files |
+| Exa | Neural web & code search | web_search_exa, crawling_exa |
+| Context7 | Library documentation | query-docs, resolve-library-id |
+| Gamma | Presentations & documents | generate, get_themes |
+
+### ManyChat + Claude Webhook
+- Instagram Default Reply automation
+- Claude Haiku generates DM responses
+- Webhook hosted on Netlify function
+- See `website/netlify/functions/` for implementation
+
+### Higgsfield AI (Project MCP)
+- Config: `.mcp.json` in project root (gitignored)
+- API key and secret stored in env vars
+- 9 tools for AI-generated content
+- Character consistency for brand content
+
+### Relevant Skills (from plugins)
+| Skill | Use For |
+|-------|---------|
+| content-engine | Content creation and strategy |
+| brand-voice | Laura's voice consistency |
+| frontend-patterns | Website development |
+| e2e-testing | Website QA with Playwright |
+| design-system | Visual consistency |
+| ui-ux-pro-max | Premium UI/UX design |
+| deep-research | Multi-source research |
+| article-writing | Blog posts and guides |
+
+---
+
+## Alpha Database
+
+Alpha operates from an embedded SQLite database at `alpha.db` in the project root.
+
+### Tables
+| Table | Purpose |
+|-------|---------|
+| clients | Active coaching clients with schedules and locations |
+| contacts | Key people (clients, partners, team) |
+| tasks | Active task tracker (replaces reading tasks.md) |
+| completed_tasks | Full task completion history |
+| services | Pricing tiers and service offerings |
+| content_pillars | 5 content pillars with share percentages |
+| content_templates | 7 script templates linked to pillars |
+| content_log | Published content tracking by platform |
+| revenue | Income tracking by client and service |
+| kpis | Weekly metrics (followers, revenue, quiz completions) |
+| sessions_log | Individual coaching session records |
+| calendar_events | Recurring and one-time calendar events |
+| strategy_docs | Index of all strategy documents |
+| credentials | Credential vault (tokens, API keys, secrets) |
+
+### Usage Rules
+1. Alpha and agents query `alpha.db` for operational data before reading markdown files.
+2. When tasks change, update BOTH `alpha.db` AND `tasks.md` (markdown stays as human-readable backup).
+3. Credentials are consolidated in the `credentials` table. Check expiration dates.
+4. `alpha.db` is gitignored. Never commit it.
+5. `build_alpha_db.py` can rebuild the DB from scratch if needed.
+6. The Meta long-lived user token expires 2026-06-03. Renew before then.
+
+---
+
 ## Codex Cross-Model Protocol
 
 Laura uses **Codex (OpenAI)** for daily business operations. Alex uses **Claude (Alpha)** for strategy and technical builds.

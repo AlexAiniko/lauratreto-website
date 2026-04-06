@@ -1,4 +1,10 @@
 .credentials/
 .DS_Store
+.mcp.json
 *.swp
 *~
+Input/
+.env
+node_modules/
+alpha.db
+build_alpha_db.py
