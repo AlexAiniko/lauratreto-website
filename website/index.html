@@ -835,111 +835,40 @@
     }
     .social-proof .section-header .subtitle { color: rgba(255,255,255,0.7); }
     .social-proof h2 { color: var(--white); }
-    .ig-grid {
+    /* Curated social embed grid */
+    .social-embed-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      max-width: 720px;
+      gap: 18px;
+      max-width: 1080px;
       margin: 0 auto;
     }
-    .ig-placeholder {
-      aspect-ratio: 1;
-      background: rgba(255,255,255,0.08);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,0.3);
-      font-size: 13px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Skeleton loading animation */
-    .ig-skeleton {
-      animation: shimmer 1.5s ease-in-out infinite alternate;
-    }
-    @keyframes shimmer {
-      from { background: rgba(255,255,255,0.05); }
-      to { background: rgba(255,255,255,0.12); }
-    }
-
-    /* Social post image tiles */
-    .ig-post {
-      aspect-ratio: 1;
-      border-radius: 8px;
+    .social-embed-cell {
       overflow: hidden;
-      position: relative;
-      display: block;
-    }
-    .ig-post img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease-out;
-    }
-    .ig-post:hover img {
-      transform: scale(1.05);
-    }
-    .ig-post::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0);
-      transition: background 0.3s ease-out;
-      pointer-events: none;
-    }
-    .ig-post:hover::after {
-      background: rgba(0,0,0,0.1);
-    }
-    .ig-post .source-badge {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
-      z-index: 1;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Fallback block */
-    .ig-fallback {
-      text-align: center;
-      padding: 48px 24px;
-    }
-    .ig-fallback p {
-      color: rgba(255,255,255,0.8);
-      font-size: 17px;
-      margin-bottom: 24px;
-    }
-    .ig-fallback-links {
+      border-radius: 12px;
+      max-height: 560px;
+      background: rgba(255,255,255,0.06);
       display: flex;
-      gap: 16px;
+      align-items: flex-start;
       justify-content: center;
-      flex-wrap: wrap;
     }
-    .ig-fallback-links a {
-      display: inline-block;
-      padding: 10px 24px;
-      border: 2px solid rgba(255,255,255,0.5);
-      border-radius: 8px;
-      color: var(--white);
-      font-weight: 600;
-      font-size: 14px;
-      text-decoration: none;
-      transition: all 0.2s;
+    /* Force embeds to fill cell width */
+    .social-embed-cell .instagram-media,
+    .social-embed-cell .tiktok-embed {
+      width: 100% !important;
+      min-width: unset !important;
+      max-width: 100% !important;
+      margin: 0 !important;
     }
-    .ig-fallback-links a:hover {
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.8);
-      text-decoration: none;
+    @media (max-width: 900px) {
+      .social-embed-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 540px) {
+      .social-embed-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* ========================================
@@ -1768,25 +1697,61 @@
         <p class="subtitle" data-lang="es">S&iacute;guenos en redes sociales para consejos de movimiento, insights de coaching y vida en Key West.</p>
       </div>
 
-      <div class="ig-grid" id="social-grid">
-        <div class="ig-placeholder ig-skeleton"></div>
-        <div class="ig-placeholder ig-skeleton"></div>
-        <div class="ig-placeholder ig-skeleton"></div>
-        <div class="ig-placeholder ig-skeleton"></div>
-        <div class="ig-placeholder ig-skeleton"></div>
-        <div class="ig-placeholder ig-skeleton"></div>
-        <div class="ig-placeholder ig-skeleton"></div>
-        <div class="ig-placeholder ig-skeleton"></div>
-        <div class="ig-placeholder ig-skeleton"></div>
-      </div>
-      <div class="ig-fallback" id="social-fallback" style="display:none">
-        <p data-lang="en">Follow Laura for daily movement tips</p>
-        <p data-lang="es">Sigue a Laura para consejos diarios de movimiento</p>
-        <div class="ig-fallback-links">
-          <a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer">Facebook</a>
-          <a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer">TikTok</a>
+      <div class="social-embed-grid">
+
+        <!-- 1: IG Testimonial -->
+        <div class="social-embed-cell">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DTJw4lDEa9C/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
         </div>
+
+        <!-- 2: IG Testimonial -->
+        <div class="social-embed-cell">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DQ-cwNCkT07/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
+        </div>
+
+        <!-- 3: TikTok -->
+        <div class="social-embed-cell">
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942" data-video-id="7566784390789958942" style="max-width:605px; min-width:325px; width:100%;">
+            <section><a target="_blank" href="https://www.tiktok.com/@coachlauratreto">@coachlauratreto</a></section>
+          </blockquote>
+        </div>
+
+        <!-- 4: TikTok -->
+        <div class="social-embed-cell">
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478" data-video-id="7577168789930888478" style="max-width:605px; min-width:325px; width:100%;">
+            <section><a target="_blank" href="https://www.tiktok.com/@coachlauratreto">@coachlauratreto</a></section>
+          </blockquote>
+        </div>
+
+        <!-- 5: TikTok -->
+        <div class="social-embed-cell">
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494" data-video-id="7573494950017502494" style="max-width:605px; min-width:325px; width:100%;">
+            <section><a target="_blank" href="https://www.tiktok.com/@coachlauratreto">@coachlauratreto</a></section>
+          </blockquote>
+        </div>
+
+        <!-- 6: IG -->
+        <div class="social-embed-cell">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DSFvY2BEURa/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
+        </div>
+
+        <!-- 7: IG -->
+        <div class="social-embed-cell">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DWXNzUMRtYK/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
+        </div>
+
+        <!-- 8: IG -->
+        <div class="social-embed-cell">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DURgP5Ckc1_/" data-instgrm-version="14" style="max-width:540px; min-width:326px; width:100%;"></blockquote>
+        </div>
+
+        <!-- 9: TikTok -->
+        <div class="social-embed-cell">
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982" data-video-id="7479955696470215982" style="max-width:605px; min-width:325px; width:100%;">
+            <section><a target="_blank" href="https://www.tiktok.com/@coachlauratreto">@coachlauratreto</a></section>
+          </blockquote>
+        </div>
+
       </div>
 
       <div class="social-testimonial">
@@ -2032,51 +1997,6 @@
       });
     }
 
-    // Social feed loader
-    async function loadSocialFeed() {
-      var grid = document.getElementById('social-grid');
-      var fallback = document.getElementById('social-fallback');
-      if (!grid) return;
-
-      try {
-        var res = await fetch('/.netlify/functions/social-feed?v=4');
-        if (!res.ok) throw new Error('Status ' + res.status);
-
-        var data = await res.json();
-        if (!data.posts || data.posts.length === 0) throw new Error('No posts');
-
-        // Clear skeleton placeholders
-        grid.innerHTML = '';
-
-        // Render posts
-        var posts = data.posts.slice(0, 9);
-        posts.forEach(function(post) {
-          var a = document.createElement('a');
-          a.href = post.permalink;
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          a.className = 'ig-post';
-
-          var img = document.createElement('img');
-          img.src = post.imageUrl;
-          img.alt = post.caption || 'Social media post by Laura Treto';
-          img.loading = 'lazy';
-          img.onerror = function() { a.style.display = 'none'; };
-
-          var badge = document.createElement('span');
-          badge.className = 'source-badge';
-          badge.textContent = post.source === 'instagram' ? 'IG' : 'FB';
-
-          a.appendChild(img);
-          a.appendChild(badge);
-          grid.appendChild(a);
-        });
-      } catch (err) {
-        grid.style.display = 'none';
-        if (fallback) fallback.style.display = 'block';
-      }
-    }
-
     // Scroll-triggered fade-in
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -2089,7 +2009,7 @@
     }, { threshold: 0.1 });
 
     document.addEventListener('DOMContentLoaded', () => {
-      const animateEls = document.querySelectorAll('.card, .pricing-card, .section-header, .about-grid, .ig-grid');
+      const animateEls = document.querySelectorAll('.card, .pricing-card, .section-header, .about-grid, .social-embed-grid');
       animateEls.forEach(el => {
         el.classList.add('fade-up');
         el.style.opacity = '0';
@@ -2097,7 +2017,6 @@
         el.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
         observer.observe(el);
       });
-      loadSocialFeed();
     });
 
     // Scroll-driven progressive text reveal
@@ -2388,6 +2307,10 @@
       });
     })();
   </script>
+
+  <!-- Social embed scripts -->
+  <script async src="//www.instagram.com/embed.js"></script>
+  <script async src="https://www.tiktok.com/embed.js"></script>
 
 </body>
 </html>
