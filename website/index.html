@@ -348,24 +348,28 @@
     }
 
     /* ========================================
-       SECTION 2: CREDENTIALS (Scroll-Driven Video BG)
+       SECTION 2: CREDENTIALS (Scroll-Driven Video BG, HIW pattern)
        ======================================== */
-    .credentials-scroll-wrapper {
+    .credentials-section {
       position: relative;
-      /* Tall section for slow scroll-through (31 frames) */
-      height: 280vh;
-    }
-    .credentials-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
       overflow: hidden;
+      padding: 0;
     }
-    /* The scroll-frame background image */
+
+    /* Fixed background with scroll-driven frames */
     .cred-frame-bg {
-      position: absolute;
-      inset: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
       z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .cred-frame-bg.cred-bg-visible {
+      opacity: 1;
     }
     .cred-frame-bg img {
       width: 100%;
@@ -373,68 +377,75 @@
       object-fit: cover;
       object-position: center;
     }
-    /* Dark overlay — heavier at bottom where cards sit, lighter up top for Laura */
+    /* Dark overlay for text readability */
     .cred-frame-bg::after {
       content: '';
       position: absolute;
       inset: 0;
       background: linear-gradient(
         180deg,
-        rgba(0, 0, 0, 0.15) 0%,
-        rgba(0, 0, 0, 0.1) 35%,
-        rgba(0, 0, 0, 0.45) 70%,
-        rgba(0, 0, 0, 0.6) 100%
+        rgba(43, 43, 43, 0.45) 0%,
+        rgba(43, 43, 43, 0.35) 40%,
+        rgba(43, 43, 43, 0.50) 100%
       );
     }
-    /* Credential card grid overlay — pinned to bottom so Laura stays visible */
-    .cred-overlay {
-      position: absolute;
-      inset: 0;
+
+    /* Scrollable content area */
+    .cred-scroll-area {
+      position: relative;
       z-index: 2;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 0 var(--content-pad) 48px;
+      min-height: 400vh;
     }
-    .cred-overlay .container {
-      width: 100%;
-    }
-    .credentials-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    /* Glass-morphism credential cards */
+
+    /* Credential cards — one at a time, floating up */
     .cred-card {
-      background: rgba(43, 43, 43, 0.45);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 32px 24px;
-      text-align: center;
-      color: var(--white);
+      position: relative;
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 36px 48px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
       opacity: 0;
-      transform: translateY(40px) scale(0.95);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(60px) scale(0.95);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      /* Glass-morphism */
+      background: rgba(43, 43, 43, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--white);
     }
     .cred-card.cred-visible {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
+
+    /* Spacing between cards */
+    .cred-card + .cred-card {
+      margin-top: 40vh;
+    }
+    /* First card top spacing */
+    .cred-cards-list .cred-card:first-child {
+      margin-top: 25vh;
+    }
+    /* Last card bottom spacing */
+    .cred-cards-list .cred-card:last-child {
+      margin-bottom: 20vh;
+    }
+
     .cred-icon {
-      font-size: 32px;
-      margin-bottom: 12px;
-      display: block;
+      font-size: 40px;
+      flex-shrink: 0;
+      line-height: 1;
     }
     .cred-text {
       font-weight: 500;
-      font-size: 13px;
+      font-size: 15px;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       line-height: 1.4;
       color: rgba(255,255,255,0.9);
     }
@@ -617,6 +628,11 @@
         opacity: 1;
         transform: none;
         transition: none;
+      }
+      .cred-frame-bg {
+        position: absolute;
+        opacity: 1;
+        height: 100%;
       }
       .hiw-step-card {
         opacity: 1;
@@ -1103,25 +1119,21 @@
       }
       .hero-buttons .btn { width: 100%; max-width: 320px; }
 
-      .credentials-scroll-wrapper {
-        height: 200vh;
-      }
-      /* On mobile, give cards more bottom padding for thumb clearance */
-      .cred-overlay {
-        padding-bottom: 32px;
-      }
-      .credentials-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+      .cred-scroll-area {
+        min-height: 350vh;
       }
       .cred-card {
-        padding: 24px 16px;
+        max-width: 90%;
+        padding: 28px 24px;
+      }
+      .cred-card + .cred-card {
+        margin-top: 35vh;
       }
       .cred-icon {
-        font-size: 26px;
+        font-size: 32px;
       }
       .cred-text {
-        font-size: 11px;
+        font-size: 13px;
       }
 
       .cards-grid,
@@ -1207,21 +1219,21 @@
     body.lang-es .hero-buttons[data-lang="es"] { display: flex; }
     body.lang-es .hero-buttons[data-lang="en"] { display: none; }
     /* grid containers */
-    .credentials-grid[data-lang="es"],
+    .cred-cards-list[data-lang="es"],
     .cards-grid[data-lang="es"],
     .hiw-steps-list[data-lang="es"],
     .pricing-grid[data-lang="es"],
     .pricing-subsection[data-lang="es"],
     .inquiry-grid[data-lang="es"],
     .footer-grid[data-lang="es"] { display: none; }
-    body.lang-es .credentials-grid[data-lang="es"],
+    body.lang-es .cred-cards-list[data-lang="es"] { display: block; }
     body.lang-es .cards-grid[data-lang="es"],
     body.lang-es .pricing-grid[data-lang="es"],
     body.lang-es .inquiry-grid[data-lang="es"],
     body.lang-es .footer-grid[data-lang="es"] { display: grid; }
     body.lang-es .hiw-steps-list[data-lang="es"] { display: block; }
     body.lang-es .pricing-subsection[data-lang="es"] { display: block; }
-    body.lang-es .credentials-grid[data-lang="en"],
+    body.lang-es .cred-cards-list[data-lang="en"],
     body.lang-es .cards-grid[data-lang="en"],
     body.lang-es .hiw-steps-list[data-lang="en"],
     body.lang-es .pricing-grid[data-lang="en"],
@@ -1301,38 +1313,33 @@
   </div>
 
   <!-- ============ SECTION 2: CREDENTIALS (Scroll-Driven Video BG) ============ -->
-  <div class="credentials-scroll-wrapper" id="credentials-section">
-    <div class="credentials-sticky">
-      <!-- Scroll-frame background (single img element, src swapped by JS) -->
-      <div class="cred-frame-bg">
-        <img id="credFrameImg" src="/images/scroll-frames/frame-001.jpg" alt="Laura Treto kettlebell exercise by the ocean" />
-      </div>
+  <section class="credentials-section" id="credentials-section">
+    <!-- Fixed background with scroll-driven frame animation -->
+    <div class="cred-frame-bg" id="credFrameBg">
+      <img id="credFrameImg" src="/images/scroll-frames/frame-001.jpg" alt="Laura Treto kettlebell exercise by the ocean" />
+    </div>
 
-      <!-- Glass-morphism credential cards overlay -->
-      <div class="cred-overlay">
-        <div class="container">
-          <!-- EN credentials -->
-          <div class="credentials-grid" data-lang="en">
-            <div class="cred-card" data-cred-index="0"><span class="cred-icon">&#9834;</span><span class="cred-text">Cuban-Trained Athlete & Dancer</span></div>
-            <div class="cred-card" data-cred-index="1"><span class="cred-icon">&#9733;</span><span class="cred-text">O-1B Visa (Extraordinary Ability)</span></div>
-            <div class="cred-card" data-cred-index="2"><span class="cred-icon">&#127760;</span><span class="cred-text">1,000+ International Performances</span></div>
-            <div class="cred-card" data-cred-index="3"><span class="cred-icon">&#127891;</span><span class="cred-text">University of Havana, Clinical Psychology</span></div>
-            <div class="cred-card" data-cred-index="4"><span class="cred-icon">&#9989;</span><span class="cred-text">NASM Certified Personal Trainer</span></div>
-            <div class="cred-card" data-cred-index="5"><span class="cred-icon">&#128172;</span><span class="cred-text">Bilingual: English & Spanish</span></div>
-          </div>
-          <!-- ES credentials -->
-          <div class="credentials-grid" data-lang="es">
-            <div class="cred-card" data-cred-index="0"><span class="cred-icon">&#9834;</span><span class="cred-text">Atleta y Bailarina Cubana</span></div>
-            <div class="cred-card" data-cred-index="1"><span class="cred-icon">&#9733;</span><span class="cred-text">Visa O-1B (Habilidad Extraordinaria)</span></div>
-            <div class="cred-card" data-cred-index="2"><span class="cred-icon">&#127760;</span><span class="cred-text">M&aacute;s de 1,000 Presentaciones Internacionales</span></div>
-            <div class="cred-card" data-cred-index="3"><span class="cred-icon">&#127891;</span><span class="cred-text">Universidad de La Habana, Psicolog&iacute;a Cl&iacute;nica</span></div>
-            <div class="cred-card" data-cred-index="4"><span class="cred-icon">&#9989;</span><span class="cred-text">Entrenadora Personal Certificada NASM</span></div>
-            <div class="cred-card" data-cred-index="5"><span class="cred-icon">&#128172;</span><span class="cred-text">Biling&uuml;e: Ingl&eacute;s y Espa&ntilde;ol</span></div>
-          </div>
-        </div>
+    <div class="cred-scroll-area">
+      <!-- EN credentials -->
+      <div class="cred-cards-list" data-lang="en">
+        <div class="cred-card"><span class="cred-icon">&#9834;</span><span class="cred-text">Cuban-Trained Athlete &amp; Dancer</span></div>
+        <div class="cred-card"><span class="cred-icon">&#9733;</span><span class="cred-text">O-1B Visa: Extraordinary Ability</span></div>
+        <div class="cred-card"><span class="cred-icon">&#127760;</span><span class="cred-text">1,000+ International Performances</span></div>
+        <div class="cred-card"><span class="cred-icon">&#127891;</span><span class="cred-text">University of Havana: Clinical Psychology</span></div>
+        <div class="cred-card"><span class="cred-icon">&#9989;</span><span class="cred-text">NASM Certified Personal Trainer</span></div>
+        <div class="cred-card"><span class="cred-icon">&#128172;</span><span class="cred-text">Bilingual: English &amp; Spanish</span></div>
+      </div>
+      <!-- ES credentials -->
+      <div class="cred-cards-list" data-lang="es">
+        <div class="cred-card"><span class="cred-icon">&#9834;</span><span class="cred-text">Atleta y Bailarina Cubana</span></div>
+        <div class="cred-card"><span class="cred-icon">&#9733;</span><span class="cred-text">Visa O-1B (Habilidad Extraordinaria)</span></div>
+        <div class="cred-card"><span class="cred-icon">&#127760;</span><span class="cred-text">M&aacute;s de 1,000 Presentaciones Internacionales</span></div>
+        <div class="cred-card"><span class="cred-icon">&#127891;</span><span class="cred-text">Universidad de La Habana, Psicolog&iacute;a Cl&iacute;nica</span></div>
+        <div class="cred-card"><span class="cred-icon">&#9989;</span><span class="cred-text">Entrenadora Personal Certificada NASM</span></div>
+        <div class="cred-card"><span class="cred-icon">&#128172;</span><span class="cred-text">Biling&uuml;e: Ingl&eacute;s y Espa&ntilde;ol</span></div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- ============ SECTION 3: WHO I HELP ============ -->
   <section class="who-i-help section-pad">
@@ -1981,70 +1988,87 @@
       updateLogo();
     })();
 
-    // Scroll-driven frame animation for credentials section (31 frames)
+    // Credentials section: fixed background + scroll-driven frame animation + card reveal
     (function() {
       var TOTAL_FRAMES = 31;
-      var wrapper = document.getElementById('credentials-section');
+      var section = document.getElementById('credentials-section');
+      var frameBg = document.getElementById('credFrameBg');
       var frameImg = document.getElementById('credFrameImg');
-      if (!wrapper || !frameImg) return;
+      if (!section || !frameBg || !frameImg) return;
+
+      var credCards = section.querySelectorAll('.cred-card');
+      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion) {
+        credCards.forEach(function(card) { card.classList.add('cred-visible'); });
+        frameBg.classList.add('cred-bg-visible');
+        return;
+      }
 
       // Preload all 31 frames for smooth playback
       var frames = [];
-      var loadedCount = 0;
       for (var i = 1; i <= TOTAL_FRAMES; i++) {
         var img = new Image();
         img.src = '/images/scroll-frames/frame-' + String(i).padStart(3, '0') + '.jpg';
         frames.push(img);
-        img.onload = function() { loadedCount++; };
       }
 
       var currentFrame = 0;
-      var isActive = false;
 
-      // IntersectionObserver to only run scroll handler when section is in view
-      var credObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          isActive = entry.isIntersecting;
-        });
-      }, { threshold: 0 });
-      credObserver.observe(wrapper);
+      // Show/hide fixed background when section is in viewport
+      function updateBgVisibility() {
+        var rect = section.getBoundingClientRect();
+        var viewportH = window.innerHeight;
+        var inView = rect.top < viewportH && rect.bottom > 0;
+        if (inView) {
+          frameBg.classList.add('cred-bg-visible');
+        } else {
+          frameBg.classList.remove('cred-bg-visible');
+        }
+      }
 
-      // Credential cards reveal based on scroll progress
-      var credCards = wrapper.querySelectorAll('.cred-card');
-
-      function updateCredentials() {
-        if (!isActive) return;
-
-        var rect = wrapper.getBoundingClientRect();
-        var wrapperHeight = wrapper.offsetHeight;
+      // Update frame based on scroll progress through the section
+      function updateFrame() {
+        var rect = section.getBoundingClientRect();
+        var sectionHeight = section.offsetHeight;
         var viewportHeight = window.innerHeight;
-
-        // Scroll progress through the section (0 to 1)
-        var scrollProgress = -rect.top / (wrapperHeight - viewportHeight);
+        var scrollProgress = -rect.top / (sectionHeight - viewportHeight);
         scrollProgress = Math.max(0, Math.min(1, scrollProgress));
 
-        // Map scroll progress to frame number (0-indexed, 31 frames)
-        var targetFrame = Math.min(TOTAL_FRAMES - 1, Math.floor(scrollProgress * TOTAL_FRAMES));
+        // Map to frame with easing (ease-out curve for smoother feel)
+        var eased = 1 - Math.pow(1 - scrollProgress, 1.3);
+        var targetFrame = Math.min(TOTAL_FRAMES - 1, Math.floor(eased * TOTAL_FRAMES));
 
-        // Update frame image if changed and preloaded
         if (targetFrame !== currentFrame && frames[targetFrame] && frames[targetFrame].complete) {
           frameImg.src = frames[targetFrame].src;
           currentFrame = targetFrame;
         }
-
-        // Reveal credential cards progressively (staggered from 30% to 75% scroll)
-        // Cards appear in the second half of the scroll so Laura's movement plays first
-        credCards.forEach(function(card) {
-          var idx = parseInt(card.getAttribute('data-cred-index'));
-          var triggerPoint = 0.30 + (idx * 0.08);
-          if (scrollProgress >= triggerPoint) {
-            card.classList.add('cred-visible');
-          }
-        });
       }
 
-      window.addEventListener('scroll', updateCredentials, { passive: true });
-      updateCredentials();
+      function onScroll() {
+        updateBgVisibility();
+        updateFrame();
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // Card fade-in via IntersectionObserver (like HIW step cards)
+      var credCardObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('cred-visible');
+            credCardObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.2,
+        rootMargin: '0px 0px -10% 0px'
+      });
+
+      credCards.forEach(function(card) {
+        credCardObserver.observe(card);
+      });
     })();
 
     // About carousel (scroll-snap) dot sync
