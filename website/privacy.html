@@ -4,654 +4,231 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy | Laura Treto Coaching</title>
-  <meta name="description" content="Privacy Policy for Laura Treto Coaching. Learn how we collect, use, and protect your personal information." />
+  <meta name="description" content="Privacy Policy for Laura Treto Coaching." />
   <link rel="canonical" href="https://lauratreto.com/privacy" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤍</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* ========================================
-       CSS CUSTOM PROPERTIES
-       ======================================== */
     :root {
       --coral: #E8654A;
-      --coral-dark: #D4553B;
       --turquoise: #1A7A7A;
       --warm-white: #FAF7F2;
-      --white: #FFFFFF;
       --charcoal: #2B2B2B;
-      --gold: #C5973E;
-      --sand: #F0E6D8;
       --muted: #888;
-      --border: #D4D0CB;
-
       --font-serif: 'Playfair Display', Georgia, serif;
-      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-
-      --max-width: 800px;
-      --content-pad: 24px;
+      --font-sans: 'DM Sans', -apple-system, sans-serif;
     }
 
-    /* ========================================
-       RESET & BASE
-       ======================================== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
     body {
       font-family: var(--font-sans);
       font-size: 17px;
-      line-height: 1.7;
+      line-height: 1.75;
       color: var(--charcoal);
       background: var(--warm-white);
       -webkit-font-smoothing: antialiased;
     }
-    img { max-width: 100%; display: block; }
     a { color: var(--coral); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* ========================================
-       LANGUAGE TOGGLE (fixed top-right)
-       ======================================== */
-    .lang-toggle {
+    /* Top bar */
+    .topbar {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
+      top: 0; left: 0; right: 0;
+      height: 64px;
       display: flex;
-      background: rgba(255,255,255,0.95);
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-      backdrop-filter: blur(10px);
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: var(--warm-white);
+      z-index: 100;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .logo {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--charcoal);
+      text-decoration: none;
+    }
+    .lang-toggle {
+      display: flex;
+      gap: 4px;
     }
     .lang-toggle button {
-      padding: 8px 18px;
-      border: none;
+      padding: 6px 14px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
       background: transparent;
       font-family: var(--font-sans);
+      font-size: 13px;
       font-weight: 600;
-      font-size: 14px;
       cursor: pointer;
       color: var(--charcoal);
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
     .lang-toggle button.active {
       background: var(--coral);
-      color: var(--white);
+      border-color: var(--coral);
+      color: #fff;
     }
 
-    /* ========================================
-       SITE LOGO (fixed top-left)
-       ======================================== */
-    .site-logo {
-      position: fixed;
-      top: 20px;
-      left: 24px;
-      z-index: 1000;
-      font-family: var(--font-sans);
-      font-size: 16px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.3em;
-      color: var(--charcoal);
-      text-decoration: none;
-      transition: opacity 0.3s ease;
-    }
-    .site-logo:hover { opacity: 0.7; text-decoration: none; }
-
-    /* ========================================
-       PAGE HEADER
-       ======================================== */
-    .page-header {
-      background: var(--charcoal);
-      color: var(--white);
-      padding: 120px var(--content-pad) 64px;
-      text-align: center;
-    }
-    .page-header h1 {
-      font-family: var(--font-serif);
-      font-size: 48px;
-      font-weight: 700;
-      line-height: 1.15;
-      color: var(--white);
-      margin-bottom: 16px;
-    }
-    .page-header p {
-      font-size: 16px;
-      color: rgba(255,255,255,0.6);
-    }
-
-    /* ========================================
-       CONTENT AREA
-       ======================================== */
-    .content-wrap {
-      max-width: var(--max-width);
+    /* Content */
+    .page {
+      max-width: 680px;
       margin: 0 auto;
-      padding: 64px var(--content-pad) 96px;
+      padding: 104px 24px 80px;
     }
-
-    .policy-section {
-      margin-bottom: 48px;
-    }
-
-    .policy-section h2 {
+    h1 {
       font-family: var(--font-serif);
-      font-size: 26px;
-      font-weight: 600;
-      color: var(--turquoise);
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--sand);
-    }
-
-    .policy-section p {
-      margin-bottom: 14px;
-      color: var(--charcoal);
-    }
-
-    .policy-section ul {
-      padding-left: 20px;
-      margin-bottom: 14px;
-    }
-
-    .policy-section ul li {
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1.2;
       margin-bottom: 8px;
     }
-
-    .highlight-box {
-      background: var(--sand);
-      border-left: 4px solid var(--coral);
-      border-radius: 0 8px 8px 0;
-      padding: 20px 24px;
-      margin-bottom: 24px;
-    }
-
-    .highlight-box p {
-      margin: 0;
-      font-size: 15px;
-    }
-
-    .service-tag {
-      display: inline-block;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 4px 12px;
+    .effective-date {
       font-size: 14px;
-      font-weight: 500;
-      margin: 4px 4px 4px 0;
-      color: var(--charcoal);
+      color: var(--muted);
+      margin-bottom: 48px;
     }
-
-    /* ========================================
-       FOOTER
-       ======================================== */
-    .footer {
-      background: var(--charcoal);
-      color: rgba(255,255,255,0.8);
-      padding: 60px 0 0;
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 40px;
-      padding-bottom: 48px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding-left: var(--content-pad);
-      padding-right: var(--content-pad);
-    }
-    .footer h4 {
-      color: var(--white);
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-    .footer p, .footer a {
+    h2 {
       font-size: 15px;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--turquoise);
+      margin-top: 40px;
+      margin-bottom: 10px;
     }
-    .footer a:hover { color: var(--coral); text-decoration: none; }
-    .social-links { list-style: none; padding: 0; }
-    .social-links li { margin-bottom: 10px; }
-    .social-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      transition: color 0.2s;
-    }
-    .social-icon {
-      width: 24px;
-      height: 24px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      transition: background 0.2s;
-    }
-    .social-links a:hover .social-icon { background: var(--coral); }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding: 20px var(--content-pad);
+    p { margin-bottom: 0; }
+    section + section { margin-top: 0; }
+
+    /* Footer */
+    footer {
       text-align: center;
-      font-size: 13px;
-      color: rgba(255,255,255,0.4);
-      max-width: 1200px;
-      margin: 0 auto;
+      padding: 32px 24px;
+      font-size: 14px;
+      color: var(--muted);
+      border-top: 1px solid rgba(0,0,0,0.07);
     }
-    .footer-bottom a { color: rgba(255,255,255,0.5); }
-    .footer-bottom a:hover { color: var(--coral); }
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--coral); text-decoration: none; }
 
-    /* ========================================
-       LANGUAGE VISIBILITY
-       ======================================== */
-    [data-lang="es"] { display: none; }
-    body.lang-es [data-lang="es"] { display: block; }
-    body.lang-es [data-lang="en"] { display: none; }
-
-    /* Inline spans */
-    span[data-lang="es"] { display: none; }
-    body.lang-es span[data-lang="es"] { display: inline; }
-    body.lang-es span[data-lang="en"] { display: none; }
-
-    /* Footer grids */
-    .footer-grid[data-lang="es"] { display: none; }
-    body.lang-es .footer-grid[data-lang="es"] { display: grid; }
-    body.lang-es .footer-grid[data-lang="en"] { display: none; }
-
-    /* ========================================
-       RESPONSIVE
-       ======================================== */
-    @media (max-width: 768px) {
-      .page-header h1 { font-size: 36px; }
-      .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-      .policy-section h2 { font-size: 22px; }
-    }
+    /* Language switching */
+    [data-lang] { display: none; }
+    .lang-en [data-lang="en"] { display: block; }
+    .lang-es [data-lang="es"] { display: block; }
+    h1[data-lang], .effective-date[data-lang] { display: none; }
+    .lang-en h1[data-lang="en"],
+    .lang-en .effective-date[data-lang="en"] { display: block; }
+    .lang-es h1[data-lang="es"],
+    .lang-es .effective-date[data-lang="es"] { display: block; }
   </style>
 </head>
-<body>
+<body class="lang-en">
 
-  <!-- ============ SITE LOGO ============ -->
-  <a href="/" class="site-logo">Laura Treto</a>
-
-  <!-- ============ LANGUAGE TOGGLE ============ -->
-  <div class="lang-toggle">
-    <button class="active" onclick="setLang('en')">EN</button>
-    <button onclick="setLang('es')">ES</button>
-  </div>
-
-  <!-- ============ PAGE HEADER ============ -->
-  <div class="page-header">
-    <h1>
-      <span data-lang="en">Privacy Policy</span>
-      <span data-lang="es">Pol&iacute;tica de Privacidad</span>
-    </h1>
-    <p>
-      <span data-lang="en">Effective April 6, 2026 &nbsp;&middot;&nbsp; Laura Treto Coaching, Key West FL</span>
-      <span data-lang="es">Vigente desde el 6 de abril de 2026 &nbsp;&middot;&nbsp; Laura Treto Coaching, Key West FL</span>
-    </p>
-  </div>
-
-  <!-- ============ ENGLISH CONTENT ============ -->
-  <div data-lang="en">
-    <div class="content-wrap">
-
-      <div class="highlight-box">
-        <p>This is a small coaching business, not a corporation. We keep this simple and honest: we collect only what we need to serve you, we never sell your information, and we always respond if you have questions.</p>
-      </div>
-
-      <!-- 1. What We Collect -->
-      <div class="policy-section">
-        <h2>1. What Information We Collect</h2>
-        <p>We collect information in two ways: when you reach out to us, and when you interact with our website or social channels.</p>
-        <p><strong>From the inquiry form on our website:</strong></p>
-        <ul>
-          <li>Your name</li>
-          <li>Your email address</li>
-          <li>Your phone number (optional)</li>
-          <li>Your message</li>
-        </ul>
-        <p><strong>From Instagram DMs (via ManyChat):</strong></p>
-        <ul>
-          <li>Your Instagram username</li>
-          <li>The content of messages you send to our Instagram account (@coachlauratreto)</li>
-        </ul>
-        <p>We do not collect any payment information directly. All payments are processed by Trainerize (see Third-Party Services below).</p>
-      </div>
-
-      <!-- 2. How We Use It -->
-      <div class="policy-section">
-        <h2>2. How We Use Your Information</h2>
-        <p>We use the information you share with us to:</p>
-        <ul>
-          <li>Respond to your inquiry and answer your questions</li>
-          <li>Schedule and manage your coaching sessions</li>
-          <li>Deliver the coaching services you sign up for</li>
-          <li>Send occasional updates about offerings, workshops, or events (only if you opt in)</li>
-        </ul>
-        <p>We do not use your information for automated profiling or any purpose unrelated to providing you with coaching services.</p>
-      </div>
-
-      <!-- 3. Third-Party Services -->
-      <div class="policy-section">
-        <h2>3. Third-Party Services We Use</h2>
-        <p>Running a modern coaching business involves a few trusted tools. Here is what we use and why:</p>
-
-        <p>
-          <span class="service-tag">Netlify</span>
-          Our website is hosted on Netlify. They may set functional cookies and process your IP address when you visit the site. See <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener">Netlify's Privacy Policy</a>.
-        </p>
-
-        <p>
-          <span class="service-tag">Trainerize</span>
-          We use Trainerize for online program delivery, scheduling, and payment processing. When you purchase a program or book a session, their platform handles your payment and account information. See <a href="https://www.trainerize.com/privacy-policy/" target="_blank" rel="noopener">Trainerize's Privacy Policy</a>.
-        </p>
-
-        <p>
-          <span class="service-tag">Google Calendar</span>
-          We use Google Calendar to manage session scheduling. If you book a session with us, your name and contact information may be stored in our calendar system. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.
-        </p>
-
-        <p>
-          <span class="service-tag">Meta (Instagram / Facebook)</span>
-          We have a business presence on Instagram (@coachlauratreto) and Facebook (Laura Treto, Fitness Trainer). We use the Meta API to publish content and respond to messages. Meta's own data practices apply when you interact with us on their platforms. See <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Meta's Privacy Policy</a>.
-        </p>
-
-        <p>
-          <span class="service-tag">ManyChat</span>
-          We use ManyChat to automate responses to Instagram DMs. When you send a message to our Instagram, it may be processed by ManyChat and by an AI assistant (Claude, by Anthropic) to generate a response. We do not store your DM content beyond what ManyChat retains per their own policy. See <a href="https://manychat.com/privacy" target="_blank" rel="noopener">ManyChat's Privacy Policy</a>.
-        </p>
-
-        <p>
-          <span class="service-tag">TikTok</span>
-          We embed TikTok content on our website. TikTok may set cookies or collect data when you interact with embedded videos. See <a href="https://www.tiktok.com/legal/privacy-policy" target="_blank" rel="noopener">TikTok's Privacy Policy</a>.
-        </p>
-
-        <p>
-          <span class="service-tag">Google Analytics (future)</span>
-          We may add Google Analytics in the future to understand how visitors use our site. If we do, we will update this policy and add an opt-out mechanism.
-        </p>
-      </div>
-
-      <!-- 4. Cookies -->
-      <div class="policy-section">
-        <h2>4. Cookies and Tracking</h2>
-        <p>We do not run any tracking or advertising cookies ourselves.</p>
-        <p>However, third-party services embedded in this site (Netlify hosting, Instagram embeds, TikTok embeds) may set their own functional or analytics cookies. These are outside our direct control. You can manage cookies through your browser settings at any time.</p>
-        <p>We do not currently use Google Analytics or any ad-targeting pixels, though we may add them in the future and will update this policy accordingly.</p>
-      </div>
-
-      <!-- 5. Data Retention -->
-      <div class="policy-section">
-        <h2>5. How Long We Keep Your Data</h2>
-        <p>Inquiry form submissions are kept for up to 24 months so we can follow up if needed and maintain a record of communications. After that period, we delete them.</p>
-        <p>If you become a coaching client, we retain session records and communication history for the duration of the coaching relationship plus one year, in case of any follow-up needs.</p>
-        <p>You can request deletion of your data at any time (see Your Rights below).</p>
-      </div>
-
-      <!-- 6. Your Rights -->
-      <div class="policy-section">
-        <h2>6. Your Rights</h2>
-        <p>You have the right to:</p>
-        <ul>
-          <li><strong>Access</strong> the personal information we hold about you</li>
-          <li><strong>Correct</strong> any information that is inaccurate</li>
-          <li><strong>Request deletion</strong> of your data (we will honor this unless we have a legal obligation to retain it)</li>
-          <li><strong>Opt out</strong> of any marketing or follow-up communications at any time</li>
-        </ul>
-        <p>To exercise any of these rights, email us at <a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a>. We will respond within 10 business days.</p>
-      </div>
-
-      <!-- 7. Children's Privacy -->
-      <div class="policy-section">
-        <h2>7. Children's Privacy</h2>
-        <p>Our coaching services are designed for adults, primarily those 45 and older. We do not knowingly collect personal information from anyone under the age of 18. If you believe a minor has submitted information through our site, please contact us and we will delete it immediately.</p>
-      </div>
-
-      <!-- 8. Data Security -->
-      <div class="policy-section">
-        <h2>8. How We Protect Your Data</h2>
-        <p>We take reasonable precautions to protect the information you share with us. Our website is served over HTTPS. We use reputable, security-conscious service providers for hosting and communications.</p>
-        <p>No system is 100% secure, but we do our best to keep your information safe and only share it with the third-party services listed above, which are necessary to run our business.</p>
-      </div>
-
-      <!-- 9. Changes to This Policy -->
-      <div class="policy-section">
-        <h2>9. Changes to This Policy</h2>
-        <p>We may update this privacy policy from time to time as our business or services change. When we do, we will update the effective date at the top of this page. We encourage you to review this page periodically.</p>
-        <p>Significant changes will be communicated via our website or email to active clients.</p>
-      </div>
-
-      <!-- 10. Contact -->
-      <div class="policy-section">
-        <h2>10. Questions? Contact Us.</h2>
-        <p>If you have any questions about this privacy policy or how we handle your information, reach out:</p>
-        <ul>
-          <li><strong>Email:</strong> <a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a></li>
-          <li><strong>Business:</strong> Laura Treto Coaching</li>
-          <li><strong>Location:</strong> Key West, FL, USA</li>
-        </ul>
-      </div>
-
-      <p style="margin-top: 48px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 24px;">
-        Effective date: April 6, 2026 &nbsp;&middot;&nbsp; <a href="/">Back to Home</a>
-      </p>
-
+  <div class="topbar">
+    <a class="logo" href="/">Laura Treto</a>
+    <div class="lang-toggle">
+      <button class="active" onclick="setLang('en', this)">EN</button>
+      <button onclick="setLang('es', this)">ES</button>
     </div>
   </div>
 
-  <!-- ============ SPANISH CONTENT ============ -->
-  <div data-lang="es">
-    <div class="content-wrap">
+  <main class="page">
 
-      <div class="highlight-box">
-        <p>Este es un negocio de coaching peque&ntilde;o, no una corporaci&oacute;n. Somos directos: solo recopilamos lo que necesitamos para servirte, nunca vendemos tu informaci&oacute;n y siempre respondemos tus preguntas.</p>
-      </div>
+    <h1 data-lang="en">Privacy Policy</h1>
+    <h1 data-lang="es">Política de Privacidad</h1>
 
-      <!-- 1 -->
-      <div class="policy-section">
-        <h2>1. Qu&eacute; Informaci&oacute;n Recopilamos</h2>
-        <p>Recopilamos informaci&oacute;n de dos formas: cuando te comunicas con nosotros y cuando interact&uacute;as con nuestro sitio web o redes sociales.</p>
-        <p><strong>Del formulario de contacto en nuestro sitio web:</strong></p>
-        <ul>
-          <li>Tu nombre</li>
-          <li>Tu direcci&oacute;n de correo electr&oacute;nico</li>
-          <li>Tu n&uacute;mero de tel&eacute;fono (opcional)</li>
-          <li>Tu mensaje</li>
-        </ul>
-        <p><strong>Desde mensajes directos de Instagram (v&iacute;a ManyChat):</strong></p>
-        <ul>
-          <li>Tu nombre de usuario de Instagram</li>
-          <li>El contenido de los mensajes que env&iacute;as a nuestra cuenta (@coachlauratreto)</li>
-        </ul>
-        <p>No recopilamos informaci&oacute;n de pago directamente. Todos los pagos son procesados por Trainerize (ver Servicios de Terceros a continuaci&oacute;n).</p>
-      </div>
+    <p class="effective-date" data-lang="en">Effective April 6, 2026</p>
+    <p class="effective-date" data-lang="es">Vigente desde el 6 de abril de 2026</p>
 
-      <!-- 2 -->
-      <div class="policy-section">
-        <h2>2. C&oacute;mo Usamos Tu Informaci&oacute;n</h2>
-        <p>Usamos la informaci&oacute;n que compartes con nosotros para:</p>
-        <ul>
-          <li>Responder a tu consulta y contestar tus preguntas</li>
-          <li>Programar y gestionar tus sesiones de coaching</li>
-          <li>Brindarte los servicios de coaching a los que te inscribes</li>
-          <li>Enviarte actualizaciones ocasionales sobre ofertas, talleres o eventos (solo si das tu consentimiento)</li>
-        </ul>
-        <p>No usamos tu informaci&oacute;n para perfiles automatizados ni para ning&uacute;n prop&oacute;sito ajeno a la prestaci&oacute;n de servicios de coaching.</p>
-      </div>
+    <!-- EN -->
+    <div data-lang="en">
 
-      <!-- 3 -->
-      <div class="policy-section">
-        <h2>3. Servicios de Terceros que Usamos</h2>
-        <p>Operar un negocio de coaching moderno implica el uso de algunas herramientas de confianza. Aqu&iacute; est&aacute; lo que usamos y por qu&eacute;:</p>
+      <section>
+        <h2>What We Collect</h2>
+        <p>When you fill out the inquiry form or sign up for updates, we collect your name, email address, and phone number. We only collect what you choose to provide.</p>
+      </section>
 
-        <p>
-          <span class="service-tag">Netlify</span>
-          Nuestro sitio web est&aacute; alojado en Netlify. Pueden configurar cookies funcionales y procesar tu direcci&oacute;n IP cuando visitas el sitio. Consulta la <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener">Pol&iacute;tica de Privacidad de Netlify</a>.
-        </p>
+      <section>
+        <h2>How We Use It</h2>
+        <p>We use your information to respond to your inquiry, schedule coaching sessions, and send you relevant updates. We do not sell your data to anyone.</p>
+      </section>
 
-        <p>
-          <span class="service-tag">Trainerize</span>
-          Usamos Trainerize para la entrega de programas en l&iacute;nea, programaci&oacute;n y procesamiento de pagos. Cuando adquieres un programa o reservas una sesi&oacute;n, su plataforma gestiona tu informaci&oacute;n de pago y cuenta. Consulta la <a href="https://www.trainerize.com/privacy-policy/" target="_blank" rel="noopener">Pol&iacute;tica de Privacidad de Trainerize</a>.
-        </p>
+      <section>
+        <h2>Third Parties</h2>
+        <p>Our site and services run on a few trusted platforms. <strong>Netlify</strong> hosts this website. <strong>Trainerize</strong> manages session booking and client programs. <strong>Google Calendar</strong> handles scheduling. <strong>Meta (Instagram/Facebook)</strong> and <strong>TikTok</strong> power our social channels. Each service has its own privacy policy.</p>
+      </section>
 
-        <p>
-          <span class="service-tag">Google Calendar</span>
-          Usamos Google Calendar para gestionar la programaci&oacute;n de sesiones. Si reservas una sesi&oacute;n con nosotros, tu nombre e informaci&oacute;n de contacto pueden almacenarse en nuestro sistema de calendario. Consulta la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Pol&iacute;tica de Privacidad de Google</a>.
-        </p>
+      <section>
+        <h2>Cookies</h2>
+        <p>We do not use tracking cookies. Minimal cookies may be set by embedded content from third-party platforms listed above.</p>
+      </section>
 
-        <p>
-          <span class="service-tag">Meta (Instagram / Facebook)</span>
-          Tenemos presencia empresarial en Instagram (@coachlauratreto) y Facebook (Laura Treto, Fitness Trainer). Usamos la API de Meta para publicar contenido y responder mensajes. Las pr&aacute;cticas de datos de Meta aplican cuando interact&uacute;as con nosotros en sus plataformas. Consulta la <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener">Pol&iacute;tica de Privacidad de Meta</a>.
-        </p>
+      <section>
+        <h2>Your Rights</h2>
+        <p>You can request to access, update, or delete your personal data at any time. Email us and we will take care of it promptly.</p>
+      </section>
 
-        <p>
-          <span class="service-tag">ManyChat</span>
-          Usamos ManyChat para automatizar respuestas a mensajes directos de Instagram. Cuando nos env&iacute;as un mensaje, puede ser procesado por ManyChat y por un asistente de IA (Claude, de Anthropic) para generar una respuesta. No almacenamos el contenido de tus mensajes m&aacute;s all&aacute; de lo que ManyChat retiene seg&uacute;n su propia pol&iacute;tica. Consulta la <a href="https://manychat.com/privacy" target="_blank" rel="noopener">Pol&iacute;tica de Privacidad de ManyChat</a>.
-        </p>
-
-        <p>
-          <span class="service-tag">TikTok</span>
-          Incorporamos contenido de TikTok en nuestro sitio web. TikTok puede configurar cookies o recopilar datos cuando interact&uacute;as con videos incrustados. Consulta la <a href="https://www.tiktok.com/legal/privacy-policy" target="_blank" rel="noopener">Pol&iacute;tica de Privacidad de TikTok</a>.
-        </p>
-
-        <p>
-          <span class="service-tag">Google Analytics (futuro)</span>
-          Es posible que a&ntilde;adamos Google Analytics en el futuro para entender c&oacute;mo los visitantes usan nuestro sitio. Si lo hacemos, actualizaremos esta pol&iacute;tica y a&ntilde;adiremos un mecanismo de exclusi&oacute;n.
-        </p>
-      </div>
-
-      <!-- 4 -->
-      <div class="policy-section">
-        <h2>4. Cookies y Seguimiento</h2>
-        <p>Nosotros no usamos cookies de seguimiento o publicidad propias.</p>
-        <p>Sin embargo, los servicios de terceros integrados en este sitio (alojamiento de Netlify, publicaciones de Instagram, videos de TikTok) pueden configurar sus propias cookies funcionales o de an&aacute;lisis. Estas est&aacute;n fuera de nuestro control directo. Puedes gestionar las cookies a trav&eacute;s de la configuraci&oacute;n de tu navegador en cualquier momento.</p>
-        <p>Actualmente no usamos Google Analytics ni p&iacute;xeles de publicidad, aunque podr&iacute;amos agregarlos en el futuro y actualizaremos esta pol&iacute;tica en consecuencia.</p>
-      </div>
-
-      <!-- 5 -->
-      <div class="policy-section">
-        <h2>5. Cu&aacute;nto Tiempo Guardamos tus Datos</h2>
-        <p>Los env&iacute;os del formulario de contacto se conservan hasta 24 meses para poder hacer seguimiento si es necesario y mantener un registro de comunicaciones. Despu&eacute;s de ese per&iacute;odo, los eliminamos.</p>
-        <p>Si te conviertes en cliente de coaching, conservamos los registros de sesiones e historial de comunicaci&oacute;n durante la relaci&oacute;n de coaching m&aacute;s un a&ntilde;o adicional.</p>
-        <p>Puedes solicitar la eliminaci&oacute;n de tus datos en cualquier momento (ver Tus Derechos a continuaci&oacute;n).</p>
-      </div>
-
-      <!-- 6 -->
-      <div class="policy-section">
-        <h2>6. Tus Derechos</h2>
-        <p>Tienes derecho a:</p>
-        <ul>
-          <li><strong>Acceder</strong> a la informaci&oacute;n personal que tenemos sobre ti</li>
-          <li><strong>Corregir</strong> cualquier informaci&oacute;n que sea inexacta</li>
-          <li><strong>Solicitar la eliminaci&oacute;n</strong> de tus datos (lo haremos salvo que tengamos una obligaci&oacute;n legal de conservarlos)</li>
-          <li><strong>Cancelar la suscripci&oacute;n</strong> a cualquier comunicaci&oacute;n de marketing en cualquier momento</li>
-        </ul>
-        <p>Para ejercer cualquiera de estos derechos, env&iacute;anos un correo a <a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a>. Responderemos dentro de 10 d&iacute;as h&aacute;biles.</p>
-      </div>
-
-      <!-- 7 -->
-      <div class="policy-section">
-        <h2>7. Privacidad de los Menores</h2>
-        <p>Nuestros servicios de coaching est&aacute;n dise&ntilde;ados para adultos, principalmente mayores de 45 a&ntilde;os. No recopilamos conscientemente informaci&oacute;n personal de menores de 18 a&ntilde;os. Si crees que un menor ha enviado informaci&oacute;n a trav&eacute;s de nuestro sitio, cont&aacute;ctanos y la eliminaremos de inmediato.</p>
-      </div>
-
-      <!-- 8 -->
-      <div class="policy-section">
-        <h2>8. C&oacute;mo Protegemos tus Datos</h2>
-        <p>Tomamos precauciones razonables para proteger la informaci&oacute;n que compartes con nosotros. Nuestro sitio web funciona con HTTPS. Usamos proveedores de servicios de confianza con buenas pr&aacute;cticas de seguridad para el alojamiento y las comunicaciones.</p>
-        <p>Ning&uacute;n sistema es 100% seguro, pero hacemos nuestro mejor esfuerzo para mantener tu informaci&oacute;n segura y solo la compartimos con los servicios de terceros listados arriba, que son necesarios para operar nuestro negocio.</p>
-      </div>
-
-      <!-- 9 -->
-      <div class="policy-section">
-        <h2>9. Cambios a Esta Pol&iacute;tica</h2>
-        <p>Podemos actualizar esta pol&iacute;tica de privacidad de vez en cuando a medida que nuestro negocio o servicios cambien. Cuando lo hagamos, actualizaremos la fecha de vigencia en la parte superior de esta p&aacute;gina.</p>
-        <p>Los cambios significativos se comunicar&aacute;n a trav&eacute;s de nuestro sitio web o por correo electr&oacute;nico a los clientes activos.</p>
-      </div>
-
-      <!-- 10 -->
-      <div class="policy-section">
-        <h2>10. &iquest;Preguntas? Cont&aacute;ctanos.</h2>
-        <p>Si tienes alguna pregunta sobre esta pol&iacute;tica de privacidad o sobre c&oacute;mo manejamos tu informaci&oacute;n, com&uacute;nicate con nosotros:</p>
-        <ul>
-          <li><strong>Correo:</strong> <a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a></li>
-          <li><strong>Negocio:</strong> Laura Treto Coaching</li>
-          <li><strong>Ubicaci&oacute;n:</strong> Key West, FL, USA</li>
-        </ul>
-      </div>
-
-      <p style="margin-top: 48px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 24px;">
-        Fecha de vigencia: 6 de abril de 2026 &nbsp;&middot;&nbsp; <a href="/">Volver al inicio</a>
-      </p>
+      <section>
+        <h2>Contact</h2>
+        <p>Questions? Reach us at <a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a>.</p>
+      </section>
 
     </div>
-  </div>
 
-  <!-- ============ FOOTER ============ -->
-  <footer class="footer">
-    <div class="footer-grid" data-lang="en">
-      <div>
-        <h4>Laura Treto</h4>
-        <p>Movement Coach<br>Key West, FL</p>
-      </div>
-      <div>
-        <h4>Follow Along</h4>
-        <ul class="social-links">
-          <li><a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer"><span class="social-icon">T</span> TikTok</a></li>
-          <li><a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer"><span class="social-icon">I</span> Instagram</a></li>
-          <li><a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer"><span class="social-icon">F</span> Facebook</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <p><a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a><br>Key West, FL</p>
-      </div>
+    <!-- ES -->
+    <div data-lang="es">
+
+      <section>
+        <h2>Qué Recopilamos</h2>
+        <p>Cuando completas el formulario de contacto o te suscribes a nuestras actualizaciones, recopilamos tu nombre, correo electrónico y número de teléfono. Solo recopilamos lo que tú decides compartir.</p>
+      </section>
+
+      <section>
+        <h2>Cómo lo Usamos</h2>
+        <p>Usamos tu información para responder tu consulta, agendar sesiones de coaching y enviarte actualizaciones relevantes. No vendemos tus datos a nadie.</p>
+      </section>
+
+      <section>
+        <h2>Terceros</h2>
+        <p>Nuestro sitio y servicios funcionan en plataformas de confianza. <strong>Netlify</strong> aloja este sitio web. <strong>Trainerize</strong> gestiona las reservas y programas de clientes. <strong>Google Calendar</strong> maneja la programación de citas. <strong>Meta (Instagram/Facebook)</strong> y <strong>TikTok</strong> impulsan nuestras redes sociales. Cada servicio tiene su propia política de privacidad.</p>
+      </section>
+
+      <section>
+        <h2>Cookies</h2>
+        <p>No usamos cookies de seguimiento. Es posible que las plataformas de terceros mencionadas arriba establezcan cookies mínimas a través de contenido incrustado.</p>
+      </section>
+
+      <section>
+        <h2>Tus Derechos</h2>
+        <p>Puedes solicitar acceder, actualizar o eliminar tus datos personales en cualquier momento. Escríbenos y lo resolveremos de inmediato.</p>
+      </section>
+
+      <section>
+        <h2>Contacto</h2>
+        <p>¿Preguntas? Escríbenos a <a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a>.</p>
+      </section>
+
     </div>
-    <div class="footer-grid" data-lang="es">
-      <div>
-        <h4>Laura Treto</h4>
-        <p>Coach de Movimiento<br>Key West, FL</p>
-      </div>
-      <div>
-        <h4>S&iacute;gueme</h4>
-        <ul class="social-links">
-          <li><a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer"><span class="social-icon">T</span> TikTok</a></li>
-          <li><a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer"><span class="social-icon">I</span> Instagram</a></li>
-          <li><a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer"><span class="social-icon">F</span> Facebook</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Contacto</h4>
-        <p><a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a><br>Key West, FL</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span data-lang="en">&copy; 2026 Laura Treto Coaching. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp; Built by <a href="https://ainiko.ai">Ainiko.ai</a></span>
-      <span data-lang="es">&copy; 2026 Laura Treto Coaching. Todos los derechos reservados. &nbsp;&middot;&nbsp; <a href="/privacy.html">Pol&iacute;tica de Privacidad</a> &nbsp;&middot;&nbsp; Creado por <a href="https://ainiko.ai">Ainiko.ai</a></span>
-    </div>
+
+  </main>
+
+  <footer>
+    <a href="/">Laura Treto Coaching</a> &nbsp;&middot;&nbsp; &copy; 2026
   </footer>
 
-  <!-- ============ JAVASCRIPT ============ -->
   <script>
-    function setLang(lang) {
-      document.body.classList.toggle('lang-es', lang === 'es');
-      document.querySelectorAll('.lang-toggle button').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
-      });
-      document.documentElement.lang = lang;
-      try { localStorage.setItem('lang', lang); } catch(e) {}
+    function setLang(lang, btn) {
+      document.body.className = 'lang-' + lang;
+      document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
-
-    // Restore saved language
-    try { if (localStorage.getItem('lang') === 'es') setLang('es'); } catch(e) {}
   </script>
 
 </body>
