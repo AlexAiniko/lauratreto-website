@@ -741,6 +741,10 @@
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
+      position: sticky;
+      top: 30%;
+      z-index: 2;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
     .social-testimonial blockquote {
       font-family: var(--font-serif);
@@ -2328,6 +2332,30 @@
 
       revealEls.forEach(function(el) { inquiryObserver.observe(el); });
       formCards.forEach(function(el) { inquiryObserver.observe(el); });
+    })();
+
+    // Social testimonial: scroll-driven fade-out as quote exits viewport upward
+    (function() {
+      var testimonial = document.querySelector('.social-testimonial');
+      if (!testimonial) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      function updateTestimonialScroll() {
+        var rect = testimonial.getBoundingClientRect();
+        var viewportH = window.innerHeight;
+
+        if (rect.bottom <= 0 || rect.top >= viewportH) return; // fully off screen, leave as-is
+
+        // scrolledPast: 0 when quote top is at 30% of viewport, 1 when it reaches 0px
+        var scrolledPast = Math.max(0, (viewportH * 0.3 - rect.top) / (viewportH * 0.35));
+        scrolledPast = Math.min(1, scrolledPast);
+
+        testimonial.style.opacity = 1 - (scrolledPast * 0.85); // fades to ~0.15, not fully gone
+        testimonial.style.transform = 'scale(' + (1 - scrolledPast * 0.07) + ') translateY(' + (-scrolledPast * 28) + 'px)';
+      }
+
+      window.addEventListener('scroll', updateTestimonialScroll, { passive: true });
+      updateTestimonialScroll();
     })();
 
     // How It Works: Full-bleed GIF background with scroll-reveal steps
