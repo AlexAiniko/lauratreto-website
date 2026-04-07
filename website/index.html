@@ -17,6 +17,11 @@
   <link rel="alternate" hreflang="es" href="https://lauratreto.com" />
   <link rel="alternate" hreflang="x-default" href="https://lauratreto.com" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤍</text></svg>">
+  <!-- Responsive hero preload: mobile gets 640w, tablet 1024w, desktop 1920w -->
+  <link rel="preload" as="image"
+    href="/images/hero-1920w.webp"
+    imagesrcset="/images/hero-640w.webp 640w, /images/hero-1024w.webp 1024w, /images/hero-1920w.webp 1920w"
+    imagesizes="100vw" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -273,16 +278,33 @@
       overflow: hidden;
     }
     /* Hero static background with slow zoom */
+    /* Mobile-first: load smallest image, upgrade at breakpoints */
     .hero-bg {
       position: absolute;
       inset: 0;
       z-index: 0;
-      background-image: url('/images/hero.jpg');
+      background-image: url('/images/hero-640w.jpg');
+      background-image: -webkit-image-set(url('/images/hero-640w.webp') 1x);
+      background-image: image-set(url('/images/hero-640w.webp') type('image/webp'), url('/images/hero-640w.jpg') type('image/jpeg'));
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
       animation: heroSlowZoom 20s ease-in-out infinite alternate;
       will-change: transform;
+    }
+    @media (min-width: 641px) {
+      .hero-bg {
+        background-image: url('/images/hero-1024w.jpg');
+        background-image: -webkit-image-set(url('/images/hero-1024w.webp') 1x);
+        background-image: image-set(url('/images/hero-1024w.webp') type('image/webp'), url('/images/hero-1024w.jpg') type('image/jpeg'));
+      }
+    }
+    @media (min-width: 1025px) {
+      .hero-bg {
+        background-image: url('/images/hero-1920w.jpg');
+        background-image: -webkit-image-set(url('/images/hero-1920w.webp') 1x);
+        background-image: image-set(url('/images/hero-1920w.webp') type('image/webp'), url('/images/hero-1920w.jpg') type('image/jpeg'));
+      }
     }
     @keyframes heroSlowZoom {
       from { transform: scale(1); }
@@ -1737,61 +1759,61 @@
 
       <div class="social-grid" id="socialGrid">
 
-        <!-- 1: IG - Testimonial Max -->
-        <a href="https://www.instagram.com/p/DTJw4lDEa9C/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DTJw4lDEa9C/media/?size=l">
+        <!-- PINNED 1: IG - Testimonial Max (never removed) -->
+        <a href="https://www.instagram.com/p/DTJw4lDEa9C/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DTJw4lDEa9C/media/?size=l">
           <img alt="Laura Treto coaching testimonial on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
 
-        <!-- 2: IG - Testimonial Annie -->
-        <a href="https://www.instagram.com/p/DQ-cwNCkT07/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DQ-cwNCkT07/media/?size=l">
+        <!-- PINNED 2: IG - Testimonial Annie (never removed) -->
+        <a href="https://www.instagram.com/p/DQ-cwNCkT07/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DQ-cwNCkT07/media/?size=l">
           <img alt="Client testimonial on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
 
-        <!-- 3: TikTok - Wall sit 267K -->
+        <!-- TIKTOK 1: Wall sit 267K (curated, stays unless manually swapped) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942">
           <img alt="Wall sit challenge - 267K views on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
 
-        <!-- 4: TikTok - Mobility test -->
+        <!-- TIKTOK 2: Mobility test (curated) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478">
           <img alt="Mobility test on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
 
-        <!-- 5: TikTok - Kettlebells -->
+        <!-- TIKTOK 3: Kettlebells (curated) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494">
           <img alt="Kettlebell training on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
 
-        <!-- 6: IG - Dancing with Raul -->
-        <a href="https://www.instagram.com/p/DSFvY2BEURa/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DSFvY2BEURa/media/?size=l">
+        <!-- PINNED 3: IG - Dancing with Raul (never removed) -->
+        <a href="https://www.instagram.com/p/DSFvY2BEURa/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DSFvY2BEURa/media/?size=l">
           <img alt="Laura dancing with Raul Malo on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
 
-        <!-- 7: IG - Middle age crisis -->
-        <a href="https://www.instagram.com/p/DWXNzUMRtYK/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DWXNzUMRtYK/media/?size=l">
-          <img alt="Middle age crisis post on Instagram" loading="lazy" />
+        <!-- DYNAMIC 1: populated by social-feed API; fallback to IG post below -->
+        <a href="https://www.instagram.com/p/DWXNzUMRtYK/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-dynamic="true" data-src="https://www.instagram.com/p/DWXNzUMRtYK/media/?size=l">
+          <img alt="Laura Treto on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
 
-        <!-- 8: IG - Ballet roots -->
-        <a href="https://www.instagram.com/p/DURgP5Ckc1_/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-src="https://www.instagram.com/p/DURgP5Ckc1_/media/?size=l">
-          <img alt="Ballet roots on Instagram" loading="lazy" />
+        <!-- DYNAMIC 2: populated by social-feed API; fallback to IG post below -->
+        <a href="https://www.instagram.com/p/DURgP5Ckc1_/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-dynamic="true" data-src="https://www.instagram.com/p/DURgP5Ckc1_/media/?size=l">
+          <img alt="Laura Treto on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
 
-        <!-- 9: TikTok - Cuban personality -->
+        <!-- TIKTOK 4: Cuban personality (curated) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982">
           <img alt="Cuban personality on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
 
-        <!-- 10: TikTok - Strength + mobility combo drill -->
+        <!-- TIKTOK 5: Strength + mobility combo drill (curated) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7570774624737201439" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7570774624737201439">
           <img alt="Strength + mobility combo drill on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
@@ -2355,26 +2377,24 @@
     })();
   </script>
 
-  <!-- Social grid thumbnail loader -->
+  <!-- Social grid thumbnail loader + dynamic feed -->
   <script>
     (function() {
-      // Set IG thumbnails directly (public redirect)
-      document.querySelectorAll('.social-post[data-platform="ig"]').forEach(function(post) {
+      // -------------------------------------------------------
+      // Helpers
+      // -------------------------------------------------------
+      function loadIgPost(post, src) {
         var img = post.querySelector('img');
-        var src = post.getAttribute('data-src');
-        if (img && src) {
-          img.src = src;
-          img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
-          img.onerror = function() {
-            // Fallback: coral placeholder with IG icon
-            post.style.background = 'rgba(232,101,74,0.25)';
-            post.classList.remove('loading');
-          };
-        }
-      });
+        if (!img || !src) return;
+        img.src = src;
+        img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
+        img.onerror = function() {
+          post.style.background = 'rgba(232,101,74,0.25)';
+          post.classList.remove('loading');
+        };
+      }
 
-      // Fetch TikTok thumbnails via public oEmbed API (CORS-friendly, no auth needed)
-      document.querySelectorAll('.social-post[data-platform="tt"]').forEach(function(post) {
+      function loadTtPost(post) {
         var img = post.querySelector('img');
         var ttUrl = post.getAttribute('data-tt-url');
         if (!img || !ttUrl) return;
@@ -2387,11 +2407,111 @@
             }
           })
           .catch(function() {
-            // Fallback: turquoise placeholder
             post.style.background = 'rgba(26,122,122,0.3)';
             post.classList.remove('loading');
           });
+      }
+
+      // -------------------------------------------------------
+      // Step 1: Always load pinned + TikTok posts immediately
+      // -------------------------------------------------------
+      document.querySelectorAll('.social-post[data-platform="ig"][data-pinned="true"]').forEach(function(post) {
+        loadIgPost(post, post.getAttribute('data-src'));
       });
+
+      document.querySelectorAll('.social-post[data-platform="tt"]').forEach(function(post) {
+        loadTtPost(post);
+      });
+
+      // -------------------------------------------------------
+      // Step 2: Fetch dynamic IG posts from Netlify function
+      // -------------------------------------------------------
+      var dynamicSlots = Array.from(document.querySelectorAll('.social-post[data-dynamic="true"]'));
+
+      // Keyword patterns for content rules
+      var MAVERICKS_PATTERN = /mavericks|raul malo/i;
+      var PINNED_PATTERN = /testimonial|client result|raul malo|mavericks/i;
+      var NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
+
+      function filterAndRankPosts(posts) {
+        var now = Date.now();
+        var maverickCount = 0;
+        var filtered = [];
+
+        for (var i = 0; i < posts.length; i++) {
+          var p = posts[i];
+          var text = (p.caption || '') + ' ' + (p.alt || '');
+
+          // Diversity filter: max 2 Mavericks/Raul Malo posts in dynamic slots
+          if (MAVERICKS_PATTERN.test(text)) {
+            maverickCount++;
+            if (maverickCount > 2) continue;
+          }
+
+          // Skip posts that match pinned criteria (already pinned in the grid)
+          if (PINNED_PATTERN.test(text)) continue;
+
+          // Recency bias: posts from last 90 days get a 30% score boost
+          var isRecent = p.timestamp && (now - new Date(p.timestamp).getTime()) < NINETY_DAYS_MS;
+          p._adjustedScore = (p._score || 0) * (isRecent ? 1.3 : 1);
+
+          filtered.push(p);
+        }
+
+        filtered.sort(function(a, b) { return b._adjustedScore - a._adjustedScore; });
+        return filtered;
+      }
+
+      function applyDynamicPosts(posts) {
+        var ranked = filterAndRankPosts(posts);
+
+        dynamicSlots.forEach(function(slot, idx) {
+          var post = ranked[idx];
+          if (!post) {
+            // No API post for this slot: load the hardcoded fallback src
+            loadIgPost(slot, slot.getAttribute('data-src'));
+            return;
+          }
+
+          // Update href to the live post
+          if (post.permalink) slot.href = post.permalink;
+
+          // Update image
+          var img = slot.querySelector('img');
+          if (img) {
+            img.alt = post.caption ? post.caption.slice(0, 80) : 'Laura Treto on Instagram';
+            img.src = post.imageUrl;
+            img.onload = function() { img.classList.add('loaded'); slot.classList.remove('loading'); };
+            img.onerror = function() {
+              // Image failed: fall back to hardcoded src
+              loadIgPost(slot, slot.getAttribute('data-src'));
+            };
+          }
+        });
+      }
+
+      // Fetch from the Netlify function; fall back gracefully on any failure
+      fetch('/.netlify/functions/social-feed')
+        .then(function(r) {
+          if (!r.ok) throw new Error('Feed returned ' + r.status);
+          return r.json();
+        })
+        .then(function(data) {
+          if (data && Array.isArray(data.posts) && data.posts.length > 0) {
+            applyDynamicPosts(data.posts);
+          } else {
+            // Empty response: load hardcoded fallbacks
+            dynamicSlots.forEach(function(slot) {
+              loadIgPost(slot, slot.getAttribute('data-src'));
+            });
+          }
+        })
+        .catch(function() {
+          // API failure: load hardcoded fallback images so grid is always full
+          dynamicSlots.forEach(function(slot) {
+            loadIgPost(slot, slot.getAttribute('data-src'));
+          });
+        });
     })();
   </script>
 
