@@ -517,6 +517,9 @@
     }
     .hiw-gif-bg img,
     .hiw-gif-bg video {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -2389,9 +2392,16 @@
         img.src = src;
         img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
         img.onerror = function() {
-          post.style.background = 'rgba(232,101,74,0.25)';
-          post.classList.remove('loading');
+          applyIgFallback(post);
         };
+      }
+
+      function applyIgFallback(post) {
+        var img = post.querySelector('img');
+        // Branded coral gradient fallback so the grid cell still looks intentional
+        post.style.background = 'linear-gradient(135deg, rgba(232,101,74,0.55) 0%, rgba(197,151,62,0.45) 100%)';
+        post.classList.remove('loading');
+        if (img) img.style.display = 'none';
       }
 
       function loadTtPost(post) {
@@ -2404,34 +2414,71 @@
             if (data && data.thumbnail_url) {
               img.src = data.thumbnail_url;
               img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
+              img.onerror = function() {
+                post.style.background = 'linear-gradient(135deg, rgba(26,122,122,0.55) 0%, rgba(26,122,122,0.3) 100%)';
+                post.classList.remove('loading');
+              };
+            } else {
+              post.style.background = 'linear-gradient(135deg, rgba(26,122,122,0.55) 0%, rgba(26,122,122,0.3) 100%)';
+              post.classList.remove('loading');
             }
           })
           .catch(function() {
-            post.style.background = 'rgba(26,122,122,0.3)';
+            post.style.background = 'linear-gradient(135deg, rgba(26,122,122,0.55) 0%, rgba(26,122,122,0.3) 100%)';
             post.classList.remove('loading');
           });
       }
 
       // -------------------------------------------------------
-      // Step 1: Always load pinned + TikTok posts immediately
+      // Step 1: Load TikTok posts immediately via oEmbed
       // -------------------------------------------------------
-      document.querySelectorAll('.social-post[data-platform="ig"][data-pinned="true"]').forEach(function(post) {
-        loadIgPost(post, post.getAttribute('data-src'));
-      });
-
       document.querySelectorAll('.social-post[data-platform="tt"]').forEach(function(post) {
         loadTtPost(post);
       });
 
       // -------------------------------------------------------
-      // Step 2: Fetch dynamic IG posts from Netlify function
+      // Step 2: Fetch ALL IG posts (pinned + dynamic) from Netlify function
+      // Instagram /media/?size=l URLs are blocked; real CDN URLs come from the API.
       // -------------------------------------------------------
+      var pinnedSlots = Array.from(document.querySelectorAll('.social-post[data-platform="ig"][data-pinned="true"]'));
       var dynamicSlots = Array.from(document.querySelectorAll('.social-post[data-dynamic="true"]'));
 
       // Keyword patterns for content rules
       var MAVERICKS_PATTERN = /mavericks|raul malo/i;
       var PINNED_PATTERN = /testimonial|client result|raul malo|mavericks/i;
       var NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
+
+      // Build a map of permalink -> imageUrl from the API results
+      // so pinned posts can look up their real CDN thumbnail URL.
+      function buildPermalinkMap(posts) {
+        var map = {};
+        posts.forEach(function(p) {
+          if (p.permalink) {
+            // Normalize: strip trailing slash, lowercase
+            var key = p.permalink.replace(/\/$/, '').toLowerCase();
+            map[key] = p.imageUrl;
+          }
+        });
+        return map;
+      }
+
+      function applyPinnedFromMap(permalinkMap) {
+        pinnedSlots.forEach(function(slot) {
+          var href = (slot.getAttribute('href') || '').replace(/\/$/, '').toLowerCase();
+          var imageUrl = permalinkMap[href];
+          if (imageUrl) {
+            var img = slot.querySelector('img');
+            if (img) {
+              img.src = imageUrl;
+              img.onload = function() { img.classList.add('loaded'); slot.classList.remove('loading'); };
+              img.onerror = function() { applyIgFallback(slot); };
+            }
+          } else {
+            // Not in API results (may be too old / below engagement threshold): show fallback
+            applyIgFallback(slot);
+          }
+        });
+      }
 
       function filterAndRankPosts(posts) {
         var now = Date.now();
@@ -2468,8 +2515,8 @@
         dynamicSlots.forEach(function(slot, idx) {
           var post = ranked[idx];
           if (!post) {
-            // No API post for this slot: load the hardcoded fallback src
-            loadIgPost(slot, slot.getAttribute('data-src'));
+            // No API post for this slot: show branded fallback
+            applyIgFallback(slot);
             return;
           }
 
@@ -2483,33 +2530,46 @@
             img.src = post.imageUrl;
             img.onload = function() { img.classList.add('loaded'); slot.classList.remove('loading'); };
             img.onerror = function() {
-              // Image failed: fall back to hardcoded src
-              loadIgPost(slot, slot.getAttribute('data-src'));
+              applyIgFallback(slot);
             };
           }
         });
       }
 
+      // Build ?include= param from pinned post shortcodes so the API always
+      // returns their real CDN image URLs (Instagram /media/?size=l is dead).
+      var pinnedShortcodes = pinnedSlots.map(function(slot) {
+        var href = slot.getAttribute('href') || '';
+        // Extract shortcode from https://www.instagram.com/p/SHORTCODE/
+        var m = href.match(/\/p\/([^/]+)/);
+        return m ? m[1] : '';
+      }).filter(Boolean);
+      var feedUrl = '/.netlify/functions/social-feed' +
+        (pinnedShortcodes.length ? '?include=' + pinnedShortcodes.join(',') : '');
+
       // Fetch from the Netlify function; fall back gracefully on any failure
-      fetch('/.netlify/functions/social-feed')
+      fetch(feedUrl)
         .then(function(r) {
           if (!r.ok) throw new Error('Feed returned ' + r.status);
           return r.json();
         })
         .then(function(data) {
           if (data && Array.isArray(data.posts) && data.posts.length > 0) {
+            // Use API data for both pinned and dynamic slots
+            var permalinkMap = buildPermalinkMap(data.posts);
+            applyPinnedFromMap(permalinkMap);
             applyDynamicPosts(data.posts);
           } else {
-            // Empty response: load hardcoded fallbacks
-            dynamicSlots.forEach(function(slot) {
-              loadIgPost(slot, slot.getAttribute('data-src'));
-            });
+            // Empty response: branded fallback for all IG slots
+            pinnedSlots.forEach(function(slot) { applyIgFallback(slot); });
+            dynamicSlots.forEach(function(slot) { applyIgFallback(slot); });
           }
         })
         .catch(function() {
-          // API failure: load hardcoded fallback images so grid is always full
+          // API failure: branded fallback for all IG slots so grid still looks full
+          pinnedSlots.forEach(function(slot) { applyIgFallback(slot); });
           dynamicSlots.forEach(function(slot) {
-            loadIgPost(slot, slot.getAttribute('data-src'));
+            applyIgFallback(slot);
           });
         });
     })();

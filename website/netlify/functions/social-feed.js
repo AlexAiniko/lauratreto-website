@@ -193,6 +193,14 @@ exports.handler = async (event) => {
     };
   }
 
+  // Parse optional ?include= query param: comma-separated IG post shortcodes
+  // that must be included in the response regardless of engagement score.
+  // The frontend uses this to get real CDN URLs for pinned grid posts.
+  var includeParam = (event.queryStringParameters && event.queryStringParameters.include) || '';
+  var includeShortcodes = includeParam
+    ? includeParam.split(',').map(function(s) { return s.trim().toLowerCase(); }).filter(Boolean)
+    : [];
+
   // Step 1: Combine all posts from both platforms
   var allPosts = [...igPosts, ...fbPosts];
 
@@ -214,14 +222,31 @@ exports.handler = async (event) => {
     }
   }
 
-  // Step 3: Filter by minimum engagement threshold
-  var MIN_SCORE = 10;
-  var qualifiedPosts = dedupedPosts.filter(function(p) { return p._score >= MIN_SCORE; });
+  // Step 3: Separate posts that must be included (pinned) from candidates
+  var forcedPosts = [];
+  var candidatePosts = [];
+  if (includeShortcodes.length > 0) {
+    for (var post of dedupedPosts) {
+      var permalink = (post.permalink || '').toLowerCase();
+      var isForced = includeShortcodes.some(function(sc) { return permalink.includes(sc); });
+      if (isForced) {
+        forcedPosts.push(post);
+      } else {
+        candidatePosts.push(post);
+      }
+    }
+  } else {
+    candidatePosts = dedupedPosts;
+  }
 
-  // Step 4: Sort by score descending
+  // Step 4: Filter candidates by minimum engagement threshold
+  var MIN_SCORE = 10;
+  var qualifiedPosts = candidatePosts.filter(function(p) { return p._score >= MIN_SCORE; });
+
+  // Step 5: Sort candidates by score descending
   qualifiedPosts.sort(function(a, b) { return b._score - a._score; });
 
-  // Step 5: Select top 9 with max 6 per platform
+  // Step 6: Select top 9 candidates with max 6 per platform
   var MAX_PER_PLATFORM = 6;
   var platformCount = {};
   var topPosts = [];
@@ -233,8 +258,11 @@ exports.handler = async (event) => {
     platformCount[post.source] = count + 1;
   }
 
+  // Combine: forced pinned posts first, then top candidates
+  var allReturnPosts = [...forcedPosts, ...topPosts];
+
   // Strip internal score before returning
-  const cleanPosts = topPosts.map(({ _score, ...post }) => post);
+  const cleanPosts = allReturnPosts.map(({ _score, ...post }) => post);
 
   return {
     statusCode: 200,
