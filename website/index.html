@@ -2501,7 +2501,12 @@
         var map = {};
         posts.forEach(function(p) {
           if (p.permalink) {
-            // Normalize: strip trailing slash, lowercase
+            // Extract shortcode from permalink (works for both /p/ and /reel/ URLs)
+            var match = p.permalink.match(/\/(p|reel|tv)\/([^\/\?]+)/);
+            if (match) {
+              map[match[2].toLowerCase()] = p.imageUrl;
+            }
+            // Also store full normalized permalink as fallback
             var key = p.permalink.replace(/\/$/, '').toLowerCase();
             map[key] = p.imageUrl;
           }
@@ -2511,8 +2516,17 @@
 
       function applyPinnedFromMap(permalinkMap) {
         pinnedSlots.forEach(function(slot) {
-          var href = (slot.getAttribute('href') || '').replace(/\/$/, '').toLowerCase();
-          var imageUrl = permalinkMap[href];
+          var href = slot.getAttribute('href') || '';
+          // Try shortcode match first
+          var match = href.match(/\/(p|reel|tv)\/([^\/\?]+)/);
+          var imageUrl = null;
+          if (match) {
+            imageUrl = permalinkMap[match[2].toLowerCase()];
+          }
+          // Fallback: try full URL match
+          if (!imageUrl) {
+            imageUrl = permalinkMap[href.replace(/\/$/, '').toLowerCase()];
+          }
           if (imageUrl) {
             var img = slot.querySelector('img');
             if (img) {
