@@ -10,6 +10,51 @@
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
+// ---------------------------------------------------------------------------
+// Rate limiting (in-memory, resets on cold start — fine for basic protection)
+// ---------------------------------------------------------------------------
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX = 10;              // max requests per window per subscriber
+
+// Map<subscriberId, { count: number, windowStart: number }>
+const rateLimitStore = new Map();
+
+function isRateLimited(subscriberId) {
+  const now = Date.now();
+  const entry = rateLimitStore.get(subscriberId);
+
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    // New window
+    rateLimitStore.set(subscriberId, { count: 1, windowStart: now });
+    return false;
+  }
+
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return true;
+  }
+
+  entry.count += 1;
+  return false;
+}
+
+// ---------------------------------------------------------------------------
+// Input sanitization
+// ---------------------------------------------------------------------------
+const MAX_MESSAGE_LENGTH = 500;
+
+function sanitizeMessage(text) {
+  if (typeof text !== 'string') return '';
+  // Strip HTML tags
+  let clean = text.replace(/<[^>]*>/g, '');
+  // Trim whitespace
+  clean = clean.trim();
+  // Enforce max length
+  if (clean.length > MAX_MESSAGE_LENGTH) {
+    clean = clean.slice(0, MAX_MESSAGE_LENGTH);
+  }
+  return clean;
+}
+
 const SYSTEM_PROMPT = `You are Laura Treto responding to direct messages on Instagram/Facebook. You respond warmly, helpfully, and concisely.
 
 About you (Laura):
@@ -71,10 +116,13 @@ exports.handler = async (event) => {
       data.message ||
       '';
 
-    const subscriberId = data.id || data.subscriber_id || null;
+    const subscriberId = data.id || data.subscriber_id || 'unknown';
     const firstName = data.first_name || '';
 
-    if (!userMessage) {
+    // Sanitize before any further processing
+    const sanitizedMessage = sanitizeMessage(userMessage);
+
+    if (!sanitizedMessage) {
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
@@ -82,10 +130,22 @@ exports.handler = async (event) => {
       };
     }
 
+    // Rate limit check
+    if (isRateLimited(subscriberId)) {
+      console.warn('Rate limit hit for subscriber:', subscriberId);
+      return {
+        statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          claude_response: "I'm getting a lot of messages right now. Please try again in a moment."
+        })
+      };
+    }
+
     // Build the user content for Claude
     const userContent = firstName
-      ? `${firstName} says: ${userMessage}`
-      : userMessage;
+      ? `${firstName} says: ${sanitizedMessage}`
+      : sanitizedMessage;
 
     // Call Claude API (Haiku for speed + cost)
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {

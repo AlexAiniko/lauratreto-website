@@ -982,7 +982,7 @@
     if (langParam === 'es' || langParam === 'en') return langParam;
     // Check localStorage
     try {
-      var stored = localStorage.getItem('lang');
+      var stored = localStorage.getItem('ltc-lang');
       if (stored === 'es' || stored === 'en') return stored;
     } catch(e) {}
     return 'en';
@@ -995,7 +995,7 @@
     document.querySelectorAll('.lang-toggle button').forEach(function(btn) {
       btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
     });
-    try { localStorage.setItem('lang', lang); } catch(e) {}
+    try { localStorage.setItem('ltc-lang', lang); } catch(e) {}
 
     // Update all dynamic text
     updateDynamicText();

@@ -1,3 +1,5 @@
+> **Note:** Historical reference document. The website was originally specced for Framer but was built as static HTML/CSS/JS deployed on Netlify. The design direction and section structure below informed the final build.
+
 # Laura Treto Coaching -- Framer Website Build Spec
 
 **Version:** 1.0

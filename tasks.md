@@ -5,16 +5,17 @@
 | # | Task | Priority | Due | Owner | Status |
 |---|------|----------|-----|-------|--------|
 | 5 | Build AI infographic content pipeline | high | Apr 10 | Kai | todo |
-| 6 | Migrate ConvertKit to MailerLite (before trial ends ~Apr 17) | medium | Apr 17 | Kai | todo |
 | 8 | Design group coaching product | medium | Apr 25 | Alpha/Laura | todo |
 | 9 | Salsa Sunset Event logistics (talk to Derek) | medium | Apr 28 | Alex | todo |
 | 11 | Set up GA4 for lauratreto.com | low | Apr 15 | Kai | todo |
-| 12 | Clean up DNS: email Squarespace to remove NS1 zone, then verify SSL | low | Apr 7 | Alex | todo (draft email ready in Gmail, send to Squarespace) |
-| 13 | Connect TikTok API to social feed (register at developers.tiktok.com, app review, add to social-feed.js) | medium | Apr 20 | Alex/Kai | todo |
+| 13 | Register TikTok Developer account at developers.tiktok.com, create app, submit for review | medium | Apr 8 | Alex | todo |
 
 ## Completed Tasks
 | # | Task | Completed |
 |---|------|-----------|
+| 17 | Embed top 5 TikTok videos on website (social grid) | 2026-04-06 |
+| 6 | Migrate ConvertKit to MailerLite | 2026-04-06 |
+| 12 | DNS cleanup -- leaving as-is, site works, risk not worth it | 2026-04-06 |
 | 1 | Update Trainerize checkout links on website | 2026-04-06 |
 | -- | Netlify auto-deploy linked to GitHub (continuous deployment from main) | 2026-04-06 |
 | -- | Hero simplified: single image with slow zoom, removed carousel | 2026-04-06 |

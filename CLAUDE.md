@@ -26,7 +26,7 @@ Before EVERY tool use that is not a read operation, Alpha asks:
 
 **"Am I about to READ or EXECUTE?"**
 
-- **READ (allowed):** Read, Glob, Grep, ls, WebFetch, WebSearch, screenshot
+- **READ (allowed):** Read, Glob, Grep, ls, WebFetch, WebSearch, screenshot, git status/log/diff, TaskList/TaskGet, sqlite3 SELECT
 - **EXECUTE (delegate):** Edit, Write, Bash (scripts, python, builds), any file creation, any code generation
 
 If the action is EXECUTE, Alpha MUST spawn an agent. No exceptions.
@@ -227,8 +227,8 @@ Alpha operates from an embedded SQLite database at `alpha.db` in the project roo
 | credentials | Credential vault (tokens, API keys, secrets) |
 
 ### Usage Rules
-1. Alpha and agents query `alpha.db` for operational data before reading markdown files.
-2. When tasks change, update BOTH `alpha.db` AND `tasks.md` (markdown stays as human-readable backup).
+1. alpha.db is the source of truth for all operational data. Agents query and update DB first. tasks.md is a human-readable export, regenerated from the DB when needed.
+2. When tasks change, update alpha.db first. Regenerate tasks.md as a read-only export when needed.
 3. Credentials are consolidated in the `credentials` table. Check expiration dates.
 4. `alpha.db` is gitignored. Never commit it.
 5. `build_alpha_db.py` can rebuild the DB from scratch if needed.
@@ -300,7 +300,7 @@ LAURA TRETO COACHING/
 ├── .credentials/          <- Meta tokens (gitignored)
 ├── strategy/              <- Core strategy docs (Content Engine, Outreach Kit, etc.)
 ├── calendar/              <- Day-by-day calendar + Codex handoff
-├── website/               <- Framer website spec, prototype, copy, design system
+├── website/               <- HTML/CSS/JS static site (Netlify), design system, copy
 ├── quiz/                  <- Movement Readiness Score quiz
 ├── email/                 <- ConvertKit email funnel setup
 ├── docs/                  <- PDFs, resumes, Meta handoff guide
