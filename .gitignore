@@ -9,6 +9,7 @@ node_modules/
 .netlify/
 Output/
 *.mp4
+!website/images/dancing-lady.mp4
 *.mov
 alpha.db
 build_alpha_db.py
