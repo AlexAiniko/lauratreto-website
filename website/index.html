@@ -510,7 +510,7 @@
       z-index: 0;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 1.2s ease-in-out;
     }
     .hiw-gif-bg.hiw-bg-visible {
       opacity: 1;
@@ -736,6 +736,8 @@
     .social-testimonial {
       text-align: center;
       margin-top: 48px;
+      margin-bottom: 120px;
+      padding-bottom: 60px;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
@@ -1861,7 +1863,6 @@
         <div class="inquiry-reveal inquiry-reasons">
           <h3>Why Work With Laura?</h3>
           <ul>
-            <li>No commitment required</li>
             <li>In-person sessions in Key West</li>
             <li>Online options available</li>
             <li>All ages and fitness levels welcome</li>
@@ -1924,7 +1925,6 @@
         <div class="inquiry-reveal inquiry-reasons">
           <h3>&iquest;Por qu&eacute; Trabajar con Laura?</h3>
           <ul>
-            <li>Sin compromiso</li>
             <li>Sesiones en persona en Key West</li>
             <li>Opciones en l&iacute;nea disponibles</li>
             <li>Todas las edades y niveles de fitness</li>
@@ -2228,12 +2228,14 @@
         // Cycle through credential text items
         var credItems = credTextContainer.querySelectorAll('.cred-text-item');
         if (credItems.length > 0) {
-          if (scrollProgress > 0.88) {
-            // Fade out ALL credentials before next section begins
+          if (scrollProgress < 0.05 || scrollProgress > 0.88) {
+            // Hide all credentials before first item appears and before next section begins
             credItems.forEach(function(item) {
               item.classList.remove('cred-active');
             });
-            credTextContainer.classList.remove('cred-bg-visible');
+            if (scrollProgress > 0.88) {
+              credTextContainer.classList.remove('cred-bg-visible');
+            }
           } else {
             var activeIndex = Math.min(credItems.length - 1, Math.floor(scrollProgress * credItems.length));
             credItems.forEach(function(item, i) {
@@ -2345,12 +2347,12 @@
         return;
       }
 
-      // Show/hide the fixed GIF background only when section is in viewport
+      // Show/hide the fixed GIF background only when section is further into viewport
       function updateGifVisibility() {
         var rect = section.getBoundingClientRect();
         var viewportH = window.innerHeight;
-        // Section is in view if its top hasn't scrolled past bottom AND its bottom hasn't scrolled past top
-        var inView = rect.top < viewportH && rect.bottom > 0;
+        // Require section top to be at least halfway up the viewport before video appears
+        var inView = rect.top < viewportH * 0.5 && rect.bottom > 0;
         if (inView) {
           gifBg.classList.add('hiw-bg-visible');
         } else {
@@ -2404,29 +2406,41 @@
         if (img) img.style.display = 'none';
       }
 
-      function loadTtPost(post) {
+      function applyTtFallback(post) {
+        post.style.background = 'linear-gradient(135deg, rgba(232,101,74,0.55) 0%, rgba(26,122,122,0.45) 100%)';
+        post.classList.remove('loading');
         var img = post.querySelector('img');
+        if (img) img.style.display = 'none';
+      }
+
+      function loadTtPost(post) {
         var ttUrl = post.getAttribute('data-tt-url');
-        if (!img || !ttUrl) return;
-        fetch('https://www.tiktok.com/oembed?url=' + encodeURIComponent(ttUrl))
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
-            if (data && data.thumbnail_url) {
-              img.src = data.thumbnail_url;
-              img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
-              img.onerror = function() {
-                post.style.background = 'linear-gradient(135deg, rgba(26,122,122,0.55) 0%, rgba(26,122,122,0.3) 100%)';
-                post.classList.remove('loading');
-              };
-            } else {
-              post.style.background = 'linear-gradient(135deg, rgba(26,122,122,0.55) 0%, rgba(26,122,122,0.3) 100%)';
-              post.classList.remove('loading');
-            }
-          })
-          .catch(function() {
-            post.style.background = 'linear-gradient(135deg, rgba(26,122,122,0.55) 0%, rgba(26,122,122,0.3) 100%)';
-            post.classList.remove('loading');
-          });
+        if (!ttUrl) return;
+        var img = post.querySelector('img');
+
+        function attemptLoad(retries) {
+          fetch('https://www.tiktok.com/oembed?url=' + encodeURIComponent(ttUrl))
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              if (data && data.thumbnail_url) {
+                img.src = data.thumbnail_url;
+                img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
+                img.onerror = function() {
+                  if (retries > 0) setTimeout(function() { attemptLoad(retries - 1); }, 2000);
+                  else applyTtFallback(post);
+                };
+              } else if (retries > 0) {
+                setTimeout(function() { attemptLoad(retries - 1); }, 2000);
+              } else {
+                applyTtFallback(post);
+              }
+            })
+            .catch(function() {
+              if (retries > 0) setTimeout(function() { attemptLoad(retries - 1); }, 2000);
+              else applyTtFallback(post);
+            });
+        }
+        attemptLoad(2); // Try up to 3 times total
       }
 
       // -------------------------------------------------------
