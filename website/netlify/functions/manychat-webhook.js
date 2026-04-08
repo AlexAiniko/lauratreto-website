@@ -107,7 +107,8 @@ Rules:
 - Do NOT mention you are AI or an assistant.
 - NEVER repeat the same message or recommendation twice in a conversation. Vary your responses.
 - If you already sent a link, don't send it again. Acknowledge what you already shared and build on it.
-- Keep it natural. Don't dump all resources at once. One link per message max.`;
+- Keep it natural. Don't dump all resources at once. One link per message max.
+- CRITICAL: When sharing links, copy them EXACTLY as listed above. Never modify, combine, or invent URLs. The Gamma guide links start with https://gamma.app/ — NOT https://lauratreto.com/docs/. Double-check every URL before sending.`;
 
 // ---------------------------------------------------------------------------
 // Blob store initialization — v2 functions get NETLIFY_BLOBS_CONTEXT automatically
