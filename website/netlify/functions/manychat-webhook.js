@@ -1,5 +1,5 @@
 // ManyChat-to-Claude Webhook for Laura Treto Coaching
-// Netlify Function: receives DM via ManyChat External Request,
+// Netlify Function v2 (ES modules): receives DM via ManyChat External Request,
 // generates a response via Claude, returns it for ManyChat to send.
 //
 // Deployed at: https://lauratreto.netlify.app/.netlify/functions/manychat-webhook
@@ -8,15 +8,7 @@
 //   ANTHROPIC_API_KEY - Anthropic API key
 //   MANYCHAT_API_KEY  - ManyChat API token (for verification)
 
-const { getStore } = require("@netlify/blobs");
-
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-
-// ---------------------------------------------------------------------------
-// Debug: track blob store initialization errors globally
-// ---------------------------------------------------------------------------
-let blobStoreError = null;
-let blobStoreMethod = null;
+import { getStore } from "@netlify/blobs";
 
 // ---------------------------------------------------------------------------
 // Kill switch. Set to true to immediately disable all webhook responses.
@@ -118,52 +110,20 @@ Rules:
 - Keep it natural. Don't dump all resources at once. One link per message max.`;
 
 // ---------------------------------------------------------------------------
-// Blob store initialization — tries multiple approaches
+// Blob store initialization — v2 functions get NETLIFY_BLOBS_CONTEXT automatically
 // ---------------------------------------------------------------------------
+let blobStoreError = null;
+let blobStoreMethod = null;
 
 function initStore() {
-  // Approach 1: Simple name-based (works when NETLIFY_BLOBS_CONTEXT is set automatically)
   try {
     const store = getStore("conversations");
-    blobStoreMethod = "getStore('conversations')";
+    blobStoreMethod = "v2:getStore('conversations')";
     return store;
-  } catch (err1) {
-    console.error('Blob init approach 1 failed:', err1.message);
-
-    // Approach 2: Explicit config with siteID and token from env
-    try {
-      const store = getStore({
-        name: "conversations",
-        siteID: process.env.SITE_ID,
-        token: process.env.NETLIFY_BLOBS_CONTEXT
-      });
-      blobStoreMethod = "getStore({name, siteID, token})";
-      return store;
-    } catch (err2) {
-      console.error('Blob init approach 2 failed:', err2.message);
-
-      // Approach 3: Explicit config with deploy token
-      try {
-        const store = getStore({
-          name: "conversations",
-          siteID: process.env.SITE_ID,
-          token: process.env.NETLIFY_AUTH_TOKEN || process.env.DEPLOY_TOKEN
-        });
-        blobStoreMethod = "getStore({name, siteID, NETLIFY_AUTH_TOKEN})";
-        return store;
-      } catch (err3) {
-        console.error('Blob init approach 3 failed:', err3.message);
-        blobStoreError = {
-          approach1: err1.message,
-          approach2: err2.message,
-          approach3: err3.message,
-          envKeys: Object.keys(process.env).filter(k =>
-            k.includes('NETLIFY') || k.includes('SITE') || k.includes('BLOB') || k.includes('DEPLOY')
-          )
-        };
-        return null;
-      }
-    }
+  } catch (err) {
+    console.error('Blob init failed:', err.message);
+    blobStoreError = { message: err.message, stack: err.stack };
+    return null;
   }
 }
 
@@ -205,39 +165,46 @@ async function saveConversation(store, subscriberId, conversation) {
 }
 
 // ---------------------------------------------------------------------------
-// Handler
+// JSON response helper
+// ---------------------------------------------------------------------------
+function jsonResponse(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Handler (Netlify Functions v2)
 // ---------------------------------------------------------------------------
 
-exports.handler = async (event) => {
+export default async (request, context) => {
+  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+
   // Only accept POST
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Method Not Allowed' })
-    };
+  if (request.method !== 'POST') {
+    return jsonResponse({ error: 'Method Not Allowed' }, 405);
   }
 
-  // Health check: GET or empty POST
-  if (!event.body) {
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'ok', service: 'manychat-claude-webhook' })
-    };
+  // Health check: empty body
+  let bodyText;
+  try {
+    bodyText = await request.text();
+  } catch {
+    bodyText = '';
+  }
+
+  if (!bodyText) {
+    return jsonResponse({ status: 'ok', service: 'manychat-claude-webhook' });
   }
 
   // Kill switch — return empty response so ManyChat skips sending
   if (PAUSED) {
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ claude_response: "" })
-    };
+    return jsonResponse({ claude_response: "" });
   }
 
   try {
-    const payload = JSON.parse(event.body);
+    const payload = JSON.parse(bodyText);
 
     // Handle ManyChat Full Contact Data (may be nested under 'contact' key)
     const data = payload.contact || payload;
@@ -257,23 +224,15 @@ exports.handler = async (event) => {
     const sanitizedMessage = sanitizeMessage(userMessage);
 
     if (!sanitizedMessage) {
-      return {
-        statusCode: 400,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ error: 'No message text found in payload' })
-      };
+      return jsonResponse({ error: 'No message text found in payload' }, 400);
     }
 
     // Rate limit check
     if (isRateLimited(subscriberId)) {
       console.warn('Rate limit hit for subscriber:', subscriberId);
-      return {
-        statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          claude_response: "I'm getting a lot of messages right now. Please try again in a moment."
-        })
-      };
+      return jsonResponse({
+        claude_response: "I'm getting a lot of messages right now. Please try again in a moment."
+      });
     }
 
     // -----------------------------------------------------------------------
@@ -282,6 +241,7 @@ exports.handler = async (event) => {
     if (sanitizedMessage === '__debug_memory__') {
       const store = initStore();
       let debugInfo = {
+        functionVersion: "v2-esm",
         storeInitialized: store !== null,
         storeMethod: blobStoreMethod,
         initError: blobStoreError,
@@ -293,6 +253,7 @@ exports.handler = async (event) => {
           blobsContextLength: process.env.NETLIFY_BLOBS_CONTEXT ? process.env.NETLIFY_BLOBS_CONTEXT.length : 0,
           hasAuthToken: !!process.env.NETLIFY_AUTH_TOKEN,
           hasDeployToken: !!process.env.DEPLOY_TOKEN,
+          hasFunctionsToken: !!process.env.NETLIFY_FUNCTIONS_TOKEN,
           netlifyEnvKeys: Object.keys(process.env).filter(k =>
             k.includes('NETLIFY') || k.includes('SITE') || k.includes('BLOB') || k.includes('DEPLOY')
           )
@@ -311,14 +272,10 @@ exports.handler = async (event) => {
         }
       }
 
-      return {
-        statusCode: 200,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          claude_response: 'DEBUG MODE: Check server response for diagnostics.',
-          _debug: debugInfo
-        }, null, 2)
-      };
+      return jsonResponse({
+        claude_response: 'DEBUG MODE: Check server response for diagnostics.',
+        _debug: debugInfo
+      });
     }
 
     // Build the user content for Claude
@@ -368,11 +325,7 @@ exports.handler = async (event) => {
     if (!claudeRes.ok) {
       const errBody = await claudeRes.text();
       console.error('Claude API error:', claudeRes.status, errBody);
-      return {
-        statusCode: 502,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ error: 'Claude API request failed' })
-      };
+      return jsonResponse({ error: 'Claude API request failed' }, 502);
     }
 
     const claudeData = await claudeRes.json();
@@ -389,20 +342,14 @@ exports.handler = async (event) => {
     // Return flat JSON for ManyChat Actions External Request.
     // ManyChat maps 'claude_response' to a custom field, then uses
     // that field in a subsequent Send Message step.
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        claude_response: replyText
-      })
-    };
+    return jsonResponse({ claude_response: replyText });
 
   } catch (error) {
     console.error('Webhook error:', error);
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Internal server error' })
-    };
+    return jsonResponse({ error: 'Internal server error' }, 500);
   }
+};
+
+export const config = {
+  path: "/.netlify/functions/manychat-webhook"
 };

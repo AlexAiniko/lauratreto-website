@@ -1,5 +1,5 @@
 // Social Feed Aggregator for Laura Treto Coaching
-// Netlify Function: fetches top posts from Instagram and Facebook,
+// Netlify Function v2 (ES module): fetches top posts from Instagram and Facebook,
 // scores by engagement, returns the top 9 as JSON.
 //
 // Deployed at: https://lauratreto.netlify.app/.netlify/functions/social-feed
@@ -138,33 +138,30 @@ async function fetchFacebookPosts(token) {
   return posts;
 }
 
-exports.handler = async (event) => {
+export default async (request, context) => {
   // Health check for OPTIONS
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers: RESPONSE_HEADERS,
-      body: JSON.stringify({ status: 'ok' })
-    };
+  if (request.method === 'OPTIONS') {
+    return new Response(
+      JSON.stringify({ status: 'ok' }),
+      { status: 200, headers: RESPONSE_HEADERS }
+    );
   }
 
   // Only accept GET requests
-  if (event.httpMethod !== 'GET') {
-    return {
-      statusCode: 405,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Method Not Allowed' })
-    };
+  if (request.method !== 'GET') {
+    return new Response(
+      JSON.stringify({ error: 'Method Not Allowed' }),
+      { status: 405, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
   // Verify token is configured
   if (!META_PAGE_TOKEN) {
     console.error('META_PAGE_TOKEN env var is not set');
-    return {
-      statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Configuration error' })
-    };
+    return new Response(
+      JSON.stringify({ error: 'Configuration error' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
   // Fetch from both platforms in parallel. If one fails, the other still returns.
@@ -186,17 +183,17 @@ exports.handler = async (event) => {
 
   // If both platforms failed, return 502
   if (igResult.status === 'rejected' && fbResult.status === 'rejected') {
-    return {
-      statusCode: 502,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Unable to fetch social posts' })
-    };
+    return new Response(
+      JSON.stringify({ error: 'Unable to fetch social posts' }),
+      { status: 502, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
   // Parse optional ?include= query param: comma-separated IG post shortcodes
   // that must be included in the response regardless of engagement score.
   // The frontend uses this to get real CDN URLs for pinned grid posts.
-  var includeParam = (event.queryStringParameters && event.queryStringParameters.include) || '';
+  const url = new URL(request.url);
+  var includeParam = url.searchParams.get('include') || '';
   var includeShortcodes = includeParam
     ? includeParam.split(',').map(function(s) { return s.trim().toLowerCase(); }).filter(Boolean)
     : [];
@@ -264,12 +261,11 @@ exports.handler = async (event) => {
   // Strip internal score before returning
   const cleanPosts = allReturnPosts.map(({ _score, ...post }) => post);
 
-  return {
-    statusCode: 200,
-    headers: RESPONSE_HEADERS,
-    body: JSON.stringify({
+  return new Response(
+    JSON.stringify({
       posts: cleanPosts,
       fetchedAt: new Date().toISOString()
-    })
-  };
+    }),
+    { status: 200, headers: RESPONSE_HEADERS }
+  );
 };
