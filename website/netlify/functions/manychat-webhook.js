@@ -13,6 +13,12 @@ const { getStore } = require("@netlify/blobs");
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 // ---------------------------------------------------------------------------
+// Debug: track blob store initialization errors globally
+// ---------------------------------------------------------------------------
+let blobStoreError = null;
+let blobStoreMethod = null;
+
+// ---------------------------------------------------------------------------
 // Kill switch. Set to true to immediately disable all webhook responses.
 // When PAUSED, the webhook returns an empty claude_response so ManyChat
 // skips sending a DM. Useful for maintenance or emergencies.
@@ -112,10 +118,61 @@ Rules:
 - Keep it natural. Don't dump all resources at once. One link per message max.`;
 
 // ---------------------------------------------------------------------------
+// Blob store initialization — tries multiple approaches
+// ---------------------------------------------------------------------------
+
+function initStore() {
+  // Approach 1: Simple name-based (works when NETLIFY_BLOBS_CONTEXT is set automatically)
+  try {
+    const store = getStore("conversations");
+    blobStoreMethod = "getStore('conversations')";
+    return store;
+  } catch (err1) {
+    console.error('Blob init approach 1 failed:', err1.message);
+
+    // Approach 2: Explicit config with siteID and token from env
+    try {
+      const store = getStore({
+        name: "conversations",
+        siteID: process.env.SITE_ID,
+        token: process.env.NETLIFY_BLOBS_CONTEXT
+      });
+      blobStoreMethod = "getStore({name, siteID, token})";
+      return store;
+    } catch (err2) {
+      console.error('Blob init approach 2 failed:', err2.message);
+
+      // Approach 3: Explicit config with deploy token
+      try {
+        const store = getStore({
+          name: "conversations",
+          siteID: process.env.SITE_ID,
+          token: process.env.NETLIFY_AUTH_TOKEN || process.env.DEPLOY_TOKEN
+        });
+        blobStoreMethod = "getStore({name, siteID, NETLIFY_AUTH_TOKEN})";
+        return store;
+      } catch (err3) {
+        console.error('Blob init approach 3 failed:', err3.message);
+        blobStoreError = {
+          approach1: err1.message,
+          approach2: err2.message,
+          approach3: err3.message,
+          envKeys: Object.keys(process.env).filter(k =>
+            k.includes('NETLIFY') || k.includes('SITE') || k.includes('BLOB') || k.includes('DEPLOY')
+          )
+        };
+        return null;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Conversation history helpers
 // ---------------------------------------------------------------------------
 
 async function loadConversation(store, subscriberId) {
+  if (!store) return null;
   try {
     const data = await store.get(subscriberId, { type: "json" });
     if (data && Array.isArray(data.messages)) {
@@ -123,12 +180,15 @@ async function loadConversation(store, subscriberId) {
     }
     return { messages: [], updatedAt: new Date().toISOString() };
   } catch (err) {
-    console.error('Blob read error for subscriber', subscriberId, err);
+    console.error('Blob read error for subscriber', subscriberId, '|', err.message, '|', err.stack);
+    blobStoreError = blobStoreError || {};
+    blobStoreError.readError = { message: err.message, code: err.code, status: err.status };
     return null; // null signals storage failure — fall back to stateless
   }
 }
 
 async function saveConversation(store, subscriberId, conversation) {
+  if (!store) return;
   try {
     conversation.updatedAt = new Date().toISOString();
     // Trim to max history length
@@ -137,7 +197,9 @@ async function saveConversation(store, subscriberId, conversation) {
     }
     await store.setJSON(subscriberId, conversation);
   } catch (err) {
-    console.error('Blob write error for subscriber', subscriberId, err);
+    console.error('Blob write error for subscriber', subscriberId, '|', err.message, '|', err.stack);
+    blobStoreError = blobStoreError || {};
+    blobStoreError.writeError = { message: err.message, code: err.code, status: err.status };
     // Non-fatal — response was already sent to ManyChat
   }
 }
@@ -214,6 +276,51 @@ exports.handler = async (event) => {
       };
     }
 
+    // -----------------------------------------------------------------------
+    // Debug endpoint: message "__debug_memory__" returns storage diagnostics
+    // -----------------------------------------------------------------------
+    if (sanitizedMessage === '__debug_memory__') {
+      const store = initStore();
+      let debugInfo = {
+        storeInitialized: store !== null,
+        storeMethod: blobStoreMethod,
+        initError: blobStoreError,
+        subscriberId: subscriberId,
+        envVars: {
+          hasSiteId: !!process.env.SITE_ID,
+          siteIdValue: process.env.SITE_ID ? process.env.SITE_ID.slice(0, 8) + '...' : null,
+          hasBlobsContext: !!process.env.NETLIFY_BLOBS_CONTEXT,
+          blobsContextLength: process.env.NETLIFY_BLOBS_CONTEXT ? process.env.NETLIFY_BLOBS_CONTEXT.length : 0,
+          hasAuthToken: !!process.env.NETLIFY_AUTH_TOKEN,
+          hasDeployToken: !!process.env.DEPLOY_TOKEN,
+          netlifyEnvKeys: Object.keys(process.env).filter(k =>
+            k.includes('NETLIFY') || k.includes('SITE') || k.includes('BLOB') || k.includes('DEPLOY')
+          )
+        },
+        conversation: null,
+        readError: null
+      };
+
+      if (store) {
+        try {
+          const conv = await loadConversation(store, subscriberId);
+          debugInfo.conversation = conv;
+          debugInfo.readError = blobStoreError;
+        } catch (err) {
+          debugInfo.readError = { message: err.message, stack: err.stack };
+        }
+      }
+
+      return {
+        statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          claude_response: 'DEBUG MODE: Check server response for diagnostics.',
+          _debug: debugInfo
+        }, null, 2)
+      };
+    }
+
     // Build the user content for Claude
     const userContent = firstName
       ? `${firstName} says: ${sanitizedMessage}`
@@ -222,7 +329,7 @@ exports.handler = async (event) => {
     // -----------------------------------------------------------------------
     // Load conversation history from Netlify Blobs
     // -----------------------------------------------------------------------
-    const store = getStore("conversations");
+    const store = initStore();
     const conversation = await loadConversation(store, subscriberId);
 
     // If storage failed (null), fall back to stateless single-message mode
