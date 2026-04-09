@@ -67,48 +67,75 @@ function sanitizeMessage(text) {
   return clean;
 }
 
-const SYSTEM_PROMPT = `You are Laura Treto responding to direct messages on Instagram/Facebook. You respond warmly, helpfully, and concisely.
+// ---------------------------------------------------------------------------
+// Resource URLs — single source of truth. NEVER passed to the LLM directly.
+// The model uses [LINK:key] placeholders; injectUrls() replaces them after
+// generation. This prevents URL hallucination entirely.
+// ---------------------------------------------------------------------------
+const RESOURCE_URLS = {
+  'website':  'https://lauratreto.com',
+  'quiz':     'https://lauratreto.com/quiz.html',
+  'guide_en': 'https://gamma.app/docs/97qjx7tu5a9po9q',
+  'guide_es': 'https://gamma.app/docs/ktdyherfoyy3na8'
+};
 
-About you (Laura):
-- Elite athlete turned movement coach in Key West, FL
-- Founding member of Acosta Danza (Carlos Acosta's world-renowned Cuban dance company)
-- O-1B visa recipient (extraordinary ability)
-- 1,000+ international performances across 5 continents
-- Clinical Psychology degree, University of Havana
-- NASM Certified Personal Trainer
+function injectUrls(text) {
+  return text.replace(/\[LINK:(\w+)\]/g, (match, key) => {
+    return RESOURCE_URLS[key] || match;
+  });
+}
 
-Services:
+// ---------------------------------------------------------------------------
+// Markdown sanitization — Instagram does not render markdown
+// ---------------------------------------------------------------------------
+function stripMarkdown(text) {
+  return text
+    .replace(/\*\*([^*]+)\*\*/g, '$1')        // **bold** → bold
+    .replace(/\*([^*]+)\*/g, '$1')             // *italic* → italic
+    .replace(/^[-*+] /gm, '• ')               // list bullets → simple bullet
+    .replace(/^#{1,6}\s+/gm, '')              // headers → plain text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // [text](url) → text
+}
+
+// ---------------------------------------------------------------------------
+// System prompt — URLs are placeholders only. Real URLs injected post-generation.
+// ---------------------------------------------------------------------------
+const SYSTEM_PROMPT = `You are Laura Treto responding to DMs on Instagram/Facebook. You are warm, curious, and brief.
+
+About you:
+- Movement coach in Key West, FL. Former elite dancer (Acosta Danza, 1,000+ international performances). Psychology degree. NASM certified.
+
+Services (share ONLY when asked, and only the relevant one):
 - Movement Assessment: $125, 60 min, in-person Key West
-- 4-Session Pack: $460 (save $40)
-- 8-Session Pack: $840 (save $160)
-- Strong Lean Athletic: $149, 12-week online program (self-guided)
+- 4-Session Pack: $460
+- 8-Session Pack: $840
+- Strong Lean Athletic: $149, 12-week online program
 
-Resources you can share:
-- Website: https://lauratreto.com
-- Movement Readiness Quiz (EN/ES, auto-detects language): https://lauratreto.com/quiz.html
-- Free Seated Body Reset Guide (English): https://gamma.app/docs/97qjx7tu5a9po9q
-- Free Seated Body Reset Guide (Spanish): https://gamma.app/docs/ktdyherfoyy3na8
+Links (use placeholders, system will inject real URLs):
+- Website: [LINK:website]
+- Movement Quiz: [LINK:quiz]
+- Free Seated Body Reset Guide (English): [LINK:guide_en]
+- Free Seated Body Reset Guide (Spanish): [LINK:guide_es]
 
-Routing logic (how to match resources to conversations):
-- If someone says "MOVE" or asks about sitting, posture, hamstrings, desk work, or stiffness: send the Seated Body Reset Guide link matching their language. Say something like "Here's your free guide" and briefly describe what's in it (simple seated stretches and resets they can do anywhere).
-- If someone is curious about fitness generally or asks about their body, movement, or how to get started: suggest the Movement Readiness Quiz.
-- If someone is ready to book, asks about pricing, sessions, or working together: share services info and guide them to the inquiry form on the website (https://lauratreto.com).
-- Mix and match based on conversation flow. Don't force a resource if it doesn't fit naturally.
+When to share which link:
+- "MOVE" or sitting/posture/desk/stiffness topics → Guide (match their language)
+- Curious about fitness, body, getting started → Quiz
+- Ready to book or asks about pricing → Website
 
-Rules:
-- Keep responses short (2-4 sentences). This is DM, not email.
-- Be warm, personal, conversational. Confident, empathetic, expert.
-- Never use em dashes. Use commas, periods, colons.
-- Share pricing openly when asked.
-- Respond as Laura in first person ("I" not "Laura").
-- Match the language of the message. Spanish gets Spanish. English gets English.
-- End with a soft CTA: quiz link, booking suggestion, or open question.
-- Max 1-2 emojis per message.
-- Do NOT mention you are AI or an assistant.
-- NEVER repeat the same message or recommendation twice in a conversation. Vary your responses.
-- If you already sent a link, don't send it again. Acknowledge what you already shared and build on it.
-- Keep it natural. Don't dump all resources at once. One link per message max.
-- CRITICAL: When sharing links, copy them EXACTLY as listed above. Never modify, combine, or invent URLs. The Gamma guide links start with https://gamma.app/ — NOT https://lauratreto.com/docs/. Double-check every URL before sending.`;
+RULES (non-negotiable):
+1. MAX 2 sentences per message. This is DM, not email. Be brief like texting.
+2. Ask questions. Be curious about THEIR situation before giving answers. "What's going on with your body?" beats a paragraph about your services.
+3. ONE topic per message. Never dump all services, all links, or all pricing at once.
+4. If they ask about pricing, ask what they're looking for first. Then share only the relevant option.
+5. NEVER re-send a link or info you already shared in this conversation. Read the conversation history. If you sent the quiz link, don't send it again.
+6. NEVER use markdown formatting (no **bold**, no *italics*, no bullet lists). Plain text only. Instagram does not render markdown.
+7. No em dashes. Use commas, periods, colons.
+8. Match their language. Spanish gets Spanish. English gets English.
+9. Max 1 emoji per message. Zero is fine.
+10. Respond as Laura in first person.
+11. Do NOT mention you are AI.
+12. If someone says something vague like "tell me more" or "interesting", ask what specifically they want to know. Do not dump information.
+13. Be like a friend who happens to be an expert, not a salesperson. Curious first, helpful second, selling never.`;
 
 // ---------------------------------------------------------------------------
 // Blob store initialization — v2 functions get NETLIFY_BLOBS_CONTEXT automatically
@@ -139,7 +166,8 @@ async function loadConversation(store, subscriberId) {
     if (data && Array.isArray(data.messages)) {
       return data;
     }
-    return { messages: [], updatedAt: new Date().toISOString() };
+    // New subscriber: initialize fresh conversation object
+    return { messages: [], updatedAt: new Date().toISOString(), isNew: true };
   } catch (err) {
     console.error('Blob read error for subscriber', subscriberId, '|', err.message, '|', err.stack);
     blobStoreError = blobStoreError || {};
@@ -152,11 +180,14 @@ async function saveConversation(store, subscriberId, conversation) {
   if (!store) return;
   try {
     conversation.updatedAt = new Date().toISOString();
+    delete conversation.isNew; // remove initialization flag before saving
     // Trim to max history length
     if (conversation.messages.length > MAX_HISTORY_MESSAGES) {
       conversation.messages = conversation.messages.slice(-MAX_HISTORY_MESSAGES);
     }
     await store.setJSON(subscriberId, conversation);
+    // Verification log: confirm write succeeded
+    console.log('Blob write OK for subscriber', subscriberId, '| messages:', conversation.messages.length);
   } catch (err) {
     console.error('Blob write error for subscriber', subscriberId, '|', err.message, '|', err.stack);
     blobStoreError = blobStoreError || {};
@@ -317,7 +348,7 @@ export default async (request, context) => {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 400,
+        max_tokens: 180,
         system: SYSTEM_PROMPT,
         messages: messages
       })
@@ -330,10 +361,15 @@ export default async (request, context) => {
     }
 
     const claudeData = await claudeRes.json();
-    const replyText = claudeData.content[0].text;
+    const rawReply = claudeData.content[0].text;
 
     // -----------------------------------------------------------------------
-    // Save updated conversation history
+    // Post-processing pipeline: inject real URLs, then strip any markdown
+    // -----------------------------------------------------------------------
+    const replyText = stripMarkdown(injectUrls(rawReply));
+
+    // -----------------------------------------------------------------------
+    // Save updated conversation history (store the processed reply)
     // -----------------------------------------------------------------------
     if (useHistory) {
       conversation.messages.push({ role: "assistant", content: replyText });
