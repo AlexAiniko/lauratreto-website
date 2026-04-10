@@ -1298,30 +1298,28 @@
     var form = document.getElementById('emailForm');
     var data = new FormData(form);
 
-    // ── ConvertKit Integration ──
-    var CK_FORM_ID = '9284599';
-    var CK_API_KEY = 'OKImRG4WMh2aCjDnXprZaw';
-    fetch('https://api.convertkit.com/v3/forms/' + CK_FORM_ID + '/subscribe', {
+    // ── MailerLite Integration via Netlify Function ──
+    // The function routes subscribers to the correct Movement tier group
+    // based on their score, which triggers the welcome email automation.
+    fetch('/.netlify/functions/quiz-subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        api_key: CK_API_KEY,
         email: data.get('email'),
         first_name: data.get('first_name'),
-        fields: {
-          score: data.get('score'),
-          tier: data.get('tier'),
-          goal_tag: data.get('goal_tag'),
-          weakest_areas: data.get('weakest')
-        }
+        score: data.get('score'),
+        tier: data.get('tier'),
+        goal_tag: data.get('goal_tag'),
+        weakest_areas: data.get('weakest'),
+        language: currentLang
       })
     }).then(function(r) {
-      if (!r.ok) throw new Error('ConvertKit responded with ' + r.status);
+      if (!r.ok) throw new Error('Subscribe failed with ' + r.status);
       return r.json();
     }).then(function() {
       showSuccess();
     }).catch(function(err) {
-      console.error('ConvertKit error:', err);
+      console.error('Quiz subscribe error:', err);
       alert('Something went wrong. Please try again or email laura@lauratreto.com directly.');
     });
   };
