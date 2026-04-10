@@ -3,6 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Analytics 4 (gtag.js) — swap G-D8L9H56MED for the real Measurement ID to activate -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D8L9H56MED"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    // Privacy + dev guard: never fire on localhost / 127.0.0.1 / file://
+    window.__LT_GA_ENABLED = (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.protocol !== 'file:');
+    gtag('js', new Date());
+    if (window.__LT_GA_ENABLED) {
+      gtag('config', 'G-D8L9H56MED', { anonymize_ip: true });
+    }
+    // Safe wrapper — call ltTrack('event_name', {params}) anywhere in site code
+    window.ltTrack = function(name, params){
+      try { if (window.__LT_GA_ENABLED) gtag('event', name, params || {}); } catch(e) {}
+    };
+  </script>
   <title>Laura Treto | Movement Coach, Key West FL</title>
   <meta name="description" content="World-class movement coaching in Key West. Elite athlete and founding Acosta Danza member, 1000+ performances. Private sessions for adults 45+. Book your assessment today." />
   <meta property="og:title" content="Laura Treto | Movement Coaching, Key West" />
@@ -2661,6 +2677,26 @@
             applyIgFallback(slot);
           });
         });
+    })();
+  </script>
+
+  <script>
+    // GA4: delegated listener — fires trainerize_click on any Trainerize checkout link
+    (function() {
+      document.addEventListener('click', function(e) {
+        var a = e.target.closest && e.target.closest('a[href*="trainerize.me"]');
+        if (!a) return;
+        if (window.ltTrack) {
+          var label = (a.textContent || '').trim().slice(0, 60);
+          var planGuid = '';
+          try { planGuid = new URL(a.href).searchParams.get('planGUID') || ''; } catch(err) {}
+          ltTrack('trainerize_click', {
+            link_url: a.href,
+            link_text: label,
+            plan_guid: planGuid
+          });
+        }
+      }, true);
     })();
   </script>
 

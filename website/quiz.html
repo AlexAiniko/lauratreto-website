@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google Analytics 4 (gtag.js) — swap G-D8L9H56MED for the real Measurement ID to activate -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8L9H56MED"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  window.__LT_GA_ENABLED = (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.protocol !== 'file:');
+  gtag('js', new Date());
+  if (window.__LT_GA_ENABLED) {
+    gtag('config', 'G-D8L9H56MED', { anonymize_ip: true });
+  }
+  window.ltTrack = function(name, params){
+    try { if (window.__LT_GA_ENABLED) gtag('event', name, params || {}); } catch(e) {}
+  };
+</script>
 <title>Movement Readiness Score | Laura Treto</title>
 <meta name="description" content="Take the free 2-minute Movement Readiness Quiz. Discover your score and get personalized recommendations from Laura Treto, former Acosta Danza member and NASM-certified trainer.">
 <style>
@@ -1036,6 +1050,7 @@
 
   // ── Quiz Logic ──
   window.startQuiz = function() {
+    if (window.ltTrack) ltTrack('quiz_start', { language: currentLang });
     document.getElementById('introScreen').classList.add('hidden');
     document.getElementById('progressWrapper').style.display = 'block';
     current = 0;
@@ -1298,6 +1313,14 @@
     var form = document.getElementById('emailForm');
     var data = new FormData(form);
 
+    // GA4: fires once user submits the email form (end of quiz funnel)
+    if (window.ltTrack) ltTrack('quiz_complete', {
+      score: Number(data.get('score')) || 0,
+      tier: data.get('tier') || '',
+      goal_tag: data.get('goal_tag') || '',
+      language: currentLang
+    });
+
     // ── MailerLite Integration via Netlify Function ──
     // The function routes subscribers to the correct Movement tier group
     // based on their score, which triggers the welcome email automation.
@@ -1317,6 +1340,12 @@
       if (!r.ok) throw new Error('Subscribe failed with ' + r.status);
       return r.json();
     }).then(function() {
+      // GA4: fires only on successful MailerLite subscribe (real conversion)
+      if (window.ltTrack) ltTrack('email_signup', {
+        method: 'quiz',
+        tier: data.get('tier') || '',
+        language: currentLang
+      });
       showSuccess();
     }).catch(function(err) {
       console.error('Quiz subscribe error:', err);

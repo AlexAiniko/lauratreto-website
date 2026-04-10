@@ -3,6 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Analytics 4 (gtag.js) — swap G-D8L9H56MED for the real Measurement ID to activate -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D8L9H56MED"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.__LT_GA_ENABLED = (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.protocol !== 'file:');
+    gtag('js', new Date());
+    if (window.__LT_GA_ENABLED) {
+      gtag('config', 'G-D8L9H56MED', { anonymize_ip: true });
+    }
+    window.ltTrack = function(name, params){
+      try { if (window.__LT_GA_ENABLED) gtag('event', name, params || {}); } catch(e) {}
+    };
+  </script>
   <title>Privacy Policy | Laura Treto Coaching</title>
   <meta name="description" content="Privacy Policy for Laura Treto Coaching." />
   <link rel="canonical" href="https://lauratreto.com/privacy" />
