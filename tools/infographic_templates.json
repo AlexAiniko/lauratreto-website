@@ -1,0 +1,55 @@
+[
+  {
+    "id": "tip",
+    "name": "Quick Tip",
+    "pillar": "movement_authority",
+    "canva_prompt_template": "Create a premium fitness infographic Instagram post. Brand colors: coral #E8654A, turquoise #1A7A7A, warm white #FAF7F2, charcoal #2B2B2B. Font: clean sans-serif. Headline: '{headline}'. Body text: '{body}'. Bottom: 'Laura Treto | Movement Coach | Key West'. Style: warm, premium, not generic fitness. Portrait format 1080x1350.",
+    "example": {
+      "headline": "Stop Stretching Cold Muscles",
+      "body": "Dynamic warm-up activates 3x more muscle fibers than static stretching",
+      "cta": "Take the free Movement Quiz"
+    }
+  },
+  {
+    "id": "stat",
+    "name": "Stat Highlight",
+    "pillar": "movement_authority",
+    "canva_prompt_template": "Create a bold stat-focused Instagram post. Large number/stat in coral #E8654A. Supporting text in charcoal #2B2B2B on warm white #FAF7F2 background. Gold #C5973E accent line. Stat: '{stat}'. Context: '{body}'. Bottom: '@coachlauratreto'. Portrait 1080x1350.",
+    "example": {
+      "stat": "73%",
+      "body": "of desk workers report chronic back pain that could be prevented with 10 minutes of daily movement",
+      "cta": "Free Seated Body Reset Guide in bio"
+    }
+  },
+  {
+    "id": "quote",
+    "name": "Inspirational Quote",
+    "pillar": "trauma_empowerment",
+    "canva_prompt_template": "Create an elegant quote card for Instagram. Quote in Playfair Display style font, coral #E8654A. Background: warm white #FAF7F2 with subtle gold #C5973E decorative elements. Quote: '{quote}'. Attribution: '{attribution}'. Bottom: '@coachlauratreto'. Portrait 1080x1350.",
+    "example": {
+      "quote": "Your body remembers what your mind tries to forget. Movement is how you rewrite the story.",
+      "attribution": "Laura Treto"
+    }
+  },
+  {
+    "id": "myth_vs_fact",
+    "name": "Myth vs Fact",
+    "pillar": "movement_authority",
+    "canva_prompt_template": "Create a myth vs fact Instagram infographic. Split design: left side with myth crossed out in red, right side with fact in turquoise #1A7A7A. Background warm white #FAF7F2. Myth: '{myth}'. Fact: '{fact}'. Clean, premium look. Bottom: '@coachlauratreto'. Portrait 1080x1350.",
+    "example": {
+      "myth": "No pain, no gain",
+      "fact": "Pain is your body's warning signal. Smart training works WITH your body, not against it."
+    }
+  },
+  {
+    "id": "client_spotlight",
+    "name": "Client Spotlight",
+    "pillar": "cta_proof",
+    "canva_prompt_template": "Create a testimonial/client spotlight Instagram post. Warm, inviting design. Quote in elegant font on warm white #FAF7F2. Coral #E8654A accent. Client name: '{client_name}'. Quote: '{testimonial}'. Result: '{result}'. Bottom: 'Book your Movement Assessment | lauratreto.com'. Portrait 1080x1350.",
+    "example": {
+      "client_name": "Carol W.",
+      "testimonial": "I never thought I'd feel this strong at 65.",
+      "result": "3 months of kettlebell training"
+    }
+  }
+]

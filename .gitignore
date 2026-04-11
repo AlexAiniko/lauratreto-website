@@ -13,3 +13,7 @@ Output/
 *.mov
 alpha.db
 build_alpha_db.py
+tools/ga4_config.json
+graphify-out/cache/
+graphify-out/transcripts/
+.playwright-mcp/

@@ -76,7 +76,7 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 ## Business Fundamentals
 
 ### Revenue Model
-- **Baseline:** ~$600/mo from existing clients
+- **Baseline:** ~$750/mo cash from existing clients (Carol is barter)
 - **Target:** $10K/mo within 6 months, $300K annualized by Month 14-16
 - **Approach:** Content-first (3 months organic before ads), local + online split
 
@@ -90,12 +90,17 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 | Free Movement Quiz | Free | Lead magnet, email capture |
 
 ### Existing Clients
-| Client | Type | Schedule | Location |
-|--------|------|----------|----------|
-| Carol Whiteman | In-person kettlebell | Mon/Wed/Fri 9:00-10:00 AM | Carol's House, Key West |
-| Emma | In-person | Tue 9:00-10:00 AM | Key West |
-| Tony | Virtual coaching | Tue 11:00-11:30 AM | Virtual |
-| Gina | Virtual coaching | Tue 9:00-9:30 PM | Virtual |
+| Client | Type | Schedule | Revenue | Notes |
+|--------|------|----------|---------|-------|
+| Carol Whiteman | In-person kettlebell | Mon/Wed/Fri 9:00-10:00 AM | BARTER (housing) | Age 68, tennis player, knee issues. Does NOT want to be filmed. |
+| Emma | In-person | Tue 9:00-10:00 AM | $200/mo (4x $50) | Post-ACL rehab, 12 months post-op. |
+| Tony | Virtual coaching | Tue 11:00-11:30 AM | $150/mo | Mindset and psychology coaching. |
+| Gina | Virtual coaching | Biweekly Tue 9:00 PM | ~$50/mo | Reduced from weekly starting Apr 14. |
+| Tim | Virtual + app | Flexible 1x/week | $250/mo | Highest-paying client. Training + mindset. |
+| John | App only | Async (Trainerize) | $50/mo | Post-intensive, programming only. |
+| Annie | App only | Async (Trainerize) | $50/mo | Post-intensive, programming only. |
+
+**Total projected monthly: ~$750 cash** (Carol is barter for housing)
 
 ---
 
@@ -119,14 +124,16 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 
 ## Content Strategy
 
-### 5 Pillars
-| Pillar | Share | Focus |
-|--------|-------|-------|
-| Movement Authority | 40% | Corrective exercise, mobility, functional fitness |
-| Trauma/Empowerment | 25% | Body-mind connection, resilience, healing through movement |
-| Couple Content | 10% | Laura + Alex dancing, training together |
-| Key West Local | 10% | Community, beaches, tropical lifestyle |
-| CTA & Proof | 15% | Testimonials, assessments, direct offers |
+### 7 Pillars (Magnet → Connection → Conversion framework)
+| Pillar | Share | Role |
+|--------|-------|------|
+| Movement Authority | 25% | CONVERSION: corrective exercise, mobility, functional fitness |
+| Dance & Movement Artistry | 20% | MAGNET: dance clips, movement artistry, grows reach (7K views on dance) |
+| CTA & Proof | 15% | Revenue: testimonials, assessments, direct offers |
+| Personal / Raw | 10% | CONNECTION: behind the scenes, vulnerability, builds loyalty |
+| Trauma / Empowerment | 10% | Depth: body-mind connection, resilience, healing through movement |
+| Couple / Relationship | 10% | Laura + Alex dancing, training together, humanizes brand |
+| Key West Local | 10% | Community: island life, beaches, local discovery |
 
 ### Platform Strategy
 - **TikTok-first** (13.9K followers, 334 videos, biggest audience)
@@ -201,6 +208,39 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 | ui-ux-pro-max | Premium UI/UX design |
 | deep-research | Multi-source research |
 | article-writing | Blog posts and guides |
+| graphify | Knowledge graph of entire project (see below) |
+
+### graphify — Project Knowledge Graph
+Alpha has a persistent, queryable knowledge graph of the entire project corpus.
+
+**Location:** `graphify-out/graph.json` (433 nodes, 541 edges, 35 communities)
+**HTML viewer:** `graphify-out/graph.html` — open in any browser
+**Report:** `graphify-out/GRAPH_REPORT.md`
+
+**Usage:**
+```
+/graphify                    # full rebuild (when major files added)
+/graphify --update           # incremental update (new/changed files only)
+/graphify query "<question>" # BFS traversal — broad context
+/graphify query "<q>" --dfs  # DFS — trace a specific path
+/graphify path "NodeA" "NodeB" # shortest path between concepts
+/graphify explain "NodeName" # plain-language explanation
+```
+
+**When to use:**
+- Before writing any email copy, strategy, or content — query the graph for credential and concept connections
+- When a task spans multiple files/systems — graph reveals cross-file dependencies that reading alone misses
+- When writing about Laura's story — graph maps which credentials connect to which products/emails
+- When debugging a funnel or pipeline — graph traces the flow end-to-end
+
+**Key findings already in graph (2026-04-11 run):**
+- `Laura Treto (Person)` is the god node — 42 edges, bridges credentials to every product
+- `Movement Readiness Score Quiz` is the conversion bridge — connects all credentials to the funnel
+- Email 3 ("Laura's Story") only explicitly routes through Acosta Danza — 5 other credentials (Yuli film, O-1B, psychology degree, Mavericks, 1,000 shows) are in the graph but not wired into the email copy
+- `tasks.md` and the `tasks` DB table are disconnected mirrors — same data, no structural link
+- The PT-to-Weight-Room Gap concept from Laura's wellness resume is the direct rationale for the quiz design
+
+**Rebuild trigger:** Run `/graphify --update` after any session that adds strategy docs, new copy, or PDFs.
 
 ---
 
@@ -309,9 +349,55 @@ LAURA TRETO COACHING/
 
 ---
 
+## Alpha Execution Capabilities (check this BEFORE asking Alex to click anything)
+
+**HARD RULE:** Before drafting any instruction that asks Alex to manually navigate a dashboard, copy a value, click a button, or toggle a setting, Alpha MUST first check whether it has API / MCP / credential access to do it directly. If Alpha can execute it, Alpha executes it. Alex's time is for strategic decisions and physical-world actions only.
+
+### Services Alpha can execute directly
+
+| Service | Access | What Alpha can do |
+|---------|--------|-------------------|
+| **ManyChat** | REST API (key in alpha.db credentials + Netlify env var, Pro plan) | Find/tag/untag subscribers, create tags, read conversations, send messages, query page info |
+| **Meta / Instagram / Facebook** | Graph API (permanent page token in .credentials/api_keys.json) | Post, read insights, manage comments and DMs, read engagement |
+| **Netlify** | MCP + REST API | Deploys, env vars, function logs, project settings, DNS |
+| **GitHub** | MCP | Commits, PRs, issues, branches, push, read files |
+| **Google Calendar** | MCP (both Alex's AND Laura's calendars) | List, create, update, delete events |
+| **Gmail** | MCP | Create drafts, search threads, label |
+| **Trainerize** | REST API (122 endpoints, Basic auth) | Clients, programs, bookings, onboarding pipeline |
+| **MailerLite** | REST API via Netlify function | Subscribers, groups, automations, drip flows |
+| **GA4** | Python script `tools/ga4_weekly_report.py` | Traffic, events, funnel data, WoW comparisons |
+| **Higgsfield** | MCP (9 tools) | AI video/image generation, character consistency |
+| **Playwright** | MCP | Browser automation for sites with no API (visit, click, screenshot, fill forms) |
+| **Exa** | MCP | Neural web/code/company search |
+| **Gamma** | MCP | Presentation and document generation |
+| **n8n** | MCP | Workflow automation |
+| **Context7** | MCP | Library documentation lookup |
+| **alpha.db** | sqlite3 direct | All project operational data (clients, tasks, credentials, content, revenue, KPIs) |
+
+### Pre-ask checklist (run mentally before every manual instruction)
+
+1. Credential in alpha.db? → `SELECT * FROM credentials WHERE service LIKE '%X%'`
+2. Env var in Netlify? → check `reference_*.md` memories or query Netlify MCP
+3. MCP server available? → check the table above
+4. REST API + stored auth? → try curl with stored token
+5. Helper script in `tools/`? → `ls tools/`
+
+Only if all 5 return "no" does Alpha ask Alex. And when asking, Alpha must state the exact reason it cannot do the action itself.
+
+### Actions that genuinely require Alex
+
+- Physical-world actions (driving, in-person sessions, filming)
+- Strategic/creative decisions where Alex's or Laura's judgment IS the deliverable
+- Actions requiring Laura's voice or face (lives, calls, filming)
+- Payment / billing authorizations
+- Granting new OAuth consents or API access
+- Rare UI flows behind auth with no API equivalent (verify first — usually not the case)
+
+---
+
 ## Rules
 
-1. **Alpha never executes.** Think, route, brief, spawn, review, report.
+1. **Alpha never executes.** Think, route, brief, spawn, review, report. (Exception: Alpha can directly execute API/MCP/DB operations for services listed in the capabilities table above — that IS the orchestration, not manual user work.)
 2. **Terse communication.** No fluff, no filler. Lead with the answer.
 3. **No em dashes** in emails or client-facing writing. Use commas, periods, colons.
 4. **Output/Input protocol.** Output/ = deliverables for Alex/Laura. Input/ = files from Laura/Codex.
@@ -319,3 +405,4 @@ LAURA TRETO COACHING/
 6. **Simplicity over engineering.** Ship the simplest thing that works.
 7. **Auto mode.** Execute routine tasks through agents without asking. Only pause for strategic/costly/ambiguous decisions.
 8. **User corrections = hard rules.** When Alex corrects, harden it immediately. Same mistake never happens twice.
+9. **Check capabilities before asking Alex.** Run the pre-ask checklist above. Never send Alex to a dashboard for something Alpha can do via API, MCP, or stored credentials.
