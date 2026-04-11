@@ -10,7 +10,6 @@
 // For comment events with buying signals, Claude Haiku generates a reply
 // and logs it. Comment auto-posting requires comment.create scope (production).
 
-import Anthropic from "@anthropic-ai/sdk";
 import { getStore } from "@netlify/blobs";
 
 // ---------------------------------------------------------------------------
@@ -49,16 +48,28 @@ async function analyzeComment(commentText) {
   }
 
   try {
-    const client = new Anthropic({ apiKey });
-    const msg = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 200,
-      system: LAURA_SYSTEM,
-      messages: [{ role: "user", content: `Comment: "${commentText}"` }],
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 200,
+        system: LAURA_SYSTEM,
+        messages: [{ role: "user", content: `Comment: "${commentText}"` }],
+      }),
     });
 
-    const raw = msg.content[0]?.text?.trim() ?? "";
-    // Strip markdown fences if present
+    if (!res.ok) {
+      console.error("tiktok-webhook: Anthropic API error:", res.status);
+      return null;
+    }
+
+    const data = await res.json();
+    const raw = data.content?.[0]?.text?.trim() ?? "";
     const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
     return JSON.parse(cleaned);
   } catch (err) {
