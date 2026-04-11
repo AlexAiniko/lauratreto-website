@@ -70,6 +70,76 @@ function sanitizeMessage(text) {
 }
 
 // ---------------------------------------------------------------------------
+// Non-text input detection
+// ---------------------------------------------------------------------------
+// When a user sends a voice note, image, video, sticker, GIF, or any
+// attachment on Instagram, ManyChat fills last_input_text with either an
+// empty value, a CDN URL, or a placeholder token. Passing any of these to
+// Claude produces robotic apologies ("I can't open that link/file/audio…")
+// that out the bot as not-Laura. This detector is deliberately aggressive:
+// better to go silent and let Laura handle manually than to ship a robot
+// reply.
+function isNonTextInput(text) {
+  if (typeof text !== 'string') return true;
+  const trimmed = text.trim();
+  if (!trimmed) return true;
+
+  const lower = trimmed.toLowerCase();
+
+  // Single URL only (no other content)
+  if (/^https?:\/\/\S+$/i.test(trimmed)) return true;
+
+  // Predominantly a URL with minimal surrounding text (>80% URL)
+  const urlMatch = trimmed.match(/https?:\/\/\S+/i);
+  if (urlMatch && urlMatch[0].length / trimmed.length > 0.8) return true;
+
+  // Instagram / Facebook CDN hostnames appearing anywhere in the message
+  const cdnHosts = [
+    'scontent.cdninstagram.com',
+    'scontent.fbcdn.net',
+    'cdn.fbsbx.com',
+    'lookaside.fbsbx.com'
+  ];
+  for (const host of cdnHosts) {
+    if (lower.includes(host)) return true;
+  }
+
+  // Bracketed media placeholder tokens (ManyChat + variants)
+  const bracketPlaceholders = [
+    '[audio]', '[voice]', '[image]', '[img]', '[video]', '[file]',
+    '[attachment]', '[sticker]', '[gif]', '[photo]', '[media]'
+  ];
+  for (const p of bracketPlaceholders) {
+    if (lower.includes(p)) return true;
+  }
+
+  // Angle-bracket media tokens
+  if (/<(audio|image|img|video|file|attachment|sticker|gif|photo|media)[\s>]/i.test(trimmed)) {
+    return true;
+  }
+
+  // Standalone media-word messages (exactly the word, possibly with "message")
+  const standalonePatterns = [
+    /^audio( message)?$/i,
+    /^voice( message| note)?$/i,
+    /^image$/i,
+    /^photo$/i,
+    /^picture$/i,
+    /^video( message)?$/i,
+    /^gif$/i,
+    /^sticker$/i,
+    /^attachment$/i,
+    /^file$/i,
+    /^media$/i
+  ];
+  for (const pat of standalonePatterns) {
+    if (pat.test(trimmed)) return true;
+  }
+
+  return false;
+}
+
+// ---------------------------------------------------------------------------
 // Resource URLs — single source of truth. NEVER passed to the LLM directly.
 // The model uses [LINK:key] placeholders; injectUrls() replaces them after
 // generation. This prevents URL hallucination entirely.
@@ -237,7 +307,8 @@ RULES (non-negotiable):
 11. Do NOT mention you are AI.
 12. If someone says something vague like "tell me more" or "interesting", ask what specifically they want to know. Do not dump information.
 13. Be like a friend who happens to be an expert, not a salesperson. Curious first, helpful second, selling never.
-14. When you offer a resource and they say yes, ALWAYS include the placeholder tag in your next message. No dead ends.`;
+14. When you offer a resource and they say yes, ALWAYS include the placeholder tag in your next message. No dead ends.
+15. NEVER mention that you cannot open links, files, audio, images, videos, or any technical limitation. NEVER apologize for not being able to process something. NEVER say things like "I can't open that", "I'm unable to view", "I appreciate you reaching out but...". If the message is unclear or references something you cannot see, respond warmly without acknowledging any limitation, or ask a curious question about their situation instead.`;
 
 // ---------------------------------------------------------------------------
 // Blob store initialization — v2 functions get NETLIFY_BLOBS_CONTEXT automatically
@@ -356,6 +427,24 @@ export default async (request, context) => {
 
     // Sanitize before any further processing
     const sanitizedMessage = sanitizeMessage(userMessage);
+
+    // -----------------------------------------------------------------------
+    // Non-text input guard — voice notes, images, files, stickers, CDN URLs.
+    // Skip Claude entirely, flag for Laura, return empty claude_response so
+    // ManyChat sends nothing. Silent handoff beats a robotic apology.
+    // -----------------------------------------------------------------------
+    if (isNonTextInput(sanitizedMessage)) {
+      console.log(`[non-text-input] sub=${subscriberId} — skipping Claude, flagging for Laura. raw="${sanitizedMessage.slice(0, 100)}"`);
+      // Flag for Laura via tag (fire and forget — never block)
+      try {
+        await tagSubscriber(subscriberId, 'needs_laura_review');
+      } catch (err) {
+        console.error(`[non-text-tag-fail] sub=${subscriberId} err=${err.message}`);
+      }
+      // TODO: email Laura via Resend (pending API key). For now, tag-only.
+      // Return a no-op response to ManyChat — empty claude_response means ManyChat sends nothing.
+      return jsonResponse({ claude_response: '' });
+    }
 
     if (!sanitizedMessage) {
       return jsonResponse({ error: 'No message text found in payload' }, 400);
