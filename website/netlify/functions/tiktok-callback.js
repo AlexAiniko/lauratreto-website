@@ -1,5 +1,5 @@
 // TikTok OAuth Callback Handler
-// Netlify Function v2 (ES modules)
+// Netlify Function v2 (ES modules) — env vars injected at deploy time
 //
 // Handles the OAuth redirect from TikTok after user authorization.
 // Exchanges the authorization code for access + refresh tokens,
