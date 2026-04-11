@@ -6,10 +6,13 @@ Post a video to TikTok via Content Posting API v2 (FILE_UPLOAD method).
 
 Default: Direct Post — publishes immediately to Laura's profile.
 Use --draft to send to inbox drafts instead (Creator tools → Drafts).
+Use --schedule to publish at a future time (direct post only, 15 min–10 days ahead).
 
 Usage:
     python tools/tiktok_post.py --video path/to/video.mp4 --title "Your caption" --tags "tag1,tag2"
-    python tools/tiktok_post.py --video clip.mp4 --title "caption" --draft   # draft mode
+    python tools/tiktok_post.py --video clip.mp4 --title "caption" --draft                          # draft mode
+    python tools/tiktok_post.py --video clip.mp4 --title "caption" --schedule "2026-04-13 14:30"    # schedule
+    python tools/tiktok_post.py --video clip.mp4 --title "caption" --schedule "2026-04-13T14:30:00" # schedule (ISO)
 
 Required env vars:
     NETLIFY_TOKEN    — Netlify personal access token (for reading Blobs via API)
@@ -32,6 +35,7 @@ import math
 import time
 import argparse
 import json
+from datetime import datetime, timezone, timedelta
 
 try:
     import requests
@@ -139,6 +143,60 @@ def get_token() -> str:
 # Post video
 # ---------------------------------------------------------------------------
 
+def parse_schedule_time(schedule_str: str) -> int:
+    """
+    Parse a schedule datetime string and return a UTC Unix timestamp (int).
+    Accepts: "2026-04-13 14:30", "2026-04-13T14:30:00", "2026-04-13T14:30"
+    Treats as local time if no timezone specified.
+    Validates TikTok's constraint: at least 15 min in the future, at most 10 days ahead.
+    """
+    dt = None
+    try:
+        from dateutil import parser as dateutil_parser
+        dt = dateutil_parser.parse(schedule_str)
+    except ImportError:
+        for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M"):
+            try:
+                dt = datetime.strptime(schedule_str, fmt)
+                break
+            except ValueError:
+                continue
+
+    if dt is None:
+        print(
+            f"ERROR: Could not parse schedule time: {schedule_str!r}\n"
+            "  Expected format: '2026-04-13 14:30' or '2026-04-13T14:30:00'",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    # If no timezone, treat as local time
+    if dt.tzinfo is None:
+        dt = dt.astimezone()
+
+    now_utc = datetime.now(timezone.utc)
+    dt_utc  = dt.astimezone(timezone.utc)
+
+    min_delta = timedelta(minutes=15)
+    max_delta = timedelta(days=10)
+
+    if dt_utc - now_utc < min_delta:
+        print(
+            "ERROR: --schedule time must be at least 15 minutes in the future.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    if dt_utc - now_utc > max_delta:
+        print(
+            "ERROR: --schedule time must be at most 10 days in the future.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    return int(dt_utc.timestamp()), dt
+
+
 def post_video(
     video_path: str,
     title: str,
@@ -146,18 +204,33 @@ def post_video(
     tags: list[str] | None = None,
     draft: bool = False,
     privacy: str = "PUBLIC_TO_EVERYONE",
+    schedule: str = "",
 ) -> str:
     """
     Post a video file to TikTok.
 
     draft=False (default): Direct Post — publishes immediately.
     draft=True:            Inbox draft — lands in Creator tools → Drafts.
+    schedule:              ISO/datetime string — schedule a direct post (not compatible with draft).
 
     Returns publish_id on success. Exits on error.
     """
     if not os.path.isfile(video_path):
         print(f"ERROR: Video file not found: {video_path}", file=sys.stderr)
         sys.exit(1)
+
+    if schedule and draft:
+        print(
+            "ERROR: --schedule and --draft cannot be used together.\n"
+            "  Scheduling is only valid for direct post.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    schedule_unix = None
+    schedule_dt   = None
+    if schedule:
+        schedule_unix, schedule_dt = parse_schedule_time(schedule)
 
     access_token = get_token()
 
@@ -175,27 +248,38 @@ def post_video(
     if len(caption) > 2200:
         caption = caption[:2197] + "..."
 
-    mode = "DRAFT" if draft else "DIRECT POST"
+    if draft:
+        mode = "DRAFT"
+    elif schedule_unix:
+        mode = "SCHEDULED"
+    else:
+        mode = "DIRECT POST"
     print(f"Initializing TikTok upload ({mode})...")
     print(f"  File:    {video_path}")
     print(f"  Size:    {video_size:,} bytes ({chunk_count} chunk(s))")
     print(f"  Title:   {title}")
     if not draft:
         print(f"  Privacy: {privacy}")
+    if schedule_unix:
+        print(f"  Scheduled: {schedule_dt.strftime('%Y-%m-%d %H:%M %Z')} (unix: {schedule_unix})")
 
     # 1. Init upload
     privacy_level = "SELF_ONLY" if draft else privacy
     init_url      = TIKTOK_INIT_DRAFT_URL if draft else TIKTOK_INIT_URL
 
+    post_info = {
+        "title":                    caption,
+        "privacy_level":            privacy_level,
+        "disable_duet":             False,
+        "disable_stitch":           False,
+        "disable_comment":          False,
+        "video_cover_timestamp_ms": 1000,
+    }
+    if schedule_unix:
+        post_info["schedule_time"] = schedule_unix
+
     init_payload = {
-        "post_info": {
-            "title":                    caption,
-            "privacy_level":            privacy_level,
-            "disable_duet":             False,
-            "disable_stitch":           False,
-            "disable_comment":          False,
-            "video_cover_timestamp_ms": 1000,
-        },
+        "post_info": post_info,
         "source_info": {
             "source":            "FILE_UPLOAD",
             "video_size":        video_size,
@@ -265,6 +349,10 @@ def post_video(
         print(f"\nDraft posted successfully.")
         print(f"  Publish ID: {publish_id}")
         print(f"  Check TikTok app → Creator tools → Drafts.")
+    elif schedule_unix:
+        print(f"\nScheduled for: {schedule_dt.strftime('%Y-%m-%d %H:%M %Z')} (unix: {schedule_unix})")
+        print(f"  Publish ID: {publish_id}")
+        print(f"  It will appear on @coachlauratretoo at the scheduled time.")
     else:
         print(f"\nVideo posted successfully.")
         print(f"  Publish ID: {publish_id}")
@@ -320,7 +408,9 @@ def main():
     parser.add_argument("--title",   required=True,  help="Caption / post title (max 2,200 chars)")
     parser.add_argument("--desc",    default="",     help="Optional extended description")
     parser.add_argument("--tags",    default="",     help="Comma-separated hashtags (no # needed)")
-    parser.add_argument("--draft",   action="store_true", help="Send to inbox drafts instead of direct post")
+    parser.add_argument("--draft",    action="store_true", help="Send to inbox drafts instead of direct post")
+    parser.add_argument("--schedule", default="",
+                        help="Schedule publish time, e.g. '2026-04-13 14:30' (local time, 15 min–10 days ahead; direct post only)")
     parser.add_argument("--privacy", default="PUBLIC_TO_EVERYONE",
                         choices=["PUBLIC_TO_EVERYONE", "FOLLOWER_OF_CREATOR", "MUTUAL_FOLLOW_FRIENDS", "SELF_ONLY"],
                         help="Privacy level for direct post (default: PUBLIC_TO_EVERYONE)")
@@ -340,6 +430,7 @@ def main():
         tags        = tag_list,
         draft       = args.draft,
         privacy     = args.privacy,
+        schedule    = args.schedule,
     )
 
 

@@ -1,18 +1,19 @@
 # Laura Treto Coaching — Active Tasks
 
-**Last updated:** 2026-04-11
+**Last updated:** 2026-04-11 (added tasks 34 + 35: TikTok audit + production API)
 
 | # | Task | Priority | Due | Owner | Status |
 |---|------|----------|-----|-------|--------|
 | 31 | Confirm MailerLite paid plan before Apr 17 trial end | critical | 2026-04-17 | Alex | todo |
 | 1 | ~~Update Trainerize checkout links on website~~ | critical | 2026-04-06 | Max | done |
-| 23 | Plan Laura's own community fitness event | high | 2026-04-14 | Alpha/Laura | todo |
-| 16 | Outreach: Key West Southernmost Runners Club | high | 2026-04-16 | Laura/Alex | todo |
-| 32 | Write Email 3 copy — Laura's Story | high | 2026-04-20 | Laura/Alpha | todo |
-| 33 | TikTok integration: define next step after Sandbox approval | high | 2026-04-25 | Alpha/Alex | todo |
-| 30 | TikTok developer app: finish Sandbox config + build integration | high | — | alpha | in_progress |
 | 18 | Outreach: Lucy Carleton (Dance Key West) | high | 2026-04-12 | Laura/Alex | in_progress |
 | 17 | Outreach: Williams Hall — propose movement class | high | 2026-04-14 | Laura/Alex | in_progress |
+| 23 | Plan Laura's own community fitness event | high | 2026-04-14 | Alpha/Laura | todo |
+| 34 | Laura: TikTok Studio manual audit (top 5 + bottom 5 videos) | high | 2026-04-14 | Laura | todo |
+| 16 | Outreach: Key West Southernmost Runners Club | high | 2026-04-16 | Laura/Alex | todo |
+| 35 | Apply for TikTok production API access (unlocks comment auto-reply) | high | 2026-04-18 | Alpha/Alex | todo |
+| 32 | Write Email 3 copy — Laura's Story | high | 2026-04-20 | Laura/Alpha | todo |
+| 33 | ~~TikTok integration: define next step after Sandbox approval~~ | high | 2026-04-25 | Alpha/Alex | done |
 | 5 | ~~Build AI infographic content pipeline~~ | high | 2026-04-10 | Kai | done |
 | 15 | ~~Running Club partnership — Key West Thursdays 6PM~~ | high | 2026-04-10 | Alex/Laura | done |
 | 27 | ~~Finish MailerLite automation in dashboard~~ | high | 2026-04-10 | Alex | done |
@@ -51,6 +52,7 @@
 | -- | DNS authentication: DKIM CNAME + full domain verification TXT added at Squarespace | 2026-04-10 |
 | -- | Sync protocol hardcoded in memory for future org syncs | 2026-04-10 |
 | -- | Calendar events self-contained rule added to memory | 2026-04-10 |
+| 30 | TikTok integration complete: OAuth, token storage, webhook verified, posting tools built, analytics/comment tools ready for production scopes | 2026-04-11 |
 | -- | TikTok developer app created: Sandbox Alpha Dev, Login Kit + Content Posting API added | 2026-04-11 |
 | -- | terms.html shipped (bilingual EN/ES) for TikTok developer app | 2026-04-11 |
 | -- | lauratreto.com domain verified for TikTok developer app | 2026-04-11 |
