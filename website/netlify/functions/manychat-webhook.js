@@ -11,6 +11,7 @@
 //                       If unset, tagging is skipped silently (DM replies still work).
 
 import { getStore } from "@netlify/blobs";
+import { createHash } from "crypto";
 
 // ---------------------------------------------------------------------------
 // Kill switch. Set to true to immediately disable all webhook responses.
@@ -459,6 +460,29 @@ export default async (request, context) => {
     }
 
     // -----------------------------------------------------------------------
+    // Deduplication — prevents double replies when ManyChat retries a slow
+    // request or fires the webhook twice for the same message.
+    // Uses Blobs so it works across concurrent Lambda instances.
+    // -----------------------------------------------------------------------
+    const dedupHash = createHash('sha256')
+      .update(`${subscriberId}:${sanitizedMessage}`)
+      .digest('hex')
+      .slice(0, 16);
+    const DEDUP_TTL_MS = 30_000; // 30 seconds
+
+    try {
+      const dedupStore = getStore("dedup");
+      const existing   = await dedupStore.get(dedupHash, { type: "json" });
+      if (existing && (Date.now() - existing.ts) < DEDUP_TTL_MS) {
+        console.log(`[dedup] sub=${subscriberId} hash=${dedupHash} — duplicate request, returning cached reply`);
+        return jsonResponse({ claude_response: existing.reply });
+      }
+    } catch (dedupErr) {
+      // Blob read failed — proceed without dedup (better to reply than to drop)
+      console.warn('[dedup-read-fail]', dedupErr.message);
+    }
+
+    // -----------------------------------------------------------------------
     // Debug endpoint: message "__debug_memory__" returns storage diagnostics
     // -----------------------------------------------------------------------
     if (sanitizedMessage === '__debug_memory__') {
@@ -581,6 +605,14 @@ export default async (request, context) => {
     } catch (tagErr) {
       console.error('[tag-pipeline-error]', tagErr.message);
       // Swallow — reply still ships.
+    }
+
+    // Store reply in dedup cache (fire and forget — never block the response)
+    try {
+      const dedupStore = getStore("dedup");
+      await dedupStore.setJSON(dedupHash, { ts: Date.now(), reply: replyText });
+    } catch (dedupWriteErr) {
+      console.warn('[dedup-write-fail]', dedupWriteErr.message);
     }
 
     // Return flat JSON for ManyChat Actions External Request.
