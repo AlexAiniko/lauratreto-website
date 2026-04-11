@@ -5,7 +5,7 @@
 // Exchanges the authorization code for access + refresh tokens,
 // then stores them in Netlify Blobs (store: "tiktok-auth", key: "laura-token").
 //
-// Deployed at: https://lauratreto.netlify.app/.netlify/functions/tiktok-callback
+// Deployed at: https://lauratreto.com/auth/tiktok (proxied via _redirects)
 // Registered redirect URI in TikTok Developer Portal must match exactly.
 //
 // Required env vars (set in Netlify UI → Site configuration → Environment variables):
@@ -128,7 +128,7 @@ export default async (request) => {
     client_secret: CLIENT_SECRET,
     code,
     grant_type:    "authorization_code",
-    redirect_uri:  "https://lauratreto.netlify.app/.netlify/functions/tiktok-callback",
+    redirect_uri:  "https://lauratreto.com/auth/tiktok",
   });
 
   let tokenData;

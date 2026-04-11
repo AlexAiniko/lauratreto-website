@@ -33,7 +33,7 @@ import secrets
 import webbrowser
 from urllib.parse import urlencode
 
-REDIRECT_URI = "https://lauratreto.netlify.app/.netlify/functions/tiktok-callback"
+REDIRECT_URI = "https://lauratreto.com/auth/tiktok"
 SCOPES       = "video.publish,video.upload"
 AUTH_BASE    = "https://www.tiktok.com/v2/auth/authorize/"
 
