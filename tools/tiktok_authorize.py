@@ -34,7 +34,9 @@ import webbrowser
 from urllib.parse import urlencode
 
 REDIRECT_URI = "https://lauratreto.com/auth/tiktok"
-SCOPES       = "video.upload,video.publish,user.info.stats,user.info.profile,video.list,comment.list,comment.create"
+# Sandbox-available scopes. When production access is approved, add:
+# user.info.stats, user.info.profile, video.list, comment.list, comment.create
+SCOPES       = "video.upload,video.publish,user.info.basic"
 AUTH_BASE    = "https://www.tiktok.com/v2/auth/authorize/"
 
 
