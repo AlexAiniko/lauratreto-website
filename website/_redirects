@@ -1,6 +1,8 @@
 # Netlify redirects
 # TikTok OAuth callback — clean URL for TikTok portal whitelist
-/auth/tiktok    /.netlify/functions/tiktok-callback    200
+/auth/tiktok        /.netlify/functions/tiktok-callback    200
+# TikTok Webhooks
+/tiktok-webhook     /.netlify/functions/tiktok-webhook     200
 
 # SPA-style catch-all (single page site)
 /*    /index.html   200
