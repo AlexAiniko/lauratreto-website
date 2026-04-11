@@ -34,7 +34,7 @@ import webbrowser
 from urllib.parse import urlencode
 
 REDIRECT_URI = "https://lauratreto.com/auth/tiktok"
-SCOPES       = "video.publish,video.upload"
+SCOPES       = "video.upload"
 AUTH_BASE    = "https://www.tiktok.com/v2/auth/authorize/"
 
 
