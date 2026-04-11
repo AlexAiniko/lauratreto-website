@@ -6,7 +6,9 @@
 //
 // Required env vars (set in Netlify UI):
 //   ANTHROPIC_API_KEY - Anthropic API key
-//   MANYCHAT_API_KEY  - ManyChat API token (for verification)
+//   MANYCHAT_API_KEY  - ManyChat API token (Settings → API in ManyChat dashboard).
+//                       Used to apply subscriber tags for funnel segmentation.
+//                       If unset, tagging is skipped silently (DM replies still work).
 
 import { getStore } from "@netlify/blobs";
 
@@ -95,6 +97,93 @@ function stripMarkdown(text) {
     .replace(/^[-*+] /gm, '• ')               // list bullets → simple bullet
     .replace(/^#{1,6}\s+/gm, '')              // headers → plain text
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'); // [text](url) → text
+}
+
+// ---------------------------------------------------------------------------
+// ManyChat subscriber tagging — funnel segmentation
+// ---------------------------------------------------------------------------
+// Calls POST https://api.manychat.com/fb/subscriber/addTagByName to apply a
+// tag to the subscriber. Failures are caught and logged; they NEVER break the
+// DM reply flow. If MANYCHAT_API_KEY is unset, this no-ops silently.
+//
+// Suggested tags (funnel stages):
+//   lead_pricing           — asked about cost, price, how much
+//   lead_quiz_complete     — completed the movement quiz
+//   lead_booking_interest  — asked to book, schedule, sign up
+//   lead_desk_pain         — mentioned desk/sitting/posture/back pain
+//   lead_general_inquiry   — generic curiosity, no strong signal yet
+// ---------------------------------------------------------------------------
+
+async function tagSubscriber(subscriberId, tag) {
+  const token = process.env.MANYCHAT_API_KEY;
+  if (!token) {
+    console.log(`[tag-skip] MANYCHAT_API_KEY not set; skipping tag=${tag} sub=${subscriberId}`);
+    return;
+  }
+  if (!subscriberId || subscriberId === 'unknown' || !tag) {
+    console.log(`[tag-skip] missing sub/tag; sub=${subscriberId} tag=${tag}`);
+    return;
+  }
+  try {
+    const res = await fetch('https://api.manychat.com/fb/subscriber/addTagByName', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        subscriber_id: subscriberId,
+        tag_name: tag
+      })
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`[tag-fail] status=${res.status} sub=${subscriberId} tag=${tag} body=${body}`);
+      return;
+    }
+    console.log(`[tag-ok] sub=${subscriberId} tag=${tag}`);
+  } catch (err) {
+    console.error(`[tag-error] sub=${subscriberId} tag=${tag} err=${err.message}`);
+    // Non-fatal — DM reply flow continues.
+  }
+}
+
+// Detect funnel signals from the user's message. Returns an array of tags to
+// apply (can be multiple). Order-independent keyword matching, case-insensitive.
+function detectFunnelTags(message) {
+  const tags = [];
+  const m = (message || '').toLowerCase();
+  if (!m) return tags;
+
+  // Pricing signals (EN + ES)
+  if (/\b(price|pricing|cost|how much|rate|rates|fee|fees|package|packages|precio|precios|cuanto cuesta|cuánto cuesta|cuesta|tarifa)\b/.test(m)) {
+    tags.push('lead_pricing');
+  }
+
+  // Booking / scheduling signals
+  if (/\b(book|booking|schedule|sign up|sign me up|appointment|session|consult|consultation|reservar|agendar|cita|reserva)\b/.test(m)) {
+    tags.push('lead_booking_interest');
+  }
+
+  // Desk pain / posture signals
+  if (/\b(desk|sitting|sit all day|posture|back pain|neck pain|stiff|stiffness|hunched|office chair|escritorio|sentad[oa]|postura|espalda|cuello|r[ií]gid)\b/.test(m)) {
+    tags.push('lead_desk_pain');
+  }
+
+  // Quiz completion signals — usually triggered by a marker phrase or explicit
+  // mention. The quiz itself lives at lauratreto.com/quiz and posts to
+  // quiz-subscribe.js, not here. But if a DM references completing the quiz,
+  // we tag it. (True quiz-complete tagging should also happen in quiz-subscribe.)
+  if (/\b(took the quiz|finished the quiz|completed the quiz|my quiz result|quiz score|terminé el quiz|hice el quiz)\b/.test(m)) {
+    tags.push('lead_quiz_complete');
+  }
+
+  // Fallback: general inquiry if none of the above fired and message is substantive
+  if (tags.length === 0 && m.length >= 8) {
+    tags.push('lead_general_inquiry');
+  }
+
+  return tags;
 }
 
 // ---------------------------------------------------------------------------
@@ -387,6 +476,22 @@ export default async (request, context) => {
     if (useHistory) {
       conversation.messages.push({ role: "assistant", content: replyText });
       await saveConversation(store, subscriberId, conversation);
+    }
+
+    // -----------------------------------------------------------------------
+    // Funnel tagging: apply ManyChat tags based on signal detection.
+    // Wrapped in try/catch so a tag failure NEVER breaks the DM reply flow.
+    // -----------------------------------------------------------------------
+    try {
+      const tagsToApply = detectFunnelTags(sanitizedMessage);
+      if (tagsToApply.length > 0) {
+        console.log(`[tag-detect] sub=${subscriberId} tags=${tagsToApply.join(',')}`);
+        // Apply tags in parallel; individual failures are swallowed inside tagSubscriber.
+        await Promise.all(tagsToApply.map(t => tagSubscriber(subscriberId, t)));
+      }
+    } catch (tagErr) {
+      console.error('[tag-pipeline-error]', tagErr.message);
+      // Swallow — reply still ships.
     }
 
     // Return flat JSON for ManyChat Actions External Request.
