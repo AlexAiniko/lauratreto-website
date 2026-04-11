@@ -2,13 +2,14 @@
 """
 tiktok_post.py
 --------------
-Post a video to TikTok as a DRAFT (Direct Post is OFF — Sandbox mode).
+Post a video to TikTok via Content Posting API v2 (FILE_UPLOAD method).
 
-Uses TikTok Content Posting API v2 with FILE_UPLOAD method.
-Drafts land in the TikTok app under Creator tools → Drafts.
+Default: Direct Post — publishes immediately to Laura's profile.
+Use --draft to send to inbox drafts instead (Creator tools → Drafts).
 
 Usage:
     python tools/tiktok_post.py --video path/to/video.mp4 --title "Your caption" --tags "tag1,tag2"
+    python tools/tiktok_post.py --video clip.mp4 --title "caption" --draft   # draft mode
 
 Required env vars:
     NETLIFY_TOKEN    — Netlify personal access token (for reading Blobs via API)
@@ -42,10 +43,11 @@ except ImportError:
 # Constants
 # ---------------------------------------------------------------------------
 
-CHUNK_SIZE          = 10 * 1024 * 1024          # 10 MB chunks
-TIKTOK_INIT_URL     = "https://open.tiktokapis.com/v2/post/publish/inbox/video/init/"
-TIKTOK_STATUS_URL   = "https://open.tiktokapis.com/v2/post/publish/status/fetch/"
-NETLIFY_BLOBS_URL   = "https://api.netlify.com/api/v1"
+CHUNK_SIZE               = 10 * 1024 * 1024          # 10 MB chunks
+TIKTOK_INIT_URL          = "https://open.tiktokapis.com/v2/post/publish/video/init/"        # direct post
+TIKTOK_INIT_DRAFT_URL    = "https://open.tiktokapis.com/v2/post/publish/inbox/video/init/"  # draft
+TIKTOK_STATUS_URL        = "https://open.tiktokapis.com/v2/post/publish/status/fetch/"
+NETLIFY_BLOBS_URL        = "https://api.netlify.com/api/v1"
 
 
 # ---------------------------------------------------------------------------
@@ -134,20 +136,24 @@ def get_token() -> str:
 
 
 # ---------------------------------------------------------------------------
-# Post video as draft
+# Post video
 # ---------------------------------------------------------------------------
 
-def post_video_draft(
+def post_video(
     video_path: str,
     title: str,
     description: str = "",
     tags: list[str] | None = None,
+    draft: bool = False,
+    privacy: str = "PUBLIC_TO_EVERYONE",
 ) -> str:
     """
-    Post a video file to TikTok as an inbox draft (Direct Post OFF).
+    Post a video file to TikTok.
 
-    Returns publish_id on success.
-    Exits on error.
+    draft=False (default): Direct Post — publishes immediately.
+    draft=True:            Inbox draft — lands in Creator tools → Drafts.
+
+    Returns publish_id on success. Exits on error.
     """
     if not os.path.isfile(video_path):
         print(f"ERROR: Video file not found: {video_path}", file=sys.stderr)
@@ -169,16 +175,22 @@ def post_video_draft(
     if len(caption) > 2200:
         caption = caption[:2197] + "..."
 
-    print(f"Initializing TikTok draft upload...")
-    print(f"  File:   {video_path}")
-    print(f"  Size:   {video_size:,} bytes ({chunk_count} chunk(s))")
-    print(f"  Title:  {title}")
+    mode = "DRAFT" if draft else "DIRECT POST"
+    print(f"Initializing TikTok upload ({mode})...")
+    print(f"  File:    {video_path}")
+    print(f"  Size:    {video_size:,} bytes ({chunk_count} chunk(s))")
+    print(f"  Title:   {title}")
+    if not draft:
+        print(f"  Privacy: {privacy}")
 
     # 1. Init upload
+    privacy_level = "SELF_ONLY" if draft else privacy
+    init_url      = TIKTOK_INIT_DRAFT_URL if draft else TIKTOK_INIT_URL
+
     init_payload = {
         "post_info": {
             "title":                    caption,
-            "privacy_level":            "SELF_ONLY",   # SELF_ONLY = draft in inbox
+            "privacy_level":            privacy_level,
             "disable_duet":             False,
             "disable_stitch":           False,
             "disable_comment":          False,
@@ -197,7 +209,7 @@ def post_video_draft(
         "Content-Type":  "application/json; charset=UTF-8",
     }
 
-    resp = requests.post(TIKTOK_INIT_URL, json=init_payload, headers=headers, timeout=30)
+    resp = requests.post(init_url, json=init_payload, headers=headers, timeout=30)
 
     if not resp.ok:
         print(f"ERROR: TikTok init failed ({resp.status_code}):", file=sys.stderr)
@@ -249,9 +261,14 @@ def post_video_draft(
                 )
                 sys.exit(1)
 
-    print(f"\nDraft posted successfully.")
-    print(f"  Publish ID: {publish_id}")
-    print(f"  Check TikTok app → Creator tools → Drafts to review before publishing.")
+    if draft:
+        print(f"\nDraft posted successfully.")
+        print(f"  Publish ID: {publish_id}")
+        print(f"  Check TikTok app → Creator tools → Drafts.")
+    else:
+        print(f"\nVideo posted successfully.")
+        print(f"  Publish ID: {publish_id}")
+        print(f"  It will appear on @coachlauratretoo once TikTok finishes processing.")
     return publish_id
 
 
@@ -297,13 +314,17 @@ def check_status(publish_id: str) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Post a video to TikTok as a draft (Direct Post OFF)."
+        description="Post a video to TikTok via Content Posting API v2."
     )
-    parser.add_argument("--video",  required=True,  help="Path to the .mp4 video file")
-    parser.add_argument("--title",  required=True,  help="Caption / post title (max 2,200 chars)")
-    parser.add_argument("--desc",   default="",     help="Optional extended description")
-    parser.add_argument("--tags",   default="",     help="Comma-separated hashtags (no # needed)")
-    parser.add_argument("--status", default="",     help="Check status of a publish_id instead of posting")
+    parser.add_argument("--video",   required=True,  help="Path to the .mp4 video file")
+    parser.add_argument("--title",   required=True,  help="Caption / post title (max 2,200 chars)")
+    parser.add_argument("--desc",    default="",     help="Optional extended description")
+    parser.add_argument("--tags",    default="",     help="Comma-separated hashtags (no # needed)")
+    parser.add_argument("--draft",   action="store_true", help="Send to inbox drafts instead of direct post")
+    parser.add_argument("--privacy", default="PUBLIC_TO_EVERYONE",
+                        choices=["PUBLIC_TO_EVERYONE", "FOLLOWER_OF_CREATOR", "MUTUAL_FOLLOW_FRIENDS", "SELF_ONLY"],
+                        help="Privacy level for direct post (default: PUBLIC_TO_EVERYONE)")
+    parser.add_argument("--status",  default="",     help="Check status of a publish_id instead of posting")
 
     args = parser.parse_args()
 
@@ -312,11 +333,13 @@ def main():
         return
 
     tag_list = [t.strip() for t in args.tags.split(",") if t.strip()] if args.tags else []
-    post_video_draft(
+    post_video(
         video_path  = args.video,
         title       = args.title,
         description = args.desc,
         tags        = tag_list,
+        draft       = args.draft,
+        privacy     = args.privacy,
     )
 
 
