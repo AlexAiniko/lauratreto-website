@@ -4,5 +4,8 @@
 # TikTok Webhooks
 /tiktok-webhook     /.netlify/functions/tiktok-webhook     200
 
+# ChaChaFit event page
+/chachafit          /chachafit.html                        200
+
 # SPA-style catch-all (single page site)
 /*    /index.html   200

@@ -10,6 +10,7 @@ node_modules/
 Output/
 *.mp4
 !website/images/dancing-lady.mp4
+!website/videos/*.mp4
 *.mov
 alpha.db
 build_alpha_db.py
@@ -17,3 +18,5 @@ tools/ga4_config.json
 graphify-out/cache/
 graphify-out/transcripts/
 .playwright-mcp/
+.claude/skills/*/.git
+.claude/skills/*/.git/**
