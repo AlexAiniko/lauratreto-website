@@ -242,10 +242,10 @@
     }
     .lang-toggle button.active { background: var(--coral); color: var(--white); }
 
-    /* ============ HERO v3 — Cinematic, Bigger, Parallax ============ */
+    /* ============ HERO v3 — Cinematic, Big, Static (no parallax) ============ */
     .hero {
       position: relative;
-      min-height: 110vh;
+      min-height: 130vh;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -260,27 +260,23 @@
       z-index: 0;
       overflow: hidden;
     }
-    /* Hero video — B&W, full-bleed, parallax-ready */
+    /* Hero video — B&W, full-bleed, static */
     .hero-video {
       position: absolute;
-      top: -8%;
-      left: 0;
+      inset: 0;
       width: 100%;
-      height: 116%;
+      height: 100%;
       object-fit: cover;
       object-position: center 42%;
       z-index: 0;
       filter: brightness(0.78) contrast(1.05);
-      will-change: transform;
-      transform: translate3d(0, 0, 0);
     }
     /* Fallback poster for slow connects or autoplay-blocked browsers */
     .hero-fallback {
       position: absolute;
-      top: -8%;
-      left: 0;
+      inset: 0;
       width: 100%;
-      height: 116%;
+      height: 100%;
       background-image: url('/videos/chachafit-hero-poster.jpg');
       background-size: cover;
       background-position: center 42%;
@@ -420,11 +416,9 @@
 
     /* Mobile hero tuning */
     @media (max-width: 899px) {
-      .hero { min-height: 88vh; }
-      .hero-pan {
-        top: 0; left: 0; width: 100%; height: 100%;
-      }
-      .hero-pan img { object-position: 50% 42%; }
+      .hero { min-height: 100vh; min-height: 100svh; }
+      .hero-video,
+      .hero-fallback { object-position: 50% 42%; }
       .hero-mark { padding-top: 18vh; }
       .hero-copy { padding-bottom: 56px; }
     }
@@ -1188,37 +1182,6 @@
         // Bloom the warm glow after all three syllables settle (~2000ms)
         setTimeout(function() { brand.classList.add('glow'); }, 1900);
       });
-    })();
-
-    // --- Hero parallax (desktop only, respects reduced-motion) ---
-    (function heroParallax() {
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-      var narrow = window.matchMedia('(max-width: 899px)');
-      if (reduced.matches || narrow.matches) return;
-
-      var video = document.querySelector('.hero-video');
-      var fallback = document.querySelector('.hero-fallback');
-      var hero = document.querySelector('.hero');
-      if (!hero || (!video && !fallback)) return;
-
-      var ticking = false;
-      function update() {
-        var rect = hero.getBoundingClientRect();
-        // 0 when hero starts entering top, 1 when hero fully scrolled past
-        var progress = Math.min(Math.max(-rect.top / rect.height, 0), 1.2);
-        // Translate the bg up to ~12% over the full hero scroll-past = "video crawls slower"
-        var ty = -12 * progress;
-        var t = 'translate3d(0, ' + ty.toFixed(3) + '%, 0)';
-        if (video) video.style.transform = t;
-        if (fallback) fallback.style.transform = t;
-        ticking = false;
-      }
-      function onScroll() {
-        if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll, { passive: true });
-      update();
     })();
 
     // --- Scroll-reveal sections ---
