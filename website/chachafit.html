@@ -626,27 +626,6 @@
       box-shadow: 0 0 0 3px rgba(232,101,74,0.25);
       background: rgba(255,255,255,0.12);
     }
-    .radio-row {
-      display: flex;
-      gap: 20px;
-      padding-top: 4px;
-    }
-    .radio-row label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 15px;
-      color: rgba(255,255,255,0.85);
-      font-weight: 400;
-      margin-bottom: 0;
-      cursor: pointer;
-    }
-    .radio-row input[type="radio"] {
-      accent-color: var(--coral);
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
     .checkbox-row {
       display: flex;
       gap: 10px;
@@ -738,44 +717,6 @@
       border: 1px solid var(--border);
     }
 
-    /* Share block */
-    .share-block {
-      background: var(--warm-white);
-      text-align: center;
-    }
-    .share-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 28px;
-    }
-    .share-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 24px;
-      border: 1px solid var(--border);
-      background: var(--white);
-      color: var(--charcoal);
-      font-size: 15px;
-      font-weight: 500;
-      font-family: var(--font-sans);
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .share-btn:hover {
-      border-color: var(--coral);
-      color: var(--coral);
-      text-decoration: none;
-    }
-    .share-btn.copied {
-      border-color: var(--turquoise);
-      color: var(--turquoise);
-    }
-
     /* Footer */
     .footer {
       background: var(--charcoal);
@@ -826,17 +767,14 @@
     span.eyebrow[data-lang="es"] { display: none; }
     body.lang-es span.eyebrow[data-lang="es"] { display: block; }
     body.lang-es span.eyebrow[data-lang="en"] { display: none; }
-    /* Share buttons stay inline-flex */
-    a.share-btn[data-lang="es"] { display: none; }
-    body.lang-es a.share-btn[data-lang="es"] { display: inline-flex; }
-    body.lang-es a.share-btn[data-lang="en"] { display: none; }
     /* Grid children need display: grid when shown */
     body.lang-es .footer-grid[data-lang="es"] { display: grid; }
     body.lang-es .hero-buttons[data-lang="es"] { display: flex; }
     .hero-buttons[data-lang="es"] { display: none; }
-    /* Radio rows use flex */
-    body.lang-es .radio-row[data-lang="es"] { display: flex; }
-    .radio-row[data-lang="es"] { display: none; }
+    /* Schedule list flat (only one shown per language) */
+    .schedule-list-flat[data-lang="es"] { display: none; }
+    body.lang-es .schedule-list-flat[data-lang="es"] { display: block; }
+    body.lang-es .schedule-list-flat[data-lang="en"] { display: none; }
     /* btn anchors keep inline-flex */
     a.btn[data-lang="es"] { display: none; }
     body.lang-es a.btn[data-lang="es"] { display: inline-flex; }
