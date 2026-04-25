@@ -242,10 +242,10 @@
     }
     .lang-toggle button.active { background: var(--coral); color: var(--white); }
 
-    /* ============ HERO v2 — Immersive Panorama ============ */
+    /* ============ HERO v3 — Cinematic, Bigger, Parallax ============ */
     .hero {
       position: relative;
-      min-height: 96vh;
+      min-height: 110vh;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -260,47 +260,45 @@
       z-index: 0;
       overflow: hidden;
     }
-    /* Hero video — B&W, low-priority, lets the wordmark do the work */
+    /* Hero video — B&W, full-bleed, parallax-ready */
     .hero-video {
       position: absolute;
-      inset: 0;
+      top: -8%;
+      left: 0;
       width: 100%;
-      height: 100%;
+      height: 116%;
       object-fit: cover;
-      object-position: center 38%;
+      object-position: center 42%;
       z-index: 0;
-      filter: brightness(0.68) contrast(1.05);
+      filter: brightness(0.78) contrast(1.05);
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
     }
     /* Fallback poster for slow connects or autoplay-blocked browsers */
     .hero-fallback {
       position: absolute;
-      inset: 0;
+      top: -8%;
+      left: 0;
+      width: 100%;
+      height: 116%;
       background-image: url('/videos/chachafit-hero-poster.jpg');
       background-size: cover;
-      background-position: center 38%;
+      background-position: center 42%;
       z-index: 0;
-      filter: brightness(0.68) contrast(1.05);
+      filter: brightness(0.78) contrast(1.05);
     }
     .hero-vignette,
-    .hero-bottom-fade,
-    .hero-divider {
+    .hero-bottom-fade {
       position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 2;
     }
     .hero-vignette {
-      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%);
+      background: radial-gradient(ellipse at center, transparent 42%, rgba(0,0,0,0.50) 100%);
     }
     .hero-bottom-fade {
-      background: linear-gradient(180deg, transparent 36%, rgba(0,0,0,0.40) 72%, rgba(0,0,0,0.68) 100%);
-    }
-    .hero-divider {
-      top: auto;
-      bottom: 0;
-      height: 80px;
-      background: linear-gradient(180deg, transparent 0%, var(--warm-white) 100%);
-      z-index: 4;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.30) 78%, rgba(0,0,0,0.55) 100%);
     }
 
     /* Wordmark floating over Laura */
@@ -322,15 +320,25 @@
       line-height: 0.95;
       letter-spacing: -0.02em;
       color: var(--warm-white);
-      text-shadow:
-        0 2px 40px rgba(0,0,0,0.45),
-        0 0 90px rgba(229,167,71,0.28);
-      opacity: 0;
-      transform: scale(0.96);
-      animation: heroMarkIn 900ms cubic-bezier(0.22, 1, 0.36, 1) 120ms forwards;
+      text-shadow: 0 2px 40px rgba(0,0,0,0.45);
+      display: inline-block;
+      transition: text-shadow 900ms ease-out;
     }
-    @keyframes heroMarkIn {
-      to { opacity: 1; transform: scale(1); }
+    .hero-mark .syl {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(22px);
+      clip-path: inset(0 100% 0 0);
+      will-change: clip-path, transform, opacity;
+    }
+    .hero-mark .brand.in .syl:nth-child(1) { animation: sylReveal 800ms cubic-bezier(.22,1,.36,1) 250ms forwards; }
+    .hero-mark .brand.in .syl:nth-child(2) { animation: sylReveal 800ms cubic-bezier(.22,1,.36,1) 650ms forwards; }
+    .hero-mark .brand.in .syl:nth-child(3) { animation: sylReveal 800ms cubic-bezier(.22,1,.36,1) 1050ms forwards; }
+    @keyframes sylReveal {
+      to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+    }
+    .hero-mark .brand.glow {
+      text-shadow: 0 2px 44px rgba(0,0,0,0.5), 0 0 110px rgba(229,167,71,0.40);
     }
 
     /* Hero copy block at bottom */
@@ -383,15 +391,31 @@
       flex-wrap: wrap;
     }
 
+    /* Scroll-reveal helper for sections */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 700ms cubic-bezier(.22,1,.36,1), transform 700ms cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       .hero-mark .brand,
-      .hero-copy {
-        animation: none;
-        opacity: 1;
-        transform: none;
+      .hero-mark .syl,
+      .hero-copy,
+      .reveal {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        clip-path: none !important;
+        transition: none !important;
       }
-      .hero-pan { transform: none !important; }
+      .hero-video,
+      .hero-fallback { transform: none !important; }
     }
 
     /* Mobile hero tuning */
@@ -418,39 +442,32 @@
       line-height: 1.7;
       margin-bottom: 16px;
     }
-    .schedule-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--card-radius);
-      padding: 28px;
-      box-shadow: var(--card-shadow);
-    }
-    .schedule-card h3 {
-      margin-bottom: 16px;
-      color: var(--turquoise);
-    }
-    .schedule-list {
+    /* Flat 3-line schedule, no card */
+    .schedule-list-flat {
       list-style: none;
       padding: 0;
-      margin: 0;
+      margin: 0 auto;
+      max-width: 720px;
     }
-    .schedule-list li {
+    .schedule-list-flat li {
       display: flex;
       align-items: baseline;
-      gap: 14px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      font-size: 16px;
+      gap: 24px;
+      padding: 22px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      font-size: 18px;
     }
-    .schedule-list li:last-child { border-bottom: none; }
+    .schedule-list-flat li:last-child { border-bottom: none; }
     .schedule-time {
       font-family: var(--font-serif);
       font-weight: 600;
-      font-size: 18px;
+      font-size: 22px;
+      font-style: italic;
       color: var(--coral);
-      min-width: 118px;
+      min-width: 110px;
+      letter-spacing: -0.01em;
     }
-    .schedule-label { color: var(--charcoal); }
+    .schedule-label { color: var(--charcoal); font-weight: 500; }
 
     /* Meet Laura section */
     .meet-laura {
@@ -474,6 +491,10 @@
       max-width: 960px;
       margin: 0 auto;
     }
+    .cred-grid.cred-grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 640px;
+    }
     .cred-card {
       background: var(--white);
       border-radius: var(--card-radius);
@@ -496,51 +517,36 @@
       margin-bottom: 6px;
     }
 
-    /* Practical details */
+    /* Practical (minimal) */
     .practical { background: var(--warm-white); }
-    .practical .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: stretch;
+    .practical-mini {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 32px;
     }
-    .practical-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--card-radius);
-      padding: 28px;
-      box-shadow: var(--card-shadow);
+    .practical-mini .address-line {
+      font-size: 18px;
+      color: var(--charcoal);
+      margin-bottom: 8px;
     }
-    .practical-card h3 { margin-bottom: 12px; color: var(--turquoise); }
-    .practical-card p { margin-bottom: 10px; font-size: 16px; }
-    .practical-card ul {
-      list-style: none;
-      padding: 0;
-      margin: 8px 0 0;
-    }
-    .practical-card ul li {
-      padding: 6px 0;
-      font-size: 16px;
-      display: flex;
-      gap: 10px;
-    }
-    .practical-card ul li::before {
-      content: '•';
+    .practical-mini .bring-line {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 20px;
       color: var(--coral);
-      font-weight: 700;
     }
     .map-wrap {
       border-radius: var(--card-radius);
       overflow: hidden;
       box-shadow: var(--card-shadow);
-      height: 100%;
-      min-height: 320px;
+      height: 360px;
       background: var(--sand);
+      max-width: 880px;
+      margin: 0 auto;
     }
     .map-wrap iframe {
       width: 100%;
       height: 100%;
-      min-height: 320px;
       border: 0;
       display: block;
     }
@@ -851,175 +857,106 @@
     <button onclick="setLang('es')">ES</button>
   </div>
 
-  <!-- ============ HERO v2 — Cinematic B&W Video ============ -->
+  <!-- ============ HERO v3 — Cinematic, Bigger, Animated Wordmark ============ -->
   <section class="hero" id="hero">
     <div class="hero-scene">
       <div class="hero-fallback" aria-hidden="true"></div>
-      <video class="hero-video" autoplay muted loop playsinline preload="metadata"
+      <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="metadata"
              poster="/videos/chachafit-hero-poster.jpg"
              aria-label="Laura Treto dancing on stage, black and white footage">
         <source src="/videos/chachafit-hero.mp4" type="video/mp4">
       </video>
       <div class="hero-vignette"></div>
       <div class="hero-bottom-fade"></div>
-      <div class="hero-divider"></div>
     </div>
 
     <div class="hero-mark">
-      <span class="brand">ChaChaFit</span>
+      <span class="brand"><span class="syl">Cha</span><span class="syl">Cha</span><span class="syl">Fit</span></span>
     </div>
 
     <div class="hero-copy">
-      <span class="eyebrow" data-lang="en">ChaChaFit Pop-Up &middot; Key West</span>
-      <span class="eyebrow" data-lang="es">ChaChaFit Pop-Up &middot; Key West</span>
+      <h1 data-lang="en">Pop-Up Key West &middot; Sunset Salsa at the Pier</h1>
+      <h1 data-lang="es">Pop-Up Key West &middot; Salsa al Atardecer en el Muelle</h1>
 
-      <h1 data-lang="en">Full Moon Salsa at the Pier</h1>
-      <h1 data-lang="es">Salsa bajo la Luna Llena</h1>
-
-      <p class="hero-subtitle" data-lang="en">Free. Outdoors. No experience needed.</p>
-      <p class="hero-subtitle" data-lang="es">Gratis. Al aire libre. Sin experiencia necesaria.</p>
+      <p class="hero-subtitle" data-lang="en">Sunset salsa under the full moon. Free, all welcome.</p>
+      <p class="hero-subtitle" data-lang="es">Salsa al atardecer bajo la luna llena. Gratis, todos bienvenidos.</p>
 
       <p class="hero-meta" data-lang="en">Friday, May 1 &middot; 6:00 PM &middot; White Street Pier, Key West</p>
       <p class="hero-meta" data-lang="es">Viernes 1 de mayo &middot; 6:00 PM &middot; White Street Pier, Key West</p>
 
       <div class="hero-buttons" data-lang="en">
         <a href="#rsvp" class="btn btn-coral">Save my spot</a>
-        <a href="#whatitis" class="btn btn-outline-white">What to expect</a>
       </div>
       <div class="hero-buttons" data-lang="es">
         <a href="#rsvp" class="btn btn-coral">Reserva tu lugar</a>
-        <a href="#whatitis" class="btn btn-outline-white">Qu&eacute; esperar</a>
       </div>
     </div>
   </section>
 
-  <!-- ============ WHAT IT IS ============ -->
-  <section class="whatitis section-pad" id="whatitis">
+  <!-- ============ HOW THE NIGHT FLOWS ============ -->
+  <section class="whatitis section-pad reveal" id="whatitis">
     <div class="container">
-      <div class="two-col">
-        <div>
-          <span class="eyebrow" data-lang="en">What it is</span>
-          <span class="eyebrow" data-lang="es">De qu&eacute; se trata</span>
-          <h2 data-lang="en">Ninety minutes of salsa, bachata, and the slow ride that follows.</h2>
-          <h2 data-lang="es">Noventa minutos de salsa, bachata, y el paseo lento despu&eacute;s.</h2>
-
-          <div data-lang="en">
-            <p>Free 90-minute salsa and bachata pop-up class on White Street Pier, right before the monthly Full Moon Slow Ride rolls out. Laura teaches the basics, then everyone dances social style under the moon.</p>
-            <p>Family friendly. Bring water, wear flat shoes, show up ready to move. Partners welcome, not required.</p>
-          </div>
-          <div data-lang="es">
-            <p>Clase pop-up gratuita de 90 minutos de salsa y bachata en el White Street Pier, justo antes del Full Moon Slow Ride mensual. Laura ense&ntilde;a los pasos b&aacute;sicos y luego todos bailan social bajo la luna.</p>
-            <p>Apto para toda la familia. Trae agua, usa zapatos planos, y ven listo para moverte. Puedes venir con pareja, pero no hace falta.</p>
-          </div>
-        </div>
-
-        <aside class="schedule-card">
-          <h3 data-lang="en">Schedule</h3>
-          <h3 data-lang="es">Horario</h3>
-          <ul class="schedule-list" data-lang="en">
-            <li><span class="schedule-time">6:00 &ndash; 6:30</span><span class="schedule-label">Salsa basics</span></li>
-            <li><span class="schedule-time">6:30 &ndash; 7:00</span><span class="schedule-label">Social dance</span></li>
-            <li><span class="schedule-time">7:00 &ndash; 7:30</span><span class="schedule-label">Bachata basics</span></li>
-            <li><span class="schedule-time">7:30</span><span class="schedule-label">Full Moon Slow Ride rolls out</span></li>
-          </ul>
-          <ul class="schedule-list" data-lang="es">
-            <li><span class="schedule-time">6:00 &ndash; 6:30</span><span class="schedule-label">Salsa, pasos b&aacute;sicos</span></li>
-            <li><span class="schedule-time">6:30 &ndash; 7:00</span><span class="schedule-label">Baile social</span></li>
-            <li><span class="schedule-time">7:00 &ndash; 7:30</span><span class="schedule-label">Bachata, pasos b&aacute;sicos</span></li>
-            <li><span class="schedule-time">7:30</span><span class="schedule-label">Sale el Full Moon Slow Ride</span></li>
-          </ul>
-        </aside>
-      </div>
+      <ul class="schedule-list-flat" data-lang="en">
+        <li><span class="schedule-time">6:00 PM</span><span class="schedule-label">Music + warmup</span></li>
+        <li><span class="schedule-time">6:30 PM</span><span class="schedule-label">Class with Laura &middot; salsa + social dance</span></li>
+        <li><span class="schedule-time">7:30 PM</span><span class="schedule-label">Full Moon Slow Ride rolls out</span></li>
+      </ul>
+      <ul class="schedule-list-flat" data-lang="es">
+        <li><span class="schedule-time">6:00 PM</span><span class="schedule-label">M&uacute;sica y calentamiento</span></li>
+        <li><span class="schedule-time">6:30 PM</span><span class="schedule-label">Clase con Laura &middot; salsa y baile social</span></li>
+        <li><span class="schedule-time">7:30 PM</span><span class="schedule-label">Sale el Full Moon Slow Ride</span></li>
+      </ul>
     </div>
   </section>
 
-  <!-- ============ MEET LAURA ============ -->
-  <section class="meet-laura section-pad" id="meet-laura">
+  <!-- ============ MEET LAURA — concise ============ -->
+  <section class="meet-laura section-pad reveal" id="meet-laura">
     <div class="container">
       <div class="section-header">
-        <span class="eyebrow" data-lang="en">Meet your teacher</span>
-        <span class="eyebrow" data-lang="es">Conoce a tu profesora</span>
-        <h2 data-lang="en">Laura Treto</h2>
-        <h2 data-lang="es">Laura Treto</h2>
-        <p class="intro" data-lang="en">I'm Laura Treto. I spent 15+ years on stages across 5 continents with Acosta Danza. Now I teach movement that makes real people feel alive. This is my way of bringing that to the Keys.</p>
-        <p class="intro" data-lang="es">Soy Laura Treto. Pas&eacute; m&aacute;s de 15 a&ntilde;os en escenarios de 5 continentes con Acosta Danza. Ahora ense&ntilde;o movimiento que hace que personas reales se sientan vivas. Esta es mi forma de traer eso a los Keys.</p>
+        <p class="intro" data-lang="en">I'm Laura. 15 years on stages across 5 continents at the highest level of professional dancing. Now I teach movement that makes people feel alive.</p>
+        <p class="intro" data-lang="es">Soy Laura. 15 a&ntilde;os en escenarios de 5 continentes al m&aacute;s alto nivel de la danza profesional. Ahora ense&ntilde;o movimiento que hace que la gente se sienta viva.</p>
       </div>
 
       <!-- EN credentials -->
-      <div class="cred-grid" data-lang="en">
-        <div class="cred-card"><span class="cred-label">Dance</span>Founding Member, Acosta Danza</div>
-        <div class="cred-card"><span class="cred-label">Film</span>Featured in Yuli (2018)</div>
-        <div class="cred-card"><span class="cred-label">Visa</span>O-1B, Extraordinary Ability</div>
+      <div class="cred-grid cred-grid-2" data-lang="en">
         <div class="cred-card"><span class="cred-label">Stage</span>1,000+ International Performances</div>
         <div class="cred-card"><span class="cred-label">Fitness</span>NASM Certified Personal Trainer</div>
-        <div class="cred-card"><span class="cred-label">Language</span>Bilingual, English &amp; Spanish</div>
       </div>
       <!-- ES credentials -->
-      <div class="cred-grid" data-lang="es">
-        <div class="cred-card"><span class="cred-label">Danza</span>Miembro fundadora, Acosta Danza</div>
-        <div class="cred-card"><span class="cred-label">Cine</span>Pel&iacute;cula Yuli (2018)</div>
-        <div class="cred-card"><span class="cred-label">Visa</span>O-1B, Habilidad Extraordinaria</div>
+      <div class="cred-grid cred-grid-2" data-lang="es">
         <div class="cred-card"><span class="cred-label">Escenario</span>M&aacute;s de 1,000 presentaciones internacionales</div>
         <div class="cred-card"><span class="cred-label">Fitness</span>Entrenadora Personal Certificada NASM</div>
-        <div class="cred-card"><span class="cred-label">Idiomas</span>Biling&uuml;e, ingl&eacute;s y espa&ntilde;ol</div>
       </div>
     </div>
   </section>
 
-  <!-- ============ PRACTICAL DETAILS ============ -->
-  <section class="practical section-pad" id="details">
+  <!-- ============ WHERE — minimal address + map ============ -->
+  <section class="practical section-pad reveal" id="details">
     <div class="container">
-      <div class="section-header" style="max-width:720px;margin:0 auto 40px;text-align:center;">
-        <span class="eyebrow" data-lang="en">Practical details</span>
-        <span class="eyebrow" data-lang="es">Detalles pr&aacute;cticos</span>
-        <h2 data-lang="en">Everything you need to show up</h2>
-        <h2 data-lang="es">Todo lo que necesitas para venir</h2>
+      <div class="practical-mini">
+        <p class="address-line" data-lang="en"><strong>White Street Pier</strong> &middot; 1899 White Street, Key West, FL</p>
+        <p class="address-line" data-lang="es"><strong>White Street Pier</strong> &middot; 1899 White Street, Key West, FL</p>
+        <p class="bring-line" data-lang="en">Bring water and a friend.</p>
+        <p class="bring-line" data-lang="es">Trae agua y a un amigo.</p>
       </div>
-      <div class="two-col">
-        <div class="practical-card">
-          <h3 data-lang="en">Where, when, what to bring</h3>
-          <h3 data-lang="es">D&oacute;nde, cu&aacute;ndo, qu&eacute; traer</h3>
-
-          <div data-lang="en">
-            <p><strong>Edward B. Knight Pier</strong> (White Street Pier)<br>1899 White Street, Key West, FL 33040</p>
-            <p><strong>Friday, May 1 at 6:00 PM</strong></p>
-            <ul>
-              <li>Bring: water, flat shoes, a friend</li>
-              <li>Wear: whatever you can move in</li>
-              <li>Weather: rain postpones. We will email 48 hours ahead if that happens.</li>
-            </ul>
-          </div>
-          <div data-lang="es">
-            <p><strong>Edward B. Knight Pier</strong> (White Street Pier)<br>1899 White Street, Key West, FL 33040</p>
-            <p><strong>Viernes 1 de mayo, 6:00 PM</strong></p>
-            <ul>
-              <li>Trae: agua, zapatos planos, y a alguien contigo</li>
-              <li>Ropa: algo en lo que te puedas mover</li>
-              <li>Clima: si llueve, se pospone. Te enviamos un correo con 48 horas de aviso.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="map-wrap">
-          <iframe
-            src="https://www.google.com/maps?q=Edward+B.+Knight+Pier+White+Street+Pier+Key+West+FL+33040&output=embed"
-            title="Map to Edward B. Knight Pier, Key West"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen></iframe>
-        </div>
+      <div class="map-wrap">
+        <iframe
+          src="https://www.google.com/maps?q=Edward+B.+Knight+Pier+White+Street+Pier+Key+West+FL+33040&output=embed"
+          title="Map to White Street Pier, Key West"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
       </div>
     </div>
   </section>
 
   <!-- ============ RSVP ============ -->
-  <section class="rsvp section-pad" id="rsvp">
+  <section class="rsvp section-pad reveal" id="rsvp">
     <div class="container">
-      <span class="eyebrow eyebrow-center" data-lang="en">Save my spot</span>
-      <span class="eyebrow eyebrow-center" data-lang="es">Reserva tu lugar</span>
-      <h2 data-lang="en">RSVP for Friday</h2>
-      <h2 data-lang="es">Conf&iacute;rmame para el viernes</h2>
-      <p class="subtitle" data-lang="en">It's free and it helps us plan. We will email you the weather call 48 hours before.</p>
-      <p class="subtitle" data-lang="es">Es gratis y nos ayuda a planear. Te avisamos sobre el clima 48 horas antes.</p>
+      <h2 data-lang="en">Save my spot</h2>
+      <h2 data-lang="es">Reserva tu lugar</h2>
+      <p class="subtitle" data-lang="en">Free. It just helps us plan.</p>
+      <p class="subtitle" data-lang="es">Gratis. Solo nos ayuda a planear.</p>
 
       <div class="rsvp-card">
         <form id="rsvp-form" name="event-signup" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" novalidate>
@@ -1047,18 +984,7 @@
               required maxlength="120" autocomplete="email" />
           </div>
 
-          <div class="form-group">
-            <label data-lang="en">Language preference</label>
-            <label data-lang="es">Idioma preferido</label>
-            <div class="radio-row" data-lang="en">
-              <label><input type="radio" name="language" value="en" checked /> English</label>
-              <label><input type="radio" name="language" value="es" /> Espa&ntilde;ol</label>
-            </div>
-            <div class="radio-row" data-lang="es">
-              <label><input type="radio" name="language" value="en" /> English</label>
-              <label><input type="radio" name="language" value="es" checked /> Espa&ntilde;ol</label>
-            </div>
-          </div>
+          <input type="hidden" name="language" id="rsvp-language" value="en" />
 
           <div class="checkbox-row">
             <input type="checkbox" id="future_events" name="future_events" value="on" checked />
@@ -1094,7 +1020,7 @@
   </section>
 
   <!-- ============ QR FUNNEL ============ -->
-  <section class="qr-funnel section-pad" id="qr-funnel">
+  <section class="qr-funnel section-pad reveal" id="qr-funnel">
     <div class="container">
       <div class="section-header" style="max-width:720px;margin:0 auto;">
         <span class="eyebrow" data-lang="en">Two quick scans</span>
@@ -1122,33 +1048,6 @@
           <a href="#rsvp" class="btn btn-outline-dark" data-lang="en">Get on the list</a>
           <a href="#rsvp" class="btn btn-outline-dark" data-lang="es">Ap&uacute;ntame</a>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ SHARE ============ -->
-  <section class="share-block section-pad" id="share">
-    <div class="container">
-      <span class="eyebrow" data-lang="en">Tell a friend</span>
-      <span class="eyebrow" data-lang="es">Cu&eacute;ntale a alguien</span>
-      <h2 data-lang="en">Bring someone who needs a reason to dance</h2>
-      <h2 data-lang="es">Trae a alguien que necesite una raz&oacute;n para bailar</h2>
-
-      <div class="share-buttons">
-        <a id="share-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="share-btn">
-          <span data-lang="en">Share on WhatsApp</span>
-          <span data-lang="es">Compartir por WhatsApp</span>
-        </a>
-        <button type="button" class="share-btn" onclick="copyIgStory(this)">
-          <span data-lang="en">Copy link for IG Story</span>
-          <span data-lang="es">Copiar link para IG Story</span>
-        </button>
-        <button type="button" class="share-btn" onclick="copyUrl(this)">
-          <span data-lang="en">Copy URL</span>
-          <span data-lang="es">Copiar URL</span>
-        </button>
-        <a href="/images/chachafit-flyer-en.pdf" class="share-btn" data-lang="en" target="_blank" rel="noopener noreferrer">Flyer (PDF)</a>
-        <a href="/images/chachafit-flyer-es.pdf" class="share-btn" data-lang="es" target="_blank" rel="noopener noreferrer">Volante (PDF)</a>
       </div>
     </div>
   </section>
@@ -1216,16 +1115,9 @@
           : el.getAttribute('data-placeholder-en');
       });
 
-      // Sync language radio with page language if the current pick still matches
-      // the previous page language (do not clobber an explicit user choice).
-      var radios = document.querySelectorAll('input[name="language"]');
-      var allChecked = Array.from(radios).filter(function(r) { return r.checked; }).map(function(r) { return r.value; });
-      if (allChecked.length === 0 || allChecked.every(function(v) { return v !== lang; })) {
-        radios.forEach(function(r) { r.checked = (r.value === lang); });
-      }
-
-      // Refresh WhatsApp share link
-      buildWhatsAppLink();
+      // Sync hidden language input on RSVP form
+      var langField = document.getElementById('rsvp-language');
+      if (langField) langField.value = lang;
 
       try { localStorage.setItem('ltc-lang', lang); } catch(e) {}
     }
@@ -1247,21 +1139,106 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // --- Hero video: respect prefers-reduced-motion (pause if reduce) ---
+    // --- Hero video: autoplay reliability + reduced-motion ---
     (function heroVideo() {
       var video = document.querySelector('.hero-video');
       if (!video) return;
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      function tryPlay() {
+        var p = video.play();
+        if (p && p.catch) p.catch(function() { /* autoplay blocked — fallback to first interaction */ });
+      }
       function apply() {
-        if (reduced.matches) {
-          try { video.pause(); } catch(e) {}
-        } else {
-          var p = video.play();
-          if (p && p.catch) p.catch(function() { /* autoplay blocked — poster stays */ });
-        }
+        if (reduced.matches) { try { video.pause(); } catch(e) {} }
+        else { tryPlay(); }
       }
       apply();
-      reduced.addEventListener ? reduced.addEventListener('change', apply) : reduced.addListener(apply);
+      (reduced.addEventListener ? reduced.addEventListener.bind(reduced) : reduced.addListener.bind(reduced))('change', apply);
+
+      // Defensive: kick play() on first user interaction in case autoplay was blocked
+      function onFirstInteract() {
+        if (!reduced.matches && video.paused) tryPlay();
+        document.removeEventListener('pointerdown', onFirstInteract, true);
+        document.removeEventListener('touchstart', onFirstInteract, true);
+        document.removeEventListener('keydown', onFirstInteract, true);
+      }
+      document.addEventListener('pointerdown', onFirstInteract, true);
+      document.addEventListener('touchstart', onFirstInteract, true);
+      document.addEventListener('keydown', onFirstInteract, true);
+
+      // Resume on tab visibility return
+      document.addEventListener('visibilitychange', function() {
+        if (!document.hidden && !reduced.matches && video.paused) tryPlay();
+      });
+    })();
+
+    // --- Wordmark sequential reveal (Cha → Cha → Fit) ---
+    (function wordmarkReveal() {
+      var brand = document.querySelector('.hero-mark .brand');
+      if (!brand) return;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (reduced.matches) {
+        brand.classList.add('in', 'glow');
+        return;
+      }
+      // Trigger on next frame so the staggered animations play
+      requestAnimationFrame(function() {
+        brand.classList.add('in');
+        // Bloom the warm glow after all three syllables settle (~2000ms)
+        setTimeout(function() { brand.classList.add('glow'); }, 1900);
+      });
+    })();
+
+    // --- Hero parallax (desktop only, respects reduced-motion) ---
+    (function heroParallax() {
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var narrow = window.matchMedia('(max-width: 899px)');
+      if (reduced.matches || narrow.matches) return;
+
+      var video = document.querySelector('.hero-video');
+      var fallback = document.querySelector('.hero-fallback');
+      var hero = document.querySelector('.hero');
+      if (!hero || (!video && !fallback)) return;
+
+      var ticking = false;
+      function update() {
+        var rect = hero.getBoundingClientRect();
+        // 0 when hero starts entering top, 1 when hero fully scrolled past
+        var progress = Math.min(Math.max(-rect.top / rect.height, 0), 1.2);
+        // Translate the bg up to ~12% over the full hero scroll-past = "video crawls slower"
+        var ty = -12 * progress;
+        var t = 'translate3d(0, ' + ty.toFixed(3) + '%, 0)';
+        if (video) video.style.transform = t;
+        if (fallback) fallback.style.transform = t;
+        ticking = false;
+      }
+      function onScroll() {
+        if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      update();
+    })();
+
+    // --- Scroll-reveal sections ---
+    (function scrollReveal() {
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var els = document.querySelectorAll('.reveal');
+      if (!els.length) return;
+      if (reduced.matches || !('IntersectionObserver' in window)) {
+        els.forEach(function(el) { el.classList.add('is-visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+      els.forEach(function(el) { io.observe(el); });
     })();
 
     // --- RSVP submit ---
@@ -1340,43 +1317,6 @@
       });
     }
 
-    // --- Share helpers ---
-    function buildWhatsAppLink() {
-      var isEs = document.body.classList.contains('lang-es');
-      var url = 'https://lauratreto.com/chachafit';
-      var text = isEs
-        ? 'Salsa bajo la Luna Llena, viernes 1 de mayo, 6 PM en White Street Pier. Gratis, sin experiencia necesaria. ' + url
-        : 'Full Moon Salsa at the Pier, Friday May 1 at 6 PM on White Street Pier. Free, no experience needed. ' + url;
-      var a = document.getElementById('share-whatsapp');
-      if (a) a.href = 'https://wa.me/?text=' + encodeURIComponent(text);
-    }
-    buildWhatsAppLink();
-
-    function copyUrl(btn) {
-      var url = 'https://lauratreto.com/chachafit';
-      navigator.clipboard.writeText(url).then(function() { flashCopied(btn); });
-    }
-    window.copyUrl = copyUrl;
-
-    function copyIgStory(btn) {
-      var isEs = document.body.classList.contains('lang-es');
-      var text = isEs
-        ? 'Salsa bajo la Luna Llena · Viernes 1 de mayo · 6 PM · White Street Pier · Gratis · lauratreto.com/chachafit'
-        : 'Full Moon Salsa at the Pier · Friday May 1 · 6 PM · White Street Pier · Free · lauratreto.com/chachafit';
-      navigator.clipboard.writeText(text).then(function() { flashCopied(btn); });
-    }
-    window.copyIgStory = copyIgStory;
-
-    function flashCopied(btn) {
-      var isEs = document.body.classList.contains('lang-es');
-      var origHTML = btn.innerHTML;
-      btn.classList.add('copied');
-      btn.innerHTML = isEs ? 'Copiado' : 'Copied';
-      setTimeout(function() {
-        btn.classList.remove('copied');
-        btn.innerHTML = origHTML;
-      }, 1800);
-    }
   </script>
 </body>
 </html>
