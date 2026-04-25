@@ -272,14 +272,35 @@
       filter: brightness(0.78) contrast(1.05);
       pointer-events: none; /* prevent iOS tap-to-play UI from intercepting */
     }
-    /* Hide iOS Safari's auto "tap to play" button overlay */
+    /* Nuke iOS Safari's auto "tap to play" overlay across all WebKit pseudo-elements */
     .hero-video::-webkit-media-controls,
+    .hero-video::-webkit-media-controls-enclosure,
+    .hero-video::-webkit-media-controls-overlay-enclosure,
     .hero-video::-webkit-media-controls-panel,
+    .hero-video::-webkit-media-controls-panel-container,
     .hero-video::-webkit-media-controls-start-playback-button,
-    .hero-video::-webkit-media-controls-overlay-play-button {
+    .hero-video::-webkit-media-controls-overlay-play-button,
+    .hero-video::-webkit-media-controls-play-button,
+    .hero-video::-webkit-media-controls-fullscreen-button,
+    .hero-video::-webkit-media-controls-mute-button,
+    .hero-video::-webkit-media-controls-volume-slider,
+    .hero-video::-webkit-media-controls-timeline,
+    .hero-video::-webkit-media-controls-current-time-display,
+    .hero-video::-webkit-media-controls-time-remaining-display,
+    .hero-video::-webkit-media-controls-toggle-closed-captions-button {
       display: none !important;
       -webkit-appearance: none !important;
       opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+    /* Transparent shield over the video swallows taps so iOS doesn't think the user is interacting with media controls */
+    .hero-video-shield {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: transparent;
+      pointer-events: auto;
     }
     /* Fallback poster for slow connects or autoplay-blocked browsers */
     .hero-fallback {
@@ -865,11 +886,17 @@
   <section class="hero" id="hero">
     <div class="hero-scene">
       <div class="hero-fallback" aria-hidden="true"></div>
-      <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="metadata"
+      <video class="hero-video"
+             autoplay muted loop playsinline webkit-playsinline
+             disablePictureInPicture disableRemotePlayback
+             x-webkit-airplay="deny"
+             controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+             preload="auto"
              poster="/videos/chachafit-hero-poster.jpg"
              aria-label="Laura Treto dancing on stage, black and white footage">
         <source src="/videos/chachafit-hero.mp4" type="video/mp4">
       </video>
+      <div class="hero-video-shield" aria-hidden="true"></div>
       <div class="hero-vignette"></div>
       <div class="hero-bottom-fade"></div>
     </div>
