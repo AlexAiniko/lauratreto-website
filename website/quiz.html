@@ -578,7 +578,30 @@
     background: var(--sunset-coral);
   }
   .intro-start {
-    margin-top: 28px;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 28px auto 0; /* override .btn-next's margin-left:auto for question screens */
+    padding: 14px 36px;
+  }
+
+  /* Word-stagger animation on intro headline — simple, single-shot on load */
+  .intro-screen h2 .w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: introWordIn 700ms cubic-bezier(.22,1,.36,1) forwards;
+    animation-delay: calc(110ms * var(--i, 0));
+  }
+  @keyframes introWordIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .intro-screen h2 .w {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
   }
 
   /* ── Responsive ── */
@@ -1360,6 +1383,23 @@
     form.querySelector('button[type="submit"]').style.display = 'none';
     document.getElementById('formSuccess').style.display = 'block';
   }
+
+  // Wrap words in <span> on intro headline so each word can stagger in via CSS.
+  // Runs once on load. Both EN and ES headlines get animated; only the visible
+  // one is seen.
+  (function animateIntroHeadlines() {
+    var headings = document.querySelectorAll('.intro-screen h2[data-lang]');
+    headings.forEach(function(h) {
+      if (h.dataset.split === '1') return;
+      var raw = h.textContent.trim();
+      h.dataset.split = '1';
+      h.innerHTML = raw.split(/\s+/).map(function(w, i) {
+        // textContent on the wrapper means the browser already decoded HTML entities
+        // (e.g., ¿) — safe to inject directly here.
+        return '<span class="w" style="--i:' + i + '">' + w + '</span>';
+      }).join(' ');
+    });
+  })();
 })();
 </script>
 

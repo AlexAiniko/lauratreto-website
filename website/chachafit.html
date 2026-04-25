@@ -270,6 +270,16 @@
       object-position: center 42%;
       z-index: 0;
       filter: brightness(0.78) contrast(1.05);
+      pointer-events: none; /* prevent iOS tap-to-play UI from intercepting */
+    }
+    /* Hide iOS Safari's auto "tap to play" button overlay */
+    .hero-video::-webkit-media-controls,
+    .hero-video::-webkit-media-controls-panel,
+    .hero-video::-webkit-media-controls-start-playback-button,
+    .hero-video::-webkit-media-controls-overlay-play-button {
+      display: none !important;
+      -webkit-appearance: none !important;
+      opacity: 0 !important;
     }
     /* Fallback poster for slow connects or autoplay-blocked browsers */
     .hero-fallback {
