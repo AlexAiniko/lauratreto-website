@@ -454,47 +454,139 @@
       position:absolute;top:36px;right:32px;width:28px;height:28px;color:var(--red);opacity:.85;
     }
 
-    /* ----- ABOUT (full-bleed video bg with staggered text) ----- */
+    /* ----- ABOUT (sticky-pinned video + 3-step scrollytelling) ----- */
     .about-section{
       position:relative;
-      overflow:hidden;
-      padding:140px 28px;
-      color:var(--cream-2);
       isolation:isolate;
+      color:var(--cream-2);
+      background:var(--ink); /* fallback if video fails */
+    }
+    .about-sticky{
+      position:sticky;
+      top:0;
+      height:100vh;
+      width:100%;
+      overflow:hidden;
+      z-index:1;
     }
     .about-bg-video{
       position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-      z-index:0;
+      filter:saturate(1.05) brightness(.62);
       transform:scale(1.05);
-      filter:saturate(1.05) brightness(.7);
     }
     .about-overlay{
-      position:absolute;inset:0;z-index:1;
+      position:absolute;inset:0;
       background:
-        radial-gradient(1200px 600px at 80% 30%, rgba(216,68,42,.14), transparent 60%),
-        linear-gradient(180deg, rgba(42,51,68,.45) 0%, rgba(42,51,68,.62) 50%, rgba(42,51,68,.78) 100%);
+        radial-gradient(1000px 600px at 70% 30%, rgba(216,68,42,.15), transparent 60%),
+        linear-gradient(180deg, rgba(42,51,68,.4) 0%, rgba(42,51,68,.62) 50%, rgba(42,51,68,.78) 100%);
     }
-    .about-stack{
-      position:relative;z-index:2;
-      max-width:880px;
-      display:grid;gap:36px;
+    .about-track{
+      position:relative;
+      margin-top:-100vh;
+      z-index:2;
+      pointer-events:none; /* let scroll pass through to video underneath if needed */
     }
-    .about-block{
-      opacity:0;
-      transform:translateY(40px);
-      transition:opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1);
+    .about-track .step{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:60px 28px;
+      text-align:center;
     }
-    .about-block.in{opacity:1;transform:translateY(0)}
 
-    /* About color overrides — text sits on dark/saturated video */
-    .about-section .kicker{color:#F4D9C0}
-    .about-section h2.section-title{color:var(--cream-2);text-shadow:0 2px 24px rgba(0,0,0,.55)}
-    .about-section h2.section-title em{color:#F4D9C0}
-    .about-section .quote{color:var(--cream-2);text-shadow:0 2px 16px rgba(0,0,0,.55)}
-    .about-section .signature{color:#F4D9C0;font-size:42px}
-    .about-section .stat{border-top-color:rgba(247,239,224,.3)}
-    .about-section .stat .k{color:#F4D9C0;text-shadow:0 2px 12px rgba(0,0,0,.45)}
-    .about-section .stat .v{color:#E8D7BC}
+    /* Step 1: handwritten signature */
+    .step-signature .signature{
+      font-family:"Caveat",cursive;font-weight:700;
+      font-size:clamp(96px, 16vw, 200px);
+      color:#F4D9C0;
+      text-shadow:0 4px 36px rgba(0,0,0,.45), 0 0 80px rgba(244,217,192,.2);
+      transform:rotate(-3deg) translateY(20px);
+      opacity:0;
+      transition:opacity 1s ease, transform 1s cubic-bezier(.22,1,.36,1);
+      will-change:opacity,transform;
+    }
+    .step-signature.in .signature{
+      opacity:1;
+      transform:rotate(-3deg) translateY(0);
+    }
+
+    /* Step 2: 4-stat grid scrolls up */
+    .step-stats .stat-grid{
+      display:grid;grid-template-columns:repeat(2, 1fr);gap:48px 80px;
+      max-width:720px;margin:0 auto;
+      text-align:left;
+    }
+    .step-stats .stat{
+      border-top:1.5px solid rgba(247,239,224,.32);
+      padding-top:18px;
+      opacity:0;
+      transform:translateY(48px);
+      transition:opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1);
+      will-change:opacity,transform;
+    }
+    .step-stats.in .stat{opacity:1;transform:translateY(0)}
+    .step-stats.in .stat:nth-child(1){transition-delay:0ms}
+    .step-stats.in .stat:nth-child(2){transition-delay:140ms}
+    .step-stats.in .stat:nth-child(3){transition-delay:280ms}
+    .step-stats.in .stat:nth-child(4){transition-delay:420ms}
+    .step-stats .stat .k{
+      font-family:"Alfa Slab One",serif;font-size:clamp(40px, 5vw, 64px);
+      color:#F4D9C0;line-height:1;
+      text-shadow:0 2px 16px rgba(0,0,0,.5);
+    }
+    .step-stats .stat .v{
+      font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+      color:#E8D7BC;margin-top:10px;
+      text-shadow:0 1px 8px rgba(0,0,0,.4);
+    }
+
+    /* Step 3: kicker + h2 + quote */
+    .step-heading-inner{max-width:820px}
+    .step-heading .kicker{
+      color:#F4D9C0;
+      opacity:0;transform:translateY(20px);
+      transition:opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1);
+    }
+    .step-heading h2.section-title{
+      color:var(--cream-2);
+      text-shadow:0 2px 28px rgba(0,0,0,.6);
+      margin-top:14px;
+      opacity:0;transform:translateY(36px);
+      transition:opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1);
+      transition-delay:.18s;
+    }
+    .step-heading h2.section-title em{color:#F4D9C0}
+    .step-heading .quote{
+      color:var(--cream-2);
+      text-shadow:0 2px 18px rgba(0,0,0,.6);
+      margin:28px auto 0;max-width:60ch;
+      opacity:0;transform:translateY(36px);
+      transition:opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1);
+      transition-delay:.36s;
+    }
+    .step-heading.in .kicker,
+    .step-heading.in h2.section-title,
+    .step-heading.in .quote{opacity:1;transform:translateY(0)}
+
+    /* mobile tightening */
+    @media (max-width: 980px){
+      .step-stats .stat-grid{gap:32px 40px;max-width:520px}
+      .step-stats .stat .k{font-size:clamp(36px, 9vw, 52px)}
+      .step-signature .signature{font-size:clamp(80px, 22vw, 140px)}
+    }
+    @media (max-width: 640px){
+      .about-track .step{padding:80px 22px}
+      .step-stats .stat-grid{gap:28px 24px}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .step-signature .signature,
+      .step-stats .stat,
+      .step-heading .kicker,
+      .step-heading h2.section-title,
+      .step-heading .quote{opacity:1;transform:none;transition:none}
+      .about-bg-video{transform:none}
+    }
 
     /* iOS Safari nuke for .about-bg-video */
     .about-bg-video::-webkit-media-controls,
@@ -953,37 +1045,29 @@
   </div>
 </section>
 
-<!-- ===================== ABOUT (full-bleed Laura video bg + staggered stack) ===================== -->
+<!-- ===================== ABOUT (sticky-pinned Laura video, 3-step scrollytelling) ===================== -->
 <section class="about-section" id="about">
-  <video class="about-bg-video"
-         autoplay muted loop playsinline webkit-playsinline
-         disablePictureInPicture disableRemotePlayback
-         x-webkit-airplay="deny"
-         controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
-         preload="metadata"
-         poster="/videos/chachafit-pier-laura-poster.jpg"
-         aria-hidden="true">
-    <source src="/videos/chachafit-pier-laura-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
-    <source src="/videos/chachafit-pier-laura.mp4" type="video/mp4">
-  </video>
-  <div class="about-overlay" aria-hidden="true"></div>
-  <div class="container about-stack">
-    <div class="about-block">
-      <div class="kicker" data-lang="en">About Laura</div>
-      <div class="kicker" data-lang="es">Sobre Laura</div>
-    </div>
-    <div class="about-block">
-      <h2 class="section-title" data-lang="en">15 years of stages.<br><em>Now she teaches the rest of us.</em></h2>
-      <h2 class="section-title" data-lang="es">15 años en escenarios.<br><em>Ahora le enseña al resto.</em></h2>
-    </div>
-    <div class="about-block">
-      <p class="quote" data-lang="en">"I want you to leave the pier moving differently than you arrived: looser, lighter, a little more alive."</p>
-      <p class="quote" data-lang="es">"Quiero que salgas del muelle moviéndote diferente: más suelta, más ligera, un poco más viva."</p>
-    </div>
-    <div class="about-block">
+  <div class="about-sticky">
+    <video class="about-bg-video"
+           autoplay muted loop playsinline webkit-playsinline
+           disablePictureInPicture disableRemotePlayback
+           x-webkit-airplay="deny"
+           controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+           preload="metadata"
+           poster="/videos/chachafit-pier-laura-poster.jpg"
+           aria-hidden="true">
+      <source src="/videos/chachafit-pier-laura-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
+      <source src="/videos/chachafit-pier-laura.mp4" type="video/mp4">
+    </video>
+    <div class="about-overlay" aria-hidden="true"></div>
+  </div>
+  <div class="about-track">
+    <!-- Step 1: signature -->
+    <div class="step step-signature">
       <span class="signature">Laura</span>
     </div>
-    <div class="about-block">
+    <!-- Step 2: stats scroll up first -->
+    <div class="step step-stats">
       <div class="stat-grid">
         <div class="stat">
           <div class="k">1,000+</div>
@@ -1006,6 +1090,17 @@
           <div class="v" data-lang="en">Pro dancing &amp; coaching</div>
           <div class="v" data-lang="es">Bailando y entrenando</div>
         </div>
+      </div>
+    </div>
+    <!-- Step 3: header + quote -->
+    <div class="step step-heading">
+      <div class="step-heading-inner">
+        <div class="kicker" data-lang="en">About Laura</div>
+        <div class="kicker" data-lang="es">Sobre Laura</div>
+        <h2 class="section-title" data-lang="en">15 years of stages.<br><em>Now she teaches the rest of us.</em></h2>
+        <h2 class="section-title" data-lang="es">15 años en escenarios.<br><em>Ahora le enseña al resto.</em></h2>
+        <p class="quote" data-lang="en">"I want you to leave the pier moving differently than you arrived: looser, lighter, a little more alive."</p>
+        <p class="quote" data-lang="es">"Quiero que salgas del muelle moviéndote diferente: más suelta, más ligera, un poco más viva."</p>
       </div>
     </div>
   </div>
@@ -1286,25 +1381,23 @@
     });
   })();
 
-  // --- About-Laura: staggered block-by-block reveal over the bg video ---
-  (function aboutStagger() {
-    var blocks = document.querySelectorAll('.about-block');
-    if (!blocks.length) return;
+  // --- About-Laura sticky scrollytelling: trigger each step as it enters viewport ---
+  (function aboutSticky() {
+    var steps = document.querySelectorAll('.about-track .step');
+    if (!steps.length) return;
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (reduced.matches || !('IntersectionObserver' in window)) {
-      blocks.forEach(function(b){ b.classList.add('in'); });
+      steps.forEach(function(s){ s.classList.add('in'); });
       return;
     }
     var io = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
-          var idx = Array.prototype.indexOf.call(blocks, entry.target);
-          setTimeout(function(){ entry.target.classList.add('in'); }, idx * 180);
-          io.unobserve(entry.target);
+          entry.target.classList.add('in');
         }
       });
-    }, { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
-    blocks.forEach(function(b){ io.observe(b); });
+    }, { threshold: 0.4 });
+    steps.forEach(function(s){ io.observe(s); });
   })();
 
   // --- Scroll-reveal sections ---
