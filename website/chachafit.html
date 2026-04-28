@@ -454,7 +454,66 @@
       position:absolute;top:36px;right:32px;width:28px;height:28px;color:var(--red);opacity:.85;
     }
 
-    /* ----- ABOUT ----- */
+    /* ----- ABOUT (full-bleed video bg with staggered text) ----- */
+    .about-section{
+      position:relative;
+      overflow:hidden;
+      padding:140px 28px;
+      color:var(--cream-2);
+      isolation:isolate;
+    }
+    .about-bg-video{
+      position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+      z-index:0;
+      transform:scale(1.05);
+      filter:saturate(1.05) brightness(.7);
+    }
+    .about-overlay{
+      position:absolute;inset:0;z-index:1;
+      background:
+        radial-gradient(1200px 600px at 80% 30%, rgba(216,68,42,.14), transparent 60%),
+        linear-gradient(180deg, rgba(42,51,68,.45) 0%, rgba(42,51,68,.62) 50%, rgba(42,51,68,.78) 100%);
+    }
+    .about-stack{
+      position:relative;z-index:2;
+      max-width:880px;
+      display:grid;gap:36px;
+    }
+    .about-block{
+      opacity:0;
+      transform:translateY(40px);
+      transition:opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1);
+    }
+    .about-block.in{opacity:1;transform:translateY(0)}
+
+    /* About color overrides — text sits on dark/saturated video */
+    .about-section .kicker{color:#F4D9C0}
+    .about-section h2.section-title{color:var(--cream-2);text-shadow:0 2px 24px rgba(0,0,0,.55)}
+    .about-section h2.section-title em{color:#F4D9C0}
+    .about-section .quote{color:var(--cream-2);text-shadow:0 2px 16px rgba(0,0,0,.55)}
+    .about-section .signature{color:#F4D9C0;font-size:42px}
+    .about-section .stat{border-top-color:rgba(247,239,224,.3)}
+    .about-section .stat .k{color:#F4D9C0;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+    .about-section .stat .v{color:#E8D7BC}
+
+    /* iOS Safari nuke for .about-bg-video */
+    .about-bg-video::-webkit-media-controls,
+    .about-bg-video::-webkit-media-controls-enclosure,
+    .about-bg-video::-webkit-media-controls-overlay-enclosure,
+    .about-bg-video::-webkit-media-controls-panel,
+    .about-bg-video::-webkit-media-controls-panel-container,
+    .about-bg-video::-webkit-media-controls-start-playback-button,
+    .about-bg-video::-webkit-media-controls-overlay-play-button,
+    .about-bg-video::-webkit-media-controls-play-button,
+    .about-bg-video::-webkit-media-controls-fullscreen-button{
+      display:none !important;
+      -webkit-appearance:none !important;
+      opacity:0 !important;
+      visibility:hidden !important;
+      pointer-events:none !important;
+    }
+
+    /* ----- ABOUT (legacy photo-frame styles, kept dormant) ----- */
     .about-wrap{
       display:grid;grid-template-columns: .9fr 1.1fr;gap:64px;align-items:center;
     }
@@ -734,18 +793,7 @@
 </nav>
 
 <!-- ===================== HERO ===================== -->
-<section class="hero paper hero-with-video">
-  <video class="hero-bg-video"
-         autoplay muted loop playsinline webkit-playsinline
-         disablePictureInPicture disableRemotePlayback
-         x-webkit-airplay="deny"
-         controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
-         preload="metadata"
-         poster="/videos/chachafit-pier-bg-poster.jpg"
-         src="/videos/chachafit-pier-bg.mp4"
-         aria-hidden="true"></video>
-  <div class="hero-video-shield" aria-hidden="true"></div>
-  <div class="hero-bg-veil" aria-hidden="true"></div>
+<section class="hero paper">
 
   <div class="hero-grid">
     <div class="hero-copy">
@@ -812,10 +860,10 @@
                x-webkit-airplay="deny"
                controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
                preload="metadata"
-               poster="/videos/chachafit-pier-laura-poster.jpg"
+               poster="/videos/chachafit-pier-bg-poster.jpg"
                aria-hidden="true">
-          <source src="/videos/chachafit-pier-laura-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
-          <source src="/videos/chachafit-pier-laura.mp4" type="video/mp4">
+          <source src="/videos/chachafit-pier-bg-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
+          <source src="/videos/chachafit-pier-bg.mp4" type="video/mp4">
         </video>
         <div class="stamp"><span data-lang="en">FULL<b>MOON</b>EDITION</span><span data-lang="es">EDICIÓN<b>LUNA</b>LLENA</span></div>
       </div>
@@ -905,89 +953,83 @@
   </div>
 </section>
 
-<!-- ===================== ABOUT ===================== -->
-<section class="section paper reveal" id="about" style="padding-top:0">
-  <div class="container">
-    <div class="about-wrap">
-      <div class="photo-frame">
-        <span class="tape" aria-hidden="true"></span>
-        <video class="laura-video"
-               autoplay muted loop playsinline webkit-playsinline
-               disablePictureInPicture disableRemotePlayback
-               x-webkit-airplay="deny"
-               controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
-               preload="none"
-               poster="/videos/chachafit-pier-laura-poster.jpg"
-               aria-hidden="true">
-          <source src="/videos/chachafit-pier-laura-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
-          <source src="/videos/chachafit-pier-laura.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div>
-        <div class="kicker" data-lang="en">About Laura</div>
-        <div class="kicker" data-lang="es">Sobre Laura</div>
-        <h2 class="section-title" data-lang="en">15 years of stages.<br><em>Now she teaches the rest of us.</em></h2>
-        <h2 class="section-title" data-lang="es">15 años en escenarios.<br><em>Ahora le enseña al resto.</em></h2>
-        <p class="quote" data-lang="en">"I want you to leave the pier moving differently than you arrived: looser, lighter, a little more alive."</p>
-        <p class="quote" data-lang="es">"Quiero que salgas del muelle moviéndote diferente: más suelta, más ligera, un poco más viva."</p>
-        <span class="signature">Laura</span>
-
-        <div class="stat-grid">
-          <div class="stat">
-            <div class="k">1,000+</div>
-            <div class="v" data-lang="en">International performances</div>
-            <div class="v" data-lang="es">Presentaciones internacionales</div>
-          </div>
-          <div class="stat">
-            <div class="k">5</div>
-            <div class="v" data-lang="en">Continents on stage</div>
-            <div class="v" data-lang="es">Continentes en escenario</div>
-          </div>
-          <div class="stat">
-            <div class="k">NASM</div>
-            <div class="v" data-lang="en">Certified Personal Trainer</div>
-            <div class="v" data-lang="es">Entrenadora Personal Certificada</div>
-          </div>
-          <div class="stat">
-            <div class="k" data-lang="en">15 yrs</div>
-            <div class="k" data-lang="es">15 años</div>
-            <div class="v" data-lang="en">Pro dancing &amp; coaching</div>
-            <div class="v" data-lang="es">Bailando y entrenando</div>
-          </div>
+<!-- ===================== ABOUT (full-bleed Laura video bg + staggered stack) ===================== -->
+<section class="about-section" id="about">
+  <video class="about-bg-video"
+         autoplay muted loop playsinline webkit-playsinline
+         disablePictureInPicture disableRemotePlayback
+         x-webkit-airplay="deny"
+         controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+         preload="metadata"
+         poster="/videos/chachafit-pier-laura-poster.jpg"
+         aria-hidden="true">
+    <source src="/videos/chachafit-pier-laura-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
+    <source src="/videos/chachafit-pier-laura.mp4" type="video/mp4">
+  </video>
+  <div class="about-overlay" aria-hidden="true"></div>
+  <div class="container about-stack">
+    <div class="about-block">
+      <div class="kicker" data-lang="en">About Laura</div>
+      <div class="kicker" data-lang="es">Sobre Laura</div>
+    </div>
+    <div class="about-block">
+      <h2 class="section-title" data-lang="en">15 years of stages.<br><em>Now she teaches the rest of us.</em></h2>
+      <h2 class="section-title" data-lang="es">15 años en escenarios.<br><em>Ahora le enseña al resto.</em></h2>
+    </div>
+    <div class="about-block">
+      <p class="quote" data-lang="en">"I want you to leave the pier moving differently than you arrived: looser, lighter, a little more alive."</p>
+      <p class="quote" data-lang="es">"Quiero que salgas del muelle moviéndote diferente: más suelta, más ligera, un poco más viva."</p>
+    </div>
+    <div class="about-block">
+      <span class="signature">Laura</span>
+    </div>
+    <div class="about-block">
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="k">1,000+</div>
+          <div class="v" data-lang="en">International performances</div>
+          <div class="v" data-lang="es">Presentaciones internacionales</div>
+        </div>
+        <div class="stat">
+          <div class="k">5</div>
+          <div class="v" data-lang="en">Continents on stage</div>
+          <div class="v" data-lang="es">Continentes en escenario</div>
+        </div>
+        <div class="stat">
+          <div class="k">NASM</div>
+          <div class="v" data-lang="en">Certified Personal Trainer</div>
+          <div class="v" data-lang="es">Entrenadora Personal Certificada</div>
+        </div>
+        <div class="stat">
+          <div class="k" data-lang="en">15 yrs</div>
+          <div class="k" data-lang="es">15 años</div>
+          <div class="v" data-lang="en">Pro dancing &amp; coaching</div>
+          <div class="v" data-lang="es">Bailando y entrenando</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== LOCATION (teal) ===================== -->
+<!-- ===================== LOCATION (teal) — EN-only, no toggle ===================== -->
 <div class="tear-down" aria-hidden="true"></div>
 <section class="loc teal-paper reveal" id="location">
   <div class="loc-grid">
     <div>
-      <div class="kicker" style="color:#F4D9C0" data-lang="en">The Pier</div>
-      <div class="kicker" style="color:#F4D9C0" data-lang="es">El Muelle</div>
-      <h2 class="section-title" data-lang="en">End of the road,<br><em>edge of the gulf.</em></h2>
-      <h2 class="section-title" data-lang="es">Fin del camino,<br><em>borde del golfo.</em></h2>
-      <p class="big" data-lang="en">White Street Pier juts a quarter-mile into the Atlantic. We dance at the wide open end, the best seat in town for a Key West sunset.</p>
-      <p class="big" data-lang="es">El White Street Pier se mete un cuarto de milla en el Atlántico. Bailamos en la punta abierta, el mejor lugar de Key West para ver el atardecer.</p>
+      <div class="kicker" style="color:#F4D9C0">The Pier</div>
+      <h2 class="section-title">End of the road,<br><em>edge of the gulf.</em></h2>
+      <p class="big">White Street Pier juts a quarter-mile into the Atlantic. We dance at the wide open end, the best seat in town for a Key West sunset.</p>
 
       <div class="addr-card">
-        <div class="label" data-lang="en">Meet here</div>
-        <div class="label" data-lang="es">Punto de encuentro</div>
+        <div class="label">Meet here</div>
         <div class="name">White Street Pier</div>
         <div class="street">1899 White Street, Key West, FL</div>
       </div>
 
-      <ul class="checklist" data-lang="en">
+      <ul class="checklist">
         <li>Bring water. It's still warm at sundown.</li>
         <li>Soft soles or bare feet. Heels will hate the planks.</li>
         <li>Bring a friend. We'll partner you up if you don't.</li>
-      </ul>
-      <ul class="checklist" data-lang="es">
-        <li>Trae agua. Hace calor al atardecer.</li>
-        <li>Suela blanda o pies descalzos. Los tacones van a odiar los tablones.</li>
-        <li>Trae un amigo. Te emparejamos si vienes solo.</li>
       </ul>
     </div>
     <div class="map-frame">
@@ -998,8 +1040,7 @@
         referrerpolicy="no-referrer-when-downgrade"
         allowfullscreen></iframe>
       <div class="map-label">
-        <div class="ml-kicker" data-lang="en">↓ MEET HERE</div>
-        <div class="ml-kicker" data-lang="es">↓ AQUÍ NOS VEMOS</div>
+        <div class="ml-kicker">↓ MEET HERE</div>
         <div class="ml-name">WHITE ST PIER</div>
       </div>
     </div>
@@ -1196,9 +1237,9 @@
     else setLang('en');
   } catch(e) { setLang('en'); }
 
-  // --- Hero + poster + Laura video: autoplay reliability ---
+  // --- Poster + About bg + Laura video: autoplay reliability ---
   (function videoAutoplay() {
-    var videos = document.querySelectorAll('.hero-bg-video, .poster-video, .laura-video');
+    var videos = document.querySelectorAll('.poster-video, .about-bg-video, .laura-video');
     if (!videos.length) return;
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -1243,6 +1284,27 @@
       brand.classList.add('in');
       setTimeout(function() { brand.classList.add('glow'); }, 1900);
     });
+  })();
+
+  // --- About-Laura: staggered block-by-block reveal over the bg video ---
+  (function aboutStagger() {
+    var blocks = document.querySelectorAll('.about-block');
+    if (!blocks.length) return;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduced.matches || !('IntersectionObserver' in window)) {
+      blocks.forEach(function(b){ b.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var idx = Array.prototype.indexOf.call(blocks, entry.target);
+          setTimeout(function(){ entry.target.classList.add('in'); }, idx * 180);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
+    blocks.forEach(function(b){ io.observe(b); });
   })();
 
   // --- Scroll-reveal sections ---
