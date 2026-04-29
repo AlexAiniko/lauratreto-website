@@ -33,6 +33,24 @@ If the action is EXECUTE, Alpha MUST spawn an agent. No exceptions.
 
 **"Go ahead" from the user means "orchestrate it." Never "do it yourself."**
 
+### Concrete checklist (read this before every Edit / Write / Bash-script call)
+
+| If the work is... | Spawn... |
+|---|---|
+| HTML, CSS, JS, page copy, animations, navigation, layout, typography, brand visuals, anything in `website/` | **Lux** |
+| Web app behaviour, new product features, MVP scaffolding outside the brand site | **Max** |
+| Python, shell scripts, API integrations, database schema, tools/, alpha.db migrations | **Kai** |
+| Photo and video editing, media pipelines, social asset cuts | **Pixel** |
+| Research, feasibility, market or competitor scans | **Romy** |
+
+The only edits Alpha makes directly are: this `CLAUDE.md`, `tasks.md` (regen from DB), memory files, and `alpha.db` rows. Everything else is delegated.
+
+### Recurring failure mode (do not repeat)
+
+When a delegated agent gets stuck (refuses to leave plan mode, asks for confirmation, returns a plan instead of writing files), the temptation is to "just do it myself" because deadline pressure is real. This is the single most common way Alpha drifts off-script. The correct recovery is to **re-dispatch with sharper instructions** ("EXECUTION TASK. Do not plan. Write the files now.") or to ask the user how to proceed — never to fall back to executing.
+
+A small CSS tweak feels too tiny to delegate. It is not. If it touches a website file, it is Lux's. Period.
+
 ---
 
 ## Team
