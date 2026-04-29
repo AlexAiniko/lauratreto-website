@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="robots" content="noindex">
+<title>Laura Treto · Client</title>
+<meta name="description" content="Two questions. Sixty seconds. Then we talk.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700;0,600;0,700&display=swap">
+<style>
+  :root {
+    --coral: #E8654A;
+    --coral-dark: #D4553B;
+    --turquoise: #1A7A7A;
+    --warm-white: #FAF7F2;
+    --charcoal: #2B2B2B;
+    --gold: #C5973E;
+    --sand: #F0E6D8;
+    --ease-out: cubic-bezier(.4,0,.2,1);
+    --ease-in: cubic-bezier(.22,1,.36,1);
+    --ease-spring: cubic-bezier(.22,1.4,.36,1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    background: var(--warm-white);
+    color: var(--charcoal);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    overflow: hidden;
+  }
+
+  body {
+    background: linear-gradient(160deg, var(--sand) 0%, var(--warm-white) 60%);
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  [data-lang="es"] { display: none; }
+  body.lang-es [data-lang="es"] { display: block; }
+  body.lang-es [data-lang="en"] { display: none; }
+  span[data-lang="es"], small[data-lang="es"], em[data-lang="es"] { display: none; }
+  body.lang-es span[data-lang="es"], body.lang-es small[data-lang="es"], body.lang-es em[data-lang="es"] { display: inline; }
+  body.lang-es span[data-lang="en"], body.lang-es small[data-lang="en"], body.lang-es em[data-lang="en"] { display: none; }
+
+  .bg-video {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0;
+    filter: blur(14px) saturate(.85) brightness(.92);
+    transition: opacity 1.2s var(--ease-out);
+    pointer-events: none;
+  }
+  .bg-video.loaded { opacity: .35; }
+  body[data-step="mode"] .bg-video.loaded,
+  body[data-step="form"] .bg-video.loaded { opacity: .42; }
+
+  .sun-disc {
+    position: fixed;
+    right: -120px;
+    bottom: -160px;
+    width: 720px;
+    height: 720px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--gold) 0%, rgba(197,151,62,0) 70%);
+    opacity: .08;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .stage {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  .topbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px 6px;
+    z-index: 5;
+  }
+  .back-arrow {
+    width: 40px; height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--charcoal);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s var(--ease-out);
+    cursor: pointer;
+  }
+  body:not([data-step="splash"]):not([data-step="done"]) .back-arrow {
+    opacity: .55;
+    pointer-events: auto;
+  }
+  .back-arrow:active { transform: scale(.92); }
+  .step-counter {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    opacity: .45;
+    font-weight: 600;
+  }
+  .lang-pill {
+    display: inline-flex;
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 22px;
+    padding: 3px;
+    box-shadow: 0 1px 8px rgba(43,43,43,.08);
+  }
+  .lang-pill button {
+    border: none;
+    background: transparent;
+    padding: 6px 12px;
+    font: 600 12px 'Inter', sans-serif;
+    color: var(--charcoal);
+    border-radius: 20px;
+    cursor: pointer;
+    letter-spacing: .5px;
+  }
+  .lang-pill button.on {
+    background: var(--charcoal);
+    color: var(--warm-white);
+  }
+
+  .webview-banner {
+    display: none;
+    background: var(--charcoal);
+    color: var(--warm-white);
+    font-size: 12px;
+    padding: 10px 14px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .webview-banner.show { display: block; }
+  .webview-banner button {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.4);
+    color: var(--warm-white);
+    border-radius: 16px;
+    padding: 4px 10px;
+    margin-left: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .deck {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .card {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    padding: 20px 24px 32px;
+    overflow: hidden;
+  }
+  .card.active { display: flex; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card.entering {
+      animation: cardIn 360ms var(--ease-in) forwards;
+    }
+    .card.leaving {
+      animation: cardOut 280ms var(--ease-out) forwards;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: scale(1.04); filter: blur(8px); }
+      to   { opacity: 1; transform: scale(1);    filter: blur(0); }
+    }
+    @keyframes cardOut {
+      from { opacity: 1; transform: scale(1);    filter: blur(0); }
+      to   { opacity: 0; transform: scale(.94);  filter: blur(8px); }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card.entering, .card.leaving { animation: fadeOnly 200ms linear forwards; }
+    @keyframes fadeOnly { from { opacity: 0; } to { opacity: 1; } }
+    .bg-video { display: none !important; }
+  }
+
+  .wordmark {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    color: var(--charcoal);
+    text-align: center;
+    padding: 18px 0 4px;
+    position: relative;
+    display: inline-block;
+    margin: 0 auto;
+  }
+  .wordmark .underline {
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin-top: 4px;
+    overflow: visible;
+  }
+  .wordmark .underline path {
+    stroke: var(--gold);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    body[data-step="splash"] .wordmark .underline path {
+      animation: drawLine 600ms var(--ease-in) 200ms forwards;
+    }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wordmark .underline path { stroke-dashoffset: 0; }
+  }
+
+  .head-block {
+    text-align: center;
+    margin: 8px auto 22px;
+    max-width: 420px;
+  }
+  h1.headline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(28px, 7.6vw, 36px);
+    line-height: 1.18;
+    color: var(--charcoal);
+    margin: 18px 14px 4px;
+  }
+  h1.headline .w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: introWordIn 700ms var(--ease-in) forwards;
+    animation-delay: calc(110ms * var(--i, 0));
+  }
+  @keyframes introWordIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    h1.headline .w { animation: none; opacity: 1; transform: none; }
+  }
+  .sub {
+    font-size: 14px;
+    color: var(--charcoal);
+    opacity: .7;
+    margin: 6px 18px 0;
+    line-height: 1.45;
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 380px;
+    margin: auto auto 0;
+    padding-bottom: 12px;
+  }
+  .choice {
+    appearance: none;
+    border: 1.5px solid rgba(43,43,43,.12);
+    background: rgba(255,255,255,.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 18px;
+    padding: 22px 22px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    transition: transform 80ms var(--ease-out), border-color .2s, background .2s;
+    width: 100%;
+  }
+  .choice:active { transform: scale(.98); transition: transform 80ms var(--ease-out); }
+  .choice.released { transition: transform 320ms var(--ease-spring); }
+  .choice .glyph {
+    width: 56px; height: 56px;
+    flex-shrink: 0;
+    color: var(--coral);
+  }
+  .choice.train .glyph { color: var(--turquoise); }
+  .choice.local .glyph { color: var(--gold); }
+  .choice .body { flex: 1; }
+  .choice .title-en, .choice .title-es {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    color: var(--charcoal);
+    line-height: 1.1;
+  }
+  .choice .caption {
+    font-size: 13px;
+    margin-top: 4px;
+    color: var(--charcoal);
+    opacity: .65;
+    line-height: 1.4;
+  }
+  .choice [data-lang="en"] { display: block; }
+  .choice [data-lang="es"] { display: none; }
+  body.lang-es .choice [data-lang="en"] { display: none; }
+  body.lang-es .choice [data-lang="es"] { display: block; }
+  .choice.local .caption { color: var(--gold); opacity: .9; font-weight: 500; }
+
+  .form-card {
+    justify-content: flex-start;
+    min-height: 100svh;
+  }
+  .form-wrap {
+    max-width: 380px;
+    width: 100%;
+    margin: 18px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    color: var(--charcoal);
+    opacity: .55;
+    font-weight: 600;
+  }
+  .field input {
+    appearance: none;
+    border: 1.5px solid rgba(43,43,43,.14);
+    background: rgba(255,255,255,.92);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font: 500 16px 'Inter', sans-serif;
+    color: var(--charcoal);
+    transition: border-color .2s;
+    outline: none;
+  }
+  .field input:focus { border-color: var(--coral); }
+  .field input::placeholder { color: rgba(43,43,43,.35); }
+
+  .hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+  .submit {
+    margin-top: 4px;
+    width: 100%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 14px;
+    background: var(--coral);
+    color: var(--warm-white);
+    font: 600 16px 'Inter', sans-serif;
+    letter-spacing: .3px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(232,101,74,.28);
+    transition: transform 80ms var(--ease-out), background .2s;
+  }
+  .submit:active { transform: scale(.98); background: var(--coral-dark); }
+  .submit:disabled { opacity: .55; cursor: not-allowed; }
+
+  .disclosure {
+    font-size: 11px;
+    line-height: 1.45;
+    color: rgba(43,43,43,.6);
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  .glyph-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 36px auto 12px;
+    width: 120px;
+    height: 120px;
+    color: var(--gold);
+  }
+  .glyph-stage svg { width: 100%; height: 100%; }
+  .glyph-stage path, .glyph-stage line, .glyph-stage circle {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+  }
+  body[data-step="done"] .glyph-stage path,
+  body[data-step="done"] .glyph-stage line,
+  body[data-step="done"] .glyph-stage circle {
+    animation: drawGlyph 1100ms var(--ease-in) 120ms forwards;
+  }
+  @keyframes drawGlyph { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .glyph-stage path, .glyph-stage line, .glyph-stage circle { stroke-dashoffset: 0; }
+    body[data-step="done"] .glyph-stage path,
+    body[data-step="done"] .glyph-stage line,
+    body[data-step="done"] .glyph-stage circle { animation: none; }
+  }
+
+  .ghost-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 22px auto 0;
+    flex-wrap: wrap;
+  }
+  .ghost {
+    appearance: none;
+    background: transparent;
+    border: 1.5px solid rgba(43,43,43,.18);
+    color: var(--charcoal);
+    padding: 11px 18px;
+    border-radius: 22px;
+    font: 600 13px 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color .2s, color .2s;
+  }
+  .ghost:active { border-color: var(--coral); color: var(--coral); }
+
+  .booker-frame {
+    position: relative;
+    flex: 1;
+    margin: 0 -24px -32px;
+  }
+  .booker-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: var(--sand);
+  }
+  .booker-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--sand), var(--warm-white));
+    color: var(--charcoal);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 17px;
+    pointer-events: none;
+    transition: opacity .4s var(--ease-out);
+  }
+  .booker-loading.hide { opacity: 0; }
+  .booker-actions {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 4;
+  }
+  .booker-fallback {
+    display: none;
+    background: var(--coral);
+    color: var(--warm-white);
+    border: none;
+    border-radius: 14px;
+    padding: 14px 22px;
+    font: 600 15px 'Inter', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(232,101,74,.32);
+  }
+  .booker-fallback.show { display: inline-flex; }
+
+  .err {
+    color: var(--coral-dark);
+    font-size: 13px;
+    text-align: center;
+    margin-top: 8px;
+    min-height: 18px;
+  }
+
+  body[data-step] .card { display: none; }
+  body[data-step="splash"] .card[data-screen="splash"],
+  body[data-step="mode"]   .card[data-screen="mode"],
+  body[data-step="form"]   .card[data-screen="form"],
+  body[data-step="booking"] .card[data-screen="booking"],
+  body[data-step="done"]   .card[data-screen="done"] { display: flex; }
+
+  ::view-transition-old(root) { animation: cardOut 280ms var(--ease-out) forwards; }
+  ::view-transition-new(root) { animation: cardIn 360ms var(--ease-in) forwards; }
+</style>
+</head>
+<body data-step="splash">
+
+<video class="bg-video" id="bgVideo" muted playsinline loop preload="none" aria-hidden="true"></video>
+<div class="sun-disc" aria-hidden="true"></div>
+
+<div class="stage">
+
+  <div class="webview-banner" id="webviewBanner" role="status">
+    <span data-lang="en">For best experience, open in Safari.</span>
+    <span data-lang="es">Para mejor experiencia, abre en Safari.</span>
+    <button type="button" id="copyLinkBtn">
+      <span data-lang="en">Copy link</span>
+      <span data-lang="es">Copiar enlace</span>
+    </button>
+  </div>
+
+  <div class="topbar">
+    <button class="back-arrow" id="backBtn" type="button" aria-label="Back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="step-counter" id="stepCounter"></div>
+    <div class="lang-pill">
+      <button class="on" type="button" onclick="setLang('en')">EN</button>
+      <button type="button" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+
+  <div class="deck" id="deck">
+
+    <section class="card" data-screen="splash">
+      <div style="text-align:center">
+        <div class="wordmark">
+          Laura Treto
+          <svg class="underline" viewBox="0 0 200 4" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 2 L200 2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="head-block">
+        <h1 class="headline" data-lang="en" data-words>Are you here to dance, or to train?</h1>
+        <h1 class="headline" data-lang="es" data-words>¿Vienes a bailar, o a entrenar?</h1>
+      </div>
+      <div class="choices">
+        <button class="choice dance" type="button" data-track="dance">
+          <span class="glyph" aria-hidden="true">
+            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="30" cy="12" r="4"/>
+              <path d="M30 16 L26 28 L18 38"/>
+              <path d="M30 16 L36 26 L44 22"/>
+              <path d="M26 28 L30 42 L26 52"/>
+              <path d="M30 42 L38 52"/>
+            </svg>
+          </span>
+          <span class="body">
+            <span class="title-en" data-lang="en">Dance</span>
+            <span class="title-es" data-lang="es">Bailar</span>
+            <span class="caption" data-lang="en">Find rhythm in your body</span>
+            <span class="caption" data-lang="es">Encuentra el ritmo en tu cuerpo</span>
+          </span>
+        </button>
+        <button class="choice train" type="button" data-track="train">
+          <span class="glyph" aria-hidden="true">
+            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="10" y1="28" x2="46" y2="28"/>
+              <rect x="6" y="22" width="6" height="12" rx="1.5"/>
+              <rect x="44" y="22" width="6" height="12" rx="1.5"/>
+              <line x1="14" y1="20" x2="14" y2="36"/>
+              <line x1="42" y1="20" x2="42" y2="36"/>
+            </svg>
+          </span>
+          <span class="body">
+            <span class="title-en" data-lang="en">Train</span>
+            <span class="title-es" data-lang="es">Entrenar</span>
+            <span class="caption" data-lang="en">Build strength that holds</span>
+            <span class="caption" data-lang="es">Construye fuerza que dura</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card" data-screen="mode">
+      <div class="head-block">
+        <h1 class="headline" data-lang="en" data-words>Online, or in Key West?</h1>
+        <h1 class="headline" data-lang="es" data-words>¿Online, o en Key West?</h1>
+      </div>
+      <div class="choices">
+        <button class="choice online" type="button" data-mode="online">
+          <span class="glyph" aria-hidden="true">
+            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="28" cy="28" r="18"/>
+              <path d="M10 28 H46"/>
+              <path d="M28 10 C20 18 20 38 28 46"/>
+              <path d="M28 10 C36 18 36 38 28 46"/>
+            </svg>
+          </span>
+          <span class="body">
+            <span class="title-en" data-lang="en">Online</span>
+            <span class="title-es" data-lang="es">Online</span>
+            <span class="caption" data-lang="en">Anywhere with Wi-Fi</span>
+            <span class="caption" data-lang="es">En cualquier lugar con Wi-Fi</span>
+          </span>
+        </button>
+        <button class="choice local" type="button" data-mode="local">
+          <span class="glyph" aria-hidden="true">
+            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M28 8 C18 8 12 16 12 24 C12 36 28 48 28 48 C28 48 44 36 44 24 C44 16 38 8 28 8 Z"/>
+              <circle cx="28" cy="24" r="5"/>
+            </svg>
+          </span>
+          <span class="body">
+            <span class="title-en" data-lang="en">In Key West</span>
+            <span class="title-es" data-lang="es">En Key West</span>
+            <span class="caption" data-lang="en">Key West, FL · 24.5551° N</span>
+            <span class="caption" data-lang="es">Key West, FL · 24.5551° N</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card form-card" data-screen="form">
+      <div class="head-block">
+        <h1 class="headline" data-lang="en" data-words id="formHeadEn">Almost there.</h1>
+        <h1 class="headline" data-lang="es" data-words id="formHeadEs">Casi listo.</h1>
+        <p class="sub" data-lang="en" id="formSubEn">Where should I send your options?</p>
+        <p class="sub" data-lang="es" id="formSubEs">¿Dónde te envío tus opciones?</p>
+      </div>
+      <form class="form-wrap" id="leadForm" autocomplete="on" novalidate>
+        <div class="field">
+          <label for="firstName" data-lang="en">First name</label>
+          <label for="firstName" data-lang="es">Nombre</label>
+          <input id="firstName" name="first_name" type="text" inputmode="text" autocomplete="given-name" required maxlength="60">
+        </div>
+        <div class="field">
+          <label for="email" data-lang="en">Email</label>
+          <label for="email" data-lang="es">Correo</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="120">
+        </div>
+        <div class="field" id="phoneField" style="display:none">
+          <label for="phone" data-lang="en">Phone</label>
+          <label for="phone" data-lang="es">Teléfono</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20">
+        </div>
+        <div class="hp" aria-hidden="true">
+          <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <button type="submit" class="submit" id="submitBtn">
+          <span data-lang="en" id="submitLabelEn">Send it &rarr;</span>
+          <span data-lang="es" id="submitLabelEs">Envíalo &rarr;</span>
+        </button>
+        <div class="disclosure">
+          <span data-lang="en" id="discloseEn">By tapping, you agree to get emails from Laura. Unsubscribe anytime.</span>
+          <span data-lang="es" id="discloseEs">Al tocar aceptas recibir emails de Laura. Cancela cuando quieras.</span>
+        </div>
+        <div class="err" id="formErr" role="alert"></div>
+      </form>
+    </section>
+
+    <section class="card" data-screen="booking">
+      <div class="head-block" style="margin-bottom:6px">
+        <h1 class="headline" data-lang="en" style="font-size:24px">Pick your spot.</h1>
+        <h1 class="headline" data-lang="es" style="font-size:24px">Escoge tu lugar.</h1>
+      </div>
+      <div class="booker-frame">
+        <div class="booker-loading" id="bookerLoading">
+          <span data-lang="en">Setting up your spot&hellip;</span>
+          <span data-lang="es">Preparando tu lugar&hellip;</span>
+        </div>
+        <iframe id="bookerFrame" title="Coffee with Laura, 15 min, Key West" loading="lazy" allow="payment 'self'; geolocation 'self'"></iframe>
+        <div class="booker-actions">
+          <button type="button" class="ghost" id="bookedBtn">
+            <span data-lang="en">I booked it &rarr;</span>
+            <span data-lang="es">Ya reservé &rarr;</span>
+          </button>
+          <button type="button" class="booker-fallback" id="bookerFallback">
+            <span data-lang="en">Open scheduler &rarr;</span>
+            <span data-lang="es">Abrir agenda &rarr;</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" data-screen="done">
+      <div style="margin:auto;text-align:center;padding-bottom:24px">
+        <div class="glyph-stage" id="doneGlyph"></div>
+        <h1 class="headline" data-lang="en" data-words>Got you.</h1>
+        <h1 class="headline" data-lang="es" data-words>Listo.</h1>
+        <p class="sub" id="doneSubEn" data-lang="en"></p>
+        <p class="sub" id="doneSubEs" data-lang="es"></p>
+        <p class="sub" id="doneDetailEn" data-lang="en" style="margin-top:14px;opacity:.55"></p>
+        <p class="sub" id="doneDetailEs" data-lang="es" style="margin-top:14px;opacity:.55"></p>
+        <div class="ghost-row" id="doneActions" style="display:none">
+          <button type="button" class="ghost" id="icsBtn">
+            <span data-lang="en">Add to calendar</span>
+            <span data-lang="es">Agregar al calendario</span>
+          </button>
+          <a class="ghost" id="textLauraBtn" href="sms:">
+            <span data-lang="en">Text Laura</span>
+            <span data-lang="es">Escribirle a Laura</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  const BOOKING_URL = 'TODO_GOOGLE_CALENDAR_APPOINTMENT_URL';
+  const FUNNEL_ENDPOINT = '/.netlify/functions/client-funnel';
+  const LAURA_PHONE = '+13055551234';
+
+  const state = {
+    track: null,
+    mode: null,
+    step: 'splash',
+    eventId: null,
+    lang: 'en',
+    test: false,
+    history: [],
+  };
+
+  const params = new URLSearchParams(location.search);
+  state.eventId = (params.get('e') || '').slice(0, 80) || 'unknown';
+  state.test = params.get('t') === '1';
+
+  function track(name, payload) {
+    if (window.dataLayer) {
+      try { window.dataLayer.push({ event: name, ...payload }); } catch (e) {}
+    }
+  }
+
+  function setLang(lang) {
+    state.lang = lang;
+    document.body.classList.toggle('lang-es', lang === 'es');
+    document.documentElement.lang = lang;
+    document.querySelectorAll('.lang-pill button').forEach((btn) => {
+      btn.classList.toggle('on', btn.textContent.trim().toLowerCase() === lang);
+    });
+    splitWords();
+    updateFormCopy();
+    updateStepCounter();
+  }
+  window.setLang = setLang;
+
+  function splitWords() {
+    document.querySelectorAll('h1.headline[data-words]').forEach((h) => {
+      if (h.dataset.split === '1') return;
+      const raw = h.textContent.trim();
+      h.dataset.split = '1';
+      h.innerHTML = raw.split(/\s+/).map((w, i) => '<span class="w" style="--i:' + i + '">' + w + '</span>').join(' ');
+    });
+  }
+
+  function updateStepCounter() {
+    const counter = document.getElementById('stepCounter');
+    const flowLen = state.mode === 'local' ? 5 : 4;
+    const map = { splash: 1, mode: 2, form: 3, booking: 4, done: state.mode === 'local' ? 5 : 4 };
+    const n = map[state.step] || 1;
+    counter.textContent = 'STEP ' + String(n).padStart(2, '0') + ' / ' + String(flowLen).padStart(2, '0');
+  }
+
+  function goto(nextStep, opts = {}) {
+    if (nextStep === state.step) return;
+    if (!opts.back) state.history.push(state.step);
+    const prev = state.step;
+    state.step = nextStep;
+
+    const apply = () => {
+      document.body.dataset.step = nextStep;
+      document.querySelectorAll('.card').forEach((c) => {
+        c.classList.remove('active', 'entering', 'leaving');
+        if (c.dataset.screen === nextStep) {
+          c.classList.add('active', 'entering');
+          setTimeout(() => c.classList.remove('entering'), 380);
+        }
+      });
+      updateStepCounter();
+      onEnter(nextStep, prev);
+    };
+
+    if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      try { document.startViewTransition(apply); return; } catch (e) {}
+    }
+    apply();
+  }
+
+  function goBack() {
+    const prev = state.history.pop();
+    if (prev) goto(prev, { back: true });
+  }
+  document.getElementById('backBtn').addEventListener('click', goBack);
+
+  function onEnter(step, prev) {
+    if (step === 'mode') {
+      track('client_intent_chosen', { intent: state.track, event_id: state.eventId });
+    }
+    if (step === 'form') {
+      track('client_mode_chosen', { mode: state.mode, event_id: state.eventId });
+      document.getElementById('phoneField').style.display = state.mode === 'local' ? 'flex' : 'none';
+      document.getElementById('phone').required = state.mode === 'local';
+      updateFormCopy();
+      setTimeout(() => document.getElementById('firstName').focus({ preventScroll: true }), 320);
+    }
+    if (step === 'booking') {
+      mountBooker();
+    }
+    if (step === 'done') {
+      mountDone();
+    }
+  }
+
+  function updateFormCopy() {
+    const isLocal = state.mode === 'local';
+    document.getElementById('formSubEn').textContent = isLocal ? "Pick a time and I'll text you to confirm." : 'Where should I send your options?';
+    document.getElementById('formSubEs').textContent = isLocal ? 'Escoge una hora y te escribo para confirmar.' : '¿Dónde te envío tus opciones?';
+    document.getElementById('submitLabelEn').innerHTML = isLocal ? 'Pick a time &rarr;' : 'Send it &rarr;';
+    document.getElementById('submitLabelEs').innerHTML = isLocal ? 'Escoger hora &rarr;' : 'Envíalo &rarr;';
+    document.getElementById('discloseEn').textContent = isLocal
+      ? "By tapping, you agree to get emails from Laura. Unsubscribe anytime. I'll text you to lock a time."
+      : 'By tapping, you agree to get emails from Laura. Unsubscribe anytime.';
+    document.getElementById('discloseEs').textContent = isLocal
+      ? 'Al tocar aceptas recibir emails de Laura. Cancela cuando quieras. Te escribo para coordinar.'
+      : 'Al tocar aceptas recibir emails de Laura. Cancela cuando quieras.';
+  }
+
+  document.querySelectorAll('.choice[data-track]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.track = btn.dataset.track;
+      try { navigator.vibrate && navigator.vibrate(8); } catch (e) {}
+      btn.classList.add('released');
+      goto('mode');
+    });
+  });
+  document.querySelectorAll('.choice[data-mode]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.mode = btn.dataset.mode;
+      try { navigator.vibrate && navigator.vibrate(8); } catch (e) {}
+      btn.classList.add('released');
+      goto('form');
+    });
+  });
+
+  const form = document.getElementById('leadForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errBox = document.getElementById('formErr');
+    errBox.textContent = '';
+    const submitBtn = document.getElementById('submitBtn');
+    const fd = new FormData(form);
+    const payload = {
+      first_name: (fd.get('first_name') || '').toString().trim(),
+      email: (fd.get('email') || '').toString().trim(),
+      phone: (fd.get('phone') || '').toString().trim(),
+      language: state.lang,
+      intent: state.track,
+      mode: state.mode,
+      event_id: state.eventId,
+      source: 'client-scan',
+      website: (fd.get('website') || '').toString(),
+    };
+    if (!payload.first_name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+      errBox.textContent = state.lang === 'es' ? 'Revisa nombre y correo.' : 'Check name and email.';
+      return;
+    }
+    if (state.mode === 'local' && !payload.phone) {
+      errBox.textContent = state.lang === 'es' ? 'Necesito tu teléfono para confirmar.' : 'I need your phone to confirm.';
+      return;
+    }
+    submitBtn.disabled = true;
+    const origLabel = submitBtn.innerHTML;
+    submitBtn.innerHTML = state.lang === 'es' ? 'Enviando…' : 'Sending…';
+    try {
+      const url = FUNNEL_ENDPOINT + (state.test ? '?t=1' : '');
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'submit_failed');
+      track('client_lead_captured', {
+        bucket: data.bucket || (state.track + '-' + state.mode),
+        event_id: state.eventId,
+        language: state.lang,
+        dedup: !!data.dedup,
+      });
+      state.firstName = payload.first_name;
+      state.email = payload.email;
+      goto(state.mode === 'local' ? 'booking' : 'done');
+    } catch (err) {
+      console.error('client-funnel submit error:', err);
+      errBox.textContent = state.lang === 'es' ? 'Algo falló. Intenta de nuevo.' : 'Something went wrong. Try again.';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origLabel;
+    }
+  });
+
+  function mountBooker() {
+    const iframe = document.getElementById('bookerFrame');
+    const loading = document.getElementById('bookerLoading');
+    const fallback = document.getElementById('bookerFallback');
+    if (iframe.dataset.mounted === '1') return;
+    iframe.dataset.mounted = '1';
+    const src = BOOKING_URL.startsWith('TODO_')
+      ? 'about:blank'
+      : BOOKING_URL + (BOOKING_URL.includes('?') ? '&' : '?')
+        + 'email=' + encodeURIComponent(state.email || '')
+        + '&firstName=' + encodeURIComponent(state.firstName || '');
+    iframe.src = src;
+    let loaded = false;
+    iframe.addEventListener('load', () => {
+      loaded = true;
+      loading.classList.add('hide');
+    });
+    setTimeout(() => {
+      if (!loaded) {
+        fallback.classList.add('show');
+        loading.classList.add('hide');
+      }
+    }, 4000);
+    fallback.addEventListener('click', () => {
+      if (!BOOKING_URL.startsWith('TODO_')) location.href = BOOKING_URL;
+    });
+  }
+
+  document.getElementById('bookedBtn').addEventListener('click', () => goto('done'));
+
+  window.addEventListener('message', (e) => {
+    if (state.step !== 'booking') return;
+    const data = e && e.data;
+    const txt = typeof data === 'string' ? data : (data && data.type) || '';
+    if (/booked|appointment|confirm/i.test(txt)) goto('done');
+  });
+
+  function mountDone() {
+    const isLocal = state.mode === 'local';
+    const isDance = state.track === 'dance';
+    const glyph = document.getElementById('doneGlyph');
+    glyph.innerHTML = isLocal ? coffeeSVG() : planeSVG();
+    document.getElementById('doneSubEn').textContent = isLocal
+      ? "Coffee's on me when we meet."
+      : 'I just sent your ' + (isDance ? 'dance' : 'training') + ' options. Talk soon.';
+    document.getElementById('doneSubEs').textContent = isLocal
+      ? 'El café lo invito yo cuando nos veamos.'
+      : 'Te envié tus opciones de ' + (isDance ? 'baile' : 'entrenamiento') + '. Hablamos pronto.';
+    document.getElementById('doneDetailEn').textContent = isLocal
+      ? "I'll text you tonight to confirm. See you soon."
+      : 'Check your inbox in 60 seconds.';
+    document.getElementById('doneDetailEs').textContent = isLocal
+      ? 'Te escribo esta noche para confirmar. Nos vemos pronto.'
+      : 'Revisa tu bandeja en 60 segundos.';
+    document.getElementById('doneActions').style.display = isLocal ? 'flex' : 'none';
+    if (isLocal) {
+      const sms = document.getElementById('textLauraBtn');
+      const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      sms.href = isiOS ? 'sms:' + LAURA_PHONE : ('mailto:laura@lauratreto.com?subject=' + encodeURIComponent('Coffee meet'));
+    }
+  }
+
+  document.getElementById('icsBtn').addEventListener('click', () => {
+    const start = new Date(Date.now() + 2 * 24 * 3600 * 1000);
+    start.setHours(10, 0, 0, 0);
+    const end = new Date(start.getTime() + 15 * 60000);
+    const fmt = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const ics = [
+      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Laura Treto//Client//EN',
+      'BEGIN:VEVENT',
+      'UID:' + Date.now() + '@lauratreto.com',
+      'DTSTAMP:' + fmt(new Date()),
+      'DTSTART:' + fmt(start),
+      'DTEND:' + fmt(end),
+      'SUMMARY:Coffee with Laura',
+      'DESCRIPTION:15-min meet. Confirm time via text.',
+      'LOCATION:Key West, FL',
+      'END:VEVENT','END:VCALENDAR',
+    ].join('\r\n');
+    const blob = new Blob([ics], { type: 'text/calendar' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'coffee-with-laura.ics';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  });
+
+  function planeSVG() {
+    return '<svg viewBox="0 0 120 120"><path d="M10 60 L110 18 L82 110 L60 70 L10 60 Z"/><path d="M60 70 L82 50"/></svg>';
+  }
+  function coffeeSVG() {
+    return '<svg viewBox="0 0 120 120">'
+      + '<path d="M28 50 H82 V82 Q82 96 68 96 H42 Q28 96 28 82 Z"/>'
+      + '<path d="M82 58 H94 Q102 58 102 68 Q102 80 90 80 H82"/>'
+      + '<path d="M44 32 Q40 38 44 44 Q48 50 44 56"/>'
+      + '<path d="M58 28 Q54 36 58 44 Q62 52 58 58"/>'
+      + '<path d="M72 32 Q68 38 72 44 Q76 50 72 56"/>'
+      + '</svg>';
+  }
+
+  (function detectWebview() {
+    const ua = navigator.userAgent || '';
+    if (/FBAN|FBAV|Instagram|TikTok|LinkedIn|Line/i.test(ua)) {
+      document.getElementById('webviewBanner').classList.add('show');
+      document.getElementById('copyLinkBtn').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(location.href);
+          const btn = document.getElementById('copyLinkBtn');
+          btn.textContent = state.lang === 'es' ? '¡Copiado!' : 'Copied!';
+        } catch (e) {}
+      });
+    }
+  })();
+
+  (function lazyLoadVideo() {
+    const v = document.getElementById('bgVideo');
+    let armed = false;
+    function arm() {
+      if (armed) return;
+      armed = true;
+      const candidates = ['/videos/chachafit-pier-bg-mobile.mp4', '/videos/chachafit-pier-laura-mobile.mp4'];
+      v.src = candidates[0];
+      v.poster = '/images/chachafit-pier-bg-poster.jpg';
+      const playP = v.play();
+      if (playP && playP.catch) playP.catch(() => {});
+      v.addEventListener('loadeddata', () => v.classList.add('loaded'), { once: true });
+    }
+    ['pointerdown', 'touchstart', 'keydown'].forEach((ev) =>
+      document.addEventListener(ev, arm, { once: true, passive: true })
+    );
+    setTimeout(arm, 1500);
+  })();
+
+  if (window.visualViewport) {
+    const vv = window.visualViewport;
+    vv.addEventListener('resize', () => {
+      if (state.step !== 'form') return;
+      const active = document.activeElement;
+      if (!active || active.tagName !== 'INPUT') return;
+      const r = active.getBoundingClientRect();
+      const bottom = r.bottom;
+      if (bottom > vv.height - 12) {
+        active.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    });
+  }
+
+  splitWords();
+  updateStepCounter();
+  track('client_scan_landed', { event_id: state.eventId, language: state.lang });
+</script>
+
+</body>
+</html>
