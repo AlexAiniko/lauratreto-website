@@ -1186,9 +1186,21 @@
   // Allows the homepage hero CTA to drop visitors directly onto the booking screen
   // without forcing them through the choose -> mode intake. Booking and capture-online
   // both collect name/email/phone themselves, so they render standalone.
-  function applyHashStep() {
+  function applyHashStep(opts) {
+    const isInitial = !!(opts && opts.initial);
     const hash = (location.hash || '').replace('#', '');
     if (!hash) return;
+    const supported = ['booking', 'capture-online', 'mode', 'choose'];
+    // Fire deep_link_booking ONLY on initial page-load entry via a supported hash.
+    // Subsequent hashchange events (back/forward inside the funnel) are excluded so
+    // the event reflects true entry attribution, not in-page navigation.
+    if (isInitial && supported.indexOf(hash) !== -1) {
+      trackEvent('deep_link_booking', {
+        event_id: eventId,
+        hash: location.hash,
+        step: hash
+      });
+    }
     if (hash === 'booking') {
       // Default mode for direct entry: in-person ('local'). Booking screen is the
       // local-mode path; meeting method ('in-person' vs 'call') is selectable inside.
@@ -1206,12 +1218,12 @@
       goto('choose');
     }
   }
-  window.addEventListener('hashchange', applyHashStep);
+  window.addEventListener('hashchange', () => applyHashStep());
 
   // initial fire
   trackEvent('client_scan_landed', { event_id: eventId });
   updateStepCounter();
-  applyHashStep();
+  applyHashStep({ initial: true });
 </script>
 
 </body>
