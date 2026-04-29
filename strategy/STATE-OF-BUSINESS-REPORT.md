@@ -20,7 +20,6 @@ Laura, read this section carefully. This is how we will present you publicly. Co
 - Founding member of Acosta Danza, Carlos Acosta's internationally acclaimed contemporary dance company
 - O-1B visa holder -- the United States government has formally designated Laura as an individual of extraordinary ability in the arts
 - Approximately 1,000 international performances across 30+ countries
-- Film credit: Yuli (Carlos Acosta biopic, 2018)
 - Trained under and performed choreography by Justin Peck (New York City Ballet), Sidi Larbi Cherkaoui, Christopher Bruce, and Goyo Montero
 
 **Education & Certifications**

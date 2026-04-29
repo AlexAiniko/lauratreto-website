@@ -76,7 +76,6 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 - Clinical Psychology degree, University of Havana
 - NASM Certified Personal Trainer
 - Bilingual: English/Spanish (native Spanish)
-- Featured in "Yuli" (2018 Acosta biopic film)
 - Former Tour Manager for The Mavericks (Raul Malo, passed Dec 2025)
 - Moved to Key West early 2026
 
@@ -254,7 +253,7 @@ Alpha has a persistent, queryable knowledge graph of the entire project corpus.
 **Key findings already in graph (2026-04-11 run):**
 - `Laura Treto (Person)` is the god node — 42 edges, bridges credentials to every product
 - `Movement Readiness Score Quiz` is the conversion bridge — connects all credentials to the funnel
-- Email 3 ("Laura's Story") only explicitly routes through Acosta Danza — 5 other credentials (Yuli film, O-1B, psychology degree, Mavericks, 1,000 shows) are in the graph but not wired into the email copy
+- Email 3 ("Laura's Story") only explicitly routes through Acosta Danza — 4 other credentials (O-1B, psychology degree, Mavericks, 1,000 shows) are in the graph but not wired into the email copy
 - `tasks.md` and the `tasks` DB table are disconnected mirrors — same data, no structural link
 - The PT-to-Weight-Room Gap concept from Laura's wellness resume is the direct rationale for the quiz design
 

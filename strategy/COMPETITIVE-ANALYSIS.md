@@ -63,7 +63,7 @@ Core Studios / Island Holistic Trainer (Sarah) comes closest with holistic nutri
 13,900 TikTok followers vs. Sweat Society KW's 818 Instagram followers (their largest local social presence). Laura enters the Key West market as the most socially followed fitness person in town. She simply has not told Key West that she lives there yet.
 
 **7. The Origin Story Is the Brand**
-Former Acosta Danza founding member, 30+ countries, 1,000 performances, Yuli film credit, Tour Manager for The Mavericks. No fitness coach in Key West or in the PT-bridge online niche has a story like this. The story is the brand. The credentials are proof. The coaching is the product.
+Former Acosta Danza founding member, 30+ countries, 1,000 performances, Tour Manager for The Mavericks. No fitness coach in Key West or in the PT-bridge online niche has a story like this. The story is the brand. The credentials are proof. The coaching is the product.
 
 ---
 

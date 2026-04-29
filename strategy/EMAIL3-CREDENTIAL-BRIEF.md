@@ -71,7 +71,6 @@ This closes the credential loop: you opened with "I worked with extraordinary bo
 - The psychology degree is the most surprising credential — lean into it. Most fitness coaches don't have it.
 - The Mavericks story is the proof-of-concept for everyday clients: if her methods worked for a touring musician's 60-year-old body under extreme stress, they work for anyone.
 - Keep the O-1B visa brief — one sentence framing, not a paragraph. The point is: extraordinary ability is legally certified, not self-proclaimed.
-- Do NOT reference the Yuli film — not part of the story we're telling here.
 - The graph confirms Acosta Danza is the gateway for all these credentials. Start there, then fan out.
 
 ---

@@ -24,16 +24,15 @@ Take the Free Movement Test
 
 ## SECTION 2: CREDENTIAL BAR
 
-Six items, displayed horizontally on turquoise background:
+Five items, displayed horizontally on turquoise background:
 
 | # | Text |
 |---|------|
 | 1 | Acosta Danza Founding Member |
 | 2 | O-1B Visa (Extraordinary Ability) |
 | 3 | 1,000+ International Performances |
-| 4 | Yuli Film Credit |
-| 5 | University of Havana -- Clinical Psychology |
-| 6 | NASM Certified Personal Trainer |
+| 4 | University of Havana -- Clinical Psychology |
+| 5 | NASM Certified Personal Trainer |
 
 ---
 
@@ -240,9 +239,8 @@ Haz el Test de Movimiento Gratis
 | 1 | Miembro Fundadora de Acosta Danza |
 | 2 | Visa O-1B (Habilidad Extraordinaria) |
 | 3 | Mas de 1,000 Presentaciones Internacionales |
-| 4 | Credito en la Pelicula Yuli |
-| 5 | Universidad de La Habana -- Psicologia Clinica |
-| 6 | Entrenadora Personal Certificada NASM |
+| 4 | Universidad de La Habana -- Psicologia Clinica |
+| 5 | Entrenadora Personal Certificada NASM |
 
 ---
 

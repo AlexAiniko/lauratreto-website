@@ -135,16 +135,15 @@ move with strength, confidence, and joy.
 
 **Layout:** Horizontal strip, full-width. Background: Deep Turquoise (#1A7A7A). Text: White.
 
-**Content:** 6 credential items displayed horizontally (desktop) or in a 2x3 grid (mobile).
+**Content:** 5 credential items displayed horizontally (desktop) or in a grid (mobile).
 
 | # | Icon | Text |
 |---|------|------|
 | 1 | Dance/ballet icon | Acosta Danza Founding Member |
 | 2 | Visa/passport icon | O-1B Visa (Extraordinary Ability) |
 | 3 | Globe/stage icon | 1,000+ International Performances |
-| 4 | Film reel icon | Yuli Film Credit |
-| 5 | University cap icon | University of Havana -- Clinical Psychology |
-| 6 | Certificate icon | NASM Certified Personal Trainer |
+| 4 | University cap icon | University of Havana -- Clinical Psychology |
+| 5 | Certificate icon | NASM Certified Personal Trainer |
 
 **Design details:**
 - Icons: simple line icons, white, 28px. Use Phosphor Icons or Lucide (both available in Framer).
@@ -153,11 +152,10 @@ move with strength, confidence, and joy.
 - This section should feel like a trust banner -- quick, scannable, authoritative.
 
 **Mobile:**
-- 2 columns, 3 rows. Same icons and text, slightly smaller.
+- Compact grid layout. Same icons and text, slightly smaller.
 
 **Assets needed from Alex:**
 - Acosta Danza logo (if available and usage approved). Otherwise, text-only.
-- Confirm: is "Yuli Film Credit" the correct phrasing? Or should it be "Featured in Yuli (2018 Film)"?
 
 ---
 
