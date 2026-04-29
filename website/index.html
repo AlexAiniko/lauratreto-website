@@ -2,27 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Google Analytics 4 (gtag.js) — swap G-D8L9H56MED for the real Measurement ID to activate -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+
+  <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-D8L9H56MED"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    // Privacy + dev guard: never fire on localhost / 127.0.0.1 / file://
     window.__LT_GA_ENABLED = (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.protocol !== 'file:');
     gtag('js', new Date());
     if (window.__LT_GA_ENABLED) {
       gtag('config', 'G-D8L9H56MED', { anonymize_ip: true });
     }
-    // Safe wrapper — call ltTrack('event_name', {params}) anywhere in site code
     window.ltTrack = function(name, params){
       try { if (window.__LT_GA_ENABLED) gtag('event', name, params || {}); } catch(e) {}
     };
   </script>
+
   <title>Laura Treto | Movement Coach, Key West FL</title>
-  <meta name="description" content="World-class movement coaching in Key West. Elite athlete and founding Acosta Danza member, 1000+ performances. Private sessions for adults 45+. Book your assessment today." />
+  <meta name="description" content="World-class movement coaching in Key West. Founding Acosta Danza member, 1,000+ international performances. Private sessions for adults 45+. Meet Laura, 15 minutes on her." />
   <meta property="og:title" content="Laura Treto | Movement Coaching, Key West" />
-  <meta property="og:description" content="World-class movement coaching in Key West. Elite athlete and founding Acosta Danza member, 1000+ performances. Private sessions for adults 45+." />
+  <meta property="og:description" content="World-class movement coaching in Key West. Founding Acosta Danza member, 1,000+ international performances. Private sessions for adults 45+." />
   <meta property="og:url" content="https://lauratreto.com" />
   <meta property="og:image" content="https://lauratreto.com/og-image.jpg" />
   <meta property="og:type" content="website" />
@@ -33,14 +33,13 @@
   <link rel="alternate" hreflang="es" href="https://lauratreto.com" />
   <link rel="alternate" hreflang="x-default" href="https://lauratreto.com" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤍</text></svg>">
-  <!-- Responsive hero preload: mobile gets 640w, tablet 1024w, desktop 1920w -->
-  <link rel="preload" as="image"
-    href="/images/hero-1920w.webp"
-    imagesrcset="/images/hero-640w.webp 640w, /images/hero-1024w.webp 1024w, /images/hero-1920w.webp 1920w"
-    imagesizes="100vw" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="preload" as="video" href="/videos/chachafit-pier-bg-mobile.mp4" type="video/mp4" />
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -64,1467 +63,1092 @@
     ]
   }
   </script>
+
   <style>
-    /* ========================================
-       CSS CUSTOM PROPERTIES
-       ======================================== */
     :root {
       --coral: #E8654A;
-      --coral-dark: #D4553B;
+      --coral-hover: #DC5E45;
+      --coral-press: #CC5638;
       --turquoise: #1A7A7A;
       --warm-white: #FAF7F2;
-      --white: #FFFFFF;
-      --charcoal: #2B2B2B;
-      --gold: #C5973E;
       --sand: #F0E6D8;
-      --muted: #888;
-      --border: #D4D0CB;
-
-      --font-serif: 'Playfair Display', Georgia, serif;
-      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-
-      --max-width: 1200px;
-      --section-pad: 96px;
-      --section-pad-mobile: 64px;
-      --content-pad: 24px;
-      --card-radius: 12px;
-      --btn-radius: 8px;
-      --card-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      --card-shadow-hover: 0 8px 30px rgba(0,0,0,0.10);
+      --paper: #EFE4D2;
+      --paper-2: #F7EFE0;
+      --charcoal: #2B2B2B;
+      --charcoal-70: rgba(43,43,43,0.70);
+      --charcoal-12: rgba(43,43,43,0.12);
+      --gold: #C5973E;
+      --gold-soft: #D9B36A;
+      --red-deep: #B4321D;
+      --ww-85: rgba(250,247,242,0.85);
+      --ww-65: rgba(250,247,242,0.65);
+      --ww-35: rgba(250,247,242,0.35);
+      --ww-12: rgba(250,247,242,0.12);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* ========================================
-       RESET & BASE
-       ======================================== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--font-sans);
-      font-size: 17px;
-      line-height: 1.6;
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       color: var(--charcoal);
       background: var(--warm-white);
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
-
+    body { overflow-x: hidden; min-height: 100vh; min-height: 100svh; min-height: 100dvh; }
     img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    input, textarea { font: inherit; color: inherit; background: none; border: none; outline: none; }
 
-    a { color: var(--coral); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    /* ---- bilingual toggle ---- */
+    body:not(.lang-es) [data-lang="es"] { display: none !important; }
+    body.lang-es [data-lang="en"] { display: none !important; }
 
-    /* ========================================
-       TYPOGRAPHY
-       ======================================== */
-    h1 {
-      font-family: var(--font-serif);
-      font-weight: 700;
-      font-size: 56px;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
+    /* ---- paper texture ---- */
+    .paper {
+      position: relative;
+      background-color: var(--paper);
+      background-image:
+        radial-gradient(1200px 600px at 80% -10%, rgba(232,101,74,.06), transparent 60%),
+        radial-gradient(900px 500px at 0% 30%, rgba(26,122,122,.05), transparent 60%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.45  0 0 0 0 0.30  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
     }
-    h2 {
-      font-family: var(--font-serif);
-      font-weight: 600;
-      font-size: 40px;
-      line-height: 1.2;
-      letter-spacing: -0.01em;
-    }
-    h3 {
-      font-family: var(--font-sans);
-      font-weight: 600;
-      font-size: 24px;
-      line-height: 1.3;
-    }
-    .subtitle {
-      font-size: 17px;
-      color: var(--muted);
-      margin-top: 12px;
-      max-width: 580px;
-    }
-    .section-header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    .section-header .subtitle { margin-left: auto; margin-right: auto; }
-
-    .label {
-      font-family: var(--font-sans);
-      font-weight: 500;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+    .teal-paper {
+      background-color: var(--turquoise);
+      background-image:
+        radial-gradient(1000px 500px at 20% 0%, rgba(255,255,255,.07), transparent 60%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.20  0 0 0 0 0.25  0 0 0 0.22 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/></svg>");
+      color: var(--paper-2);
     }
 
-    /* ========================================
-       LAYOUT UTILITIES
-       ======================================== */
-    .container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 0 var(--content-pad);
-    }
-    .section-pad {
-      padding-top: var(--section-pad);
-      padding-bottom: var(--section-pad);
-    }
-
-    /* ========================================
-       BUTTONS
-       ======================================== */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 48px;
-      padding: 0 32px;
-      border-radius: var(--btn-radius);
-      font-family: var(--font-sans);
-      font-weight: 600;
-      font-size: 16px;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.2s ease-out;
-      text-decoration: none;
-    }
-    .btn-coral {
-      background: var(--coral);
-      color: var(--white);
-    }
-    .btn-coral:hover {
-      background: var(--coral-dark);
-      text-decoration: none;
-    }
-    .btn-outline-white {
-      background: transparent;
-      color: var(--white);
-      border-color: var(--white);
-    }
-    .btn-outline-white:hover {
-      background: rgba(255,255,255,0.15);
-      text-decoration: none;
-    }
-    .btn-outline-dark {
-      background: transparent;
-      color: var(--charcoal);
-      border-color: var(--charcoal);
-    }
-    .btn-outline-dark:hover {
-      background: var(--charcoal);
-      color: var(--white);
-      text-decoration: none;
-    }
-    .btn-full { width: 100%; }
-
-    /* ========================================
-       LANGUAGE TOGGLE (fixed top-right)
-       ======================================== */
+    /* ---- LANGUAGE TOGGLE (top-right, fades on scroll) ---- */
     .lang-toggle {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-      display: flex;
-      background: rgba(255,255,255,0.95);
+      top: max(20px, env(safe-area-inset-top));
+      right: max(64px, env(safe-area-inset-right));
+      z-index: 60;
+      display: inline-flex;
+      gap: 4px;
+      background: rgba(43,43,43,0.10);
+      padding: 4px;
       border-radius: 999px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.10);
-      backdrop-filter: blur(10px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      backdrop-filter: blur(8px);
+      transition: opacity 0.25s var(--ease);
     }
     .lang-toggle button {
-      padding: 4px 14px;
-      border: none;
-      background: transparent;
-      font-family: var(--font-sans);
+      padding: 6px 12px;
+      font-size: 11px;
       font-weight: 600;
-      font-size: 12px;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      color: var(--charcoal);
-      transition: all 0.2s;
+      letter-spacing: .12em;
+      border-radius: 999px;
+      color: var(--charcoal-70);
+      transition: background 0.2s var(--ease), color 0.2s var(--ease);
     }
     .lang-toggle button.active {
-      background: var(--coral);
-      color: var(--white);
+      background: var(--warm-white);
+      color: var(--coral);
     }
-    body.nav-hidden .lang-toggle {
-      opacity: 0;
-      transform: translateY(-8px);
-      pointer-events: none;
-    }
+    body.nav-hidden .lang-toggle { opacity: 0; pointer-events: none; }
 
-    /* ========================================
-       SITE LOGO (fixed top-left)
-       ======================================== */
+    /* ---- SITE LOGO (top-left, fades on scroll) ---- */
     .site-logo {
       position: fixed;
-      top: 20px;
-      left: 24px;
-      z-index: 1000;
-      font-family: var(--font-sans);
+      top: max(22px, env(safe-area-inset-top));
+      left: max(22px, env(safe-area-inset-left));
+      z-index: 60;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
       font-size: 16px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.3em;
-      color: var(--white);
-      text-decoration: none;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.3);
-      transition: opacity 0.4s ease, color 0.3s ease, text-shadow 0.3s ease;
-    }
-    .site-logo:hover {
-      text-decoration: none;
-      opacity: 0.9;
-    }
-    .site-logo.logo-hidden,
-    body.nav-hidden .site-logo {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* ========================================
-       HAMBURGER MENU (fixed top-right, left of lang)
-       ======================================== */
-    .nav-trigger {
-      position: fixed;
-      top: 20px;
-      right: 102px;
-      z-index: 1001;
-      width: 36px;
-      height: 28px;
-      padding: 6px 8px;
-      background: rgba(255,255,255,0.95);
-      border: none;
-      border-radius: 999px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.10);
-      backdrop-filter: blur(10px);
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
-    }
-    .nav-trigger span {
-      display: block;
-      height: 1.5px;
-      width: 100%;
-      background: var(--charcoal);
-      border-radius: 2px;
-      transform-origin: center;
-      transition: transform 0.25s ease, opacity 0.2s ease;
-    }
-    body.nav-open .nav-trigger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    body.nav-open .nav-trigger span:nth-child(2) { opacity: 0; }
-    body.nav-open .nav-trigger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-    body.nav-hidden .nav-trigger {
-      opacity: 0;
-      transform: translateY(-8px);
-      pointer-events: none;
-    }
-
-    .nav-drawer {
-      position: fixed;
-      top: 60px;
-      right: 20px;
-      z-index: 1000;
-      min-width: 200px;
-      background: rgba(255,255,255,0.98);
-      border-radius: 14px;
-      box-shadow: 0 12px 36px rgba(43,43,43,0.18), 0 2px 8px rgba(43,43,43,0.06);
-      backdrop-filter: blur(14px);
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      opacity: 0;
-      transform: translateY(-6px) scale(0.98);
-      pointer-events: none;
-      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    body.nav-open .nav-drawer {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
-    }
-    .nav-drawer a {
-      display: block;
-      padding: 12px 16px;
-      font-family: var(--font-sans);
-      font-size: 14px;
-      font-weight: 500;
+      letter-spacing: 0.02em;
       color: var(--charcoal);
-      text-decoration: none;
-      border-radius: 8px;
-      transition: background 0.15s, color 0.15s;
+      transition: opacity 0.25s var(--ease), color 0.25s var(--ease);
     }
-    .nav-drawer a:hover { background: var(--coral); color: var(--white); }
-    .nav-scrim {
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      background: transparent;
-      display: none;
-    }
-    body.nav-open .nav-scrim { display: block; }
+    body.nav-hidden .site-logo { opacity: 0; pointer-events: none; }
+    body.on-dark .site-logo { color: var(--warm-white); }
 
     /* ========================================
-       SECTION 1: HERO
+       EDGE TAB NAV (vertical pill, right edge)
        ======================================== */
-    .hero-scroll-wrapper {
-      height: 350vh;
-      position: relative;
-    }
-    .hero {
-      position: sticky;
-      top: 0;
-      height: 100vh;
+    .edge-tab {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 1000;
+      width: 36px;
+      padding: 22px 0;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--gold);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      box-shadow: -2px 4px 14px rgba(43,43,43,0.10);
+      backdrop-filter: blur(8px);
       display: flex;
-      align-items: stretch;
+      align-items: center;
       justify-content: center;
-      text-align: center;
-      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.25s var(--ease);
     }
-    /* Hero static background with slow zoom */
-    /* Mobile-first: load smallest image, upgrade at breakpoints */
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background-image: url('/images/hero-640w.jpg');
-      background-image: -webkit-image-set(url('/images/hero-640w.webp') 1x);
-      background-image: image-set(url('/images/hero-640w.webp') type('image/webp'), url('/images/hero-640w.jpg') type('image/jpeg'));
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      animation: heroSlowZoom 20s ease-in-out infinite alternate;
-      will-change: transform;
+    .edge-tab:hover { background: var(--warm-white); transform: translateY(-50%) translateX(-2px); }
+    .edge-tab .label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--charcoal);
     }
-    @media (min-width: 641px) {
-      .hero-bg {
-        background-image: url('/images/hero-1024w.jpg');
-        background-image: -webkit-image-set(url('/images/hero-1024w.webp') 1x);
-        background-image: image-set(url('/images/hero-1024w.webp') type('image/webp'), url('/images/hero-1024w.jpg') type('image/jpeg'));
-      }
-    }
-    @media (min-width: 1025px) {
-      .hero-bg {
-        background-image: url('/images/hero-1920w.jpg');
-        background-image: -webkit-image-set(url('/images/hero-1920w.webp') 1x);
-        background-image: image-set(url('/images/hero-1920w.webp') type('image/webp'), url('/images/hero-1920w.jpg') type('image/jpeg'));
-      }
-    }
-    @keyframes heroSlowZoom {
-      from { transform: scale(1); }
-      to { transform: scale(1.05); }
-    }
-    .hero-bg::after {
+    .edge-tab .label::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
+      display: inline-block;
+      width: 1px;
+      height: 18px;
+      background: var(--gold);
+      margin-bottom: 8px;
+      vertical-align: middle;
     }
-    .hero-content {
+
+    .edge-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      height: 100dvh;
+      width: min(60vw, 360px);
+      background: var(--warm-white);
+      border-left: 1px solid var(--gold);
+      box-shadow: -16px 0 48px rgba(43,43,43,0.18);
+      z-index: 1101;
+      padding: max(48px, env(safe-area-inset-top)) clamp(28px, 6vw, 48px) max(28px, env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      transform: translateX(100%);
+      transition: transform 0.4s var(--ease);
+    }
+    @media (max-width: 480px) { .edge-panel { width: 80vw; } }
+    body.edge-open .edge-panel { transform: translateX(0); }
+
+    .edge-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      background: rgba(43,43,43,0.30);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    body.edge-open .edge-scrim { opacity: 1; pointer-events: auto; }
+
+    .edge-panel .close-row { display: flex; justify-content: flex-end; }
+    .edge-panel .close-btn {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--charcoal);
+      opacity: 0.65;
+      padding: 4px 8px;
+      transition: opacity 0.2s;
+    }
+    .edge-panel .close-btn:hover { opacity: 1; }
+
+    .edge-panel .links {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-top: 12px;
+    }
+    .edge-panel .links a {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(34px, 7.5vw, 48px);
+      line-height: 1.0;
+      color: var(--charcoal);
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+      display: block;
+    }
+    .edge-panel .links a:hover { color: var(--coral); }
+    .edge-panel .links .rule {
+      display: block;
+      width: 56px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.55;
+      margin-top: 10px;
+    }
+    .edge-panel .links .sub {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      opacity: 0.55;
+      margin-top: 8px;
+    }
+    body.edge-open .edge-tab { opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+
+    /* ========================================
+       HERO (paper texture, bg video, syllable reveal)
+       ======================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
+      padding: clamp(120px, 18vh, 180px) clamp(24px, 6vw, 56px) clamp(60px, 10vh, 100px);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .hero-bg-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.32;
+      mix-blend-mode: multiply;
+      filter: saturate(1.05);
+    }
+    .hero-bg-veil {
+      position: absolute; inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(900px 600px at 80% 20%, rgba(239,228,210,0), rgba(239,228,210,.85) 70%),
+        linear-gradient(180deg, rgba(239,228,210,.55) 0%, rgba(239,228,210,.92) 100%);
+    }
+    .hero-inner {
       position: relative;
       z-index: 2;
-      color: var(--white);
-      max-width: 800px;
-      padding: 0 var(--content-pad);
-      display: flex;
-      flex-direction: column;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
       align-items: center;
-      text-align: center;
-      height: 100%;
-      justify-content: center;
-      padding-top: 15vh;
-      padding-bottom: 12vh;
-      gap: 0;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--charcoal);
     }
-    .hero-content h1 {
-      color: var(--white);
-      margin-top: 0;
+    .hero-eyebrow::before {
+      content: '';
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+    }
+    h1.hero-title {
+      font-family: 'Alfa Slab One', serif;
+      font-weight: 400;
+      color: var(--coral);
+      font-size: clamp(64px, 12vw, 144px);
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      margin: 24px 0 8px;
+      text-shadow: 0 2px 18px rgba(232,101,74,.12);
+    }
+    h1.hero-title .syl {
+      display: inline-block;
       opacity: 0;
-      transform: translateY(40px) scale(0.95);
-      transition: opacity 1s ease-out, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(22px);
+      clip-path: inset(0 100% 0 0);
+      will-change: clip-path, transform, opacity;
     }
-    .hero-content .subtitle {
-      color: rgba(255,255,255,0.85);
-      font-size: 19px;
-      max-width: 600px;
-      margin: 20px auto 0;
+    h1.hero-title.in [data-lang]:not([style*="none"]) .syl,
+    h1.hero-title.in .syl { animation: sylReveal 700ms var(--ease) forwards; }
+    body:not(.lang-es) h1.hero-title.in [data-lang="en"] .syl:nth-child(1),
+    body.lang-es h1.hero-title.in [data-lang="es"] .syl:nth-child(1) { animation-delay: 200ms; }
+    body:not(.lang-es) h1.hero-title.in [data-lang="en"] .syl:nth-child(2),
+    body.lang-es h1.hero-title.in [data-lang="es"] .syl:nth-child(2) { animation-delay: 310ms; }
+    body:not(.lang-es) h1.hero-title.in [data-lang="en"] .syl:nth-child(3),
+    body.lang-es h1.hero-title.in [data-lang="es"] .syl:nth-child(3) { animation-delay: 420ms; }
+    body:not(.lang-es) h1.hero-title.in [data-lang="en"] .syl:nth-child(4),
+    body.lang-es h1.hero-title.in [data-lang="es"] .syl:nth-child(4) { animation-delay: 530ms; }
+    body.lang-es h1.hero-title.in [data-lang="es"] .syl:nth-child(5) { animation-delay: 640ms; }
+    @keyframes sylReveal {
+      to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+    }
+    .hero-tagline {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(18px, 4.4vw, 22px);
+      line-height: 1.3;
+      color: var(--charcoal);
+      max-width: 540px;
+      margin: 8px 0 36px;
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease-out 0.1s, transform 0.8s ease-out 0.1s;
+      transform: translateY(12px);
+      transition: opacity 700ms var(--ease) 800ms, transform 700ms var(--ease) 800ms;
     }
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      margin-top: auto;
-      opacity: 0;
-      transform: translateY(25px);
-      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-    }
+    .hero-title.in ~ .hero-tagline,
+    .hero-inner.in .hero-tagline { opacity: 1; transform: translateY(0); }
 
-    /* Scroll-triggered reveal states */
-    .hero-content.show-title h1 {
-      opacity: 1;
-      transform: translateY(0) scale(1);
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 700ms var(--ease) 1000ms, transform 700ms var(--ease) 1000ms;
     }
-    .hero-content.show-subtitle .subtitle {
-      opacity: 1;
-      transform: translateY(0);
+    .hero-inner.in .hero-ctas { opacity: 1; transform: translateY(0); }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 26px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: .02em;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
     }
-    .hero-content.show-cta .hero-buttons {
-      opacity: 1;
-      transform: translateY(0);
+    .btn-pill.primary {
+      background: var(--coral);
+      color: var(--warm-white);
+      box-shadow: 0 10px 30px -12px rgba(232,101,74,.6);
+    }
+    .btn-pill.primary:hover {
+      transform: translateY(-1px);
+      background: var(--coral-hover);
+    }
+    .btn-pill.ghost {
+      background: transparent;
+      color: var(--charcoal);
+      border: 1.5px solid var(--charcoal);
+    }
+    .btn-pill.ghost:hover {
+      background: var(--charcoal);
+      color: var(--warm-white);
     }
 
     /* ========================================
-       SECTION 2: CREDENTIALS (Scroll-Driven Video BG, HIW pattern)
+       CREDENTIALS — italic Playfair confirmations
        ======================================== */
     .credentials-section {
       position: relative;
-      overflow: hidden;
-      padding: 0;
+      background: var(--charcoal);
+      color: var(--warm-white);
     }
-
-    /* Fixed background with scroll-driven frames */
     .cred-frame-bg {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
+      inset: 0;
       z-index: 0;
-      pointer-events: none;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.5s var(--ease);
+      pointer-events: none;
     }
-    .cred-frame-bg.cred-bg-visible {
-      opacity: 1;
-    }
+    .cred-frame-bg.cred-bg-visible { opacity: 1; }
     .cred-frame-bg img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      filter: brightness(0.55) saturate(1.1);
     }
-    /* Dark overlay for text readability */
     .cred-frame-bg::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        180deg,
-        rgba(43, 43, 43, 0.45) 0%,
-        rgba(43, 43, 43, 0.35) 40%,
-        rgba(43, 43, 43, 0.50) 100%
-      );
+      background: linear-gradient(180deg, rgba(43,43,43,.45), rgba(43,43,43,.7));
     }
-
-    /* Scrollable content area */
     .cred-scroll-area {
       position: relative;
-      z-index: 2;
-      min-height: 400vh;
+      z-index: 1;
+      height: 600vh;
+      pointer-events: none;
     }
-
-    /* Credential text overlay — fixed at top, cycles on scroll */
+    .cred-cards-list { display: none; }
     .cred-text-container {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 40vh;
+      right: 0;
+      height: 100vh;
+      height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 3;
-      pointer-events: none;
+      z-index: 2;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.5s var(--ease);
+      pointer-events: none;
+      padding: 0 clamp(24px, 6vw, 64px);
     }
-    .cred-text-container.cred-bg-visible {
-      opacity: 1;
-    }
+    .cred-text-container.cred-bg-visible { opacity: 1; }
     .cred-text-item {
       position: absolute;
+      max-width: 1200px;
       width: 100%;
       text-align: center;
-      font-family: var(--font-serif);
-      font-size: 34px;
-      font-weight: 600;
-      color: #fff;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(48px, 14vw, 104px);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--warm-white);
       opacity: 0;
-      transition: opacity 1.2s ease-in-out;
-      padding: 0 24px;
+      transform: translateY(20px);
+      transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+      text-shadow: 0 2px 28px rgba(0,0,0,.55);
     }
     .cred-text-item.cred-active {
       opacity: 1;
-      animation: credFloat 4s ease-in-out infinite;
+      transform: translateY(0);
     }
-    @keyframes credFloat {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-8px) scale(1.02); }
-    }
-
-    /* ========================================
-       SECTION 3: WHO I HELP
-       ======================================== */
-    .who-i-help { background: var(--sand); }
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .card {
-      background: var(--white);
-      border-radius: var(--card-radius);
-      padding: 32px;
-      box-shadow: var(--card-shadow);
-      transition: all 0.3s ease-out;
-    }
-    .card:hover {
-      box-shadow: var(--card-shadow-hover);
-      transform: translateY(-4px);
-    }
-    .card-icon {
-      font-size: 40px;
-      color: var(--coral);
-      margin-bottom: 16px;
-    }
-    .card h3 { margin-bottom: 12px; }
-    .card p { font-size: 16px; color: #555; line-height: 1.6; }
-
-    /* ========================================
-       SECTION 4: HOW IT WORKS (Full-bleed GIF background)
-       ======================================== */
-    .how-it-works {
-      position: relative;
-      overflow: hidden;
-      padding: 0;
-      /* The GIF IS the background -- no solid color */
-    }
-
-    /* Full-bleed GIF background */
-    .hiw-gif-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 1.2s ease-in-out;
-    }
-    .hiw-gif-bg.hiw-bg-visible {
-      opacity: 1;
-    }
-    .hiw-gif-bg img,
-    .hiw-gif-bg video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-    /* Dark overlay for text readability */
-    .hiw-gif-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        180deg,
-        rgba(43, 43, 43, 0.55) 0%,
-        rgba(43, 43, 43, 0.45) 40%,
-        rgba(43, 43, 43, 0.50) 100%
-      );
-    }
-
-    /* Scrollable content area */
-    .hiw-scroll-area {
-      position: relative;
-      z-index: 2;
-      min-height: 280vh;
-    }
-
-    /* Section header pinned at top initially */
-    .hiw-header {
-      text-align: center;
-      padding: 120px var(--content-pad) 60px;
-    }
-    .hiw-header h2 {
-      color: var(--white);
-      text-shadow: 0 2px 16px rgba(0,0,0,0.3);
-    }
-    .hiw-header .subtitle {
-      color: rgba(255,255,255,0.8);
-      text-shadow: 0 1px 8px rgba(0,0,0,0.2);
-    }
-
-    /* Step cards that fade in on scroll */
-    .hiw-step-card {
-      position: relative;
-      max-width: 560px;
-      margin: 0 auto;
-      padding: 48px 40px;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(60px) scale(0.95);
-      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-      /* Semi-transparent card backdrop */
-      background: rgba(43, 43, 43, 0.5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .hiw-step-card.hiw-visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    /* Generous spacing between step cards */
-    .hiw-step-card + .hiw-step-card {
-      margin-top: 50vh;
-    }
-
-    /* First card gets top spacing */
-    .hiw-steps-list .hiw-step-card:first-child {
-      margin-top: 20vh;
-    }
-    /* Last card gets bottom spacing */
-    .hiw-steps-list .hiw-step-card:last-child {
-      margin-bottom: 20vh;
-    }
-
-    .hiw-step-number {
-      font-family: var(--font-serif);
-      font-weight: 700;
-      font-size: 72px;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 12px;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
-    }
-    .hiw-step-card h3 {
-      color: var(--white);
-      font-size: 28px;
-      margin-bottom: 16px;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.2);
-    }
-    .hiw-step-card p {
-      font-size: 17px;
-      color: rgba(255,255,255,0.85);
-      line-height: 1.7;
-      max-width: 440px;
-      margin: 0 auto;
-    }
-
-    /* Bottom CTA area */
-    .hiw-bottom-cta {
-      text-align: center;
-      padding: 0 var(--content-pad) 100px;
-      position: relative;
-      z-index: 2;
-    }
-    .hiw-bottom-cta p {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-size: 22px;
-      color: var(--white);
-      margin-bottom: 24px;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
-    }
-
-    /* Reduced motion: show everything immediately */
-    @media (prefers-reduced-motion: reduce) {
-      .hero-bg {
-        animation: none;
-      }
-      .cred-text-item {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
-      .cred-frame-bg {
-        position: absolute;
-        opacity: 1;
-        height: 100%;
-      }
-      .hiw-step-card {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
-      .hiw-gif-bg {
-        position: absolute;
-        opacity: 1;
-        height: 100%;
-      }
-      .inquiry-reveal,
-      .inquiry-form-card {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
-      .inquiry-bg {
-        position: absolute;
-        opacity: 1;
-        height: 100%;
-      }
-    }
-
-    /* ========================================
-       SECTION 5: ABOUT LAURA
-       ======================================== */
-    .about { background: var(--sand); }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-    .about-carousel {
-      position: relative;
-      width: 100%;
-      max-width: 500px;
-      overflow: hidden;
-      border-radius: var(--card-radius);
-      box-shadow: var(--card-shadow);
-    }
-    .carousel-track {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .carousel-track::-webkit-scrollbar { display: none; }
-    .carousel-slide {
-      min-width: 100%;
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
+    .cred-text-item .gold-rule {
       display: block;
-      flex-shrink: 0;
-      scroll-snap-align: center;
-    }
-    .carousel-dots {
-      position: absolute;
-      bottom: 16px;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      z-index: 2;
-    }
-    .carousel-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.8);
-      background: transparent;
-      cursor: pointer;
-      padding: 0;
-      transition: background 0.3s;
-    }
-    .carousel-dot.active {
-      background: rgba(255,255,255,0.9);
-    }
-    .about-text h2 { margin-bottom: 24px; }
-    .about-text p { max-width: 520px; margin-bottom: 20px; }
-    .social-testimonial {
-      text-align: center;
-      margin-top: 48px;
-      margin-bottom: 40px;
-      padding-bottom: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      position: sticky;
-      top: 30%;
-      z-index: 2;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    .social-testimonial blockquote {
-      font-family: var(--font-serif);
-      font-size: 22px;
-      font-style: italic;
-      color: var(--white);
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-    .social-testimonial .attribution {
-      color: rgba(255,255,255,0.7);
-      font-size: 15px;
-    }
-    .about-link {
-      display: inline-block;
-      margin-top: 20px;
-      font-weight: 600;
-      color: var(--coral);
+      width: 56px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.55;
+      margin: 28px auto 0;
     }
 
     /* ========================================
-       SECTION 6: SERVICES & PRICING
+       HALVES — Who I Help + How It Works (6 panels)
        ======================================== */
-    .services { background: var(--warm-white); }
-    .services-self-guided { background: var(--sand); }
-    .pricing-subsection {
-      margin-bottom: 0;
-    }
-    .pricing-subsection-header {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-    .pricing-subsection-header h3 {
-      font-family: var(--heading-font);
-      font-size: 26px;
-      margin-bottom: 8px;
-    }
-    .pricing-subsection-header p {
-      color: #666;
-      font-size: 16px;
-    }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .pricing-grid.single-card {
-      grid-template-columns: 1fr;
-      max-width: 380px;
-      margin: 0 auto;
-    }
-    .programs-note {
-      text-align: center;
-      margin-top: 24px;
-      color: #999;
-      font-size: 14px;
-      font-style: italic;
-    }
-    .pricing-card {
-      background: var(--white);
-      border-radius: var(--card-radius);
-      padding: 32px;
-      box-shadow: var(--card-shadow);
-      text-align: center;
-      transition: all 0.3s ease-out;
+    .halves-section { background: var(--warm-white); }
+    .half-panel {
       position: relative;
+      min-height: 100dvh;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(60px, 12vw, 100px) clamp(24px, 6vw, 40px);
+      overflow: hidden;
+      cursor: default;
+      transition: filter 0.2s var(--ease);
+    }
+    a.half-panel { cursor: pointer; }
+    a.half-panel:active { filter: brightness(0.94); }
+    .half-panel.coral { background: var(--coral); color: var(--warm-white); }
+    .half-panel.charcoal { background: var(--charcoal); color: var(--warm-white); }
+    .half-panel .corner {
+      position: absolute;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(250,247,242,0.65);
+    }
+    .half-panel .corner.tl { top: clamp(24px, 6vw, 40px); left: clamp(24px, 6vw, 40px); }
+    .half-panel .corner.tr { top: clamp(24px, 6vw, 40px); right: clamp(24px, 6vw, 40px); }
+    .half-panel .stack {
       display: flex;
       flex-direction: column;
-    }
-    .pricing-card:hover {
-      box-shadow: var(--card-shadow-hover);
-      transform: translateY(-4px);
-    }
-    .pricing-card.highlighted {
-      border-top: 4px solid var(--coral);
-    }
-    .badge {
-      position: absolute;
-      top: -14px;
-      right: 20px;
-      background: var(--coral);
-      color: var(--white);
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      padding: 4px 14px;
-      border-radius: 20px;
-      letter-spacing: 0.05em;
-    }
-    .pricing-card h3 { margin-bottom: 8px; font-size: 20px; }
-    .price {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--charcoal);
-      margin: 12px 0 16px;
-    }
-    .pricing-card .details {
-      font-size: 15px;
-      color: #666;
-      line-height: 1.5;
-      flex-grow: 1;
-      margin-bottom: 24px;
-    }
-    .free-quiz-bar {
+      align-items: center;
+      gap: 18px;
+      max-width: 720px;
       text-align: center;
-      margin-top: 48px;
-      padding-top: 40px;
-      border-top: 1px solid rgba(0,0,0,0.06);
     }
-    .free-quiz-bar p {
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 20px;
-      color: var(--charcoal);
+    .half-panel .gold-rule {
+      width: 56px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.55;
+    }
+    .half-panel h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 800;
+      font-size: clamp(48px, 14vw, 80px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--warm-white);
+    }
+    .half-panel .sub {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(17px, 4.2vw, 19px);
+      line-height: 1.45;
+      color: rgba(250,247,242,0.85);
+      max-width: 36ch;
+    }
+    .half-panel .arrow {
+      position: absolute;
+      bottom: clamp(24px, 5vw, 36px);
+      right: clamp(24px, 5vw, 36px);
+      color: var(--warm-white);
+      opacity: 0.85;
     }
 
     /* ========================================
-       SECTION 7: SOCIAL PROOF
+       SERVICES — chachafit poster triptych (no prices)
        ======================================== */
-    .social-proof {
-      background: var(--turquoise);
-      color: var(--white);
+    .services-section {
+      padding: clamp(80px, 12vh, 140px) clamp(24px, 6vw, 56px);
+      position: relative;
     }
-    .social-proof .section-header .subtitle { color: rgba(255,255,255,0.7); }
-    .social-proof h2 { color: var(--white); }
-    /* Curated social image grid */
-    .social-grid {
+    .services-inner { max-width: 1240px; margin: 0 auto; }
+    .services-head { text-align: center; margin-bottom: clamp(48px, 8vh, 80px); }
+    .services-head .kicker {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 14px;
+    }
+    .services-head h2 {
+      font-family: 'Alfa Slab One', serif;
+      font-weight: 400;
+      font-size: clamp(40px, 5.5vw, 64px);
+      line-height: 0.95;
+      color: var(--charcoal);
+      letter-spacing: -0.005em;
+    }
+    .services-head h2 em {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--coral);
+    }
+    .services-head p.sub {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.2vw, 22px);
+      color: var(--charcoal-70);
+      margin-top: 16px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .triptych {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
-      max-width: 900px;
-      margin: 0 auto;
+      gap: clamp(24px, 4vw, 40px);
+      align-items: stretch;
+    }
+    .poster-card {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: var(--paper-2);
+      background-image:
+        radial-gradient(800px 400px at 60% 10%, rgba(232,101,74,.10), transparent 60%),
+        radial-gradient(600px 400px at 0% 80%, rgba(26,122,122,.06), transparent 60%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.45  0 0 0 0 0.30  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+      box-shadow: 0 30px 80px -30px rgba(43,43,43,.45), 0 1px 0 rgba(43,43,43,.08);
+      padding: clamp(28px, 4vw, 40px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: var(--charcoal);
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .poster-card.tilt-l { transform: rotate(-1.5deg); }
+    .poster-card.tilt-r { transform: rotate(1.5deg); }
+    .poster-card:hover { transform: rotate(0) translateY(-4px); box-shadow: 0 40px 90px -30px rgba(43,43,43,.5); }
+    .poster-card .top-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--coral);
+    }
+    .poster-card h3 {
+      font-family: 'Alfa Slab One', serif;
+      font-weight: 400;
+      font-size: clamp(26px, 3.4vw, 38px);
+      line-height: 1.0;
+      color: var(--charcoal);
+      letter-spacing: -0.005em;
+      margin-top: 18px;
+    }
+    .poster-card .desc {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(16px, 1.7vw, 19px);
+      line-height: 1.4;
+      color: var(--charcoal-70);
+      margin-top: 14px;
+      max-width: 28ch;
+    }
+    .poster-card .cta {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--coral);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .poster-card .cta:hover { color: var(--coral-press); }
+    .poster-card .ribbon {
+      position: absolute;
+      top: 22px;
+      right: -10px;
+      background: var(--coral);
+      color: var(--warm-white);
+      padding: 8px 18px 8px 14px;
+      font-family: 'Alfa Slab One', serif;
+      font-size: 18px;
+      letter-spacing: .04em;
+      transform: rotate(-3deg);
+      box-shadow: 0 8px 16px -8px rgba(0,0,0,.35);
+      z-index: 2;
+    }
+
+    .all-options-link {
+      text-align: center;
+      margin-top: clamp(40px, 6vh, 64px);
+    }
+    .all-options-link a {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.2vw, 22px);
+      color: var(--coral);
+      letter-spacing: -0.005em;
+      transition: color 0.2s;
+    }
+    .all-options-link a:hover { color: var(--coral-press); }
+
+    /* free quiz banner */
+    .quiz-banner {
+      max-width: 1200px;
+      margin: clamp(60px, 8vh, 96px) auto 0;
+      padding: clamp(28px, 4vw, 40px) clamp(28px, 5vw, 48px);
+      border-radius: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .quiz-banner .copy {
+      flex: 1 1 320px;
+      color: var(--paper-2);
+    }
+    .quiz-banner .copy .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold-soft);
+      margin-bottom: 10px;
+    }
+    .quiz-banner .copy h3 {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(22px, 2.6vw, 28px);
+      color: var(--paper-2);
+      line-height: 1.3;
+    }
+
+    /* ========================================
+       SOCIAL PROOF (kept from old site)
+       ======================================== */
+    .social-proof {
+      padding: clamp(80px, 12vh, 120px) clamp(24px, 6vw, 56px);
+      background: var(--warm-white);
+    }
+    .social-proof .container { max-width: 1200px; margin: 0 auto; }
+    .social-proof .section-head { text-align: center; margin-bottom: clamp(40px, 6vh, 64px); }
+    .social-proof .kicker {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 14px;
+    }
+    .social-proof h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 800;
+      font-size: clamp(40px, 7vw, 60px);
+      line-height: 1.0;
+      color: var(--charcoal);
+      letter-spacing: -0.02em;
+    }
+    .social-proof .section-head p.sub {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(17px, 2vw, 20px);
+      color: var(--charcoal-70);
+      margin-top: 16px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: clamp(8px, 1.5vw, 14px);
+      margin-bottom: clamp(56px, 8vh, 80px);
     }
     .social-post {
       position: relative;
-      aspect-ratio: 1;
+      aspect-ratio: 1 / 1;
       overflow: hidden;
-      display: block;
-      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      background: var(--sand);
     }
     .social-post img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-      transition: transform 0.35s ease;
+      opacity: 0;
+      transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
     }
-    .social-post:hover img {
-      transform: scale(1.07);
-    }
+    .social-post img.loaded { opacity: 1; }
+    .social-post:hover img { transform: scale(1.04); }
     .social-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.0);
+      background: rgba(0,0,0,0);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.3s ease;
+      transition: background 0.2s ease;
     }
-    .social-post:hover .social-overlay {
-      background: rgba(0,0,0,0.38);
-    }
+    .social-post:hover .social-overlay { background: rgba(0,0,0,0.18); }
     .platform-icon {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--warm-white);
       opacity: 0;
-      transition: opacity 0.3s ease;
-      color: #fff;
-      font-size: 28px;
-      line-height: 1;
+      transition: opacity 0.2s ease;
     }
-    .social-post:hover .platform-icon {
-      opacity: 1;
+    .platform-icon.ig::before { content: 'IG'; }
+    .platform-icon.tt::before { content: 'TT'; }
+    .social-post:hover .platform-icon { opacity: 1; }
+    .social-post.loading { background: linear-gradient(135deg, rgba(232,101,74,.10), rgba(26,122,122,.08)); }
+
+    .testimonial {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
     }
-    /* Platform icon SVGs */
-    .platform-icon.ig::before { content: ''; display: inline-block; width: 28px; height: 28px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'/%3E%3C/svg%3E") no-repeat center/contain; }
-    .platform-icon.tt::before { content: ''; display: inline-block; width: 28px; height: 28px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.95a8.2 8.2 0 004.79 1.52V7.02a4.85 4.85 0 01-1.02-.33z'/%3E%3C/svg%3E") no-repeat center/contain; }
-    /* Loading shimmer for thumbnails */
-    .social-post.loading img {
-      opacity: 0;
+    .testimonial blockquote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.2;
+      color: var(--charcoal);
+      letter-spacing: -0.01em;
     }
-    .social-post img.loaded {
-      opacity: 1;
-      transition: opacity 0.4s ease, transform 0.35s ease;
+    .testimonial blockquote::before { content: '"'; }
+    .testimonial blockquote::after { content: '"'; }
+    .testimonial .attrib {
+      margin-top: 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--coral);
     }
-    @media (max-width: 600px) {
-      .social-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .testimonial .attrib .role {
+      display: block;
+      margin-top: 6px;
+      font-weight: 400;
+      color: var(--charcoal-70);
+      letter-spacing: .04em;
+      text-transform: none;
+      font-size: 13px;
     }
 
     /* ========================================
-       SECTION 8: INQUIRY / CONTACT (Hero-style scroll reveal)
+       INQUIRY (coral canvas, /client style)
        ======================================== */
     .inquiry {
+      background: var(--coral);
+      color: var(--warm-white);
+      padding: clamp(80px, 14vh, 140px) clamp(24px, 7vw, 56px) clamp(60px, 10vh, 100px);
       position: relative;
-      overflow: hidden;
-      padding: 0;
-      background: none;
+      min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-
-    /* Full-bleed sunset silhouette background (fixed) */
-    .inquiry-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    .inquiry-bg.inquiry-bg-visible {
-      opacity: 1;
-    }
-    .inquiry-bg img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-    /* Dark gradient overlay for text readability */
-    .inquiry-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        180deg,
-        rgba(43, 43, 43, 0.50) 0%,
-        rgba(43, 43, 43, 0.40) 40%,
-        rgba(43, 43, 43, 0.60) 100%
-      );
-    }
-
-    /* Scrollable content area within inquiry section */
-    .inquiry-scroll-area {
-      position: relative;
-      z-index: 2;
-      min-height: 250vh;
-    }
-
-    /* Scroll-reveal text blocks */
-    .inquiry-reveal {
-      text-align: center;
-      padding: 0 var(--content-pad);
-      opacity: 0;
-      transform: translateY(50px) scale(0.97);
-      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .inquiry-reveal.inquiry-visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    /* First reveal: big headline */
-    .inquiry-headline {
-      padding-top: 35vh;
-    }
-    .inquiry-headline h2 {
-      font-family: var(--font-serif);
-      font-size: 56px;
-      font-weight: 700;
-      color: var(--white);
-      text-shadow: 0 2px 16px rgba(0,0,0,0.4);
-      line-height: 1.15;
-    }
-
-    /* Second reveal: subheader */
-    .inquiry-subheader {
-      margin-top: 15vh;
-    }
-    .inquiry-subheader p {
-      font-size: 20px;
-      color: rgba(255,255,255,0.85);
-      max-width: 600px;
+    .inquiry-inner {
+      max-width: 720px;
       margin: 0 auto;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.2);
-    }
-
-    /* Third reveal: why work with laura */
-    .inquiry-reasons {
-      margin-top: 15vh;
-    }
-    .inquiry-reasons h3 {
-      color: var(--white);
-      font-size: 28px;
-      margin-bottom: 20px;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.2);
-    }
-    .inquiry-reasons ul {
-      list-style: none;
-      padding: 0;
-      display: inline-block;
-      text-align: left;
-    }
-    .inquiry-reasons li {
-      padding: 10px 0;
-      padding-left: 28px;
-      position: relative;
-      font-size: 17px;
-      color: rgba(255,255,255,0.9);
-    }
-    .inquiry-reasons li::before {
-      content: '\2713';
-      position: absolute;
-      left: 0;
-      color: var(--coral);
-      font-weight: 700;
-    }
-
-    /* Form card: glass-morphism on dark background */
-    .inquiry-form-card {
-      margin: 15vh auto 10vh;
-      max-width: 600px;
-      padding: 40px 36px;
-      background: rgba(43, 43, 43, 0.55);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      opacity: 0;
-      transform: translateY(50px) scale(0.97);
-      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .inquiry-form-card.inquiry-visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    /* Form styling overrides for dark card context */
-    .inquiry-form-card .form-group label {
-      color: rgba(255,255,255,0.9);
-    }
-    .inquiry-form-card .form-group input,
-    .inquiry-form-card .form-group textarea {
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(255,255,255,0.2);
-      color: var(--white);
-    }
-    .inquiry-form-card .form-group input::placeholder,
-    .inquiry-form-card .form-group textarea::placeholder {
-      color: rgba(255,255,255,0.45);
-    }
-    .inquiry-form-card .form-group input:focus,
-    .inquiry-form-card .form-group textarea:focus {
-      border-color: var(--coral);
-      box-shadow: 0 0 0 3px rgba(232,101,74,0.25);
-      background: rgba(255,255,255,0.15);
-    }
-
-    /* Success messages on dark background */
-    .inquiry-form-card .form-success h3 {
-      color: var(--coral);
-    }
-    .inquiry-form-card .form-success p {
-      color: rgba(255,255,255,0.85);
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block;
-      font-weight: 500;
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: var(--charcoal);
-    }
-    .form-group input,
-    .form-group textarea {
       width: 100%;
-      padding: 14px 16px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-family: var(--font-sans);
-      font-size: 16px;
-      color: var(--charcoal);
-      background: var(--white);
-      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--coral);
-      box-shadow: 0 0 0 3px rgba(232,101,74,0.15);
+    .inquiry .meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ww-65);
+      margin-bottom: 20px;
     }
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
-      color: #999;
+    .inquiry h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(48px, 14vw, 72px);
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--warm-white);
     }
-    .form-group textarea {
-      min-height: 120px;
-      resize: vertical;
+    .inquiry .gold-rule {
+      width: 56px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.55;
+      margin: 18px 0 16px;
     }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+    .inquiry .sub {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.2vw, 22px);
+      color: var(--ww-85);
+      margin-bottom: clamp(28px, 4vh, 40px);
+      max-width: 32ch;
     }
-    .bot-trap {
-      position: absolute;
-      left: -9999px;
-      height: 0;
-      overflow: hidden;
+
+    .picker-row {
+      margin-bottom: clamp(24px, 3vh, 32px);
     }
-    .form-success {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .form-success h3 {
-      color: var(--turquoise);
+    .picker-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ww-65);
       margin-bottom: 12px;
+    }
+    .picker-pills {
+      display: inline-flex;
+      background: var(--ww-12);
+      border-radius: 999px;
+      padding: 4px;
+    }
+    .picker-pills button {
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ww-65);
+      transition: background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+    .picker-pills button.on {
+      background: var(--warm-white);
+      color: var(--coral);
+    }
+
+    .form-grid { display: flex; flex-direction: column; gap: 20px; }
+    .field {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid var(--ww-35);
+      transition: border-color 0.2s var(--ease);
+    }
+    .field:focus-within { border-bottom-color: var(--warm-white); }
+    .field label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ww-65);
+      padding-top: 4px;
+    }
+    .field input {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--warm-white);
+      padding: 8px 0 14px;
+      width: 100%;
+    }
+    .field input::placeholder { color: var(--ww-35); }
+    .submit-btn {
+      width: 100%;
+      background: var(--coral-press);
+      color: var(--warm-white);
+      padding: 18px 24px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      transition: background 0.2s var(--ease), opacity 0.2s var(--ease);
+      margin-top: 8px;
+    }
+    .submit-btn:hover { background: #B84A30; }
+    .submit-btn:active { transform: scale(0.99); }
+    .submit-btn[disabled] {
+      background: transparent;
+      border: 1px solid var(--ww-35);
+      color: var(--ww-65);
+      cursor: not-allowed;
+    }
+    .disclosure {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--ww-65);
+      margin-top: 12px;
+    }
+    .err {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #FFE0D6;
+      min-height: 1em;
+      margin-top: 8px;
+    }
+    .hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+    .inquiry-confirm { display: none; }
+    body.inquiry-sent .inquiry-form { display: none; }
+    body.inquiry-sent .inquiry-confirm { display: flex; flex-direction: column; }
+    .inquiry-confirm .confirm-sub {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.2vw, 22px);
+      color: var(--ww-85);
+      margin-top: 18px;
+      max-width: 32ch;
     }
 
     /* ========================================
-       SECTION 9: FOOTER
+       FOOTER
        ======================================== */
     .footer {
       background: var(--charcoal);
-      color: rgba(255,255,255,0.8);
-      padding: 60px 0 0;
-      position: relative;
-      z-index: 10;
+      color: #C7CCD7;
+      padding: 80px clamp(24px, 6vw, 56px) 28px;
     }
     .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 40px;
-      padding-bottom: 48px;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 48px;
     }
     .footer h4 {
-      color: var(--white);
-      font-size: 16px;
-      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--warm-white);
       margin-bottom: 16px;
     }
-    .footer p, .footer a {
-      font-size: 15px;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.8;
+    .footer .brand-mark {
+      font-family: 'Alfa Slab One', serif;
+      color: var(--coral);
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 14px;
     }
-    .footer a:hover { color: var(--coral); text-decoration: none; }
-    .social-links { list-style: none; padding: 0; }
-    .social-links li { margin-bottom: 10px; }
-    .social-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
+    .footer p {
+      font-size: 14px;
+      color: #C7CCD7;
+      line-height: 1.6;
+    }
+    .footer a {
+      color: #C7CCD7;
       transition: color 0.2s;
     }
-    .social-icon {
-      width: 24px;
-      height: 24px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      transition: background 0.2s;
-    }
-    .social-links a:hover .social-icon { background: var(--coral); }
+    .footer a:hover { color: var(--warm-white); }
+    .footer ul { list-style: none; display: grid; gap: 8px; }
+    .footer ul a { font-size: 14px; }
     .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding: 20px 0;
-      text-align: center;
-      font-size: 13px;
-      color: rgba(255,255,255,0.4);
+      max-width: 1200px;
+      margin: 48px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 12px;
+      color: #7E869A;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
     }
-    .footer-bottom a { color: rgba(255,255,255,0.5); }
-    .footer-bottom a:hover { color: var(--coral); }
+    .footer-bottom a { color: #7E869A; }
+    .footer-bottom a:hover { color: #C7CCD7; }
 
     /* ========================================
        RESPONSIVE
        ======================================== */
-    @media (max-width: 1024px) {
-      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
-      .pricing-grid.single-card { grid-template-columns: 1fr; }
+    @media (max-width: 980px) {
+      .triptych { grid-template-columns: 1fr; gap: 40px; max-width: 380px; margin: 0 auto; }
+      .poster-card.tilt-l, .poster-card.tilt-r { transform: rotate(0); }
+      .social-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
     }
-    @media (max-width: 768px) {
-      .hero-scroll-wrapper {
-        height: 250vh;
-      }
-      :root {
-        --section-pad: 64px;
-        --content-pad: 20px;
-      }
-      h1 { font-size: 36px; }
-      h2 { font-size: 28px; }
-      h3 { font-size: 20px; }
-      body { font-size: 16px; }
-
-      .hero-content {
-        padding-top: 12vh;
-        padding-bottom: 10vh;
-      }
-      .hero-content .subtitle { font-size: 16px; }
-
-      .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-      }
-      .hero-buttons .btn { width: 100%; max-width: 320px; }
-
-      .cred-scroll-area {
-        min-height: 350vh;
-      }
-      .cred-text-item { font-size: 24px; }
-
-      .cards-grid,
-      .pricing-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-
-      /* How It Works mobile */
-      .hiw-scroll-area {
-        min-height: 240vh;
-      }
-      .hiw-header {
-        padding: 80px var(--content-pad) 40px;
-      }
-      .hiw-step-card {
-        max-width: 90%;
-        padding: 36px 24px;
-      }
-      .hiw-step-card + .hiw-step-card {
-        margin-top: 40vh;
-      }
-      .hiw-step-number {
-        font-size: 52px;
-      }
-      .hiw-step-card h3 {
-        font-size: 22px;
-      }
-      .hiw-step-card p {
-        font-size: 15px;
-      }
-      .hiw-bottom-cta p {
-        font-size: 18px;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-      .about-carousel { max-width: 100%; }
-
-      /* Inquiry section mobile */
-      .inquiry-scroll-area {
-        min-height: 180vh;
-      }
-      .inquiry-headline {
-        padding-top: 25vh;
-      }
-      .inquiry-headline h2 {
-        font-size: 36px;
-      }
-      .inquiry-subheader {
-        margin-top: 10vh;
-      }
-      .inquiry-subheader p {
-        font-size: 17px;
-      }
-      .inquiry-reasons {
-        margin-top: 10vh;
-      }
-      .inquiry-reasons h3 {
-        font-size: 22px;
-      }
-      .inquiry-form-card {
-        margin: 10vh auto 8vh;
-        padding: 28px 20px;
-        max-width: 95%;
-      }
-
-      .form-row { grid-template-columns: 1fr; }
-
-      .footer-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-      .social-links a { justify-content: center; }
-
-      .price { font-size: 30px; }
-      .social-testimonial blockquote { font-size: 18px; }
-
-      .card:hover, .pricing-card:hover { transform: none; }
-    }
-
-    @media (max-width: 480px) {
-      .site-logo {
-        font-size: 13px;
-        letter-spacing: 0.25em;
-        top: 19px;
-        left: 16px;
-      }
+    @media (max-width: 640px) {
+      .hero-bg-video, .hero-bg-veil { display: none; }
+      .hero { background: var(--paper); padding: clamp(100px, 16vh, 140px) 22px clamp(60px, 10vh, 80px); }
+      h1.hero-title { font-size: clamp(56px, 18vw, 88px); }
+      .social-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .lang-toggle { right: max(64px, env(safe-area-inset-right)); }
     }
 
     /* ========================================
-       HIDDEN LANGUAGE
+       REDUCED MOTION
        ======================================== */
-    [data-lang="es"] { display: none; }
-    body.lang-es [data-lang="es"] { display: block; }
-    body.lang-es [data-lang="en"] { display: none; }
-    /* inline elements */
-    span[data-lang="es"], a[data-lang="es"] { display: none; }
-    body.lang-es span[data-lang="es"], body.lang-es a[data-lang="es"] { display: inline; }
-    body.lang-es span[data-lang="en"], body.lang-es a[data-lang="en"] { display: none; }
-    /* flex containers */
-    .hero-buttons[data-lang="es"] { display: none; }
-    body.lang-es .hero-buttons[data-lang="es"] { display: flex; }
-    body.lang-es .hero-buttons[data-lang="en"] { display: none; }
-    /* grid containers */
-    .cred-cards-list[data-lang="es"],
-    .cards-grid[data-lang="es"],
-    .hiw-steps-list[data-lang="es"],
-    .pricing-grid[data-lang="es"],
-    .pricing-subsection[data-lang="es"],
-    .inquiry-content[data-lang="es"],
-    .footer-grid[data-lang="es"] { display: none; }
-    body.lang-es .cred-cards-list[data-lang="es"] { display: block; }
-    body.lang-es .cards-grid[data-lang="es"],
-    body.lang-es .pricing-grid[data-lang="es"],
-    body.lang-es .footer-grid[data-lang="es"] { display: grid; }
-    body.lang-es .inquiry-content[data-lang="es"] { display: block; }
-    body.lang-es .hiw-steps-list[data-lang="es"] { display: block; }
-    body.lang-es .pricing-subsection[data-lang="es"] { display: block; }
-    body.lang-es .cred-cards-list[data-lang="en"],
-    body.lang-es .cards-grid[data-lang="en"],
-    body.lang-es .hiw-steps-list[data-lang="en"],
-    body.lang-es .pricing-grid[data-lang="en"],
-    body.lang-es .pricing-subsection[data-lang="en"],
-    body.lang-es .inquiry-content[data-lang="en"],
-    body.lang-es .footer-grid[data-lang="en"] { display: none; }
-    /* list containers */
-    ul[data-lang="es"] { display: none; }
-    body.lang-es ul[data-lang="es"] { display: block; }
-    body.lang-es ul[data-lang="en"] { display: none; }
-    /* free quiz bar */
-    .free-quiz-bar[data-lang="es"] { display: none; }
-    body.lang-es .free-quiz-bar[data-lang="es"] { display: block; }
-    body.lang-es .free-quiz-bar[data-lang="en"] { display: none; }
-    /* programs note */
-    .programs-note[data-lang="es"] { display: none; }
-    body.lang-es .programs-note[data-lang="es"] { display: block; }
-    body.lang-es .programs-note[data-lang="en"] { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      h1.hero-title .syl { opacity: 1; transform: none; clip-path: inset(0); }
+      .hero-tagline, .hero-ctas { opacity: 1; transform: none; transition: none; }
+      .cred-text-item { transition: opacity 0.2s ease; transform: none; }
+      .poster-card { transition: none; }
+      * { animation-duration: 0.01ms !important; }
+    }
 
-    /* ========================================
-       CSS SCROLL-DRIVEN ANIMATIONS (progressive enhancement)
-       ======================================== */
-    @media (prefers-reduced-motion: no-preference) {
-      @supports (animation-timeline: view()) {
-        .fade-up {
-          animation: fadeUpScroll 0.6s ease-out both;
-          animation-timeline: view();
-          animation-range: entry 0% entry 30%;
-        }
-
-        @keyframes fadeUpScroll {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      }
+    /* iOS Safari: nuke video controls */
+    .hero-bg-video::-webkit-media-controls,
+    .hero-bg-video::-webkit-media-controls-enclosure,
+    .hero-bg-video::-webkit-media-controls-overlay-enclosure,
+    .hero-bg-video::-webkit-media-controls-panel,
+    .hero-bg-video::-webkit-media-controls-start-playback-button,
+    .hero-bg-video::-webkit-media-controls-overlay-play-button,
+    .hero-bg-video::-webkit-media-controls-play-button {
+      display: none !important;
+      -webkit-appearance: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
   </style>
 </head>
@@ -1533,616 +1157,521 @@
   <!-- ============ SITE LOGO ============ -->
   <a href="/" class="site-logo">Laura Treto</a>
 
-  <!-- ============ NAV TRIGGER + DRAWER ============ -->
-  <button type="button" class="nav-trigger" id="navTrigger" aria-label="Menu" aria-expanded="false" aria-controls="navDrawer">
-    <span></span><span></span><span></span>
+  <!-- ============ EDGE TAB NAV ============ -->
+  <button type="button" class="edge-tab" id="edgeTab" aria-label="Open menu" aria-expanded="false" aria-controls="edgePanel">
+    <span class="label">menu</span>
   </button>
-  <nav class="nav-drawer" id="navDrawer" role="menu" aria-hidden="true">
-    <a href="/client" role="menuitem">
-      <span data-lang="en">Become a client</span>
-      <span data-lang="es">Hazte cliente</span>
-    </a>
-    <a href="/chachafit" role="menuitem">ChaChaFit</a>
-  </nav>
-  <div class="nav-scrim" id="navScrim" aria-hidden="true"></div>
+  <div class="edge-scrim" id="edgeScrim" aria-hidden="true"></div>
+  <aside class="edge-panel" id="edgePanel" role="dialog" aria-modal="true" aria-label="Site menu">
+    <div class="close-row">
+      <button type="button" class="close-btn" id="edgeClose" aria-label="Close menu">close.</button>
+    </div>
+    <nav class="links">
+      <a href="/client">
+        <span data-lang="en">Become a client.</span>
+        <span data-lang="es">Hazte cliente.</span>
+        <span class="rule"></span>
+        <span class="sub" data-lang="en">The funnel</span>
+        <span class="sub" data-lang="es">El embudo</span>
+      </a>
+      <a href="/chachafit">
+        <span>ChaChaFit.</span>
+        <span class="rule"></span>
+        <span class="sub" data-lang="en">May 1, full moon at the pier</span>
+        <span class="sub" data-lang="es">1 de mayo, luna llena en el muelle</span>
+      </a>
+      <a href="/pricing">
+        <span data-lang="en">Training options.</span>
+        <span data-lang="es">Opciones de entrenamiento.</span>
+        <span class="rule"></span>
+        <span class="sub" data-lang="en">All paid programs</span>
+        <span class="sub" data-lang="es">Todos los programas pagos</span>
+      </a>
+    </nav>
+  </aside>
 
   <!-- ============ LANGUAGE TOGGLE ============ -->
   <div class="lang-toggle">
-    <button class="active" onclick="setLang('en')">EN</button>
-    <button onclick="setLang('es')">ES</button>
+    <button class="active" type="button" onclick="setLang('en')">EN</button>
+    <button type="button" onclick="setLang('es')">ES</button>
   </div>
 
-  <!-- ============ SECTION 1: HERO ============ -->
-  <div class="hero-scroll-wrapper">
-    <section class="hero" id="hero">
-      <div class="hero-bg"></div>
-      <div class="hero-content">
-        <h1 data-lang="en">World-Class Movement Coaching.<br>Now in Key West.</h1>
-        <h1 data-lang="es">Coaching de Movimiento de Clase Mundial.<br>Ahora en Key West.</h1>
+  <!-- ============ HERO ============ -->
+  <section class="hero paper" id="hero">
+    <video class="hero-bg-video"
+           autoplay muted loop playsinline webkit-playsinline
+           disablePictureInPicture disableRemotePlayback
+           x-webkit-airplay="deny"
+           controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+           preload="metadata"
+           poster="/videos/chachafit-pier-bg-poster.jpg"
+           aria-hidden="true">
+      <source src="/videos/chachafit-pier-bg-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
+      <source src="/videos/chachafit-pier-bg.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg-veil" aria-hidden="true"></div>
 
-        <p class="subtitle" data-lang="en">Elite athlete turned movement coach. O-1B visa recipient. 1,000+ international performances. Now helping adults move with strength, confidence, and joy.</p>
-        <p class="subtitle" data-lang="es">Atleta de elite convertida en coach de movimiento. Receptora de visa O-1B. Mas de 1,000 presentaciones internacionales. Ahora ayudando a adultos a moverse con fuerza, confianza y alegria.</p>
+    <div class="hero-inner" id="heroInner">
+      <span class="hero-eyebrow">
+        <span data-lang="en">Movement Coach &middot; Key West</span>
+        <span data-lang="es">Coach de Movimiento &middot; Key West</span>
+      </span>
 
-        <div class="hero-buttons" data-lang="en">
-          <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1fWkcjRxX0dYbOwrfC0HH4bPL6Rqf6vL_iSt2I51eav3qjW13Np92mOAT7_HKE8r0E5Zi63wJR" target="_blank" rel="noopener noreferrer" class="btn btn-coral">Book Your Assessment</a>
-          <a href="/quiz.html" class="btn btn-outline-white">Take the Free Movement Test</a>
-        </div>
-        <div class="hero-buttons" data-lang="es">
-          <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1fWkcjRxX0dYbOwrfC0HH4bPL6Rqf6vL_iSt2I51eav3qjW13Np92mOAT7_HKE8r0E5Zi63wJR" target="_blank" rel="noopener noreferrer" class="btn btn-coral">Reserva Tu Evaluaci&oacute;n</a>
-          <a href="/quiz.html" class="btn btn-outline-white">Haz el Test de Movimiento Gratis</a>
-        </div>
+      <h1 class="hero-title" id="heroTitle" aria-label="Move with Laura">
+        <span data-lang="en"><span class="syl">Move</span> <span class="syl">with</span> <span class="syl">Laura.</span></span>
+        <span data-lang="es"><span class="syl">Mu&eacute;</span><span class="syl">ve</span><span class="syl">te con</span> <span class="syl">Laura.</span></span>
+      </h1>
+
+      <p class="hero-tagline" data-lang="en">World-class movement coaching, now in Key West.</p>
+      <p class="hero-tagline" data-lang="es">Coaching de movimiento de clase mundial, ahora en Key West.</p>
+
+      <div class="hero-ctas">
+        <a href="/client" class="btn-pill primary">
+          <span data-lang="en">Meet Laura. 15 min, on her.</span>
+          <span data-lang="es">Conoce a Laura. 15 min, te invita ella.</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="/quiz.html" class="btn-pill ghost">
+          <span data-lang="en">Take the 2-min Movement Test</span>
+          <span data-lang="es">Haz el Test de Movimiento de 2 min</span>
+        </a>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
-  <!-- ============ SECTION 2: CREDENTIALS (Scroll-Driven Video BG) ============ -->
+  <!-- ============ CREDENTIALS (scroll-driven background + italic confirmations) ============ -->
   <section class="credentials-section" id="credentials-section">
-    <!-- Fixed background with scroll-driven frame animation -->
     <div class="cred-frame-bg" id="credFrameBg">
       <img id="credFrameImg" src="/images/scroll-frames/frame-001.jpg?v=2" alt="Laura Treto kettlebell exercise by the ocean" />
     </div>
 
     <div class="cred-scroll-area">
-      <!-- EN credentials -->
       <div class="cred-cards-list" data-lang="en">
-        <div class="cred-text-item" data-cred="0">Cuban-Trained Athlete &amp; Dancer</div>
-        <div class="cred-text-item" data-cred="1">O-1B Visa: Extraordinary Ability</div>
-        <div class="cred-text-item" data-cred="2">1,000+ International Performances</div>
-        <div class="cred-text-item" data-cred="3">University of Havana: Clinical Psychology</div>
-        <div class="cred-text-item" data-cred="4">NASM Certified Personal Trainer</div>
-        <div class="cred-text-item" data-cred="5">Bilingual: English &amp; Spanish</div>
+        <div class="cred-text-item" data-cred="0">Acosta Danza.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="1">1,000 shows.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="2">O-1B.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="3">Yuli.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="4">Habana.<span class="gold-rule"></span></div>
       </div>
-      <!-- ES credentials -->
       <div class="cred-cards-list" data-lang="es">
-        <div class="cred-text-item" data-cred="0">Atleta y Bailarina Cubana</div>
-        <div class="cred-text-item" data-cred="1">Visa O-1B (Habilidad Extraordinaria)</div>
-        <div class="cred-text-item" data-cred="2">M&aacute;s de 1,000 Presentaciones Internacionales</div>
-        <div class="cred-text-item" data-cred="3">Universidad de La Habana, Psicolog&iacute;a Cl&iacute;nica</div>
-        <div class="cred-text-item" data-cred="4">Entrenadora Personal Certificada NASM</div>
-        <div class="cred-text-item" data-cred="5">Biling&uuml;e: Ingl&eacute;s y Espa&ntilde;ol</div>
+        <div class="cred-text-item" data-cred="0">Acosta Danza.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="1">1,000 funciones.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="2">O-1B.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="3">Yuli.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="4">Habana.<span class="gold-rule"></span></div>
       </div>
     </div>
     <div class="cred-text-container" id="credTextContainer"></div>
   </section>
 
-  <!-- ============ SECTION 3: WHO I HELP ============ -->
-  <section class="who-i-help section-pad">
-    <div class="container">
-      <div class="section-header">
-        <h2 data-lang="en">Not Your Average Fitness Client</h2>
-        <h2 data-lang="es">No Es el Cliente de Fitness Promedio</h2>
-        <p class="subtitle" data-lang="en">Laura works with people who need more than a generic workout plan.</p>
-        <p class="subtitle" data-lang="es">Laura trabaja con personas que necesitan m&aacute;s que un plan de ejercicio gen&eacute;rico.</p>
-      </div>
+  <!-- ============ HALVES: WHO I HELP + HOW IT WORKS ============ -->
+  <section class="halves-section" id="halves">
 
-      <div class="cards-grid" data-lang="en">
-        <div class="card">
-          <div class="card-icon">&#9899;</div>
-          <h3>Adults 45+ Feeling Stiff or Unstable</h3>
-          <p>You used to move easily. Now getting off the floor takes thought. You're not injured. You're disconnected. Laura bridges that gap.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#10132;</div>
-          <h3>Between PT Discharge and Confident Training</h3>
-          <p>Your physical therapist cleared you. But you don't feel ready for a gym. Laura picks up where PT left off.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#10024;</div>
-          <h3>Anyone Who Wants More Than Reps and Sets</h3>
-          <p>You've done the classes. You've had trainers. Nobody looked at HOW you move. Laura does.</p>
-        </div>
+    <!-- WHO I HELP 01: Adults 45+ -->
+    <div class="half-panel coral">
+      <span class="corner tl" data-lang="en">WHO I HELP &middot; 01</span>
+      <span class="corner tl" data-lang="es">A QUI&Eacute;N AYUDO &middot; 01</span>
+      <span class="corner tr" data-lang="en">STIFF &amp; UNSTABLE</span>
+      <span class="corner tr" data-lang="es">R&Iacute;GIDO E INESTABLE</span>
+      <div class="stack">
+        <h2 data-lang="en">Adults 45+.</h2>
+        <h2 data-lang="es">Adultos 45+.</h2>
+        <span class="gold-rule"></span>
+        <p class="sub" data-lang="en">You used to move easily. Now getting off the floor takes thought. You're not injured, you're disconnected. Laura bridges that gap.</p>
+        <p class="sub" data-lang="es">Antes te mov&iacute;as con facilidad. Ahora levantarte del suelo requiere pensar. No est&aacute;s lesionado, est&aacute;s desconectado. Laura cierra esa brecha.</p>
       </div>
+      <span class="arrow" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </span>
+    </div>
 
-      <div class="cards-grid" data-lang="es">
-        <div class="card">
-          <div class="card-icon">&#9899;</div>
-          <h3>Adultos de 45+ que Se Sienten R&iacute;gidos o Inestables</h3>
-          <p>Antes te mov&iacute;as con facilidad. Ahora levantarte del suelo requiere pensar. No est&aacute;s lesionado. Est&aacute;s desconectado. Laura cierra esa brecha.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#10132;</div>
-          <h3>Entre el Alta de Fisioterapia y un Entrenamiento Seguro</h3>
-          <p>Tu fisioterapeuta te dio el alta. Pero no te sientes listo para un gimnasio. Laura retoma donde la fisioterapia termin&oacute;.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">&#10024;</div>
-          <h3>Cualquiera que Quiera M&aacute;s que Repeticiones y Series</h3>
-          <p>Has hecho las clases. Has tenido entrenadores. Nadie mir&oacute; C&Oacute;MO te mueves. Laura s&iacute; lo hace.</p>
-        </div>
+    <!-- WHO I HELP 02: Post-PT -->
+    <div class="half-panel charcoal">
+      <span class="corner tl" data-lang="en">WHO I HELP &middot; 02</span>
+      <span class="corner tl" data-lang="es">A QUI&Eacute;N AYUDO &middot; 02</span>
+      <span class="corner tr" data-lang="en">CLEARED, NOT CONFIDENT</span>
+      <span class="corner tr" data-lang="es">DADO DE ALTA, SIN CONFIANZA</span>
+      <div class="stack">
+        <h2 data-lang="en">Post-PT,<br>pre-confidence.</h2>
+        <h2 data-lang="es">Post-PT,<br>pre-confianza.</h2>
+        <span class="gold-rule"></span>
+        <p class="sub" data-lang="en">Your physical therapist cleared you. The gym still feels too far. Laura picks up where PT left off.</p>
+        <p class="sub" data-lang="es">Tu fisioterapeuta te dio de alta. El gimnasio se siente lejos a&uacute;n. Laura retoma donde la fisioterapia termin&oacute;.</p>
+      </div>
+      <span class="arrow" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </span>
+    </div>
+
+    <!-- WHO I HELP 03: Anyone who used to move -->
+    <div class="half-panel coral">
+      <span class="corner tl" data-lang="en">WHO I HELP &middot; 03</span>
+      <span class="corner tl" data-lang="es">A QUI&Eacute;N AYUDO &middot; 03</span>
+      <span class="corner tr" data-lang="en">MORE THAN REPS</span>
+      <span class="corner tr" data-lang="es">M&Aacute;S QUE REPETICIONES</span>
+      <div class="stack">
+        <h2 data-lang="en">Anyone who<br>used to move.</h2>
+        <h2 data-lang="es">Cualquiera que<br>sol&iacute;a moverse.</h2>
+        <span class="gold-rule"></span>
+        <p class="sub" data-lang="en">You've done the classes. You've had trainers. Nobody looked at HOW you move. Laura does.</p>
+        <p class="sub" data-lang="es">Has hecho las clases. Has tenido entrenadores. Nadie mir&oacute; C&Oacute;MO te mueves. Laura s&iacute;.</p>
+      </div>
+      <span class="arrow" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </span>
+    </div>
+
+    <!-- HOW IT WORKS 01 -->
+    <a href="/quiz.html" class="half-panel charcoal">
+      <span class="corner tl" data-lang="en">HOW IT WORKS &middot; 01</span>
+      <span class="corner tl" data-lang="es">C&Oacute;MO FUNCIONA &middot; 01</span>
+      <span class="corner tr" data-lang="en">2 MINUTES</span>
+      <span class="corner tr" data-lang="es">2 MINUTOS</span>
+      <div class="stack">
+        <h2 data-lang="en">01. Take the test.</h2>
+        <h2 data-lang="es">01. Haz el test.</h2>
+        <span class="gold-rule"></span>
+        <p class="sub" data-lang="en">A 2-minute online quiz that reveals your movement strengths and blind spots. No camera, no gym. Just honest answers.</p>
+        <p class="sub" data-lang="es">Un test en l&iacute;nea de 2 minutos que revela tus fortalezas y puntos ciegos de movimiento. Sin c&aacute;mara, sin gimnasio. Solo respuestas honestas.</p>
+      </div>
+      <span class="arrow" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </span>
+    </a>
+
+    <!-- HOW IT WORKS 02 -->
+    <a href="/client" class="half-panel coral">
+      <span class="corner tl" data-lang="en">HOW IT WORKS &middot; 02</span>
+      <span class="corner tl" data-lang="es">C&Oacute;MO FUNCIONA &middot; 02</span>
+      <span class="corner tr" data-lang="en">15 MIN, ON HER</span>
+      <span class="corner tr" data-lang="es">15 MIN, TE INVITA</span>
+      <div class="stack">
+        <h2 data-lang="en">02. Meet Laura.</h2>
+        <h2 data-lang="es">02. Conoce a Laura.</h2>
+        <span class="gold-rule"></span>
+        <p class="sub" data-lang="en">Fifteen minutes with Laura, on her. Just to say hi and hear what you want. No pitch, no pressure.</p>
+        <p class="sub" data-lang="es">Quince minutos con Laura, ella te invita. Solo para saludarse y escuchar qu&eacute; quieres. Sin discurso, sin presi&oacute;n.</p>
+      </div>
+      <span class="arrow" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </span>
+    </a>
+
+    <!-- HOW IT WORKS 03 -->
+    <div class="half-panel charcoal">
+      <span class="corner tl" data-lang="en">HOW IT WORKS &middot; 03</span>
+      <span class="corner tl" data-lang="es">C&Oacute;MO FUNCIONA &middot; 03</span>
+      <span class="corner tr" data-lang="en">YOUR BODY, YOUR PLAN</span>
+      <span class="corner tr" data-lang="es">TU CUERPO, TU PLAN</span>
+      <div class="stack">
+        <h2 data-lang="en">03. Move better.</h2>
+        <h2 data-lang="es">03. Mu&eacute;vete mejor.</h2>
+        <span class="gold-rule"></span>
+        <p class="sub" data-lang="en">A personalized plan built around your body. Not a template. Not an app. Real coaching from a world-class mover.</p>
+        <p class="sub" data-lang="es">Un plan personalizado construido alrededor de tu cuerpo. No es una plantilla. No es una app. Coaching real de una profesional de clase mundial.</p>
       </div>
     </div>
+
   </section>
 
-  <!-- ============ SECTION 4: HOW IT WORKS (Full-bleed GIF) ============ -->
-  <section class="how-it-works" id="how-it-works">
-    <!-- Full-bleed dancing lady video background (fixed) -->
-    <div class="hiw-gif-bg" id="hiwGifBg">
-      <video autoplay muted loop playsinline>
-        <source src="/images/dancing-lady.mp4" type="video/mp4" />
-      </video>
-    </div>
-
-    <div class="hiw-scroll-area">
-      <!-- Section header -->
-      <div class="hiw-header">
-        <h2 data-lang="en">How It Works</h2>
-        <h2 data-lang="es">C&oacute;mo Funciona</h2>
-        <p class="subtitle" data-lang="en">Three steps to moving with confidence again.</p>
-        <p class="subtitle" data-lang="es">Tres pasos para volver a moverte con confianza.</p>
+  <!-- ============ SERVICES — POSTER TRIPTYCH (no prices visible) ============ -->
+  <section class="services-section paper" id="services">
+    <div class="services-inner">
+      <div class="services-head">
+        <div class="kicker" data-lang="en">Train with Laura</div>
+        <div class="kicker" data-lang="es">Entrena con Laura</div>
+        <h2 data-lang="en">Three ways to <em>move</em>.</h2>
+        <h2 data-lang="es">Tres formas de <em>moverte</em>.</h2>
+        <p class="sub" data-lang="en">Online, in person, or self-guided. Pick the one that fits your week.</p>
+        <p class="sub" data-lang="es">Online, en persona o autoguiado. Elige el que se ajuste a tu semana.</p>
       </div>
 
-      <!-- EN Steps -->
-      <div class="hiw-steps-list" data-lang="en">
-        <div class="hiw-step-card" data-hiw-step="1">
-          <div class="hiw-step-number">01</div>
-          <h3>Take the Free Assessment</h3>
-          <p>A 2-minute online quiz that reveals your movement strengths and blind spots. No camera, no gym. Just honest answers.</p>
-        </div>
-        <div class="hiw-step-card" data-hiw-step="2">
-          <div class="hiw-step-number">02</div>
-          <h3>Book a Private Session</h3>
-          <p>Meet Laura in person in Key West. She watches how you move, identifies patterns, and builds your plan. $125 for your first session.</p>
-        </div>
-        <div class="hiw-step-card" data-hiw-step="3">
-          <div class="hiw-step-number">03</div>
-          <h3>Move With Confidence</h3>
-          <p>A personalized coaching plan built around YOUR body. Not a template. Not an app. Real coaching from a world-class mover.</p>
-        </div>
-      </div>
-
-      <!-- ES Steps -->
-      <div class="hiw-steps-list" data-lang="es">
-        <div class="hiw-step-card" data-hiw-step="1">
-          <div class="hiw-step-number">01</div>
-          <h3>Haz la Evaluaci&oacute;n Gratuita</h3>
-          <p>Un test en l&iacute;nea de 2 minutos que revela tus fortalezas y puntos ciegos de movimiento. Sin c&aacute;mara, sin gimnasio. Solo respuestas honestas.</p>
-        </div>
-        <div class="hiw-step-card" data-hiw-step="2">
-          <div class="hiw-step-number">02</div>
-          <h3>Reserva una Sesi&oacute;n Privada</h3>
-          <p>Conoce a Laura en persona en Key West. Ella observa c&oacute;mo te mueves, identifica patrones y construye tu plan. $125 por tu primera sesi&oacute;n.</p>
-        </div>
-        <div class="hiw-step-card" data-hiw-step="3">
-          <div class="hiw-step-number">03</div>
-          <h3>Mu&eacute;vete con Confianza</h3>
-          <p>Un plan de coaching personalizado construido alrededor de TU cuerpo. No es una plantilla. No es una app. Coaching real de una profesional de clase mundial.</p>
-        </div>
-      </div>
-
-      <!-- Bottom CTA -->
-      <div class="hiw-bottom-cta">
-        <p data-lang="en">Movement has no age limit.</p>
-        <p data-lang="es">El movimiento no tiene l&iacute;mite de edad.</p>
-        <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1fWkcjRxX0dYbOwrfC0HH4bPL6Rqf6vL_iSt2I51eav3qjW13Np92mOAT7_HKE8r0E5Zi63wJR" target="_blank" rel="noopener noreferrer" class="btn btn-coral" data-lang="en">Start Your Journey</a>
-        <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1fWkcjRxX0dYbOwrfC0HH4bPL6Rqf6vL_iSt2I51eav3qjW13Np92mOAT7_HKE8r0E5Zi63wJR" target="_blank" rel="noopener noreferrer" class="btn btn-coral" data-lang="es">Comienza Tu Camino</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ SECTION 5: ABOUT LAURA ============ -->
-  <section class="about section-pad">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-carousel" id="aboutCarousel">
-          <div class="carousel-track">
-            <img src="/images/laura-seawall.jpg" alt="Laura Treto on the seawall" class="carousel-slide" loading="lazy" />
-            <img src="/images/laura-smile.jpg" alt="Laura Treto smiling" class="carousel-slide" loading="lazy" />
-            <img src="/images/laura-kettlebell-stand.jpg" alt="Laura Treto with kettlebell" class="carousel-slide" loading="lazy" />
-            <img src="/images/laura-confident.jpg" alt="Laura Treto, confident stance" class="carousel-slide" loading="lazy" />
+      <div class="triptych">
+        <a href="/pricing" class="poster-card tilt-l">
+          <div>
+            <span class="top-meta" data-lang="en">In Person &middot; Key West</span>
+            <span class="top-meta" data-lang="es">En Persona &middot; Key West</span>
+            <h3 data-lang="en">Private Sessions</h3>
+            <h3 data-lang="es">Sesiones Privadas</h3>
+            <p class="desc" data-lang="en">One-on-one with Laura. Movement assessment first, then packages. Built around how YOU move.</p>
+            <p class="desc" data-lang="es">Uno a uno con Laura. Evaluaci&oacute;n primero, luego paquetes. Construido alrededor de c&oacute;mo TE mueves.</p>
           </div>
-          <div class="carousel-dots">
-            <button class="carousel-dot active" data-index="0"></button>
-            <button class="carousel-dot" data-index="1"></button>
-            <button class="carousel-dot" data-index="2"></button>
-            <button class="carousel-dot" data-index="3"></button>
-          </div>
-        </div>
-        <div class="about-text">
-          <h2 data-lang="en">Meet Laura</h2>
-          <h2 data-lang="es">Conoce a Laura</h2>
+          <span class="cta">
+            <span data-lang="en">Learn more</span>
+            <span data-lang="es">Saber m&aacute;s</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
 
-          <div data-lang="en">
-            <p>Laura Treto spent a decade as a founding member of Acosta Danza, Carlos Acosta's world-renowned dance company. She performed over 1,000 shows across five continents, earned an O-1B visa for extraordinary ability, and holds a clinical psychology degree from the University of Havana.</p>
-            <p>A decade of 10-hour training days built an elite athlete's understanding of the human body.</p>
-            <p>Today she lives in Key West, where she coaches adults who want more than a workout. Her approach blends elite movement training, body awareness, and the empathy of someone who understands that the body holds more than muscle.</p>
-            <p>Whether you're recovering from an injury, navigating the changes that come with age, or simply want to move with the confidence you used to have. Laura meets you where you are and builds a path forward.</p>
+        <a href="#" class="poster-card sla-card">
+          <span class="ribbon">$149</span>
+          <div>
+            <span class="top-meta" data-lang="en">12-Week Digital</span>
+            <span class="top-meta" data-lang="es">12 Semanas Digital</span>
+            <h3>Strong Lean Athletic</h3>
+            <p class="desc" data-lang="en">Video-guided workouts, progressive programming. Train anywhere, at your pace.</p>
+            <p class="desc" data-lang="es">Entrenamientos guiados por video, programaci&oacute;n progresiva. Entrena donde quieras, a tu ritmo.</p>
           </div>
-          <div data-lang="es">
-            <p>Laura Treto pas&oacute; una d&eacute;cada como miembro fundadora de Acosta Danza, la compa&ntilde;&iacute;a de fama mundial de Carlos Acosta. Realiz&oacute; m&aacute;s de 1,000 presentaciones en cinco continentes, obtuvo una visa O-1B por habilidad extraordinaria y tiene un t&iacute;tulo en psicolog&iacute;a cl&iacute;nica de la Universidad de La Habana.</p>
-            <p>Una decada de entrenamientos de 10 horas diarias forjo el entendimiento de una atleta de elite sobre el cuerpo humano.</p>
-            <p>Hoy vive en Key West, donde entrena a adultos que quieren m&aacute;s que un ejercicio. Su enfoque combina entrenamiento de movimiento de elite, conciencia corporal y la empat&iacute;a de alguien que entiende que el cuerpo guarda m&aacute;s que m&uacute;sculo.</p>
-            <p>Ya sea que te est&eacute;s recuperando de una lesi&oacute;n, navegando los cambios que vienen con la edad, o simplemente quieras moverte con la confianza que sol&iacute;as tener. Laura te encuentra donde est&aacute;s y construye un camino hacia adelante.</p>
-          </div>
+          <span class="cta">
+            <span data-lang="en">Start the program</span>
+            <span data-lang="es">Comienza el programa</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
 
+        <a href="/pricing" class="poster-card tilt-r">
+          <div>
+            <span class="top-meta" data-lang="en">Virtual &middot; Worldwide</span>
+            <span class="top-meta" data-lang="es">Virtual &middot; Mundial</span>
+            <h3 data-lang="en">Online Coaching</h3>
+            <h3 data-lang="es">Coaching Online</h3>
+            <p class="desc" data-lang="en">Programming, accountability, and the eyes of a world-class mover, wherever you live.</p>
+            <p class="desc" data-lang="es">Programaci&oacute;n, responsabilidad y los ojos de una atleta de clase mundial, donde vivas.</p>
+          </div>
+          <span class="cta">
+            <span data-lang="en">Learn more</span>
+            <span data-lang="es">Saber m&aacute;s</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="all-options-link">
+        <a href="/pricing">
+          <span data-lang="en">See all training options &rarr;</span>
+          <span data-lang="es">Ver todas las opciones de entrenamiento &rarr;</span>
+        </a>
+      </div>
+
+      <div class="quiz-banner teal-paper">
+        <div class="copy">
+          <div class="label" data-lang="en">FREE &middot; 2 minutes</div>
+          <div class="label" data-lang="es">GRATIS &middot; 2 minutos</div>
+          <h3 data-lang="en">Not sure where to start? Take the Movement Readiness quiz.</h3>
+          <h3 data-lang="es">&iquest;No sabes por d&oacute;nde empezar? Haz el test de Preparaci&oacute;n para el Movimiento.</h3>
         </div>
+        <a href="/quiz.html" class="btn-pill primary">
+          <span data-lang="en">Take the Quiz</span>
+          <span data-lang="es">Haz el Test</span>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- ============ SECTION 6A: SERVICES & PRICING - TRAIN WITH LAURA ============ -->
-  <section class="services section-pad">
+  <!-- ============ SOCIAL PROOF ============ -->
+  <section class="social-proof" id="social">
     <div class="container">
-      <div class="section-header">
-        <h2 data-lang="en">Services &amp; Pricing</h2>
-        <h2 data-lang="es">Servicios y Precios</h2>
-        <p class="subtitle" data-lang="en">Premium coaching, transparent pricing. No contracts, no commitments.</p>
-        <p class="subtitle" data-lang="es">Coaching premium, precios transparentes. Sin contratos, sin compromisos.</p>
-      </div>
-
-      <!-- EN: Train With Laura -->
-      <div class="pricing-subsection" data-lang="en">
-        <div class="pricing-subsection-header">
-          <h3>Train With Laura</h3>
-          <p>Premium one-on-one coaching, in person in Key West</p>
-        </div>
-      </div>
-      <div class="pricing-grid" data-lang="en">
-        <div class="pricing-card">
-          <h3>Movement Assessment</h3>
-          <div class="price">$125</div>
-          <p class="details">One-on-one, in-person. Laura evaluates how you move, identifies patterns, and gives you a clear action plan. 60 minutes.</p>
-          <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=c6cc4dd9fe1c4538a69d322500081e45" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-full">Book Now</a>
-        </div>
-        <div class="pricing-card highlighted">
-          <span class="badge">Most Popular</span>
-          <h3>4-Session Pack</h3>
-          <div class="price">$460</div>
-          <p class="details">Save $40. Four private sessions with Laura. Use within 8 weeks. Personalized programming included.</p>
-          <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=43339acf43bc4e17b5c311029b4a6ffa" target="_blank" rel="noopener noreferrer" class="btn btn-coral btn-full">Get Started</a>
-        </div>
-        <div class="pricing-card">
-          <h3>8-Session Pack</h3>
-          <div class="price">$840</div>
-          <p class="details">Save $160. Eight private sessions. Maximum results. Priority scheduling.</p>
-          <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=3c00802b433642dbbb89614dc8745544" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-full">Get Started</a>
-        </div>
-      </div>
-
-      <!-- ES: Entrena con Laura -->
-      <div class="pricing-subsection" data-lang="es">
-        <div class="pricing-subsection-header">
-          <h3>Entrena con Laura</h3>
-          <p>Coaching premium uno a uno, en persona en Key West</p>
-        </div>
-      </div>
-      <div class="pricing-grid" data-lang="es">
-        <div class="pricing-card">
-          <h3>Evaluaci&oacute;n de Movimiento</h3>
-          <div class="price">$125</div>
-          <p class="details">Uno a uno, en persona. Laura eval&uacute;a c&oacute;mo te mueves, identifica patrones y te da un plan de acci&oacute;n claro. 60 minutos.</p>
-          <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=c6cc4dd9fe1c4538a69d322500081e45" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-full">Reservar Ahora</a>
-        </div>
-        <div class="pricing-card highlighted">
-          <span class="badge">M&aacute;s Popular</span>
-          <h3>Paquete de 4 Sesiones</h3>
-          <div class="price">$460</div>
-          <p class="details">Ahorra $40. Cuatro sesiones privadas con Laura. Usa dentro de 8 semanas. Programaci&oacute;n personalizada incluida.</p>
-          <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=43339acf43bc4e17b5c311029b4a6ffa" target="_blank" rel="noopener noreferrer" class="btn btn-coral btn-full">Comenzar</a>
-        </div>
-        <div class="pricing-card">
-          <h3>Paquete de 8 Sesiones</h3>
-          <div class="price">$840</div>
-          <p class="details">Ahorra $160. Ocho sesiones privadas. Resultados m&aacute;ximos. Programaci&oacute;n prioritaria.</p>
-          <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=3c00802b433642dbbb89614dc8745544" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-full">Comenzar</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ SECTION 6B: SELF-GUIDED PROGRAMS ============ -->
-  <section class="services-self-guided section-pad">
-    <div class="container">
-      <!-- EN: Self-Guided Programs -->
-      <div class="pricing-subsection" data-lang="en">
-        <div class="pricing-subsection-header">
-          <h3>Self-Guided Programs</h3>
-          <p>Expert-designed programs you can do anywhere, at your own pace</p>
-        </div>
-      </div>
-      <div class="pricing-grid single-card" data-lang="en">
-        <div class="pricing-card">
-          <h3>Strong Lean Athletic</h3>
-          <div class="price">$149</div>
-          <p class="details">12-week online program. Video-guided workouts, progressive programming. Train anywhere. No live coaching required.</p>
-          <a href="#" class="btn btn-outline-dark btn-full">Learn More</a>
-        </div>
-      </div>
-      <p class="programs-note" data-lang="en">More programs coming soon</p>
-
-      <!-- ES: Programas Autoguiados -->
-      <div class="pricing-subsection" data-lang="es">
-        <div class="pricing-subsection-header">
-          <h3>Programas Autoguiados</h3>
-          <p>Programas dise&ntilde;ados por expertos que puedes hacer donde quieras, a tu ritmo</p>
-        </div>
-      </div>
-      <div class="pricing-grid single-card" data-lang="es">
-        <div class="pricing-card">
-          <h3>Strong Lean Athletic</h3>
-          <div class="price">$149</div>
-          <p class="details">Programa en l&iacute;nea de 12 semanas. Entrenamientos guiados por video, programaci&oacute;n progresiva. Entrena donde quieras. Sin coaching en vivo requerido.</p>
-          <a href="#" class="btn btn-outline-dark btn-full">M&aacute;s Informaci&oacute;n</a>
-        </div>
-      </div>
-      <p class="programs-note" data-lang="es">M&aacute;s programas pr&oacute;ximamente</p>
-
-      <!-- Free quiz -->
-      <div class="free-quiz-bar" data-lang="en">
-        <p><strong>FREE:</strong> Movement Readiness Assessment. Take the 2-minute online quiz and discover your score.</p>
-        <a href="/quiz.html" class="btn btn-coral">Take the Free Quiz</a>
-      </div>
-      <div class="free-quiz-bar" data-lang="es">
-        <p><strong>GRATIS:</strong> Evaluaci&oacute;n de Preparaci&oacute;n para el Movimiento. Haz el test en l&iacute;nea de 2 minutos y descubre tu puntaje.</p>
-        <a href="/quiz.html" class="btn btn-coral">Haz el Test Gratis</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ SECTION 7: SOCIAL PROOF ============ -->
-  <section class="social-proof section-pad">
-    <div class="container">
-      <div class="section-header">
-        <h2 data-lang="en">See Laura in Action</h2>
-        <h2 data-lang="es">Mira a Laura en Acci&oacute;n</h2>
-        <p class="subtitle" data-lang="en">Follow along on social media for daily movement tips, coaching insights, and Key West life.</p>
-        <p class="subtitle" data-lang="es">S&iacute;guenos en redes sociales para consejos de movimiento, insights de coaching y vida en Key West.</p>
+      <div class="section-head">
+        <div class="kicker" data-lang="en">Proof &middot; Social</div>
+        <div class="kicker" data-lang="es">Prueba &middot; Social</div>
+        <h2 data-lang="en">Laura, in motion.</h2>
+        <h2 data-lang="es">Laura, en movimiento.</h2>
+        <p class="sub" data-lang="en">Daily movement tips, coaching insights, and Key West life.</p>
+        <p class="sub" data-lang="es">Consejos de movimiento, insights de coaching y vida en Key West.</p>
       </div>
 
       <div class="social-grid" id="socialGrid">
-
-        <!-- PINNED 1: IG - Testimonial Max (never removed) -->
         <a href="https://www.instagram.com/p/DTJw4lDEa9C/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DTJw4lDEa9C/media/?size=l">
           <img alt="Laura Treto coaching testimonial on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
-
-        <!-- PINNED 2: IG - Testimonial Annie (never removed) -->
         <a href="https://www.instagram.com/p/DQ-cwNCkT07/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DQ-cwNCkT07/media/?size=l">
           <img alt="Client testimonial on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
-
-        <!-- TIKTOK 1: Wall sit 267K (curated, stays unless manually swapped) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942">
-          <img alt="Wall sit challenge - 267K views on TikTok" loading="lazy" />
+          <img alt="Wall sit challenge on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
-
-        <!-- TIKTOK 2: Mobility test (curated) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478">
           <img alt="Mobility test on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
-
-        <!-- TIKTOK 3: Kettlebells (curated) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494">
           <img alt="Kettlebell training on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
-
-        <!-- PINNED 3: IG - Dancing with Raul (never removed) -->
         <a href="https://www.instagram.com/p/DSFvY2BEURa/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DSFvY2BEURa/media/?size=l">
           <img alt="Laura dancing with Raul Malo on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
-
-        <!-- DYNAMIC 1: populated by social-feed API; fallback to IG post below -->
         <a href="https://www.instagram.com/p/DWXNzUMRtYK/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-dynamic="true" data-src="https://www.instagram.com/p/DWXNzUMRtYK/media/?size=l">
           <img alt="Laura Treto on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
-
-        <!-- DYNAMIC 2: populated by social-feed API; fallback to IG post below -->
         <a href="https://www.instagram.com/p/DURgP5Ckc1_/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-dynamic="true" data-src="https://www.instagram.com/p/DURgP5Ckc1_/media/?size=l">
           <img alt="Laura Treto on Instagram" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
-
-        <!-- TIKTOK 4: Cuban personality (curated) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982">
           <img alt="Cuban personality on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
-
-        <!-- TIKTOK 5: Strength + mobility combo drill (curated) -->
         <a href="https://www.tiktok.com/@coachlauratreto/video/7570774624737201439" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7570774624737201439">
           <img alt="Strength + mobility combo drill on TikTok" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
-
       </div>
 
-      <div class="social-testimonial">
+      <div class="testimonial">
         <blockquote data-lang="en">Thanks to Laura I was able to walk again without pain.</blockquote>
         <blockquote data-lang="es">Gracias a Laura pude volver a caminar sin dolor.</blockquote>
-        <p class="attribution">Raul Malo, The Mavericks</p>
-        <p class="attribution" style="font-size:13px; margin-top:4px; opacity:0.7;">
-          <span data-lang="en">Grammy Award-winning artist.</span>
-          <span data-lang="es">Artista ganador del Grammy.</span>
+        <p class="attrib">
+          Raul Malo, The Mavericks
+          <span class="role" data-lang="en">Grammy Award-winning artist</span>
+          <span class="role" data-lang="es">Artista ganador del Grammy</span>
         </p>
       </div>
     </div>
   </section>
 
-  <!-- ============ SECTION 8: INQUIRY FORM (Hero-style scroll reveal) ============ -->
+  <!-- ============ INQUIRY (coral canvas) ============ -->
   <section class="inquiry" id="inquiry">
-    <!-- Fixed sunset silhouette background -->
-    <div class="inquiry-bg" id="inquiryBg">
-      <img src="/images/laura-sunset-silhouette.jpg" alt="Laura Treto sunset silhouette" loading="lazy" />
-    </div>
-
-    <div class="inquiry-scroll-area">
-
-      <!-- === EN Content === -->
-      <div class="inquiry-content" data-lang="en">
-        <!-- Reveal 1: Big headline -->
-        <div class="inquiry-reveal inquiry-headline">
-          <h2>Ready to Move Better?</h2>
-        </div>
-
-        <!-- Reveal 2: Subheader -->
-        <div class="inquiry-reveal inquiry-subheader">
-          <p>Fill out the form below and Laura will personally respond within 24 hours.</p>
-        </div>
-
-        <!-- Reveal 3: Why work with Laura -->
-        <div class="inquiry-reveal inquiry-reasons">
-          <h3>Why Work With Laura?</h3>
-          <ul>
-            <li>In-person sessions in Key West</li>
-            <li>Online options available</li>
-            <li>All ages and fitness levels welcome</li>
-          </ul>
-        </div>
-
-        <!-- Form card -->
-        <div class="inquiry-form-card" id="inquiry-card-en">
-          <form id="inquiry-form-en" name="contact-en" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleSubmit(event, 'en')">
-            <input type="hidden" name="form-name" value="contact-en">
-            <input type="hidden" name="language" value="en">
-            <p class="bot-trap" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="fname-en">First Name *</label>
-                <input type="text" id="fname-en" name="first-name" placeholder="Your first name" required />
-              </div>
-              <div class="form-group">
-                <label for="lname-en">Last Name *</label>
-                <input type="text" id="lname-en" name="last-name" placeholder="Your last name" required />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="phone-en">Phone *</label>
-                <input type="tel" id="phone-en" name="phone" placeholder="(305) 555-0123" required />
-              </div>
-              <div class="form-group">
-                <label for="email-en">Email *</label>
-                <input type="email" id="email-en" name="email" placeholder="you@email.com" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="message-en">What brought you here?</label>
-              <textarea id="message-en" name="message" placeholder="Tell me a bit about what you're looking for..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-coral btn-full">Send My Info</button>
-          </form>
-          <!-- Success message (EN) -->
-          <div class="form-success" id="success-en">
-            <h3>Thanks!</h3>
-            <p>Laura will be in touch within 24 hours.</p>
-          </div>
-        </div>
+    <div class="inquiry-inner">
+      <div class="meta-row">
+        <span data-lang="en">START HERE</span>
+        <span data-lang="es">EMPIEZA AQU&Iacute;</span>
+        <span data-lang="en">2 MINUTES</span>
+        <span data-lang="es">2 MINUTOS</span>
       </div>
 
-      <!-- === ES Content === -->
-      <div class="inquiry-content" data-lang="es">
-        <!-- Reveal 1: Big headline -->
-        <div class="inquiry-reveal inquiry-headline">
-          <h2>&iquest;Lista para Moverte Mejor?</h2>
-        </div>
+      <!-- form view -->
+      <div class="inquiry-form" id="inquiryForm">
+        <h2 data-lang="en">Ready to<br>move better?</h2>
+        <h2 data-lang="es">&iquest;Listo para<br>moverte mejor?</h2>
+        <div class="gold-rule"></div>
+        <p class="sub" data-lang="en">Tell me where to start.</p>
+        <p class="sub" data-lang="es">Dime por d&oacute;nde empezar.</p>
 
-        <!-- Reveal 2: Subheader -->
-        <div class="inquiry-reveal inquiry-subheader">
-          <p>Completa el formulario y Laura te responder&aacute; personalmente dentro de 24 horas.</p>
-        </div>
-
-        <!-- Reveal 3: Why work with Laura -->
-        <div class="inquiry-reveal inquiry-reasons">
-          <h3>&iquest;Por qu&eacute; Trabajar con Laura?</h3>
-          <ul>
-            <li>Sesiones en persona en Key West</li>
-            <li>Opciones en l&iacute;nea disponibles</li>
-            <li>Todas las edades y niveles de fitness</li>
-          </ul>
-        </div>
-
-        <!-- Form card -->
-        <div class="inquiry-form-card" id="inquiry-card-es">
-          <form id="inquiry-form-es" name="contact-es" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleSubmit(event, 'es')">
-            <input type="hidden" name="form-name" value="contact-es">
-            <input type="hidden" name="language" value="es">
-            <p class="bot-trap" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="fname-es">Nombre *</label>
-                <input type="text" id="fname-es" name="first-name" placeholder="Tu nombre" required />
-              </div>
-              <div class="form-group">
-                <label for="lname-es">Apellido *</label>
-                <input type="text" id="lname-es" name="last-name" placeholder="Tu apellido" required />
-              </div>
+        <form id="leadForm" class="form-grid" autocomplete="on" novalidate>
+          <div class="picker-row">
+            <div class="picker-label">
+              <span data-lang="en">Pick your track</span>
+              <span data-lang="es">Elige tu camino</span>
             </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="phone-es">Tel&eacute;fono *</label>
-                <input type="tel" id="phone-es" name="phone" placeholder="(305) 555-0123" required />
-              </div>
-              <div class="form-group">
-                <label for="email-es">Email *</label>
-                <input type="email" id="email-es" name="email" placeholder="tu@email.com" required />
-              </div>
+            <div class="picker-pills" role="radiogroup" aria-label="Track">
+              <button type="button" class="track-pill on" data-track="train">
+                <span data-lang="en">Train</span><span data-lang="es">Entrena</span>
+              </button>
+              <button type="button" class="track-pill" data-track="dance">
+                <span data-lang="en">Dance</span><span data-lang="es">Baila</span>
+              </button>
             </div>
-            <div class="form-group">
-              <label for="message-es">&iquest;Qu&eacute; te trajo aqu&iacute;?</label>
-              <textarea id="message-es" name="message" placeholder="Cu&eacute;ntame un poco sobre lo que buscas..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-coral btn-full">Enviar Mi Informaci&oacute;n</button>
-          </form>
-          <!-- Success message (ES) -->
-          <div class="form-success" id="success-es">
-            <h3>&iexcl;Gracias!</h3>
-            <p>Laura se pondr&aacute; en contacto dentro de 24 horas.</p>
           </div>
-        </div>
+
+          <div class="picker-row">
+            <div class="picker-label">
+              <span data-lang="en">Where</span>
+              <span data-lang="es">D&oacute;nde</span>
+            </div>
+            <div class="picker-pills" role="radiogroup" aria-label="Mode">
+              <button type="button" class="mode-pill on" data-mode="online">
+                <span data-lang="en">Online</span><span data-lang="es">Online</span>
+              </button>
+              <button type="button" class="mode-pill" data-mode="local">
+                <span data-lang="en">In Key West</span><span data-lang="es">En Key West</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label data-lang="en">FIRST NAME</label>
+            <label data-lang="es">NOMBRE</label>
+            <input type="text" name="first_name" id="leadName" autocomplete="given-name" required maxlength="60" />
+          </div>
+          <div class="field">
+            <label data-lang="en">EMAIL</label>
+            <label data-lang="es">CORREO</label>
+            <input type="email" name="email" id="leadEmail" autocomplete="email" inputmode="email" required maxlength="120" />
+          </div>
+          <div class="field">
+            <label>
+              <span data-lang="en">PHONE</span>
+              <span data-lang="es">TEL&Eacute;FONO</span>
+              <span id="phoneOptional" data-lang="en"> (optional)</span>
+              <span id="phoneOptionalEs" data-lang="es"> (opcional)</span>
+            </label>
+            <input type="tel" name="phone" id="leadPhone" autocomplete="tel" inputmode="tel" maxlength="20" />
+          </div>
+
+          <div class="hp" aria-hidden="true">
+            <label>Website<input type="text" name="website" id="leadHp" tabindex="-1" autocomplete="off"></label>
+          </div>
+
+          <button type="submit" class="submit-btn" id="leadSubmit">
+            <span data-lang="en">Send it &rarr;</span>
+            <span data-lang="es">Env&iacute;alo &rarr;</span>
+          </button>
+          <div class="disclosure">
+            <span data-lang="en">By tapping, you agree to get emails from Laura. Unsubscribe anytime.</span>
+            <span data-lang="es">Al tocar aceptas recibir emails de Laura. Cancela cuando quieras.</span>
+          </div>
+          <div class="err" id="leadErr" role="alert"></div>
+        </form>
       </div>
 
+      <!-- confirm view -->
+      <div class="inquiry-confirm" id="inquiryConfirm">
+        <h2 data-lang="en">Got you.</h2>
+        <h2 data-lang="es">Listo.</h2>
+        <div class="gold-rule"></div>
+        <p class="confirm-sub" data-lang="en">Check your inbox. Laura will be in touch.</p>
+        <p class="confirm-sub" data-lang="es">Revisa tu inbox. Laura te escribir&aacute;.</p>
+      </div>
     </div>
   </section>
 
-  <!-- ============ SECTION 9: FOOTER ============ -->
+  <!-- ============ FOOTER ============ -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer-grid" data-lang="en">
-        <div>
-          <h4>Laura Treto</h4>
-          <p>Movement Coach<br>Key West, FL</p>
-        </div>
-        <div>
-          <h4>Follow Along</h4>
-          <ul class="social-links">
-            <li><a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer"><span class="social-icon">T</span> TikTok</a></li>
-            <li><a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer"><span class="social-icon">I</span> Instagram</a></li>
-            <li><a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer"><span class="social-icon">F</span> Facebook</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Contact</h4>
-          <p><a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a><br>Key West, FL</p>
-        </div>
+    <div class="footer-grid" data-lang="en">
+      <div>
+        <div class="brand-mark">Laura Treto</div>
+        <p>Movement Coach<br>Key West, FL</p>
       </div>
-      <div class="footer-grid" data-lang="es">
-        <div>
-          <h4>Laura Treto</h4>
-          <p>Coach de Movimiento<br>Key West, FL</p>
-        </div>
-        <div>
-          <h4>S&iacute;gueme</h4>
-          <ul class="social-links">
-            <li><a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer"><span class="social-icon">T</span> TikTok</a></li>
-            <li><a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer"><span class="social-icon">I</span> Instagram</a></li>
-            <li><a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer"><span class="social-icon">F</span> Facebook</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Contacto</h4>
-          <p><a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a><br>Key West, FL</p>
-        </div>
+      <div>
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+          <li><a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        </ul>
       </div>
-      <div class="footer-bottom">
-        <span data-lang="en">&copy; 2026 Laura Treto Coaching. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms.html">Terms of Service</a> &nbsp;&middot;&nbsp; Built by <a href="https://ainiko.ai">Ainiko.ai</a></span>
-        <span data-lang="es">&copy; 2026 Laura Treto Coaching. Todos los derechos reservados. &nbsp;&middot;&nbsp; <a href="/privacy.html">Pol&iacute;tica de Privacidad</a> &nbsp;&middot;&nbsp; <a href="/terms.html">T&eacute;rminos del Servicio</a> &nbsp;&middot;&nbsp; Creado por <a href="https://ainiko.ai">Ainiko.ai</a></span>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li><a href="/client">Become a client</a></li>
+          <li><a href="/pricing">Training options</a></li>
+          <li><a href="/chachafit">ChaChaFit</a></li>
+          <li><a href="/quiz.html">Movement quiz</a></li>
+        </ul>
       </div>
+    </div>
+    <div class="footer-grid" data-lang="es">
+      <div>
+        <div class="brand-mark">Laura Treto</div>
+        <p>Coach de Movimiento<br>Key West, FL</p>
+      </div>
+      <div>
+        <h4>S&iacute;gueme</h4>
+        <ul>
+          <li><a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+          <li><a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Visita</h4>
+        <ul>
+          <li><a href="/client">Hazte cliente</a></li>
+          <li><a href="/pricing">Opciones de entrenamiento</a></li>
+          <li><a href="/chachafit">ChaChaFit</a></li>
+          <li><a href="/quiz.html">Test de movimiento</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-lang="en">&copy; 2026 Laura Treto Coaching. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms.html">Terms of Service</a> &nbsp;&middot;&nbsp; Built by <a href="https://ainiko.ai">Ainiko.ai</a></span>
+      <span data-lang="es">&copy; 2026 Laura Treto Coaching. Todos los derechos reservados. &nbsp;&middot;&nbsp; <a href="/privacy.html">Pol&iacute;tica de Privacidad</a> &nbsp;&middot;&nbsp; <a href="/terms.html">T&eacute;rminos del Servicio</a> &nbsp;&middot;&nbsp; Creado por <a href="https://ainiko.ai">Ainiko.ai</a></span>
     </div>
   </footer>
 
@@ -2151,112 +1680,30 @@
     // Language toggle
     function setLang(lang) {
       document.body.classList.toggle('lang-es', lang === 'es');
-      document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      document.querySelectorAll('.lang-toggle button').forEach(function(btn) {
         btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
       });
       document.documentElement.lang = lang;
       try { localStorage.setItem('ltc-lang', lang); } catch(e) {}
+      // re-render credentials in case container is built
+      var ev = new Event('langchange');
+      document.dispatchEvent(ev);
     }
-
-    // Restore saved language
     try { if (localStorage.getItem('ltc-lang') === 'es') setLang('es'); } catch(e) {}
 
-    // Form submit handler (Netlify Forms via fetch)
-    function handleSubmit(e, lang) {
-      e.preventDefault();
-      const form = e.target;
-      const btn = form.querySelector('button[type="submit"]');
-      const origText = btn.textContent;
-
-      btn.textContent = lang === 'es' ? 'Enviando...' : 'Sending...';
-      btn.disabled = true;
-
-      const formData = new URLSearchParams(new FormData(form)).toString();
-
-      fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData
-      })
-      .then(function(response) {
-        if (response.ok) {
-          form.style.display = 'none';
-          document.getElementById('success-' + lang).style.display = 'block';
-        } else {
-          btn.textContent = origText;
-          btn.disabled = false;
-          alert(lang === 'es' ? 'Error al enviar. Intenta de nuevo.' : 'Submission failed. Please try again.');
-        }
-      })
-      .catch(function() {
-        btn.textContent = origText;
-        btn.disabled = false;
-        alert(lang === 'es' ? 'Error de conexion. Intenta de nuevo.' : 'Network error. Please try again.');
-      });
-    }
-
-    // Scroll-triggered fade-in
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const animateEls = document.querySelectorAll('.card, .pricing-card, .section-header, .about-grid, .social-grid');
-      animateEls.forEach(el => {
-        el.classList.add('fade-up');
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(15px)';
-        el.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-        observer.observe(el);
-      });
+    // Hero syllable reveal trigger + content fade-in
+    document.addEventListener('DOMContentLoaded', function() {
+      var heroTitle = document.getElementById('heroTitle');
+      var heroInner = document.getElementById('heroInner');
+      if (heroTitle) {
+        requestAnimationFrame(function() {
+          heroTitle.classList.add('in');
+          if (heroInner) heroInner.classList.add('in');
+        });
+      }
     });
 
-    // Scroll-driven progressive text reveal
-    (function() {
-      var wrapper = document.querySelector('.hero-scroll-wrapper');
-      var heroContent = document.querySelector('.hero-content');
-      if (!wrapper || !heroContent) return;
-
-      function onScroll() {
-        var rect = wrapper.getBoundingClientRect();
-        var wrapperHeight = wrapper.offsetHeight;
-        var viewportHeight = window.innerHeight;
-
-        // How far we've scrolled into the wrapper (0 to 1)
-        var scrolled = -rect.top / (wrapperHeight - viewportHeight);
-        scrolled = Math.max(0, Math.min(1, scrolled));
-
-        // Progressive text reveal based on scroll position
-        if (scrolled >= 0.15) {
-          heroContent.classList.add('show-title');
-        } else {
-          heroContent.classList.remove('show-title');
-        }
-
-        if (scrolled >= 0.35) {
-          heroContent.classList.add('show-subtitle');
-        } else {
-          heroContent.classList.remove('show-subtitle');
-        }
-
-        if (scrolled >= 0.55) {
-          heroContent.classList.add('show-cta');
-        } else {
-          heroContent.classList.remove('show-cta');
-        }
-      }
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    })();
-
-    // Top nav (logo + lang + hamburger) fade out after credentials section scrolls past
+    // Top nav fade after credentials section scrolls past
     (function() {
       var credSection = document.getElementById('credentials-section');
       function updateNav() {
@@ -2268,28 +1715,30 @@
       updateNav();
     })();
 
-    // Hamburger drawer
+    // Edge tab + slide-in panel
     (function() {
-      var trigger = document.getElementById('navTrigger');
-      var drawer = document.getElementById('navDrawer');
-      var scrim = document.getElementById('navScrim');
-      if (!trigger || !drawer) return;
+      var tab = document.getElementById('edgeTab');
+      var panel = document.getElementById('edgePanel');
+      var scrim = document.getElementById('edgeScrim');
+      var closeBtn = document.getElementById('edgeClose');
+      if (!tab || !panel) return;
+      function open() {
+        document.body.classList.add('edge-open');
+        tab.setAttribute('aria-expanded', 'true');
+        panel.setAttribute('aria-hidden', 'false');
+      }
       function close() {
-        document.body.classList.remove('nav-open');
-        trigger.setAttribute('aria-expanded', 'false');
-        drawer.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('edge-open');
+        tab.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
       }
-      function toggle() {
-        var open = document.body.classList.toggle('nav-open');
-        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
-        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
-      }
-      trigger.addEventListener('click', function(e) { e.stopPropagation(); toggle(); });
+      tab.addEventListener('click', open);
+      closeBtn.addEventListener('click', close);
       scrim.addEventListener('click', close);
       document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
     })();
 
-    // Credentials section: fixed background + scroll-driven frame animation + text cycling
+    // Credentials: scroll-driven background frames + cycled italic text
     (function() {
       var TOTAL_FRAMES = 49;
       var section = document.getElementById('credentials-section');
@@ -2300,7 +1749,6 @@
 
       var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Clone text items into the fixed container for overlay display
       function updateCredTextItems() {
         var lang = document.body.classList.contains('lang-es') ? 'es' : 'en';
         credTextContainer.innerHTML = '';
@@ -2311,13 +1759,7 @@
         });
       }
       updateCredTextItems();
-
-      // Re-clone on language toggle
-      document.querySelectorAll('.lang-btn, .lang-toggle button').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          setTimeout(updateCredTextItems, 50);
-        });
-      });
+      document.addEventListener('langchange', function() { setTimeout(updateCredTextItems, 30); });
 
       if (prefersReducedMotion) {
         frameBg.classList.add('cred-bg-visible');
@@ -2325,17 +1767,14 @@
         return;
       }
 
-      // Preload all frames for smooth playback
       var frames = [];
       for (var i = 1; i <= TOTAL_FRAMES; i++) {
         var img = new Image();
         img.src = '/images/scroll-frames/frame-' + String(i).padStart(3, '0') + '.jpg?v=2';
         frames.push(img);
       }
-
       var currentFrame = 0;
 
-      // Show/hide fixed background when section is in viewport
       function updateBgVisibility() {
         var rect = section.getBoundingClientRect();
         var viewportH = window.innerHeight;
@@ -2349,7 +1788,6 @@
         }
       }
 
-      // Update frame and credential text based on scroll progress through the section
       function updateFrame() {
         var rect = section.getBoundingClientRect();
         var sectionHeight = section.offsetHeight;
@@ -2357,7 +1795,6 @@
         var scrollProgress = -rect.top / (sectionHeight - viewportHeight);
         scrollProgress = Math.max(0, Math.min(1, scrollProgress));
 
-        // Map to frame with easing (ease-out curve for smoother feel)
         var eased = 1 - Math.pow(1 - scrollProgress, 1.3);
         var targetFrame = Math.min(TOTAL_FRAMES - 1, Math.floor(eased * TOTAL_FRAMES));
 
@@ -2366,17 +1803,11 @@
           currentFrame = targetFrame;
         }
 
-        // Cycle through credential text items
         var credItems = credTextContainer.querySelectorAll('.cred-text-item');
         if (credItems.length > 0) {
-          if (scrollProgress < 0.05 || scrollProgress > 0.88) {
-            // Hide all credentials before first item appears and before next section begins
-            credItems.forEach(function(item) {
-              item.classList.remove('cred-active');
-            });
-            if (scrollProgress > 0.88) {
-              credTextContainer.classList.remove('cred-bg-visible');
-            }
+          if (scrollProgress < 0.05 || scrollProgress > 0.92) {
+            credItems.forEach(function(item) { item.classList.remove('cred-active'); });
+            if (scrollProgress > 0.92) credTextContainer.classList.remove('cred-bg-visible');
           } else {
             var activeIndex = Math.min(credItems.length - 1, Math.floor(scrollProgress * credItems.length));
             credItems.forEach(function(item, i) {
@@ -2386,236 +1817,162 @@
         }
       }
 
-      function onScroll() {
-        updateBgVisibility();
-        updateFrame();
-      }
-
+      function onScroll() { updateBgVisibility(); updateFrame(); }
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     })();
 
-    // About carousel (scroll-snap) dot sync
+    // On-dark logo color when over charcoal sections
     (function() {
-      var container = document.getElementById('aboutCarousel');
-      if (!container) return;
-      var track = container.querySelector('.carousel-track');
-      var dots = container.querySelectorAll('.carousel-dot');
-      if (!track) return;
-
-      function updateDots() {
-        var scrollLeft = track.scrollLeft;
-        var slideWidth = track.offsetWidth;
-        var index = Math.round(scrollLeft / slideWidth);
-        dots.forEach(function(dot, i) {
-          dot.classList.toggle('active', i === index);
-        });
+      var darkSections = ['credentials-section', 'inquiry'];
+      function checkDark() {
+        var onDark = false;
+        for (var i = 0; i < darkSections.length; i++) {
+          var el = document.getElementById(darkSections[i]);
+          if (!el) continue;
+          var rect = el.getBoundingClientRect();
+          if (rect.top < 80 && rect.bottom > 80) { onDark = true; break; }
+        }
+        document.body.classList.toggle('on-dark', onDark);
       }
-
-      track.addEventListener('scroll', updateDots, { passive: true });
-
-      dots.forEach(function(dot) {
-        dot.addEventListener('click', function() {
-          var index = parseInt(dot.dataset.index);
-          track.scrollTo({ left: index * track.offsetWidth, behavior: 'smooth' });
-        });
-      });
+      window.addEventListener('scroll', checkDark, { passive: true });
+      checkDark();
     })();
 
-    // Inquiry section: fixed sunset background + scroll-reveal text + form
+    // Inquiry form: pickers + submit -> client-funnel
     (function() {
-      var section = document.getElementById('inquiry');
-      var inquiryBg = document.getElementById('inquiryBg');
-      if (!section || !inquiryBg) return;
+      var form = document.getElementById('leadForm');
+      if (!form) return;
+      var trackPills = form.querySelectorAll('.track-pill');
+      var modePills = form.querySelectorAll('.mode-pill');
+      var phoneInput = document.getElementById('leadPhone');
+      var phoneOptional = document.getElementById('phoneOptional');
+      var phoneOptionalEs = document.getElementById('phoneOptionalEs');
+      var errEl = document.getElementById('leadErr');
+      var submitBtn = document.getElementById('leadSubmit');
+      var state = { track: 'train', mode: 'online' };
 
-      var revealEls = section.querySelectorAll('.inquiry-reveal');
-      var formCards = section.querySelectorAll('.inquiry-form-card');
-      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (prefersReducedMotion) {
-        revealEls.forEach(function(el) { el.classList.add('inquiry-visible'); });
-        formCards.forEach(function(el) { el.classList.add('inquiry-visible'); });
-        inquiryBg.classList.add('inquiry-bg-visible');
-        return;
-      }
-
-      // Show/hide the fixed background when section is in viewport
-      function updateBgVisibility() {
-        var rect = section.getBoundingClientRect();
-        var viewportH = window.innerHeight;
-        var inView = rect.top < viewportH && rect.bottom > 0;
-        if (inView) {
-          inquiryBg.classList.add('inquiry-bg-visible');
+      function updatePhoneRequired() {
+        if (state.mode === 'local') {
+          phoneInput.required = true;
+          if (phoneOptional) phoneOptional.style.display = 'none';
+          if (phoneOptionalEs) phoneOptionalEs.style.display = 'none';
         } else {
-          inquiryBg.classList.remove('inquiry-bg-visible');
+          phoneInput.required = false;
         }
       }
 
-      window.addEventListener('scroll', updateBgVisibility, { passive: true });
-      updateBgVisibility();
-
-      // Scroll-reveal via IntersectionObserver for text blocks and form cards
-      var inquiryObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('inquiry-visible');
-            inquiryObserver.unobserve(entry.target);
-          }
+      trackPills.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          trackPills.forEach(function(b) { b.classList.remove('on'); });
+          btn.classList.add('on');
+          state.track = btn.getAttribute('data-track');
         });
-      }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px 0px 0px'
       });
-
-      revealEls.forEach(function(el) { inquiryObserver.observe(el); });
-      formCards.forEach(function(el) { inquiryObserver.observe(el); });
-    })();
-
-    // Social testimonial: scroll-driven fade-out as quote exits viewport upward
-    (function() {
-      var testimonial = document.querySelector('.social-testimonial');
-      if (!testimonial) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      function updateTestimonialScroll() {
-        var rect = testimonial.getBoundingClientRect();
-        var viewportH = window.innerHeight;
-
-        if (rect.bottom <= 0 || rect.top >= viewportH) return; // fully off screen, leave as-is
-
-        // scrolledPast: 0 when quote top is at 30% of viewport, 1 when it reaches 0px
-        var scrolledPast = Math.max(0, (viewportH * 0.3 - rect.top) / (viewportH * 0.35));
-        scrolledPast = Math.min(1, scrolledPast);
-
-        testimonial.style.opacity = 1 - (scrolledPast * 0.85); // fades to ~0.15, not fully gone
-        testimonial.style.transform = 'scale(' + (1 - scrolledPast * 0.07) + ') translateY(' + (-scrolledPast * 28) + 'px)';
-      }
-
-      window.addEventListener('scroll', updateTestimonialScroll, { passive: true });
-      updateTestimonialScroll();
-    })();
-
-    // How It Works: Full-bleed GIF background with scroll-reveal steps
-    (function() {
-      var section = document.getElementById('how-it-works');
-      var gifBg = document.getElementById('hiwGifBg');
-      if (!section || !gifBg) return;
-
-      var stepCards = section.querySelectorAll('.hiw-step-card');
-      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if (prefersReducedMotion) {
-        stepCards.forEach(function(card) {
-          card.classList.add('hiw-visible');
+      modePills.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          modePills.forEach(function(b) { b.classList.remove('on'); });
+          btn.classList.add('on');
+          state.mode = btn.getAttribute('data-mode');
+          updatePhoneRequired();
         });
-        gifBg.classList.add('hiw-bg-visible');
-        return;
-      }
+      });
+      updatePhoneRequired();
 
-      // Show/hide the fixed GIF background only when section is further into viewport
-      function updateGifVisibility() {
-        var rect = section.getBoundingClientRect();
-        var viewportH = window.innerHeight;
-        // Require section top to be at least halfway up the viewport before video appears
-        var inView = rect.top < viewportH * 0.5 && rect.bottom > 0;
-        if (inView) {
-          gifBg.classList.add('hiw-bg-visible');
-        } else {
-          gifBg.classList.remove('hiw-bg-visible');
+      function isEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        errEl.textContent = '';
+        var hp = (document.getElementById('leadHp') || {}).value || '';
+        var first_name = (document.getElementById('leadName') || {}).value.trim();
+        var email = (document.getElementById('leadEmail') || {}).value.trim();
+        var phone = (document.getElementById('leadPhone') || {}).value.trim();
+        var lang = document.body.classList.contains('lang-es') ? 'es' : 'en';
+
+        if (!first_name || first_name.length < 2) {
+          errEl.textContent = lang === 'es' ? 'Falta tu nombre.' : 'Add your first name.';
+          return;
         }
-      }
+        if (!isEmail(email)) {
+          errEl.textContent = lang === 'es' ? 'Email no válido.' : 'Email looks off.';
+          return;
+        }
+        if (state.mode === 'local' && (!phone || phone.length < 7)) {
+          errEl.textContent = lang === 'es' ? 'Falta tu teléfono para sesiones en Key West.' : 'Phone is required for Key West sessions.';
+          return;
+        }
 
-      window.addEventListener('scroll', updateGifVisibility, { passive: true });
-      updateGifVisibility();
+        var origLabel = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = lang === 'es' ? 'Enviando...' : 'Sending...';
 
-      // Step cards fade in via Intersection Observer
-      var cardObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('hiw-visible');
-            cardObserver.unobserve(entry.target);
+        fetch('/.netlify/functions/client-funnel', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            first_name: first_name,
+            email: email,
+            phone: phone,
+            intent: state.track,
+            mode: state.mode,
+            language: lang,
+            source: 'inquiry-form',
+            event_id: 'homepage-inquiry',
+            website: hp
+          })
+        }).then(function(r) {
+          if (!r.ok) throw new Error('Bad response ' + r.status);
+          return r.json().catch(function() { return {}; });
+        }).then(function() {
+          document.body.classList.add('inquiry-sent');
+          if (window.ltTrack) {
+            window.ltTrack('inquiry_submit', {
+              intent: state.track,
+              mode: state.mode,
+              language: lang
+            });
           }
+        }).catch(function() {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origLabel;
+          errEl.textContent = lang === 'es' ? 'Error al enviar. Intenta de nuevo.' : 'Submission failed. Try again.';
         });
-      }, {
-        threshold: 0.2,
-        rootMargin: '0px 0px -10% 0px'
-      });
-
-      stepCards.forEach(function(card) {
-        cardObserver.observe(card);
       });
     })();
   </script>
 
-  <!-- Social grid thumbnail loader + dynamic feed -->
+  <!-- ============ Social grid loaders (kept from prior site) ============ -->
   <script>
     (function() {
-      // -------------------------------------------------------
-      // Helpers
-      // -------------------------------------------------------
-      function loadIgPost(post, src) {
-        var img = post.querySelector('img');
-        if (!img || !src) return;
-        img.src = src;
-        img.onload = function() { img.classList.add('loaded'); post.classList.remove('loading'); };
-        img.onerror = function() {
-          applyIgFallback(post);
-        };
-      }
-
       function applyIgFallback(post) {
         var img = post.querySelector('img');
         if (img) img.style.display = 'none';
         post.style.background = 'linear-gradient(135deg, #E8654A 0%, #C5973E 100%)';
         post.classList.remove('loading');
-        post.setAttribute('data-fallback-active', '1');
         var overlay = post.querySelector('.social-overlay');
         if (overlay) {
           overlay.style.background = 'rgba(0,0,0,0.25)';
-          overlay.style.flexDirection = 'column';
-          overlay.style.gap = '8px';
           var icon = overlay.querySelector('.platform-icon');
-          if (icon) { icon.style.opacity = '1'; icon.style.fontSize = '36px'; }
-          if (!overlay.querySelector('.fallback-label')) {
-            var altText = img ? img.getAttribute('alt') : '';
-            var label = document.createElement('span');
-            label.className = 'fallback-label';
-            label.textContent = altText || 'Instagram';
-            label.style.cssText = 'color:rgba(255,255,255,0.85);font-size:11px;text-align:center;padding:0 8px;line-height:1.3;max-width:90%;';
-            overlay.appendChild(label);
-          }
+          if (icon) { icon.style.opacity = '1'; icon.style.fontSize = '20px'; }
         }
       }
-
       function applyTtFallback(post) {
         var img = post.querySelector('img');
         if (img) img.style.display = 'none';
         post.style.background = 'linear-gradient(135deg, #1A7A7A 0%, #2B2B2B 100%)';
         post.classList.remove('loading');
-        post.setAttribute('data-fallback-active', '1');
         var overlay = post.querySelector('.social-overlay');
         if (overlay) {
-          overlay.style.background = 'rgba(0,0,0,0.15)';
-          overlay.style.flexDirection = 'column';
-          overlay.style.gap = '8px';
+          overlay.style.background = 'rgba(0,0,0,0.18)';
           var icon = overlay.querySelector('.platform-icon');
-          if (icon) { icon.style.opacity = '1'; icon.style.fontSize = '36px'; }
-          if (!overlay.querySelector('.fallback-label')) {
-            var altText = img ? img.getAttribute('alt') : '';
-            var label = document.createElement('span');
-            label.className = 'fallback-label';
-            label.textContent = altText || 'TikTok';
-            label.style.cssText = 'color:rgba(255,255,255,0.85);font-size:11px;text-align:center;padding:0 8px;line-height:1.3;max-width:90%;';
-            overlay.appendChild(label);
-          }
+          if (icon) { icon.style.opacity = '1'; icon.style.fontSize = '20px'; }
         }
       }
-
       function loadTtPost(post) {
         var ttUrl = post.getAttribute('data-tt-url');
         if (!ttUrl) return;
         var img = post.querySelector('img');
-
         function attemptLoad(retries) {
           fetch('https://www.tiktok.com/oembed?url=' + encodeURIComponent(ttUrl))
             .then(function(r) { return r.json(); })
@@ -2638,60 +1995,35 @@
               else applyTtFallback(post);
             });
         }
-        attemptLoad(2); // Try up to 3 times total
+        attemptLoad(2);
       }
 
-      // -------------------------------------------------------
-      // Step 1: Load TikTok posts immediately via oEmbed
-      // -------------------------------------------------------
-      document.querySelectorAll('.social-post[data-platform="tt"]').forEach(function(post) {
-        loadTtPost(post);
-      });
+      document.querySelectorAll('.social-post[data-platform="tt"]').forEach(loadTtPost);
 
-      // -------------------------------------------------------
-      // Step 2: Fetch ALL IG posts (pinned + dynamic) from Netlify function
-      // Instagram /media/?size=l URLs are blocked; real CDN URLs come from the API.
-      // -------------------------------------------------------
       var pinnedSlots = Array.from(document.querySelectorAll('.social-post[data-platform="ig"][data-pinned="true"]'));
       var dynamicSlots = Array.from(document.querySelectorAll('.social-post[data-dynamic="true"]'));
-
-      // Keyword patterns for content rules
       var MAVERICKS_PATTERN = /mavericks|raul malo/i;
       var PINNED_PATTERN = /testimonial|client result|raul malo|mavericks/i;
       var NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
 
-      // Build a map of permalink -> imageUrl from the API results
-      // so pinned posts can look up their real CDN thumbnail URL.
       function buildPermalinkMap(posts) {
         var map = {};
         posts.forEach(function(p) {
           if (p.permalink) {
-            // Extract shortcode from permalink (works for both /p/ and /reel/ URLs)
             var match = p.permalink.match(/\/(p|reel|tv)\/([^\/\?]+)/);
-            if (match) {
-              map[match[2].toLowerCase()] = p.imageUrl;
-            }
-            // Also store full normalized permalink as fallback
-            var key = p.permalink.replace(/\/$/, '').toLowerCase();
-            map[key] = p.imageUrl;
+            if (match) map[match[2].toLowerCase()] = p.imageUrl;
+            map[p.permalink.replace(/\/$/, '').toLowerCase()] = p.imageUrl;
           }
         });
         return map;
       }
-
       function applyPinnedFromMap(permalinkMap) {
         pinnedSlots.forEach(function(slot) {
           var href = slot.getAttribute('href') || '';
-          // Try shortcode match first
           var match = href.match(/\/(p|reel|tv)\/([^\/\?]+)/);
           var imageUrl = null;
-          if (match) {
-            imageUrl = permalinkMap[match[2].toLowerCase()];
-          }
-          // Fallback: try full URL match
-          if (!imageUrl) {
-            imageUrl = permalinkMap[href.replace(/\/$/, '').toLowerCase()];
-          }
+          if (match) imageUrl = permalinkMap[match[2].toLowerCase()];
+          if (!imageUrl) imageUrl = permalinkMap[href.replace(/\/$/, '').toLowerCase()];
           if (imageUrl) {
             var img = slot.querySelector('img');
             if (img) {
@@ -2700,109 +2032,73 @@
               img.onerror = function() { applyIgFallback(slot); };
             }
           } else {
-            // Not in API results (may be too old / below engagement threshold): show fallback
             applyIgFallback(slot);
           }
         });
       }
-
       function filterAndRankPosts(posts) {
         var now = Date.now();
         var maverickCount = 0;
         var filtered = [];
-
         for (var i = 0; i < posts.length; i++) {
           var p = posts[i];
           var text = (p.caption || '') + ' ' + (p.alt || '');
-
-          // Diversity filter: max 2 Mavericks/Raul Malo posts in dynamic slots
           if (MAVERICKS_PATTERN.test(text)) {
             maverickCount++;
             if (maverickCount > 2) continue;
           }
-
-          // Skip posts that match pinned criteria (already pinned in the grid)
           if (PINNED_PATTERN.test(text)) continue;
-
-          // Recency bias: posts from last 90 days get a 30% score boost
           var isRecent = p.timestamp && (now - new Date(p.timestamp).getTime()) < NINETY_DAYS_MS;
           p._adjustedScore = (p._score || 0) * (isRecent ? 1.3 : 1);
-
           filtered.push(p);
         }
-
         filtered.sort(function(a, b) { return b._adjustedScore - a._adjustedScore; });
         return filtered;
       }
-
       function applyDynamicPosts(posts) {
         var ranked = filterAndRankPosts(posts);
-
         dynamicSlots.forEach(function(slot, idx) {
           var post = ranked[idx];
-          if (!post) {
-            // No API post for this slot: show branded fallback
-            applyIgFallback(slot);
-            return;
-          }
-
-          // Update href to the live post
+          if (!post) { applyIgFallback(slot); return; }
           if (post.permalink) slot.href = post.permalink;
-
-          // Update image
           var img = slot.querySelector('img');
           if (img) {
             img.alt = post.caption ? post.caption.slice(0, 80) : 'Laura Treto on Instagram';
             img.src = post.imageUrl;
             img.onload = function() { img.classList.add('loaded'); slot.classList.remove('loading'); };
-            img.onerror = function() {
-              applyIgFallback(slot);
-            };
+            img.onerror = function() { applyIgFallback(slot); };
           }
         });
       }
 
-      // Build ?include= param from pinned post shortcodes so the API always
-      // returns their real CDN image URLs (Instagram /media/?size=l is dead).
       var pinnedShortcodes = pinnedSlots.map(function(slot) {
         var href = slot.getAttribute('href') || '';
-        // Extract shortcode from https://www.instagram.com/p/SHORTCODE/
         var m = href.match(/\/p\/([^/]+)/);
         return m ? m[1] : '';
       }).filter(Boolean);
-      var feedUrl = '/.netlify/functions/social-feed' +
-        (pinnedShortcodes.length ? '?include=' + pinnedShortcodes.join(',') : '');
+      var feedUrl = '/.netlify/functions/social-feed' + (pinnedShortcodes.length ? '?include=' + pinnedShortcodes.join(',') : '');
 
-      // Fetch from the Netlify function; fall back gracefully on any failure
       fetch(feedUrl)
-        .then(function(r) {
-          if (!r.ok) throw new Error('Feed returned ' + r.status);
-          return r.json();
-        })
+        .then(function(r) { if (!r.ok) throw new Error('Feed returned ' + r.status); return r.json(); })
         .then(function(data) {
           if (data && Array.isArray(data.posts) && data.posts.length > 0) {
-            // Use API data for both pinned and dynamic slots
             var permalinkMap = buildPermalinkMap(data.posts);
             applyPinnedFromMap(permalinkMap);
             applyDynamicPosts(data.posts);
           } else {
-            // Empty response: branded fallback for all IG slots
-            pinnedSlots.forEach(function(slot) { applyIgFallback(slot); });
-            dynamicSlots.forEach(function(slot) { applyIgFallback(slot); });
+            pinnedSlots.forEach(applyIgFallback);
+            dynamicSlots.forEach(applyIgFallback);
           }
         })
         .catch(function() {
-          // API failure: branded fallback for all IG slots so grid still looks full
-          pinnedSlots.forEach(function(slot) { applyIgFallback(slot); });
-          dynamicSlots.forEach(function(slot) {
-            applyIgFallback(slot);
-          });
+          pinnedSlots.forEach(applyIgFallback);
+          dynamicSlots.forEach(applyIgFallback);
         });
     })();
   </script>
 
   <script>
-    // GA4: delegated listener — fires trainerize_click on any Trainerize checkout link
+    // Trainerize click tracking
     (function() {
       document.addEventListener('click', function(e) {
         var a = e.target.closest && e.target.closest('a[href*="trainerize.me"]');

@@ -11,5 +11,8 @@
 /client             /client.html                           200
 /c                  /client.html                           200
 
+# Pricing page
+/pricing            /pricing.html                          200
+
 # SPA-style catch-all (single page site)
 /*    /index.html   200
