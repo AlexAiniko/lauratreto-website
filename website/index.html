@@ -520,6 +520,8 @@
       opacity: 0.55;
       margin: 28px auto 0;
     }
+    .cred-text-item.cred-stack { line-height: 0.95; }
+    .cred-text-item.cred-stack > span { display: block; }
 
     /* ========================================
        HALVES — Who I Help + How It Works (6 panels)
@@ -643,7 +645,7 @@
     }
     .poster-card {
       position: relative;
-      aspect-ratio: 4 / 5;
+      min-height: 460px;
       border-radius: 6px;
       overflow: hidden;
       background-color: var(--paper-2);
@@ -657,10 +659,12 @@
       flex-direction: column;
       color: var(--charcoal);
       transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      transform-origin: center;
     }
     .poster-card .poster-photo {
       position: relative;
-      flex: 0 0 62%;
+      width: 100%;
+      aspect-ratio: 16 / 10;
       overflow: hidden;
     }
     .poster-card .poster-photo img {
@@ -671,7 +675,7 @@
     }
     .poster-card .poster-body {
       flex: 1 1 auto;
-      padding: clamp(20px, 3vw, 28px) clamp(22px, 3.2vw, 30px) clamp(22px, 3.4vw, 30px);
+      padding: clamp(20px, 3vw, 28px) clamp(22px, 3.2vw, 30px) clamp(24px, 4vw, 30px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -680,7 +684,11 @@
     }
     .poster-card.tilt-l { transform: rotate(-1.5deg); }
     .poster-card.tilt-r { transform: rotate(1.5deg); }
-    .poster-card:hover { transform: rotate(0) translateY(-4px); box-shadow: 0 40px 90px -30px rgba(43,43,43,.5); }
+    .poster-card.tilt-c { transform: translateY(-20px); }
+    .poster-card.tilt-l:hover { transform: rotate(0) translateY(-4px); box-shadow: 0 40px 90px -30px rgba(43,43,43,.5); }
+    .poster-card.tilt-r:hover { transform: rotate(0) translateY(-4px); box-shadow: 0 40px 90px -30px rgba(43,43,43,.5); }
+    .poster-card.tilt-c:hover { transform: translateY(-28px); box-shadow: 0 40px 90px -30px rgba(43,43,43,.5); }
+    .poster-card:not(.tilt-l):not(.tilt-r):not(.tilt-c):hover { transform: translateY(-4px); box-shadow: 0 40px 90px -30px rgba(43,43,43,.5); }
     .poster-card .top-meta {
       font-family: 'Inter', sans-serif;
       font-size: 11px;
@@ -866,6 +874,26 @@
     .platform-icon.tt::before { content: 'TT'; }
     .social-post:hover .platform-icon { opacity: 1; }
     .social-post.loading { background: linear-gradient(135deg, rgba(232,101,74,.10), rgba(26,122,122,.08)); }
+    .social-post.fallback {
+      background-image: url('/images/laura-confident.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+    .social-post.fallback::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.55));
+      pointer-events: none;
+      z-index: 1;
+    }
+    .social-post.fallback .social-overlay { background: transparent; z-index: 2; }
+    .social-post.fallback .platform-glyph {
+      width: 36px; height: 36px;
+      color: var(--warm-white);
+      opacity: 0.85;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.45));
+    }
+    .platform-glyph { display: none; }
 
     .testimonial {
       max-width: 720px;
@@ -1199,8 +1227,10 @@
        RESPONSIVE
        ======================================== */
     @media (max-width: 980px) {
-      .triptych { grid-template-columns: 1fr; gap: 40px; max-width: 380px; margin: 0 auto; }
-      .poster-card.tilt-l, .poster-card.tilt-r { transform: rotate(0); }
+      .triptych { grid-template-columns: 1fr; gap: 48px; max-width: 380px; margin: 0 auto; }
+      .poster-card.tilt-l { transform: rotate(-1.5deg); }
+      .poster-card.tilt-r { transform: rotate(1.5deg); }
+      .poster-card.tilt-c { transform: translateY(-12px); }
       .social-grid { grid-template-columns: repeat(3, 1fr); }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
@@ -1330,23 +1360,23 @@
   <!-- ============ CREDENTIALS (scroll-driven background + italic confirmations) ============ -->
   <section class="credentials-section" id="credentials-section">
     <div class="cred-frame-bg" id="credFrameBg">
-      <img id="credFrameImg" src="/images/scroll-frames/frame-001.jpg?v=2" alt="Laura Treto kettlebell exercise by the ocean" />
+      <img id="credFrameImg" src="/images/scroll-frames/frame-001.jpg?v=2" alt="Laura Treto kettlebell exercise by the ocean" width="1920" height="1080" />
     </div>
 
     <div class="cred-scroll-area">
       <div class="cred-cards-list" data-lang="en">
-        <div class="cred-text-item" data-cred="0">World class dancer.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="1">1,500+ shows.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="2">O-1B.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="3">NASM certified.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="4">Certified psychologist.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="0">World class dancer<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="1">1,500+ shows<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="2">O-1B<span class="gold-rule"></span></div>
+        <div class="cred-text-item cred-stack" data-cred="3"><span>NASM</span><span>certified</span><span class="gold-rule"></span></div>
+        <div class="cred-text-item cred-stack" data-cred="4"><span>Certified</span><span>psychologist</span><span class="gold-rule"></span></div>
       </div>
       <div class="cred-cards-list" data-lang="es">
-        <div class="cred-text-item" data-cred="0">Bailarina de clase mundial.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="1">1,500+ funciones.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="2">O-1B.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="3">Certificada NASM.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="4">Psic&oacute;loga certificada.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="0">Bailarina de clase mundial<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="1">1,500+ funciones<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="2">O-1B<span class="gold-rule"></span></div>
+        <div class="cred-text-item cred-stack" data-cred="3"><span>Certificada</span><span>NASM</span><span class="gold-rule"></span></div>
+        <div class="cred-text-item cred-stack" data-cred="4"><span>Psic&oacute;loga</span><span>certificada</span><span class="gold-rule"></span></div>
       </div>
     </div>
     <div class="cred-text-container" id="credTextContainer"></div>
@@ -1477,7 +1507,7 @@
       <div class="triptych">
         <a href="/pricing" class="poster-card tilt-l">
           <div class="poster-photo">
-            <img src="/images/laura-silhouette.jpg" alt="Laura Treto, sunset kettlebell squat" loading="lazy" decoding="async" />
+            <img src="/images/laura-pier-squat.jpg" alt="Laura Treto, sunset squat on the pier" width="1440" height="900" loading="lazy" decoding="async" />
           </div>
           <div class="poster-body">
             <div>
@@ -1496,10 +1526,10 @@
           </div>
         </a>
 
-        <a href="#" class="poster-card sla-card">
+        <a href="#" class="poster-card sla-card tilt-c">
           <span class="ribbon">$149</span>
           <div class="poster-photo">
-            <img src="/images/laura-fullbody.jpg" alt="Laura Treto, full body, action ready" loading="lazy" decoding="async" />
+            <img src="/images/laura-power-stance.jpg" alt="Laura Treto, sunset wide stance silhouette" width="1440" height="900" loading="lazy" decoding="async" />
           </div>
           <div class="poster-body">
             <div>
@@ -1519,7 +1549,7 @@
 
         <a href="/pricing" class="poster-card tilt-r">
           <div class="poster-photo">
-            <img src="/images/laura-portrait.jpg" alt="Laura Treto, warm portrait" loading="lazy" decoding="async" />
+            <img src="/images/laura-lunge-silhouette.jpg" alt="Laura Treto, sunset lunge silhouette" width="1440" height="900" loading="lazy" decoding="async" />
           </div>
           <div class="poster-body">
             <div>
@@ -1575,43 +1605,43 @@
 
       <div class="social-grid" id="socialGrid">
         <a href="https://www.instagram.com/p/DTJw4lDEa9C/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DTJw4lDEa9C/media/?size=l">
-          <img alt="Laura Treto coaching testimonial on Instagram" loading="lazy" />
+          <img alt="Laura Treto coaching testimonial on Instagram" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
         <a href="https://www.instagram.com/p/DQ-cwNCkT07/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DQ-cwNCkT07/media/?size=l">
-          <img alt="Client testimonial on Instagram" loading="lazy" />
+          <img alt="Client testimonial on Instagram" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
         <a href="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7566784390789958942">
-          <img alt="Wall sit challenge on TikTok" loading="lazy" />
+          <img alt="Wall sit challenge on TikTok" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
         <a href="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7577168789930888478">
-          <img alt="Mobility test on TikTok" loading="lazy" />
+          <img alt="Mobility test on TikTok" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
         <a href="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7573494950017502494">
-          <img alt="Kettlebell training on TikTok" loading="lazy" />
+          <img alt="Kettlebell training on TikTok" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
         <a href="https://www.instagram.com/p/DSFvY2BEURa/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-pinned="true" data-src="https://www.instagram.com/p/DSFvY2BEURa/media/?size=l">
-          <img alt="Laura dancing with Raul Malo on Instagram" loading="lazy" />
+          <img alt="Laura dancing with Raul Malo on Instagram" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
         <a href="https://www.instagram.com/p/DWXNzUMRtYK/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-dynamic="true" data-src="https://www.instagram.com/p/DWXNzUMRtYK/media/?size=l">
-          <img alt="Laura Treto on Instagram" loading="lazy" />
+          <img alt="Laura Treto on Instagram" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
         <a href="https://www.instagram.com/p/DURgP5Ckc1_/" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="ig" data-dynamic="true" data-src="https://www.instagram.com/p/DURgP5Ckc1_/media/?size=l">
-          <img alt="Laura Treto on Instagram" loading="lazy" />
+          <img alt="Laura Treto on Instagram" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon ig"></span></div>
         </a>
         <a href="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7479955696470215982">
-          <img alt="Cuban personality on TikTok" loading="lazy" />
+          <img alt="Cuban personality on TikTok" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
         <a href="https://www.tiktok.com/@coachlauratreto/video/7570774624737201439" target="_blank" rel="noopener noreferrer" class="social-post loading" data-platform="tt" data-tt-url="https://www.tiktok.com/@coachlauratreto/video/7570774624737201439">
-          <img alt="Strength + mobility combo drill on TikTok" loading="lazy" />
+          <img alt="Strength + mobility combo drill on TikTok" width="1080" height="1080" loading="lazy" />
           <div class="social-overlay"><span class="platform-icon tt"></span></div>
         </a>
       </div>
@@ -1630,7 +1660,7 @@
 
   <!-- ============ PORTRAIT BREAK ============ -->
   <section class="portrait-break" id="portraitBreak" aria-label="Meet Laura">
-    <img src="/images/laura-portrait.jpg" alt="Laura Treto, movement coach in Key West" loading="lazy" decoding="async" />
+    <img src="/images/laura-confident.jpg" alt="Laura Treto, confident portrait" width="1920" height="1280" loading="lazy" decoding="async" />
     <div class="pb-inner">
       <div class="pb-eyebrow" data-lang="en">Meet your coach</div>
       <div class="pb-eyebrow" data-lang="es">Conoce a tu coach</div>
@@ -2079,30 +2109,26 @@
   <!-- ============ Social grid loaders (kept from prior site) ============ -->
   <script>
     (function() {
-      function applyIgFallback(post) {
+      var IG_GLYPH = '<svg class="platform-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg>';
+      var TT_GLYPH = '<svg class="platform-glyph" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 2v3.6c1 .8 2.3 1.3 3.7 1.3v3.5c-1.4 0-2.7-.4-3.7-1v6.6c0 3.4-2.7 6-6 6s-6-2.7-6-6 2.7-6 6-6c.3 0 .7 0 1 .1v3.6c-.3-.1-.6-.2-1-.2-1.4 0-2.5 1.1-2.5 2.5s1.1 2.5 2.5 2.5 2.5-1.1 2.5-2.5V2H16z"/></svg>';
+      function applyFallback(post, glyph) {
         var img = post.querySelector('img');
         if (img) img.style.display = 'none';
-        post.style.background = 'linear-gradient(135deg, #E8654A 0%, #C5973E 100%)';
         post.classList.remove('loading');
+        post.classList.add('fallback');
         var overlay = post.querySelector('.social-overlay');
-        if (overlay) {
-          overlay.style.background = 'rgba(0,0,0,0.25)';
-          var icon = overlay.querySelector('.platform-icon');
-          if (icon) { icon.style.opacity = '1'; icon.style.fontSize = '20px'; }
+        if (overlay && !overlay.querySelector('.platform-glyph')) {
+          var ph = document.createElement('span');
+          ph.innerHTML = glyph;
+          var svg = ph.firstChild;
+          if (svg) {
+            svg.style.display = 'block';
+            overlay.appendChild(svg);
+          }
         }
       }
-      function applyTtFallback(post) {
-        var img = post.querySelector('img');
-        if (img) img.style.display = 'none';
-        post.style.background = 'linear-gradient(135deg, #1A7A7A 0%, #2B2B2B 100%)';
-        post.classList.remove('loading');
-        var overlay = post.querySelector('.social-overlay');
-        if (overlay) {
-          overlay.style.background = 'rgba(0,0,0,0.18)';
-          var icon = overlay.querySelector('.platform-icon');
-          if (icon) { icon.style.opacity = '1'; icon.style.fontSize = '20px'; }
-        }
-      }
+      function applyIgFallback(post) { applyFallback(post, IG_GLYPH); }
+      function applyTtFallback(post) { applyFallback(post, TT_GLYPH); }
       function loadTtPost(post) {
         var ttUrl = post.getAttribute('data-tt-url');
         if (!ttUrl) return;
