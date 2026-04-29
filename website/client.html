@@ -1182,9 +1182,36 @@
     if (dy > 24) nudge();
   }, { passive: true });
 
+  // --- deep-link via hash (e.g. /client#booking) ---
+  // Allows the homepage hero CTA to drop visitors directly onto the booking screen
+  // without forcing them through the choose -> mode intake. Booking and capture-online
+  // both collect name/email/phone themselves, so they render standalone.
+  function applyHashStep() {
+    const hash = (location.hash || '').replace('#', '');
+    if (!hash) return;
+    if (hash === 'booking') {
+      // Default mode for direct entry: in-person ('local'). Booking screen is the
+      // local-mode path; meeting method ('in-person' vs 'call') is selectable inside.
+      if (!state.mode) state.mode = 'local';
+      mountBooking();
+      goto('booking');
+    } else if (hash === 'capture-online') {
+      if (!state.mode) state.mode = 'online';
+      mountCaptureOnline();
+      goto('capture-online');
+    } else if (hash === 'mode') {
+      mountModeCopy();
+      goto('mode');
+    } else if (hash === 'choose') {
+      goto('choose');
+    }
+  }
+  window.addEventListener('hashchange', applyHashStep);
+
   // initial fire
   trackEvent('client_scan_landed', { event_id: eventId });
   updateStepCounter();
+  applyHashStep();
 </script>
 
 </body>

@@ -595,6 +595,53 @@
     }
 
     /* ========================================
+       BREATHER — quiet pull-quote between WHO I HELP and HOW IT WORKS
+       ======================================== */
+    .breather-section {
+      background: var(--paper);
+      padding: clamp(80px, 12vh, 140px) clamp(24px, 6vw, 48px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .breather-inner {
+      max-width: 720px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+    .breather-quote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.25;
+      color: var(--charcoal);
+      letter-spacing: -0.005em;
+      margin: 0;
+    }
+    .breather-rule {
+      width: 80px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.85;
+    }
+    .breather-attrib {
+      font-family: 'Inter', 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    @media (min-width: 640px) {
+      .breather-attrib { font-size: 13px; }
+    }
+
+    /* ========================================
        SERVICES — chachafit poster triptych (no prices)
        ======================================== */
     .services-section {
@@ -1344,9 +1391,9 @@
       <p class="hero-tagline" data-lang="es">Coaching de movimiento de clase mundial, ahora en Key West.</p>
 
       <div class="hero-ctas">
-        <a href="/client" class="btn-pill primary">
-          <span data-lang="en">Meet Laura. 15 min, on her.</span>
-          <span data-lang="es">Conoce a Laura. 15 min, te invita ella.</span>
+        <a href="/client#booking" class="btn-pill primary">
+          <span data-lang="en">Meet me. 15 min, on me.</span>
+          <span data-lang="es">Con&oacute;ceme. 15 min, te invito yo.</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a href="/quiz.html" class="btn-pill ghost">
@@ -1395,8 +1442,8 @@
         <h2 data-lang="en">Adults 45+.</h2>
         <h2 data-lang="es">Adultos 45+.</h2>
         <span class="gold-rule"></span>
-        <p class="sub" data-lang="en">You used to move easily. Now getting off the floor takes thought. You're not injured, you're disconnected. Laura bridges that gap.</p>
-        <p class="sub" data-lang="es">Antes te mov&iacute;as con facilidad. Ahora levantarte del suelo requiere pensar. No est&aacute;s lesionado, est&aacute;s desconectado. Laura cierra esa brecha.</p>
+        <p class="sub" data-lang="en">You used to move easily. Now getting off the floor takes thought. You're not injured, you're disconnected. I bridge that gap.</p>
+        <p class="sub" data-lang="es">Antes te mov&iacute;as con facilidad. Ahora levantarte del suelo requiere pensar. No est&aacute;s lesionado, est&aacute;s desconectado. Yo cierro esa brecha.</p>
       </div>
       <span class="arrow" aria-hidden="true">
         <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
@@ -1413,8 +1460,8 @@
         <h2 data-lang="en">Post-PT,<br>pre-confidence.</h2>
         <h2 data-lang="es">Post-PT,<br>pre-confianza.</h2>
         <span class="gold-rule"></span>
-        <p class="sub" data-lang="en">Your physical therapist cleared you. The gym still feels too far. Laura picks up where PT left off.</p>
-        <p class="sub" data-lang="es">Tu fisioterapeuta te dio de alta. El gimnasio se siente lejos a&uacute;n. Laura retoma donde la fisioterapia termin&oacute;.</p>
+        <p class="sub" data-lang="en">Your physical therapist cleared you. The gym still feels too far. I pick up where PT left off.</p>
+        <p class="sub" data-lang="es">Tu fisioterapeuta te dio de alta. El gimnasio se siente lejos a&uacute;n. Yo retomo donde la fisioterapia termin&oacute;.</p>
       </div>
       <span class="arrow" aria-hidden="true">
         <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
@@ -1431,13 +1478,37 @@
         <h2 data-lang="en">Anyone who<br>used to move.</h2>
         <h2 data-lang="es">Cualquiera que<br>sol&iacute;a moverse.</h2>
         <span class="gold-rule"></span>
-        <p class="sub" data-lang="en">You've done the classes. You've had trainers. Nobody looked at HOW you move. Laura does.</p>
-        <p class="sub" data-lang="es">Has hecho las clases. Has tenido entrenadores. Nadie mir&oacute; C&Oacute;MO te mueves. Laura s&iacute;.</p>
+        <p class="sub" data-lang="en">You've done the classes. You've had trainers. Nobody looked at HOW you move. I do.</p>
+        <p class="sub" data-lang="es">Has hecho las clases. Has tenido entrenadores. Nadie mir&oacute; C&Oacute;MO te mueves. Yo s&iacute;.</p>
       </div>
       <span class="arrow" aria-hidden="true">
         <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
       </span>
     </div>
+
+  </section>
+
+  <!-- ============ BREATHER (pull-quote between WHO I HELP and HOW IT WORKS) ============ -->
+  <section class="breather-section" id="breather" aria-label="Laura's voice">
+    <div class="breather-inner">
+      <!--
+        Option B (alternate, swap by uncommenting):
+        EN: "Movement isn't reps. It's the way you carry your body, every day, for the rest of your life."
+        ES: "El movimiento no son repeticiones. Es la forma en que llevas tu cuerpo, cada d&iacute;a, el resto de tu vida."
+
+        Option C (alternate, swap by uncommenting):
+        EN: "I look at how you move before I tell you what to change."
+        ES: "Miro c&oacute;mo te mueves antes de decirte qu&eacute; cambiar."
+      -->
+      <p class="breather-quote" data-lang="en">&ldquo;I'm not training a body part. I'm training how you move through the world.&rdquo;</p>
+      <p class="breather-quote" data-lang="es">&ldquo;No entreno una parte del cuerpo. Entreno c&oacute;mo te mueves por el mundo.&rdquo;</p>
+      <span class="breather-rule" aria-hidden="true"></span>
+      <span class="breather-attrib">Laura</span>
+    </div>
+  </section>
+
+  <!-- ============ HALVES: HOW IT WORKS ============ -->
+  <section class="halves-section" id="how-it-works">
 
     <!-- HOW IT WORKS 01 -->
     <a href="/quiz.html" class="half-panel charcoal">
@@ -1458,17 +1529,17 @@
     </a>
 
     <!-- HOW IT WORKS 02 -->
-    <a href="/client" class="half-panel coral">
+    <a href="/client#booking" class="half-panel coral">
       <span class="corner tl" data-lang="en">HOW IT WORKS &middot; 02</span>
       <span class="corner tl" data-lang="es">C&Oacute;MO FUNCIONA &middot; 02</span>
-      <span class="corner tr" data-lang="en">15 MIN, ON HER</span>
-      <span class="corner tr" data-lang="es">15 MIN, TE INVITA</span>
+      <span class="corner tr" data-lang="en">15 MIN, ON ME</span>
+      <span class="corner tr" data-lang="es">15 MIN, TE INVITO</span>
       <div class="stack">
-        <h2 data-lang="en">02. Meet Laura.</h2>
-        <h2 data-lang="es">02. Conoce a Laura.</h2>
+        <h2 data-lang="en">02. Meet me.</h2>
+        <h2 data-lang="es">02. Con&oacute;ceme.</h2>
         <span class="gold-rule"></span>
-        <p class="sub" data-lang="en">Fifteen minutes with Laura, on her. Just to say hi and hear what you want. No pitch, no pressure.</p>
-        <p class="sub" data-lang="es">Quince minutos con Laura, ella te invita. Solo para saludarse y escuchar qu&eacute; quieres. Sin discurso, sin presi&oacute;n.</p>
+        <p class="sub" data-lang="en">Fifteen minutes with me, on me. Just to say hi and hear what you want. No pitch, no pressure.</p>
+        <p class="sub" data-lang="es">Quince minutos conmigo, te invito yo. Solo para saludarnos y escuchar qu&eacute; quieres. Sin discurso, sin presi&oacute;n.</p>
       </div>
       <span class="arrow" aria-hidden="true">
         <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
@@ -1476,7 +1547,7 @@
     </a>
 
     <!-- HOW IT WORKS 03 -->
-    <div class="half-panel charcoal">
+    <a href="/pricing" class="half-panel charcoal">
       <span class="corner tl" data-lang="en">HOW IT WORKS &middot; 03</span>
       <span class="corner tl" data-lang="es">C&Oacute;MO FUNCIONA &middot; 03</span>
       <span class="corner tr" data-lang="en">YOUR BODY, YOUR PLAN</span>
@@ -1488,7 +1559,10 @@
         <p class="sub" data-lang="en">A personalized plan built around your body. Not a template. Not an app. Real coaching from a world-class mover.</p>
         <p class="sub" data-lang="es">Un plan personalizado construido alrededor de tu cuerpo. No es una plantilla. No es una app. Coaching real de una profesional de clase mundial.</p>
       </div>
-    </div>
+      <span class="arrow" aria-hidden="true">
+        <svg width="32" height="32" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </span>
+    </a>
 
   </section>
 
@@ -1515,8 +1589,8 @@
               <span class="top-meta" data-lang="es">En Persona &middot; Key West</span>
               <h3 data-lang="en">Private Sessions</h3>
               <h3 data-lang="es">Sesiones Privadas</h3>
-              <p class="desc" data-lang="en">One-on-one with Laura. Movement assessment first, then packages. Built around how YOU move.</p>
-              <p class="desc" data-lang="es">Uno a uno con Laura. Evaluaci&oacute;n primero, luego paquetes. Construido alrededor de c&oacute;mo TE mueves.</p>
+              <p class="desc" data-lang="en">One-on-one with me. Movement assessment first, then packages. Built around how YOU move.</p>
+              <p class="desc" data-lang="es">Uno a uno conmigo. Evaluaci&oacute;n primero, luego paquetes. Construido alrededor de c&oacute;mo TE mueves.</p>
             </div>
             <span class="cta">
               <span data-lang="en">Learn more</span>
@@ -1761,8 +1835,8 @@
         <h2 data-lang="en">Got you.</h2>
         <h2 data-lang="es">Listo.</h2>
         <div class="gold-rule"></div>
-        <p class="confirm-sub" data-lang="en">Check your inbox. Laura will be in touch.</p>
-        <p class="confirm-sub" data-lang="es">Revisa tu inbox. Laura te escribir&aacute;.</p>
+        <p class="confirm-sub" data-lang="en">Check your inbox. I'll be in touch.</p>
+        <p class="confirm-sub" data-lang="es">Revisa tu inbox. Te escribir&eacute;.</p>
       </div>
     </div>
   </section>
