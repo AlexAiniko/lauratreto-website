@@ -277,6 +277,37 @@
     }
 
     /* ========================================
+       CLIENT PILL (fixed top-right, left of lang)
+       ======================================== */
+    .client-pill {
+      position: fixed;
+      top: 20px;
+      right: 110px;
+      z-index: 1000;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      backdrop-filter: blur(10px);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--charcoal);
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .client-pill:hover { background: var(--coral); color: var(--white); }
+    @media (max-width: 480px) {
+      .client-pill {
+        top: 64px;
+        right: 20px;
+        font-size: 13px;
+        padding: 7px 14px;
+      }
+    }
+
+    /* ========================================
        SECTION 1: HERO
        ======================================== */
     .hero-scroll-wrapper {
@@ -1439,6 +1470,12 @@
 
   <!-- ============ SITE LOGO ============ -->
   <a href="/" class="site-logo">Laura Treto</a>
+
+  <!-- ============ CLIENT PILL ============ -->
+  <a href="/client" class="client-pill">
+    <span data-lang="en">Become a client</span>
+    <span data-lang="es">Hazte cliente</span>
+  </a>
 
   <!-- ============ LANGUAGE TOGGLE ============ -->
   <div class="lang-toggle">
