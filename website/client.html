@@ -8,1066 +8,1032 @@
 <meta name="description" content="Two questions. Sixty seconds. Then we talk.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600;1,700;0,600;0,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700&display=swap">
 <style>
   :root {
     --coral: #E8654A;
-    --coral-dark: #D4553B;
+    --coral-hover: #DC5E45;
+    --coral-press: #CC5638;
     --turquoise: #1A7A7A;
-    --warm-white: #FAF7F2;
-    --charcoal: #2B2B2B;
     --gold: #C5973E;
+    --warm-white: #FAF7F2;
     --sand: #F0E6D8;
-    --ease-out: cubic-bezier(.4,0,.2,1);
-    --ease-in: cubic-bezier(.22,1,.36,1);
-    --ease-spring: cubic-bezier(.22,1.4,.36,1);
+    --charcoal: #2B2B2B;
+    --charcoal-70: rgba(43,43,43,0.70);
+    --charcoal-12: rgba(43,43,43,0.12);
+    --ww-85: rgba(250,247,242,0.85);
+    --ww-65: rgba(250,247,242,0.65);
+    --ww-35: rgba(250,247,242,0.35);
+    --ww-12: rgba(250,247,242,0.12);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --dur-ui: 200ms;
+    --dur-reveal: 400ms;
+    --shadow-card: 0 1px 2px rgba(43,43,43,0.06), 0 8px 24px rgba(43,43,43,0.06);
+    --radius-card: 16px;
+    --radius-btn: 8px;
+    --radius-chip: 999px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
   html, body {
-    height: 100%;
     background: var(--warm-white);
     color: var(--charcoal);
-    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     overscroll-behavior: none;
-    overflow: hidden;
   }
 
   body {
-    background: linear-gradient(160deg, var(--sand) 0%, var(--warm-white) 60%);
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+  input { font: inherit; color: inherit; background: none; border: none; outline: none; }
+
+  body:not(.lang-es) [data-lang="es"] { display: none !important; }
+  body.lang-es [data-lang="en"] { display: none !important; }
+
+  /* ---- TOPBAR ---- */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: max(14px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) 6px max(18px, env(safe-area-inset-left));
+    z-index: 50;
+    pointer-events: none;
+  }
+  .topbar > * { pointer-events: auto; }
+  .back-btn {
+    width: 40px; height: 40px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--warm-white);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-ui) var(--ease);
+  }
+  body[data-step="mode"] .back-btn,
+  body[data-step="capture-online"] .back-btn,
+  body[data-step="booking"] .back-btn {
+    opacity: .7;
+    pointer-events: auto;
+  }
+  .back-btn:active { transform: scale(.92); }
+  .step-counter {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ww-65);
+  }
+  body[data-step="choose"] .step-counter,
+  body[data-step="mode"] .step-counter { color: var(--ww-65); }
+  body[data-step="capture-online"] .step-counter,
+  body[data-step="online-confirm"] .step-counter,
+  body[data-step="booking"] .step-counter,
+  body[data-step="booked"] .step-counter { color: var(--ww-65); }
+  .lang-pill {
+    display: inline-flex;
+    background: var(--ww-12);
+    border-radius: var(--radius-chip);
+    padding: 3px;
+    backdrop-filter: blur(6px);
+  }
+  .lang-pill button {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    border-radius: var(--radius-chip);
+    color: var(--ww-65);
+    transition: background var(--dur-ui) var(--ease), color var(--dur-ui) var(--ease);
+  }
+  .lang-pill button.on {
+    background: var(--warm-white);
+    color: var(--charcoal);
+  }
+
+  /* ---- STAGE & SCREENS ---- */
+  .stage {
+    position: relative;
     min-height: 100vh;
     min-height: 100svh;
     min-height: 100dvh;
   }
-
-  [data-lang="es"] { display: none; }
-  body.lang-es [data-lang="es"] { display: block; }
-  body.lang-es [data-lang="en"] { display: none; }
-  span[data-lang="es"], small[data-lang="es"], em[data-lang="es"] { display: none; }
-  body.lang-es span[data-lang="es"], body.lang-es small[data-lang="es"], body.lang-es em[data-lang="es"] { display: inline; }
-  body.lang-es span[data-lang="en"], body.lang-es small[data-lang="en"], body.lang-es em[data-lang="en"] { display: none; }
-
-  .bg-video {
-    position: fixed;
-    inset: 0;
+  .screen {
+    display: none;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    opacity: 0;
-    filter: blur(14px) saturate(.85) brightness(.92);
-    transition: opacity 1.2s var(--ease-out);
-    pointer-events: none;
   }
-  .bg-video.loaded { opacity: .35; }
-  body[data-step="mode"] .bg-video.loaded,
-  body[data-step="form"] .bg-video.loaded { opacity: .42; }
-
-  .sun-disc {
-    position: fixed;
-    right: -120px;
-    bottom: -160px;
-    width: 720px;
-    height: 720px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, var(--gold) 0%, rgba(197,151,62,0) 70%);
-    opacity: .08;
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  .stage {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    height: 100vh;
-    height: 100svh;
-    height: 100dvh;
+  body[data-step="choose"] .screen[data-screen="choose"],
+  body[data-step="mode"] .screen[data-screen="mode"],
+  body[data-step="capture-online"] .screen[data-screen="capture-online"],
+  body[data-step="online-confirm"] .screen[data-screen="online-confirm"],
+  body[data-step="booking"] .screen[data-screen="booking"],
+  body[data-step="booked"] .screen[data-screen="booked"] {
     display: flex;
     flex-direction: column;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    animation: ltFade var(--dur-reveal) var(--ease);
+  }
+  @keyframes ltFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
-  .topbar {
+  /* ---- SPLIT (steps 1, 2) ---- */
+  .split {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    min-height: 100svh;
+    position: relative;
+  }
+  .half {
+    flex: 1;
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 18px 6px;
-    z-index: 5;
-  }
-  .back-arrow {
-    width: 40px; height: 40px;
-    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: none;
-    background: transparent;
-    color: var(--charcoal);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .25s var(--ease-out);
-    cursor: pointer;
-  }
-  body:not([data-step="splash"]):not([data-step="done"]) .back-arrow {
-    opacity: .55;
-    pointer-events: auto;
-  }
-  .back-arrow:active { transform: scale(.92); }
-  .step-counter {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--charcoal);
-    opacity: .45;
-    font-weight: 600;
-  }
-  .lang-pill {
-    display: inline-flex;
-    background: rgba(255,255,255,.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 22px;
-    padding: 3px;
-    box-shadow: 0 1px 8px rgba(43,43,43,.08);
-  }
-  .lang-pill button {
-    border: none;
-    background: transparent;
-    padding: 6px 12px;
-    font: 600 12px 'Inter', sans-serif;
-    color: var(--charcoal);
-    border-radius: 20px;
-    cursor: pointer;
-    letter-spacing: .5px;
-  }
-  .lang-pill button.on {
-    background: var(--charcoal);
-    color: var(--warm-white);
-  }
-
-  .webview-banner {
-    display: none;
-    background: var(--charcoal);
-    color: var(--warm-white);
-    font-size: 12px;
-    padding: 10px 14px;
     text-align: center;
-    line-height: 1.4;
-  }
-  .webview-banner.show { display: block; }
-  .webview-banner button {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,.4);
-    color: var(--warm-white);
-    border-radius: 16px;
-    padding: 4px 10px;
-    margin-left: 8px;
-    font-size: 11px;
-    font-weight: 600;
     cursor: pointer;
-  }
-
-  .deck {
-    position: relative;
-    flex: 1;
+    transition: filter var(--dur-ui) var(--ease), transform var(--dur-ui) var(--ease);
     overflow: hidden;
+    padding: clamp(60px, 12vw, 100px) clamp(24px, 6vw, 40px);
   }
-
-  .card {
+  .half[data-bg="coral"] { background: var(--coral); color: var(--warm-white); }
+  .half[data-bg="charcoal"] { background: var(--charcoal); color: var(--warm-white); }
+  .half:active { filter: brightness(0.94); transform: scale(0.985); }
+  .half-meta {
     position: absolute;
-    inset: 0;
-    display: none;
-    flex-direction: column;
-    padding: 20px 24px 32px;
-    overflow: hidden;
-  }
-  .card.active { display: flex; }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .card.entering {
-      animation: cardIn 360ms var(--ease-in) forwards;
-    }
-    .card.leaving {
-      animation: cardOut 280ms var(--ease-out) forwards;
-    }
-    @keyframes cardIn {
-      from { opacity: 0; transform: scale(1.04); filter: blur(8px); }
-      to   { opacity: 1; transform: scale(1);    filter: blur(0); }
-    }
-    @keyframes cardOut {
-      from { opacity: 1; transform: scale(1);    filter: blur(0); }
-      to   { opacity: 0; transform: scale(.94);  filter: blur(8px); }
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .card.entering, .card.leaving { animation: fadeOnly 200ms linear forwards; }
-    @keyframes fadeOnly { from { opacity: 0; } to { opacity: 1; } }
-    .bg-video { display: none !important; }
-  }
-
-  .wordmark {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: .4px;
-    color: var(--charcoal);
-    text-align: center;
-    padding: 18px 0 4px;
-    position: relative;
-    display: inline-block;
-    margin: 0 auto;
-  }
-  .wordmark .underline {
-    display: block;
-    width: 100%;
-    height: 1px;
-    margin-top: 4px;
-    overflow: visible;
-  }
-  .wordmark .underline path {
-    stroke: var(--gold);
-    stroke-width: 1.5;
-    fill: none;
-    stroke-dasharray: 200;
-    stroke-dashoffset: 200;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    body[data-step="splash"] .wordmark .underline path {
-      animation: drawLine 600ms var(--ease-in) 200ms forwards;
-    }
-    @keyframes drawLine { to { stroke-dashoffset: 0; } }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .wordmark .underline path { stroke-dashoffset: 0; }
-  }
-
-  .head-block {
-    text-align: center;
-    margin: 8px auto 22px;
-    max-width: 420px;
-  }
-  h1.headline {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
     font-weight: 600;
-    font-size: clamp(28px, 7.6vw, 36px);
-    line-height: 1.18;
-    color: var(--charcoal);
-    margin: 18px 14px 4px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ww-65);
   }
-  h1.headline .w {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(14px);
-    animation: introWordIn 700ms var(--ease-in) forwards;
-    animation-delay: calc(110ms * var(--i, 0));
+  .half-meta.tl { top: clamp(72px, 9vw, 96px); left: clamp(24px, 6vw, 36px); }
+  .half-meta.tr { top: clamp(72px, 9vw, 96px); right: clamp(24px, 6vw, 36px); }
+  .half-meta.bl { bottom: clamp(28px, 5vw, 40px); left: clamp(24px, 6vw, 36px); }
+  .half-arrow { position: absolute; bottom: clamp(20px, 4vw, 32px); right: clamp(20px, 4vw, 32px); color: var(--warm-white); opacity: .9; }
+  .half-stack { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 560px; }
+  .half-headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 800;
+    font-size: clamp(56px, 17vw, 92px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--warm-white);
   }
-  @keyframes introWordIn {
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    h1.headline .w { animation: none; opacity: 1; transform: none; }
-  }
-  .sub {
-    font-size: 14px;
-    color: var(--charcoal);
-    opacity: .7;
-    margin: 6px 18px 0;
-    line-height: 1.45;
+  .half-headline .ln { display: block; }
+  .half-sub {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(16px, 4.4vw, 19px);
+    line-height: 1.4;
+    color: var(--ww-85);
+    max-width: 28ch;
   }
 
-  .choices {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    width: 100%;
-    max-width: 380px;
-    margin: auto auto 0;
-    padding-bottom: 12px;
-  }
-  .choice {
-    appearance: none;
-    border: 1.5px solid rgba(43,43,43,.12);
-    background: rgba(255,255,255,.78);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 18px;
-    padding: 22px 22px;
-    text-align: left;
-    cursor: pointer;
+  /* ---- CENTER PIVOT (step 1 + 2) ---- */
+  .pivot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--warm-white);
+    color: var(--charcoal);
     display: flex;
     align-items: center;
-    gap: 18px;
-    transition: transform 80ms var(--ease-out), border-color .2s, background .2s;
-    width: 100%;
+    justify-content: center;
+    box-shadow: var(--shadow-card);
+    z-index: 4;
   }
-  .choice:active { transform: scale(.98); transition: transform 80ms var(--ease-out); }
-  .choice.released { transition: transform 320ms var(--ease-spring); }
-  .choice .glyph {
-    width: 56px; height: 56px;
-    flex-shrink: 0;
-    color: var(--coral);
-  }
-  .choice.train .glyph { color: var(--turquoise); }
-  .choice.local .glyph { color: var(--gold); }
-  .choice .body { flex: 1; }
-  .choice .title-en, .choice .title-es {
+  .pivot .lt {
     font-family: 'Playfair Display', serif;
-    font-size: 22px;
+    font-style: italic;
     font-weight: 700;
-    letter-spacing: .2px;
-    color: var(--charcoal);
-    line-height: 1.1;
+    font-size: 22px;
+    letter-spacing: .02em;
   }
-  .choice .caption {
-    font-size: 13px;
-    margin-top: 4px;
-    color: var(--charcoal);
-    opacity: .65;
-    line-height: 1.4;
-  }
-  .choice [data-lang="en"] { display: block; }
-  .choice [data-lang="es"] { display: none; }
-  body.lang-es .choice [data-lang="en"] { display: none; }
-  body.lang-es .choice [data-lang="es"] { display: block; }
-  .choice.local .caption { color: var(--gold); opacity: .9; font-weight: 500; }
 
-  .form-card {
-    justify-content: flex-start;
-    min-height: 100svh;
-  }
-  .form-wrap {
-    max-width: 380px;
-    width: 100%;
-    margin: 18px auto 0;
+  /* ---- FULL CANVAS SCREENS (3a, 3a-confirm, 3b, 4) ---- */
+  .canvas {
+    flex: 1;
+    background: var(--coral);
+    color: var(--warm-white);
+    padding: max(96px, calc(env(safe-area-inset-top) + 80px)) clamp(24px, 7vw, 40px) max(28px, calc(env(safe-area-inset-bottom) + 20px));
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 20px;
   }
+  .canvas .meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ww-65);
+  }
+  .canvas h1.headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1.05;
+  }
+  .canvas h1.headline.medium { font-size: clamp(40px, 11vw, 64px); }
+  .canvas h1.headline.large {
+    font-size: clamp(64px, 19vw, 104px);
+    line-height: 1.0;
+  }
+  .canvas h2.headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    font-size: clamp(40px, 11vw, 56px);
+  }
+  .canvas .subhead {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ww-85);
+  }
+  .canvas .body-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    line-height: 1.45;
+    color: var(--warm-white);
+    max-width: 30ch;
+  }
+  .gold-rule {
+    width: 56px;
+    height: 1px;
+    background: var(--gold);
+    opacity: .5;
+    margin: 8px 0 16px;
+  }
+  .info-card {
+    padding: 14px 16px;
+    background: var(--ww-12);
+    border: 1px solid var(--ww-35);
+    border-radius: var(--radius-btn);
+    color: var(--warm-white);
+    margin-top: 4px;
+  }
+  .info-card .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ww-65);
+    margin-bottom: 4px;
+  }
+  .info-card .row {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .info-card .row + .row { margin-top: 4px; }
+  .canvas .closing {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ww-85);
+    line-height: 1.45;
+    max-width: 32ch;
+  }
+  .canvas .spacer { flex: 1; }
+
+  /* ---- INPUTS ---- */
   .field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    border-bottom: 1px solid var(--ww-35);
+    transition: border-color var(--dur-ui) var(--ease);
   }
+  .field:focus-within { border-bottom-color: var(--warm-white); }
   .field label {
+    font-family: 'Inter', sans-serif;
     font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.6px;
-    color: var(--charcoal);
-    opacity: .55;
     font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ww-65);
+    padding-top: 4px;
   }
   .field input {
-    appearance: none;
-    border: 1.5px solid rgba(43,43,43,.14);
-    background: rgba(255,255,255,.92);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font: 500 16px 'Inter', sans-serif;
-    color: var(--charcoal);
-    transition: border-color .2s;
-    outline: none;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--warm-white);
+    padding: 8px 0 14px;
+    width: 100%;
   }
-  .field input:focus { border-color: var(--coral); }
-  .field input::placeholder { color: rgba(43,43,43,.35); }
+  .field input::placeholder { color: var(--ww-35); }
+  .form-grid { display: flex; flex-direction: column; gap: 18px; }
 
+  /* ---- PRIMARY BUTTON ---- */
+  .btn-primary {
+    width: 100%;
+    background: var(--coral-press);
+    color: var(--warm-white);
+    padding: 18px 24px;
+    border-radius: var(--radius-btn);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    transition: background var(--dur-ui) var(--ease), opacity var(--dur-ui) var(--ease);
+    margin-top: 4px;
+  }
+  .btn-primary:hover { background: #B84A30; }
+  .btn-primary:active { transform: scale(0.99); }
+  .btn-primary[disabled] {
+    background: transparent;
+    border: 1px solid var(--ww-35);
+    color: var(--ww-65);
+    cursor: not-allowed;
+  }
+  .btn-ghost {
+    align-self: flex-start;
+    padding: 12px 22px;
+    background: transparent;
+    border: 1px solid var(--ww-65);
+    color: var(--warm-white);
+    border-radius: var(--radius-btn);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    transition: background var(--dur-ui) var(--ease), color var(--dur-ui) var(--ease);
+  }
+  .btn-ghost:hover { background: var(--ww-12); }
+  .disclosure {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--ww-65);
+    margin-top: 8px;
+  }
+  .err {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #FFE0D6;
+    min-height: 1em;
+  }
   .hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 
-  .submit {
-    margin-top: 4px;
-    width: 100%;
-    padding: 16px 20px;
-    border: none;
-    border-radius: 14px;
-    background: var(--coral);
-    color: var(--warm-white);
-    font: 600 16px 'Inter', sans-serif;
-    letter-spacing: .3px;
-    cursor: pointer;
-    box-shadow: 0 8px 24px rgba(232,101,74,.28);
-    transition: transform 80ms var(--ease-out), background .2s;
-  }
-  .submit:active { transform: scale(.98); background: var(--coral-dark); }
-  .submit:disabled { opacity: .55; cursor: not-allowed; }
-
-  .disclosure {
-    font-size: 11px;
-    line-height: 1.45;
-    color: rgba(43,43,43,.6);
-    text-align: center;
-    margin-top: 8px;
-  }
-
-  .glyph-stage {
+  /* ---- BOOKING (day strip + time grid) ---- */
+  .day-strip {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 36px auto 12px;
-    width: 120px;
-    height: 120px;
-    color: var(--gold);
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 4px 0 8px;
+    margin: 0 calc(-1 * clamp(24px, 7vw, 40px));
+    padding-left: clamp(24px, 7vw, 40px);
+    padding-right: clamp(24px, 7vw, 40px);
   }
-  .glyph-stage svg { width: 100%; height: 100%; }
-  .glyph-stage path, .glyph-stage line, .glyph-stage circle {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 400;
-    stroke-dashoffset: 400;
-  }
-  body[data-step="done"] .glyph-stage path,
-  body[data-step="done"] .glyph-stage line,
-  body[data-step="done"] .glyph-stage circle {
-    animation: drawGlyph 1100ms var(--ease-in) 120ms forwards;
-  }
-  @keyframes drawGlyph { to { stroke-dashoffset: 0; } }
-  @media (prefers-reduced-motion: reduce) {
-    .glyph-stage path, .glyph-stage line, .glyph-stage circle { stroke-dashoffset: 0; }
-    body[data-step="done"] .glyph-stage path,
-    body[data-step="done"] .glyph-stage line,
-    body[data-step="done"] .glyph-stage circle { animation: none; }
-  }
-
-  .ghost-row {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin: 22px auto 0;
-    flex-wrap: wrap;
-  }
-  .ghost {
-    appearance: none;
+  .day-strip::-webkit-scrollbar { display: none; }
+  .day {
+    flex: 0 0 auto;
+    width: 56px;
+    min-height: 78px;
+    border: 1px solid var(--ww-35);
+    border-radius: var(--radius-btn);
     background: transparent;
-    border: 1.5px solid rgba(43,43,43,.18);
-    color: var(--charcoal);
-    padding: 11px 18px;
-    border-radius: 22px;
-    font: 600 13px 'Inter', sans-serif;
-    cursor: pointer;
-    text-decoration: none;
-    transition: border-color .2s, color .2s;
-  }
-  .ghost:active { border-color: var(--coral); color: var(--coral); }
-
-  .booker-frame {
-    position: relative;
-    flex: 1;
-    margin: 0 -24px -32px;
-  }
-  .booker-frame iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    background: var(--sand);
-  }
-  .booker-loading {
-    position: absolute;
-    inset: 0;
+    color: var(--warm-white);
+    padding: 10px 6px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--sand), var(--warm-white));
-    color: var(--charcoal);
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 17px;
-    pointer-events: none;
-    transition: opacity .4s var(--ease-out);
+    gap: 2px;
+    transition: background var(--dur-ui) var(--ease), color var(--dur-ui) var(--ease), border-color var(--dur-ui) var(--ease);
   }
-  .booker-loading.hide { opacity: 0; }
-  .booker-actions {
-    position: absolute;
-    bottom: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    z-index: 4;
+  .day .m { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ww-65); }
+  .day .d { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px; line-height: 1; color: var(--warm-white); }
+  .day .w { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--ww-65); }
+  .day.on { background: var(--warm-white); border-color: var(--warm-white); }
+  .day.on .m, .day.on .w { color: var(--coral); opacity: .8; }
+  .day.on .d { color: var(--coral); }
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
   }
-  .booker-fallback {
-    display: none;
-    background: var(--coral);
+  .time {
+    border: 1px solid var(--ww-35);
+    border-radius: var(--radius-btn);
+    background: transparent;
     color: var(--warm-white);
-    border: none;
-    border-radius: 14px;
-    padding: 14px 22px;
-    font: 600 15px 'Inter', sans-serif;
-    cursor: pointer;
-    box-shadow: 0 8px 24px rgba(232,101,74,.32);
+    padding: 14px 8px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 18px;
+    transition: background var(--dur-ui) var(--ease), color var(--dur-ui) var(--ease), border-color var(--dur-ui) var(--ease), opacity var(--dur-ui) var(--ease);
   }
-  .booker-fallback.show { display: inline-flex; }
-
-  .err {
-    color: var(--coral-dark);
-    font-size: 13px;
-    text-align: center;
-    margin-top: 8px;
-    min-height: 18px;
+  .time.on { background: var(--warm-white); color: var(--coral); border-color: var(--warm-white); }
+  .time-grid.disabled .time { opacity: .4; pointer-events: none; }
+  .pick-section h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ww-65);
+    margin-bottom: 10px;
   }
 
-  body[data-step] .card { display: none; }
-  body[data-step="splash"] .card[data-screen="splash"],
-  body[data-step="mode"]   .card[data-screen="mode"],
-  body[data-step="form"]   .card[data-screen="form"],
-  body[data-step="booking"] .card[data-screen="booking"],
-  body[data-step="done"]   .card[data-screen="done"] { display: flex; }
+  /* ---- REDUCED MOTION ---- */
+  @media (prefers-reduced-motion: reduce) {
+    .half:active { filter: none; transform: none; }
+    .screen { animation-duration: 0.01ms !important; }
+    * { transition-duration: 0.01ms !important; }
+  }
 
-  ::view-transition-old(root) { animation: cardOut 280ms var(--ease-out) forwards; }
-  ::view-transition-new(root) { animation: cardIn 360ms var(--ease-in) forwards; }
+  /* ---- iOS keyboard helper ---- */
+  body.kb-open .screen.canvas { padding-bottom: 280px; }
 </style>
 </head>
-<body data-step="splash">
+<body data-step="choose">
 
-<video class="bg-video" id="bgVideo" muted playsinline loop preload="none" aria-hidden="true"></video>
-<div class="sun-disc" aria-hidden="true"></div>
-
-<div class="stage">
-
-  <div class="webview-banner" id="webviewBanner" role="status">
-    <span data-lang="en">For best experience, open in Safari.</span>
-    <span data-lang="es">Para mejor experiencia, abre en Safari.</span>
-    <button type="button" id="copyLinkBtn">
-      <span data-lang="en">Copy link</span>
-      <span data-lang="es">Copiar enlace</span>
-    </button>
+<header class="topbar">
+  <button class="back-btn" id="backBtn" type="button" aria-label="Back">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <div class="step-counter" id="stepCounter">STEP 01 / 04</div>
+  <div class="lang-pill">
+    <button type="button" class="on" data-set-lang="en">EN</button>
+    <button type="button" data-set-lang="es">ES</button>
   </div>
+</header>
 
-  <div class="topbar">
-    <button class="back-arrow" id="backBtn" type="button" aria-label="Back">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
-    </button>
-    <div class="step-counter" id="stepCounter"></div>
-    <div class="lang-pill">
-      <button class="on" type="button" onclick="setLang('en')">EN</button>
-      <button type="button" onclick="setLang('es')">ES</button>
+<main class="stage" id="stage">
+
+  <!-- STEP 1: CHOOSE -->
+  <section class="screen" data-screen="choose">
+    <div class="split">
+      <button class="half" data-bg="coral" data-track="train" type="button">
+        <span class="half-meta tl">01</span>
+        <span class="half-meta tr"><span data-lang="en">STRENGTH</span><span data-lang="es">FUERZA</span></span>
+        <div class="half-stack">
+          <div class="half-headline">
+            <span class="ln" data-lang="en">Train</span><span class="ln" data-lang="es">Entrena</span>
+            <span class="ln" data-lang="en">with me.</span><span class="ln" data-lang="es">conmigo.</span>
+          </div>
+          <p class="half-sub" data-lang="en">Movement built on 26 years on stage.</p>
+          <p class="half-sub" data-lang="es">Movimiento construido sobre 26 años en escena.</p>
+        </div>
+        <span class="half-meta bl"><span data-lang="en">TAP TO CHOOSE</span><span data-lang="es">TOCA PARA ELEGIR</span></span>
+        <span class="half-arrow">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+        </span>
+      </button>
+      <button class="half" data-bg="charcoal" data-track="dance" type="button">
+        <span class="half-meta tl">02</span>
+        <span class="half-meta tr"><span data-lang="en">MOVEMENT</span><span data-lang="es">MOVIMIENTO</span></span>
+        <div class="half-stack">
+          <div class="half-headline">
+            <span class="ln" data-lang="en">Dance</span><span class="ln" data-lang="es">Baila</span>
+            <span class="ln" data-lang="en">with me.</span><span class="ln" data-lang="es">conmigo.</span>
+          </div>
+          <p class="half-sub" data-lang="en">Class, technique, and the joy of moving.</p>
+          <p class="half-sub" data-lang="es">Clase, técnica, y la alegría de moverse.</p>
+        </div>
+        <span class="half-meta bl"><span data-lang="en">TAP TO CHOOSE</span><span data-lang="es">TOCA PARA ELEGIR</span></span>
+        <span class="half-arrow">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M7 17H27M27 17L19 9M27 17L19 25" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+        </span>
+      </button>
+      <div class="pivot"><span class="lt">LT</span></div>
     </div>
-  </div>
+  </section>
 
-  <div class="deck" id="deck">
-
-    <section class="card" data-screen="splash">
-      <div style="text-align:center">
-        <div class="wordmark">
-          Laura Treto
-          <svg class="underline" viewBox="0 0 200 4" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M0 2 L200 2"/>
-          </svg>
+  <!-- STEP 2: MODE -->
+  <section class="screen" data-screen="mode">
+    <div class="split">
+      <button class="half" data-bg="coral" data-mode="online" type="button">
+        <span class="half-meta tl">STEP 02 / 04</span>
+        <span class="half-meta tr" id="modeTrackLabelTop"></span>
+        <div class="half-stack">
+          <div class="half-headline">
+            <span class="ln" data-lang="en">Online.</span><span class="ln" data-lang="es">Online.</span>
+          </div>
+          <p class="half-sub" id="modeOnlineSubEn" data-lang="en"></p>
+          <p class="half-sub" id="modeOnlineSubEs" data-lang="es"></p>
         </div>
-      </div>
-      <div class="head-block">
-        <h1 class="headline" data-lang="en" data-words>Are you here to dance, or to train?</h1>
-        <h1 class="headline" data-lang="es" data-words>¿Vienes a bailar, o a entrenar?</h1>
-      </div>
-      <div class="choices">
-        <button class="choice dance" type="button" data-track="dance">
-          <span class="glyph" aria-hidden="true">
-            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="30" cy="12" r="4"/>
-              <path d="M30 16 L26 28 L18 38"/>
-              <path d="M30 16 L36 26 L44 22"/>
-              <path d="M26 28 L30 42 L26 52"/>
-              <path d="M30 42 L38 52"/>
-            </svg>
-          </span>
-          <span class="body">
-            <span class="title-en" data-lang="en">Dance</span>
-            <span class="title-es" data-lang="es">Bailar</span>
-            <span class="caption" data-lang="en">Find rhythm in your body</span>
-            <span class="caption" data-lang="es">Encuentra el ritmo en tu cuerpo</span>
-          </span>
-        </button>
-        <button class="choice train" type="button" data-track="train">
-          <span class="glyph" aria-hidden="true">
-            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="10" y1="28" x2="46" y2="28"/>
-              <rect x="6" y="22" width="6" height="12" rx="1.5"/>
-              <rect x="44" y="22" width="6" height="12" rx="1.5"/>
-              <line x1="14" y1="20" x2="14" y2="36"/>
-              <line x1="42" y1="20" x2="42" y2="36"/>
-            </svg>
-          </span>
-          <span class="body">
-            <span class="title-en" data-lang="en">Train</span>
-            <span class="title-es" data-lang="es">Entrenar</span>
-            <span class="caption" data-lang="en">Build strength that holds</span>
-            <span class="caption" data-lang="es">Construye fuerza que dura</span>
-          </span>
-        </button>
-      </div>
-    </section>
+        <span class="half-meta bl"><span data-lang="en">TAP TO CHOOSE</span><span data-lang="es">TOCA PARA ELEGIR</span></span>
+      </button>
+      <button class="half" data-bg="charcoal" data-mode="local" type="button">
+        <span class="half-meta tl">STEP 02 / 04</span>
+        <span class="half-meta tr" id="modeTrackLabelBottom"></span>
+        <div class="half-stack">
+          <div class="half-headline">
+            <span class="ln" data-lang="en">In person.</span><span class="ln" data-lang="es">En persona.</span>
+          </div>
+          <p class="half-sub" id="modeLocalSubEn" data-lang="en"></p>
+          <p class="half-sub" id="modeLocalSubEs" data-lang="es"></p>
+        </div>
+        <span class="half-meta bl"><span data-lang="en">TAP TO CHOOSE</span><span data-lang="es">TOCA PARA ELEGIR</span></span>
+      </button>
+    </div>
+  </section>
 
-    <section class="card" data-screen="mode">
-      <div class="head-block">
-        <h1 class="headline" data-lang="en" data-words>Online, or in Key West?</h1>
-        <h1 class="headline" data-lang="es" data-words>¿Online, o en Key West?</h1>
+  <!-- STEP 3a: CAPTURE ONLINE -->
+  <section class="screen" data-screen="capture-online">
+    <div class="canvas">
+      <div class="meta-row">
+        <span>STEP 03 / 04</span>
+        <span id="captureOnlineTrack"></span>
       </div>
-      <div class="choices">
-        <button class="choice online" type="button" data-mode="online">
-          <span class="glyph" aria-hidden="true">
-            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="28" cy="28" r="18"/>
-              <path d="M10 28 H46"/>
-              <path d="M28 10 C20 18 20 38 28 46"/>
-              <path d="M28 10 C36 18 36 38 28 46"/>
-            </svg>
-          </span>
-          <span class="body">
-            <span class="title-en" data-lang="en">Online</span>
-            <span class="title-es" data-lang="es">Online</span>
-            <span class="caption" data-lang="en">Anywhere with Wi-Fi</span>
-            <span class="caption" data-lang="es">En cualquier lugar con Wi-Fi</span>
-          </span>
-        </button>
-        <button class="choice local" type="button" data-mode="local">
-          <span class="glyph" aria-hidden="true">
-            <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M28 8 C18 8 12 16 12 24 C12 36 28 48 28 48 C28 48 44 36 44 24 C44 16 38 8 28 8 Z"/>
-              <circle cx="28" cy="24" r="5"/>
-            </svg>
-          </span>
-          <span class="body">
-            <span class="title-en" data-lang="en">In Key West</span>
-            <span class="title-es" data-lang="es">En Key West</span>
-            <span class="caption" data-lang="en">Key West, FL · 24.5551° N</span>
-            <span class="caption" data-lang="es">Key West, FL · 24.5551° N</span>
-          </span>
-        </button>
-      </div>
-    </section>
-
-    <section class="card form-card" data-screen="form">
-      <div class="head-block">
-        <h1 class="headline" data-lang="en" data-words id="formHeadEn">Almost there.</h1>
-        <h1 class="headline" data-lang="es" data-words id="formHeadEs">Casi listo.</h1>
-        <p class="sub" data-lang="en" id="formSubEn">Where should I send your options?</p>
-        <p class="sub" data-lang="es" id="formSubEs">¿Dónde te envío tus opciones?</p>
-      </div>
-      <form class="form-wrap" id="leadForm" autocomplete="on" novalidate>
+      <h1 class="headline medium" data-lang="en">One last thing.</h1>
+      <h1 class="headline medium" data-lang="es">Una cosa más.</h1>
+      <form id="captureOnlineForm" class="form-grid" autocomplete="on" novalidate>
         <div class="field">
-          <label for="firstName" data-lang="en">First name</label>
-          <label for="firstName" data-lang="es">Nombre</label>
-          <input id="firstName" name="first_name" type="text" inputmode="text" autocomplete="given-name" required maxlength="60">
+          <label data-lang="en">FIRST NAME</label>
+          <label data-lang="es">NOMBRE</label>
+          <input type="text" name="first_name" id="onlineName" autocomplete="given-name" inputmode="text" required maxlength="60">
         </div>
         <div class="field">
-          <label for="email" data-lang="en">Email</label>
-          <label for="email" data-lang="es">Correo</label>
-          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="120">
-        </div>
-        <div class="field" id="phoneField" style="display:none">
-          <label for="phone" data-lang="en">Phone</label>
-          <label for="phone" data-lang="es">Teléfono</label>
-          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20">
+          <label data-lang="en">EMAIL</label>
+          <label data-lang="es">CORREO</label>
+          <input type="email" name="email" id="onlineEmail" autocomplete="email" inputmode="email" required maxlength="120">
         </div>
         <div class="hp" aria-hidden="true">
-          <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          <label>Website<input type="text" name="website" id="onlineHp" tabindex="-1" autocomplete="off"></label>
         </div>
-        <button type="submit" class="submit" id="submitBtn">
-          <span data-lang="en" id="submitLabelEn">Send it &rarr;</span>
-          <span data-lang="es" id="submitLabelEs">Envíalo &rarr;</span>
+        <button type="submit" class="btn-primary" id="onlineSubmit">
+          <span data-lang="en">Send it</span><span data-lang="es">Envíalo</span>
         </button>
         <div class="disclosure">
-          <span data-lang="en" id="discloseEn">By tapping, you agree to get emails from Laura. Unsubscribe anytime.</span>
-          <span data-lang="es" id="discloseEs">Al tocar aceptas recibir emails de Laura. Cancela cuando quieras.</span>
+          <span data-lang="en">By tapping, you agree to get emails from Laura. Unsubscribe anytime.</span>
+          <span data-lang="es">Al tocar aceptas recibir emails de Laura. Cancela cuando quieras.</span>
         </div>
-        <div class="err" id="formErr" role="alert"></div>
+        <div class="err" id="onlineErr" role="alert"></div>
       </form>
-    </section>
+    </div>
+  </section>
 
-    <section class="card" data-screen="booking">
-      <div class="head-block" style="margin-bottom:6px">
-        <h1 class="headline" data-lang="en" style="font-size:24px">Pick your spot.</h1>
-        <h1 class="headline" data-lang="es" style="font-size:24px">Escoge tu lugar.</h1>
+  <!-- STEP 3a-CONFIRM: ONLINE CONFIRM -->
+  <section class="screen" data-screen="online-confirm">
+    <div class="canvas">
+      <div class="meta-row">
+        <span data-lang="en">CONFIRMED</span><span data-lang="es">CONFIRMADO</span>
+        <span id="onlineConfirmTrack"></span>
       </div>
-      <div class="booker-frame">
-        <div class="booker-loading" id="bookerLoading">
-          <span data-lang="en">Setting up your spot&hellip;</span>
-          <span data-lang="es">Preparando tu lugar&hellip;</span>
-        </div>
-        <iframe id="bookerFrame" title="Coffee with Laura, 15 min, Key West" loading="lazy" allow="payment 'self'; geolocation 'self'"></iframe>
-        <div class="booker-actions">
-          <button type="button" class="ghost" id="bookedBtn">
-            <span data-lang="en">I booked it &rarr;</span>
-            <span data-lang="es">Ya reservé &rarr;</span>
-          </button>
-          <button type="button" class="booker-fallback" id="bookerFallback">
-            <span data-lang="en">Open scheduler &rarr;</span>
-            <span data-lang="es">Abrir agenda &rarr;</span>
-          </button>
-        </div>
+      <h1 class="headline large" data-lang="en">You're in.</h1>
+      <h1 class="headline large" data-lang="es">Estás dentro.</h1>
+      <div class="gold-rule"></div>
+      <p class="body-text" id="onlineConfirmBodyEn" data-lang="en"></p>
+      <p class="body-text" id="onlineConfirmBodyEs" data-lang="es"></p>
+      <div class="info-card">
+        <div class="label"><span data-lang="en">FROM LAURA</span><span data-lang="es">DE LAURA</span></div>
+        <div class="row" id="onlineSubject"></div>
       </div>
-    </section>
+      <div class="spacer"></div>
+      <button class="btn-ghost" type="button" data-action="restart">
+        <span data-lang="en">Start over</span><span data-lang="es">Empezar de nuevo</span>
+      </button>
+    </div>
+  </section>
 
-    <section class="card" data-screen="done">
-      <div style="margin:auto;text-align:center;padding-bottom:24px">
-        <div class="glyph-stage" id="doneGlyph"></div>
-        <h1 class="headline" data-lang="en" data-words>Got you.</h1>
-        <h1 class="headline" data-lang="es" data-words>Listo.</h1>
-        <p class="sub" id="doneSubEn" data-lang="en"></p>
-        <p class="sub" id="doneSubEs" data-lang="es"></p>
-        <p class="sub" id="doneDetailEn" data-lang="en" style="margin-top:14px;opacity:.55"></p>
-        <p class="sub" id="doneDetailEs" data-lang="es" style="margin-top:14px;opacity:.55"></p>
-        <div class="ghost-row" id="doneActions" style="display:none">
-          <button type="button" class="ghost" id="icsBtn">
-            <span data-lang="en">Add to calendar</span>
-            <span data-lang="es">Agregar al calendario</span>
-          </button>
-          <a class="ghost" id="textLauraBtn" href="sms:">
-            <span data-lang="en">Text Laura</span>
-            <span data-lang="es">Escribirle a Laura</span>
-          </a>
-        </div>
+  <!-- STEP 3b: BOOKING -->
+  <section class="screen" data-screen="booking">
+    <div class="canvas">
+      <div class="meta-row">
+        <span data-lang="en">PICK A TIME</span><span data-lang="es">ELIGE UN HORARIO</span>
+        <span id="bookingTrack"></span>
       </div>
-    </section>
+      <h2 class="headline">Key West.</h2>
+      <p class="subhead" id="bookingSubEn" data-lang="en"></p>
+      <p class="subhead" id="bookingSubEs" data-lang="es"></p>
+      <form id="bookingForm" class="form-grid" autocomplete="on" novalidate>
+        <div class="field">
+          <label data-lang="en">FIRST NAME</label>
+          <label data-lang="es">NOMBRE</label>
+          <input type="text" name="first_name" id="bookName" autocomplete="given-name" inputmode="text" required maxlength="60">
+        </div>
+        <div class="field">
+          <label data-lang="en">EMAIL</label>
+          <label data-lang="es">CORREO</label>
+          <input type="email" name="email" id="bookEmail" autocomplete="email" inputmode="email" required maxlength="120">
+        </div>
+        <div class="field">
+          <label data-lang="en">PHONE</label>
+          <label data-lang="es">TELÉFONO</label>
+          <input type="tel" name="phone" id="bookPhone" autocomplete="tel" inputmode="tel" required maxlength="20">
+        </div>
+        <div class="hp" aria-hidden="true">
+          <label>Website<input type="text" name="website" id="bookHp" tabindex="-1" autocomplete="off"></label>
+        </div>
 
-  </div>
-</div>
+        <div class="pick-section">
+          <h3><span data-lang="en">PICK A DAY</span><span data-lang="es">ELIGE EL DÍA</span></h3>
+          <div class="day-strip" id="dayStrip" role="listbox" aria-label="Pick a day"></div>
+        </div>
+
+        <div class="pick-section">
+          <h3><span data-lang="en">PICK A TIME</span><span data-lang="es">ELIGE LA HORA</span></h3>
+          <div class="time-grid disabled" id="timeGrid"></div>
+        </div>
+
+        <button type="submit" class="btn-primary" id="bookingSubmit" disabled>
+          <span id="bookingBtnLabelEn" data-lang="en">Pick a day &amp; time</span>
+          <span id="bookingBtnLabelEs" data-lang="es">Elige día y hora</span>
+        </button>
+        <div class="disclosure">
+          <span data-lang="en">By tapping, you agree to get emails from Laura. Unsubscribe anytime.</span>
+          <span data-lang="es">Al tocar aceptas recibir emails de Laura. Cancela cuando quieras.</span>
+        </div>
+        <div class="err" id="bookingErr" role="alert"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- STEP 4: BOOKED -->
+  <section class="screen" data-screen="booked">
+    <div class="canvas">
+      <div class="meta-row">
+        <span data-lang="en">BOOKED</span><span data-lang="es">RESERVADO</span>
+        <span id="bookedTrack"></span>
+      </div>
+      <h1 class="headline large" data-lang="en">See you<br>soon.</h1>
+      <h1 class="headline large" data-lang="es">Nos vemos<br>pronto.</h1>
+      <div class="gold-rule"></div>
+      <div class="info-card">
+        <div class="label"><span data-lang="en">YOUR SESSION</span><span data-lang="es">TU SESIÓN</span></div>
+        <div class="row" id="bookedDateEn" data-lang="en"></div>
+        <div class="row" id="bookedDateEs" data-lang="es"></div>
+        <div class="row" id="bookedTime"></div>
+        <div class="row"><span data-lang="en">60 minutes</span><span data-lang="es">60 minutos</span></div>
+      </div>
+      <p class="closing" data-lang="en">Coffee's on me when we meet. I'll text you tonight to confirm.</p>
+      <p class="closing" data-lang="es">El café lo invito yo cuando nos veamos. Te escribo esta noche para confirmar.</p>
+      <div class="spacer"></div>
+      <button class="btn-ghost" type="button" data-action="restart">
+        <span data-lang="en">Start over</span><span data-lang="es">Empezar de nuevo</span>
+      </button>
+    </div>
+  </section>
+
+</main>
 
 <script>
-  const BOOKING_URL = 'TODO_GOOGLE_CALENDAR_APPOINTMENT_URL';
-  const FUNNEL_ENDPOINT = '/.netlify/functions/client-funnel';
-  const LAURA_PHONE = '+13055551234';
+  const params = new URLSearchParams(location.search);
+  const eventId = (params.get('e') || '').slice(0, 80) || 'unknown';
+  const isTest = params.get('t') === '1';
 
   const state = {
+    step: 'choose',
+    history: [],
     track: null,
     mode: null,
-    step: 'splash',
-    eventId: null,
+    name: '',
+    email: '',
+    phone: '',
+    date: null,
+    dateEn: null,
+    dateEs: null,
+    time: null,
     lang: 'en',
-    test: false,
-    history: [],
   };
-
-  const params = new URLSearchParams(location.search);
-  state.eventId = (params.get('e') || '').slice(0, 80) || 'unknown';
-  state.test = params.get('t') === '1';
-
-  function track(name, payload) {
-    if (window.dataLayer) {
-      try { window.dataLayer.push({ event: name, ...payload }); } catch (e) {}
-    }
-  }
 
   function setLang(lang) {
     state.lang = lang;
     document.body.classList.toggle('lang-es', lang === 'es');
     document.documentElement.lang = lang;
-    document.querySelectorAll('.lang-pill button').forEach((btn) => {
-      btn.classList.toggle('on', btn.textContent.trim().toLowerCase() === lang);
+    document.querySelectorAll('.lang-pill button').forEach((b) => {
+      b.classList.toggle('on', b.dataset.setLang === lang);
     });
-    splitWords();
-    updateFormCopy();
-    updateStepCounter();
   }
-  window.setLang = setLang;
+  document.querySelectorAll('.lang-pill button').forEach((b) => {
+    b.addEventListener('click', () => setLang(b.dataset.setLang));
+  });
 
-  function splitWords() {
-    document.querySelectorAll('h1.headline[data-words]').forEach((h) => {
-      if (h.dataset.split === '1') return;
-      const raw = h.textContent.trim();
-      h.dataset.split = '1';
-      h.innerHTML = raw.split(/\s+/).map((w, i) => '<span class="w" style="--i:' + i + '">' + w + '</span>').join(' ');
-    });
+  function trackEvent(name, payload) {
+    if (window.dataLayer) {
+      try { window.dataLayer.push({ event: name, ...payload }); } catch (e) {}
+    }
   }
 
   function updateStepCounter() {
-    const counter = document.getElementById('stepCounter');
-    const flowLen = state.mode === 'local' ? 5 : 4;
-    const map = { splash: 1, mode: 2, form: 3, booking: 4, done: state.mode === 'local' ? 5 : 4 };
-    const n = map[state.step] || 1;
-    counter.textContent = 'STEP ' + String(n).padStart(2, '0') + ' / ' + String(flowLen).padStart(2, '0');
-  }
-
-  function goto(nextStep, opts = {}) {
-    if (nextStep === state.step) return;
-    if (!opts.back) state.history.push(state.step);
-    const prev = state.step;
-    state.step = nextStep;
-
-    const apply = () => {
-      document.body.dataset.step = nextStep;
-      document.querySelectorAll('.card').forEach((c) => {
-        c.classList.remove('active', 'entering', 'leaving');
-        if (c.dataset.screen === nextStep) {
-          c.classList.add('active', 'entering');
-          setTimeout(() => c.classList.remove('entering'), 380);
-        }
-      });
-      updateStepCounter();
-      onEnter(nextStep, prev);
+    const map = {
+      'choose': 'STEP 01 / 04',
+      'mode': 'STEP 02 / 04',
+      'capture-online': 'STEP 03 / 04',
+      'online-confirm': 'STEP 04 / 04',
+      'booking': 'STEP 03 / 04',
+      'booked': 'STEP 04 / 04',
     };
-
-    if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      try { document.startViewTransition(apply); return; } catch (e) {}
-    }
-    apply();
+    document.getElementById('stepCounter').textContent = map[state.step] || '';
   }
 
-  function goBack() {
+  function goto(step, opts = {}) {
+    if (!opts.back && state.step !== step) state.history.push(state.step);
+    state.step = step;
+    document.body.dataset.step = step;
+    updateStepCounter();
+    window.scrollTo(0, 0);
+  }
+
+  function back() {
     const prev = state.history.pop();
     if (prev) goto(prev, { back: true });
   }
-  document.getElementById('backBtn').addEventListener('click', goBack);
 
-  function onEnter(step, prev) {
-    if (step === 'mode') {
-      track('client_intent_chosen', { intent: state.track, event_id: state.eventId });
-    }
-    if (step === 'form') {
-      track('client_mode_chosen', { mode: state.mode, event_id: state.eventId });
-      document.getElementById('phoneField').style.display = state.mode === 'local' ? 'flex' : 'none';
-      document.getElementById('phone').required = state.mode === 'local';
-      updateFormCopy();
-      setTimeout(() => document.getElementById('firstName').focus({ preventScroll: true }), 320);
-    }
-    if (step === 'booking') {
-      mountBooker();
-    }
-    if (step === 'done') {
-      mountDone();
-    }
-  }
+  document.getElementById('backBtn').addEventListener('click', back);
 
-  function updateFormCopy() {
-    const isLocal = state.mode === 'local';
-    document.getElementById('formSubEn').textContent = isLocal ? "Pick a time and I'll text you to confirm." : 'Where should I send your options?';
-    document.getElementById('formSubEs').textContent = isLocal ? 'Escoge una hora y te escribo para confirmar.' : '¿Dónde te envío tus opciones?';
-    document.getElementById('submitLabelEn').innerHTML = isLocal ? 'Pick a time &rarr;' : 'Send it &rarr;';
-    document.getElementById('submitLabelEs').innerHTML = isLocal ? 'Escoger hora &rarr;' : 'Envíalo &rarr;';
-    document.getElementById('discloseEn').textContent = isLocal
-      ? "By tapping, you agree to get emails from Laura. Unsubscribe anytime. I'll text you to lock a time."
-      : 'By tapping, you agree to get emails from Laura. Unsubscribe anytime.';
-    document.getElementById('discloseEs').textContent = isLocal
-      ? 'Al tocar aceptas recibir emails de Laura. Cancela cuando quieras. Te escribo para coordinar.'
-      : 'Al tocar aceptas recibir emails de Laura. Cancela cuando quieras.';
-  }
-
-  document.querySelectorAll('.choice[data-track]').forEach((btn) => {
+  // --- STEP 1 click handlers ---
+  document.querySelectorAll('.half[data-track]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.track = btn.dataset.track;
-      try { navigator.vibrate && navigator.vibrate(8); } catch (e) {}
-      btn.classList.add('released');
+      trackEvent('client_intent_chosen', { intent: state.track, event_id: eventId });
+      mountModeCopy();
       goto('mode');
     });
   });
-  document.querySelectorAll('.choice[data-mode]').forEach((btn) => {
+
+  function mountModeCopy() {
+    const isDance = state.track === 'dance';
+    const labelEn = isDance ? 'DANCE' : 'TRAIN';
+    const labelEs = isDance ? 'BAILE' : 'ENTRENO';
+    const top = document.getElementById('modeTrackLabelTop');
+    const bot = document.getElementById('modeTrackLabelBottom');
+    top.innerHTML = '<span data-lang="en">' + labelEn + '</span><span data-lang="es">' + labelEs + '</span>';
+    bot.innerHTML = '<span data-lang="en">' + labelEn + '</span><span data-lang="es">' + labelEs + '</span>';
+    document.getElementById('modeOnlineSubEn').textContent = isDance
+      ? 'Class and choreography, on your screen.'
+      : 'Programs and coaching, delivered to you.';
+    document.getElementById('modeOnlineSubEs').textContent = isDance
+      ? 'Clase y coreografía, en tu pantalla.'
+      : 'Programas y coaching, hasta donde estés.';
+    document.getElementById('modeLocalSubEn').textContent = isDance
+      ? 'Studio time, hands-on coaching.'
+      : 'Private sessions in Key West.';
+    document.getElementById('modeLocalSubEs').textContent = isDance
+      ? 'Tiempo de estudio, coaching directo.'
+      : 'Sesiones privadas en Key West.';
+  }
+
+  // --- STEP 2 click handlers ---
+  document.querySelectorAll('.half[data-mode]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.mode = btn.dataset.mode;
-      try { navigator.vibrate && navigator.vibrate(8); } catch (e) {}
-      btn.classList.add('released');
-      goto('form');
+      trackEvent('client_mode_chosen', { mode: state.mode, intent: state.track, event_id: eventId });
+      if (state.mode === 'online') {
+        mountCaptureOnline();
+        goto('capture-online');
+      } else {
+        mountBooking();
+        goto('booking');
+      }
     });
   });
 
-  const form = document.getElementById('leadForm');
-  form.addEventListener('submit', async (e) => {
+  // --- STEP 3a: capture online ---
+  function trackLabel(suffix) {
+    const isDance = state.track === 'dance';
+    const en = (isDance ? 'DANCE' : 'TRAIN') + suffix.en;
+    const es = (isDance ? 'BAILE' : 'ENTRENO') + suffix.es;
+    return '<span data-lang="en">' + en + '</span><span data-lang="es">' + es + '</span>';
+  }
+
+  function mountCaptureOnline() {
+    document.getElementById('captureOnlineTrack').innerHTML = trackLabel({ en: ' · ONLINE', es: ' · ONLINE' });
+  }
+
+  document.getElementById('captureOnlineForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const errBox = document.getElementById('formErr');
-    errBox.textContent = '';
-    const submitBtn = document.getElementById('submitBtn');
-    const fd = new FormData(form);
-    const payload = {
-      first_name: (fd.get('first_name') || '').toString().trim(),
-      email: (fd.get('email') || '').toString().trim(),
-      phone: (fd.get('phone') || '').toString().trim(),
-      language: state.lang,
+    const name = document.getElementById('onlineName').value.trim();
+    const email = document.getElementById('onlineEmail').value.trim();
+    const hp = document.getElementById('onlineHp').value;
+    const errEl = document.getElementById('onlineErr');
+    errEl.textContent = '';
+    if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errEl.textContent = state.lang === 'es' ? 'Por favor revisa nombre y correo.' : 'Please check name and email.';
+      return;
+    }
+    state.name = name; state.email = email;
+    const btn = document.getElementById('onlineSubmit');
+    btn.disabled = true; btn.style.opacity = '.7';
+    try {
+      await submitLead({ website: hp });
+      mountOnlineConfirm();
+      goto('online-confirm');
+      trackEvent('client_lead_captured', { bucket: state.track + '-' + state.mode, event_id: eventId, language: state.lang });
+    } catch (err) {
+      errEl.textContent = state.lang === 'es' ? 'Algo falló. Inténtalo otra vez.' : 'Something went wrong. Try again.';
+      btn.disabled = false; btn.style.opacity = '1';
+    }
+  });
+
+  function mountOnlineConfirm() {
+    const isDance = state.track === 'dance';
+    document.getElementById('onlineConfirmTrack').innerHTML = trackLabel({ en: ' · ONLINE', es: ' · ONLINE' });
+    document.getElementById('onlineConfirmBodyEn').textContent = isDance
+      ? 'Check your inbox. Your class details just landed there.'
+      : 'Check your inbox. Your training intake just landed there.';
+    document.getElementById('onlineConfirmBodyEs').textContent = isDance
+      ? 'Revisa tu inbox. Los detalles de la clase ya llegaron.'
+      : 'Revisa tu inbox. Tu intake de entrenamiento ya llegó.';
+    const subjectEn = isDance ? 'Welcome to class' : 'Your training intake';
+    const subjectEs = isDance ? 'Bienvenido a clase' : 'Tu intake de entrenamiento';
+    document.getElementById('onlineSubject').innerHTML = '<span data-lang="en">' + subjectEn + '</span><span data-lang="es">' + subjectEs + '</span>';
+  }
+
+  // --- STEP 3b: booking ---
+  const TIMES = ['7:00', '9:00', '11:30', '16:00', '17:30'];
+  const WEEKDAY_LETTER_EN = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  const WEEKDAY_LETTER_ES = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+  const MONTH_ABBR_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const MONTH_ABBR_ES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+  function mountBooking() {
+    const isDance = state.track === 'dance';
+    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · IN PERSON', es: ' · EN PERSONA' });
+    document.getElementById('bookingSubEn').textContent = isDance
+      ? '60 min studio class.'
+      : '60 min private session.';
+    document.getElementById('bookingSubEs').textContent = isDance
+      ? 'Clase de estudio de 60 min.'
+      : 'Sesión privada de 60 min.';
+
+    // Day strip: 14 days starting tomorrow
+    const strip = document.getElementById('dayStrip');
+    strip.innerHTML = '';
+    const today = new Date();
+    for (let i = 1; i <= 14; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'day';
+      btn.dataset.iso = d.toISOString();
+      btn.dataset.idx = i;
+      btn.innerHTML =
+        '<span class="m"><span data-lang="en">' + MONTH_ABBR_EN[d.getMonth()] + '</span><span data-lang="es">' + MONTH_ABBR_ES[d.getMonth()] + '</span></span>' +
+        '<span class="d">' + d.getDate() + '</span>' +
+        '<span class="w"><span data-lang="en">' + WEEKDAY_LETTER_EN[d.getDay()] + '</span><span data-lang="es">' + WEEKDAY_LETTER_ES[d.getDay()] + '</span></span>';
+      btn.addEventListener('click', () => {
+        strip.querySelectorAll('.day').forEach((x) => x.classList.remove('on'));
+        btn.classList.add('on');
+        state.date = d.toISOString();
+        state.dateEn = d.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        state.dateEs = d.toLocaleString('es-ES', { weekday: 'long', month: 'long', day: 'numeric' });
+        document.getElementById('timeGrid').classList.remove('disabled');
+        updateBookingBtn();
+      });
+      strip.appendChild(btn);
+    }
+
+    // Time grid
+    const grid = document.getElementById('timeGrid');
+    grid.innerHTML = '';
+    grid.classList.add('disabled');
+    TIMES.forEach((tm) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'time';
+      btn.textContent = tm;
+      btn.addEventListener('click', () => {
+        if (grid.classList.contains('disabled')) return;
+        grid.querySelectorAll('.time').forEach((x) => x.classList.remove('on'));
+        btn.classList.add('on');
+        state.time = tm;
+        updateBookingBtn();
+      });
+      grid.appendChild(btn);
+    });
+
+    // Reset on remount
+    state.date = null; state.dateEn = null; state.dateEs = null; state.time = null;
+    state.name = ''; state.email = ''; state.phone = '';
+    document.getElementById('bookName').value = '';
+    document.getElementById('bookEmail').value = '';
+    document.getElementById('bookPhone').value = '';
+    updateBookingBtn();
+
+    ['bookName','bookEmail','bookPhone'].forEach((id) => {
+      document.getElementById(id).addEventListener('input', updateBookingBtn);
+    });
+  }
+
+  function updateBookingBtn() {
+    const name = document.getElementById('bookName').value.trim();
+    const email = document.getElementById('bookEmail').value.trim();
+    const phone = document.getElementById('bookPhone').value.trim();
+    const ready = name && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && phone && state.date && state.time;
+    const btn = document.getElementById('bookingSubmit');
+    btn.disabled = !ready;
+    document.getElementById('bookingBtnLabelEn').textContent = ready ? 'Confirm booking' : 'Pick a day & time';
+    document.getElementById('bookingBtnLabelEs').textContent = ready ? 'Confirmar reserva' : 'Elige día y hora';
+  }
+
+  document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (document.getElementById('bookingSubmit').disabled) return;
+    state.name = document.getElementById('bookName').value.trim();
+    state.email = document.getElementById('bookEmail').value.trim();
+    state.phone = document.getElementById('bookPhone').value.trim();
+    const hp = document.getElementById('bookHp').value;
+    const errEl = document.getElementById('bookingErr');
+    errEl.textContent = '';
+    const btn = document.getElementById('bookingSubmit');
+    btn.disabled = true; btn.style.opacity = '.7';
+    try {
+      await submitLead({ website: hp, date: state.dateEn, time: state.time });
+      mountBooked();
+      goto('booked');
+      trackEvent('client_lead_captured', { bucket: state.track + '-' + state.mode, event_id: eventId, language: state.lang });
+    } catch (err) {
+      errEl.textContent = state.lang === 'es' ? 'Algo falló. Inténtalo otra vez.' : 'Something went wrong. Try again.';
+      btn.disabled = false; btn.style.opacity = '1';
+    }
+  });
+
+  function mountBooked() {
+    document.getElementById('bookedTrack').innerHTML = trackLabel({ en: ' · IN PERSON', es: ' · EN PERSONA' });
+    document.getElementById('bookedDateEn').textContent = state.dateEn || '';
+    document.getElementById('bookedDateEs').textContent = state.dateEs || '';
+    document.getElementById('bookedTime').textContent = state.time || '';
+  }
+
+  // --- restart ---
+  document.querySelectorAll('[data-action="restart"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.history = [];
+      state.track = null; state.mode = null;
+      state.name = ''; state.email = ''; state.phone = '';
+      state.date = null; state.dateEn = null; state.dateEs = null; state.time = null;
+      document.getElementById('captureOnlineForm').reset();
+      goto('choose', { back: true });
+    });
+  });
+
+  // --- POST helper ---
+  async function submitLead(extra = {}) {
+    const body = {
+      first_name: state.name,
+      email: state.email,
+      phone: state.phone || '',
       intent: state.track,
       mode: state.mode,
-      event_id: state.eventId,
+      language: state.lang,
+      event_id: eventId,
       source: 'client-scan',
-      website: (fd.get('website') || '').toString(),
+      ...extra,
     };
-    if (!payload.first_name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
-      errBox.textContent = state.lang === 'es' ? 'Revisa nombre y correo.' : 'Check name and email.';
-      return;
-    }
-    if (state.mode === 'local' && !payload.phone) {
-      errBox.textContent = state.lang === 'es' ? 'Necesito tu teléfono para confirmar.' : 'I need your phone to confirm.';
-      return;
-    }
-    submitBtn.disabled = true;
-    const origLabel = submitBtn.innerHTML;
-    submitBtn.innerHTML = state.lang === 'es' ? 'Enviando…' : 'Sending…';
-    try {
-      const url = FUNNEL_ENDPOINT + (state.test ? '?t=1' : '');
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.error || 'submit_failed');
-      track('client_lead_captured', {
-        bucket: data.bucket || (state.track + '-' + state.mode),
-        event_id: state.eventId,
-        language: state.lang,
-        dedup: !!data.dedup,
-      });
-      state.firstName = payload.first_name;
-      state.email = payload.email;
-      goto(state.mode === 'local' ? 'booking' : 'done');
-    } catch (err) {
-      console.error('client-funnel submit error:', err);
-      errBox.textContent = state.lang === 'es' ? 'Algo falló. Intenta de nuevo.' : 'Something went wrong. Try again.';
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = origLabel;
-    }
-  });
-
-  function mountBooker() {
-    const iframe = document.getElementById('bookerFrame');
-    const loading = document.getElementById('bookerLoading');
-    const fallback = document.getElementById('bookerFallback');
-    if (iframe.dataset.mounted === '1') return;
-    iframe.dataset.mounted = '1';
-    const src = BOOKING_URL.startsWith('TODO_')
-      ? 'about:blank'
-      : BOOKING_URL + (BOOKING_URL.includes('?') ? '&' : '?')
-        + 'email=' + encodeURIComponent(state.email || '')
-        + '&firstName=' + encodeURIComponent(state.firstName || '');
-    iframe.src = src;
-    let loaded = false;
-    iframe.addEventListener('load', () => {
-      loaded = true;
-      loading.classList.add('hide');
+    const url = '/.netlify/functions/client-funnel' + (isTest ? '?t=1' : '');
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
     });
-    setTimeout(() => {
-      if (!loaded) {
-        fallback.classList.add('show');
-        loading.classList.add('hide');
-      }
-    }, 4000);
-    fallback.addEventListener('click', () => {
-      if (!BOOKING_URL.startsWith('TODO_')) location.href = BOOKING_URL;
-    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'submit failed');
+    return data;
   }
 
-  document.getElementById('bookedBtn').addEventListener('click', () => goto('done'));
-
-  window.addEventListener('message', (e) => {
-    if (state.step !== 'booking') return;
-    const data = e && e.data;
-    const txt = typeof data === 'string' ? data : (data && data.type) || '';
-    if (/booked|appointment|confirm/i.test(txt)) goto('done');
-  });
-
-  function mountDone() {
-    const isLocal = state.mode === 'local';
-    const isDance = state.track === 'dance';
-    const glyph = document.getElementById('doneGlyph');
-    glyph.innerHTML = isLocal ? coffeeSVG() : planeSVG();
-    document.getElementById('doneSubEn').textContent = isLocal
-      ? "Coffee's on me when we meet."
-      : 'I just sent your ' + (isDance ? 'dance' : 'training') + ' options. Talk soon.';
-    document.getElementById('doneSubEs').textContent = isLocal
-      ? 'El café lo invito yo cuando nos veamos.'
-      : 'Te envié tus opciones de ' + (isDance ? 'baile' : 'entrenamiento') + '. Hablamos pronto.';
-    document.getElementById('doneDetailEn').textContent = isLocal
-      ? "I'll text you tonight to confirm. See you soon."
-      : 'Check your inbox in 60 seconds.';
-    document.getElementById('doneDetailEs').textContent = isLocal
-      ? 'Te escribo esta noche para confirmar. Nos vemos pronto.'
-      : 'Revisa tu bandeja en 60 segundos.';
-    document.getElementById('doneActions').style.display = isLocal ? 'flex' : 'none';
-    if (isLocal) {
-      const sms = document.getElementById('textLauraBtn');
-      const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      sms.href = isiOS ? 'sms:' + LAURA_PHONE : ('mailto:laura@lauratreto.com?subject=' + encodeURIComponent('Coffee meet'));
-    }
-  }
-
-  document.getElementById('icsBtn').addEventListener('click', () => {
-    const start = new Date(Date.now() + 2 * 24 * 3600 * 1000);
-    start.setHours(10, 0, 0, 0);
-    const end = new Date(start.getTime() + 15 * 60000);
-    const fmt = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-    const ics = [
-      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Laura Treto//Client//EN',
-      'BEGIN:VEVENT',
-      'UID:' + Date.now() + '@lauratreto.com',
-      'DTSTAMP:' + fmt(new Date()),
-      'DTSTART:' + fmt(start),
-      'DTEND:' + fmt(end),
-      'SUMMARY:Coffee with Laura',
-      'DESCRIPTION:15-min meet. Confirm time via text.',
-      'LOCATION:Key West, FL',
-      'END:VEVENT','END:VCALENDAR',
-    ].join('\r\n');
-    const blob = new Blob([ics], { type: 'text/calendar' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'coffee-with-laura.ics';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-  });
-
-  function planeSVG() {
-    return '<svg viewBox="0 0 120 120"><path d="M10 60 L110 18 L82 110 L60 70 L10 60 Z"/><path d="M60 70 L82 50"/></svg>';
-  }
-  function coffeeSVG() {
-    return '<svg viewBox="0 0 120 120">'
-      + '<path d="M28 50 H82 V82 Q82 96 68 96 H42 Q28 96 28 82 Z"/>'
-      + '<path d="M82 58 H94 Q102 58 102 68 Q102 80 90 80 H82"/>'
-      + '<path d="M44 32 Q40 38 44 44 Q48 50 44 56"/>'
-      + '<path d="M58 28 Q54 36 58 44 Q62 52 58 58"/>'
-      + '<path d="M72 32 Q68 38 72 44 Q76 50 72 56"/>'
-      + '</svg>';
-  }
-
-  (function detectWebview() {
-    const ua = navigator.userAgent || '';
-    if (/FBAN|FBAV|Instagram|TikTok|LinkedIn|Line/i.test(ua)) {
-      document.getElementById('webviewBanner').classList.add('show');
-      document.getElementById('copyLinkBtn').addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(location.href);
-          const btn = document.getElementById('copyLinkBtn');
-          btn.textContent = state.lang === 'es' ? '¡Copiado!' : 'Copied!';
-        } catch (e) {}
-      });
-    }
-  })();
-
-  (function lazyLoadVideo() {
-    const v = document.getElementById('bgVideo');
-    let armed = false;
-    function arm() {
-      if (armed) return;
-      armed = true;
-      const candidates = ['/videos/chachafit-pier-bg-mobile.mp4', '/videos/chachafit-pier-laura-mobile.mp4'];
-      v.src = candidates[0];
-      v.poster = '/images/chachafit-pier-bg-poster.jpg';
-      const playP = v.play();
-      if (playP && playP.catch) playP.catch(() => {});
-      v.addEventListener('loadeddata', () => v.classList.add('loaded'), { once: true });
-    }
-    ['pointerdown', 'touchstart', 'keydown'].forEach((ev) =>
-      document.addEventListener(ev, arm, { once: true, passive: true })
-    );
-    setTimeout(arm, 1500);
-  })();
-
+  // --- iOS keyboard helper ---
   if (window.visualViewport) {
     const vv = window.visualViewport;
+    let baseHeight = vv.height;
     vv.addEventListener('resize', () => {
-      if (state.step !== 'form') return;
-      const active = document.activeElement;
-      if (!active || active.tagName !== 'INPUT') return;
-      const r = active.getBoundingClientRect();
-      const bottom = r.bottom;
-      if (bottom > vv.height - 12) {
-        active.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      const open = vv.height < baseHeight - 150;
+      document.body.classList.toggle('kb-open', open);
+      if (open && document.activeElement && document.activeElement.tagName === 'INPUT') {
+        setTimeout(() => {
+          document.activeElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }, 100);
       }
     });
   }
 
-  splitWords();
+  // initial fire
+  trackEvent('client_scan_landed', { event_id: eventId });
   updateStepCounter();
-  track('client_scan_landed', { event_id: state.eventId, language: state.lang });
 </script>
 
 </body>
