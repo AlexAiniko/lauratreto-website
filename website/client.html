@@ -663,6 +663,8 @@
       </div>
       <h1 class="headline medium" data-lang="en">One last thing.</h1>
       <h1 class="headline medium" data-lang="es">Una cosa más.</h1>
+      <p class="subhead" id="captureOnlineSubEn" data-lang="en"></p>
+      <p class="subhead" id="captureOnlineSubEs" data-lang="es"></p>
       <form id="captureOnlineForm" class="form-grid" autocomplete="on" novalidate>
         <div class="field">
           <label data-lang="en">FIRST NAME</label>
@@ -920,7 +922,14 @@
   }
 
   function mountCaptureOnline() {
+    const isDance = state.track === 'dance';
     document.getElementById('captureOnlineTrack').innerHTML = trackLabel({ en: ' · ONLINE', es: ' · ONLINE' });
+    document.getElementById('captureOnlineSubEn').textContent = isDance
+      ? 'Give me your info and I\'ll email you my online dance programs.'
+      : 'Give me your info and I\'ll email you my online training programs.';
+    document.getElementById('captureOnlineSubEs').textContent = isDance
+      ? 'Déjame tus datos y te envío mis programas de baile online.'
+      : 'Déjame tus datos y te envío mis programas de entrenamiento online.';
   }
 
   document.getElementById('captureOnlineForm').addEventListener('submit', async (e) => {
