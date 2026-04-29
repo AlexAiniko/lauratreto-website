@@ -116,6 +116,7 @@ export default async (request, context) => {
   const source = sanitize(body.source, 40) || 'client-scan';
   const date = sanitize(body.date, 80);
   const time = sanitize(body.time, 20);
+  const meetingMethod = sanitize(body.meeting_method, 20);
 
   if (!isValidEmail(email)) {
     return jsonResponse({ error: 'Invalid email' }, 400);
@@ -147,6 +148,7 @@ export default async (request, context) => {
       await inbox.set(key, JSON.stringify({
         ts: new Date().toISOString(),
         email, firstName, phone, intent, mode, eventId, language, ip, date, time,
+        meeting_method: meetingMethod,
       }));
     } catch (err) {
       console.error('[client-funnel] inbox blob write failed:', err);
@@ -193,6 +195,7 @@ export default async (request, context) => {
       source,
       booking_date: date || undefined,
       booking_time: time || undefined,
+      meeting_method: meetingMethod || undefined,
     },
     groups: [finalGroupId],
     status: 'active',

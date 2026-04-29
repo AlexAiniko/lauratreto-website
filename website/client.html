@@ -211,7 +211,6 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
     width: 64px;
     height: 64px;
     border-radius: 50%;
@@ -222,6 +221,9 @@
     justify-content: center;
     box-shadow: var(--shadow-card);
     z-index: 4;
+    transform: translate(-50%, -50%);
+    transition: transform 360ms var(--ease);
+    will-change: transform;
   }
   .pivot .lt {
     font-family: 'Playfair Display', serif;
@@ -229,6 +231,73 @@
     font-weight: 700;
     font-size: 22px;
     letter-spacing: .02em;
+    opacity: 1;
+    transition: opacity 320ms var(--ease);
+  }
+  /* Landing vignette: pivot starts at full-screen scale, shrinks down to 64px. */
+  body.entering .pivot {
+    animation: vignetteIn 1200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  body.entering .pivot .lt {
+    opacity: 0;
+    animation: ltAppear 600ms ease-out 1000ms forwards;
+  }
+  body.entering .half-stack,
+  body.entering .half-meta,
+  body.entering .half-arrow {
+    opacity: 0;
+    animation: contentFadeIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 900ms forwards;
+  }
+  @keyframes vignetteIn {
+    0% { transform: translate(-50%, -50%) scale(28); }
+    70% { transform: translate(-50%, -50%) scale(1.18); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes ltAppear {
+    from { opacity: 0; transform: scale(.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes contentFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* Scroll-attempt nudge (pivot rotates, headlines wobble) */
+  body.nudge .pivot {
+    transform: translate(-50%, -50%) rotate(-12deg) scale(.94);
+  }
+  body.nudge .half-headline {
+    animation: shake 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    65% { transform: translateX(3px); }
+    100% { transform: translateX(0); }
+  }
+
+  /* ---- METHOD TOGGLE ---- */
+  .method-toggle {
+    display: inline-flex;
+    background: var(--ww-12);
+    border-radius: var(--radius-chip);
+    padding: 4px;
+    align-self: flex-start;
+    margin: 4px 0 4px;
+  }
+  .method {
+    padding: 8px 16px;
+    border-radius: var(--radius-chip);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ww-65);
+    transition: background var(--dur-ui) var(--ease), color var(--dur-ui) var(--ease);
+  }
+  .method.on {
+    background: var(--warm-white);
+    color: var(--coral);
   }
 
   /* ---- FULL CANVAS SCREENS (3a, 3a-confirm, 3b, 4) ---- */
@@ -627,8 +696,18 @@
         <span id="bookingTrack"></span>
       </div>
       <h2 class="headline">Key West.</h2>
-      <p class="subhead" id="bookingSubEn" data-lang="en"></p>
-      <p class="subhead" id="bookingSubEs" data-lang="es"></p>
+      <p class="subhead" data-lang="en">15 min meet, on me. Just to say hi and hear what you want.</p>
+      <p class="subhead" data-lang="es">15 min, te invito el café. Solo para saludarnos y escuchar qué quieres.</p>
+
+      <div class="method-toggle" role="radiogroup" aria-label="How to meet">
+        <button type="button" class="method on" data-method="in-person">
+          <span data-lang="en">In Key West</span><span data-lang="es">En Key West</span>
+        </button>
+        <button type="button" class="method" data-method="call">
+          <span data-lang="en">On a call</span><span data-lang="es">Por llamada</span>
+        </button>
+      </div>
+
       <form id="bookingForm" class="form-grid" autocomplete="on" novalidate>
         <div class="field">
           <label data-lang="en">FIRST NAME</label>
@@ -683,14 +762,14 @@
       <h1 class="headline large" data-lang="es">Nos vemos<br>pronto.</h1>
       <div class="gold-rule"></div>
       <div class="info-card">
-        <div class="label"><span data-lang="en">YOUR SESSION</span><span data-lang="es">TU SESIÓN</span></div>
+        <div class="label"><span data-lang="en">YOUR MEET</span><span data-lang="es">TU CITA</span></div>
         <div class="row" id="bookedDateEn" data-lang="en"></div>
         <div class="row" id="bookedDateEs" data-lang="es"></div>
         <div class="row" id="bookedTime"></div>
-        <div class="row"><span data-lang="en">60 minutes</span><span data-lang="es">60 minutos</span></div>
+        <div class="row" id="bookedMethodRow"></div>
       </div>
-      <p class="closing" data-lang="en">Coffee's on me when we meet. I'll text you tonight to confirm.</p>
-      <p class="closing" data-lang="es">El café lo invito yo cuando nos veamos. Te escribo esta noche para confirmar.</p>
+      <p class="closing" id="bookedClosingEn" data-lang="en"></p>
+      <p class="closing" id="bookedClosingEs" data-lang="es"></p>
       <div class="spacer"></div>
       <button class="btn-ghost" type="button" data-action="restart">
         <span data-lang="en">Start over</span><span data-lang="es">Empezar de nuevo</span>
@@ -789,12 +868,8 @@
     document.getElementById('modeOnlineSubEs').textContent = isDance
       ? 'Clase y coreografía, en tu pantalla.'
       : 'Programas y coaching, hasta donde estés.';
-    document.getElementById('modeLocalSubEn').textContent = isDance
-      ? 'Studio time, hands-on coaching.'
-      : 'Private sessions in Key West.';
-    document.getElementById('modeLocalSubEs').textContent = isDance
-      ? 'Tiempo de estudio, coaching directo.'
-      : 'Sesiones privadas en Key West.';
+    document.getElementById('modeLocalSubEn').textContent = 'For individuals, couples, or private groups in Key West.';
+    document.getElementById('modeLocalSubEs').textContent = 'Para individuos, parejas, o grupos privados en Key West.';
   }
 
   // --- STEP 2 click handlers ---
@@ -871,14 +946,9 @@
   const MONTH_ABBR_ES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 
   function mountBooking() {
-    const isDance = state.track === 'dance';
-    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · IN PERSON', es: ' · EN PERSONA' });
-    document.getElementById('bookingSubEn').textContent = isDance
-      ? '60 min studio class.'
-      : '60 min private session.';
-    document.getElementById('bookingSubEs').textContent = isDance
-      ? 'Clase de estudio de 60 min.'
-      : 'Sesión privada de 60 min.';
+    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · 15 MIN MEET', es: ' · 15 MIN' });
+    state.meetingMethod = 'in-person';
+    document.querySelectorAll('.method').forEach((b) => b.classList.toggle('on', b.dataset.method === 'in-person'));
 
     // Day strip: 14 days starting tomorrow
     const strip = document.getElementById('dayStrip');
@@ -951,6 +1021,14 @@
     document.getElementById('bookingBtnLabelEs').textContent = ready ? 'Confirmar reserva' : 'Elige día y hora';
   }
 
+  document.querySelectorAll('.method').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.method').forEach((b) => b.classList.remove('on'));
+      btn.classList.add('on');
+      state.meetingMethod = btn.dataset.method;
+    });
+  });
+
   document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (document.getElementById('bookingSubmit').disabled) return;
@@ -963,7 +1041,7 @@
     const btn = document.getElementById('bookingSubmit');
     btn.disabled = true; btn.style.opacity = '.7';
     try {
-      await submitLead({ website: hp, date: state.dateEn, time: state.time });
+      await submitLead({ website: hp, date: state.dateEn, time: state.time, meeting_method: state.meetingMethod || 'in-person' });
       mountBooked();
       goto('booked');
       trackEvent('client_lead_captured', { bucket: state.track + '-' + state.mode, event_id: eventId, language: state.lang });
@@ -974,10 +1052,23 @@
   });
 
   function mountBooked() {
-    document.getElementById('bookedTrack').innerHTML = trackLabel({ en: ' · IN PERSON', es: ' · EN PERSONA' });
+    const isCall = state.meetingMethod === 'call';
+    document.getElementById('bookedTrack').innerHTML = trackLabel({
+      en: isCall ? ' · 15 MIN CALL' : ' · 15 MIN MEET',
+      es: isCall ? ' · 15 MIN' : ' · 15 MIN',
+    });
     document.getElementById('bookedDateEn').textContent = state.dateEn || '';
     document.getElementById('bookedDateEs').textContent = state.dateEs || '';
     document.getElementById('bookedTime').textContent = state.time || '';
+    document.getElementById('bookedMethodRow').innerHTML = isCall
+      ? '<span data-lang="en">15 min, on a call</span><span data-lang="es">15 min, por llamada</span>'
+      : '<span data-lang="en">15 min, in Key West</span><span data-lang="es">15 min, en Key West</span>';
+    document.getElementById('bookedClosingEn').textContent = isCall
+      ? "I'll call you. We'll talk and figure out where to start. I'll text you tonight to confirm."
+      : "Coffee's on me when we meet. I'll text you tonight to confirm.";
+    document.getElementById('bookedClosingEs').textContent = isCall
+      ? 'Te llamo. Hablamos y vemos por dónde empezar. Te escribo esta noche para confirmar.'
+      : 'El café lo invito yo cuando nos veamos. Te escribo esta noche para confirmar.';
   }
 
   // --- restart ---
@@ -1030,6 +1121,28 @@
       }
     });
   }
+
+  // Landing vignette: white circle expands across screen on load, shrinks to pivot.
+  document.body.classList.add('entering');
+  setTimeout(() => document.body.classList.remove('entering'), 1700);
+
+  // Scroll-attempt nudge — page does not scroll, but feedback signals to the user
+  // that the choice is here, not below.
+  let nudgeTimer;
+  function nudge() {
+    if (state.step !== 'choose') return;
+    document.body.classList.add('nudge');
+    clearTimeout(nudgeTimer);
+    nudgeTimer = setTimeout(() => document.body.classList.remove('nudge'), 380);
+  }
+  window.addEventListener('wheel', nudge, { passive: true });
+  let touchStartY = null;
+  window.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    if (touchStartY == null) return;
+    const dy = Math.abs(e.touches[0].clientY - touchStartY);
+    if (dy > 24) nudge();
+  }, { passive: true });
 
   // initial fire
   trackEvent('client_scan_landed', { event_id: eventId });
