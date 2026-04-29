@@ -265,7 +265,9 @@
   body.nudge .pivot {
     transform: translate(-50%, -50%) rotate(-12deg) scale(.94);
   }
-  body.nudge .half-headline {
+  body.nudge .half-headline,
+  body.nudge .canvas h1.headline,
+  body.nudge .canvas h2.headline {
     animation: shake 360ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   @keyframes shake {
@@ -1126,11 +1128,16 @@
   document.body.classList.add('entering');
   setTimeout(() => document.body.classList.remove('entering'), 1700);
 
-  // Scroll-attempt nudge — page does not scroll, but feedback signals to the user
-  // that the choice is here, not below.
+  // Scroll-attempt nudge fires on every screen so the headline always
+  // acknowledges the swipe, even on screens with legitimate vertical scroll.
   let nudgeTimer;
+  let lastNudge = 0;
   function nudge() {
-    if (state.step !== 'choose') return;
+    const now = Date.now();
+    if (now - lastNudge < 380) return;
+    lastNudge = now;
+    document.body.classList.remove('nudge');
+    void document.body.offsetWidth;
     document.body.classList.add('nudge');
     clearTimeout(nudgeTimer);
     nudgeTimer = setTimeout(() => document.body.classList.remove('nudge'), 380);
