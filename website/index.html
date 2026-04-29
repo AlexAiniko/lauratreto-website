@@ -228,18 +228,20 @@
       z-index: 1000;
       display: flex;
       background: rgba(255,255,255,0.95);
-      border-radius: 24px;
+      border-radius: 999px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.10);
       backdrop-filter: blur(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
     .lang-toggle button {
-      padding: 8px 18px;
+      padding: 4px 14px;
       border: none;
       background: transparent;
       font-family: var(--font-sans);
       font-weight: 600;
-      font-size: 14px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
       cursor: pointer;
       color: var(--charcoal);
       transition: all 0.2s;
@@ -247,6 +249,11 @@
     .lang-toggle button.active {
       background: var(--coral);
       color: var(--white);
+    }
+    body.nav-hidden .lang-toggle {
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
     }
 
     /* ========================================
@@ -271,41 +278,96 @@
       text-decoration: none;
       opacity: 0.9;
     }
-    .site-logo.logo-hidden {
+    .site-logo.logo-hidden,
+    body.nav-hidden .site-logo {
       opacity: 0;
       pointer-events: none;
     }
 
     /* ========================================
-       CLIENT PILL (fixed top-right, left of lang)
+       HAMBURGER MENU (fixed top-right, left of lang)
        ======================================== */
-    .client-pill {
+    .nav-trigger {
       position: fixed;
       top: 20px;
-      right: 110px;
-      z-index: 1000;
-      padding: 8px 16px;
+      right: 102px;
+      z-index: 1001;
+      width: 36px;
+      height: 28px;
+      padding: 6px 8px;
       background: rgba(255,255,255,0.95);
-      border-radius: 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      border: none;
+      border-radius: 999px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.10);
       backdrop-filter: blur(10px);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s;
+    }
+    .nav-trigger span {
+      display: block;
+      height: 1.5px;
+      width: 100%;
+      background: var(--charcoal);
+      border-radius: 2px;
+      transform-origin: center;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+    body.nav-open .nav-trigger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    body.nav-open .nav-trigger span:nth-child(2) { opacity: 0; }
+    body.nav-open .nav-trigger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    body.nav-hidden .nav-trigger {
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+    }
+
+    .nav-drawer {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      z-index: 1000;
+      min-width: 200px;
+      background: rgba(255,255,255,0.98);
+      border-radius: 14px;
+      box-shadow: 0 12px 36px rgba(43,43,43,0.18), 0 2px 8px rgba(43,43,43,0.06);
+      backdrop-filter: blur(14px);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    body.nav-open .nav-drawer {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .nav-drawer a {
+      display: block;
+      padding: 12px 16px;
       font-family: var(--font-sans);
       font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
+      font-weight: 500;
       color: var(--charcoal);
       text-decoration: none;
-      transition: background 0.2s, color 0.2s;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
     }
-    .client-pill:hover { background: var(--coral); color: var(--white); }
-    @media (max-width: 480px) {
-      .client-pill {
-        top: 64px;
-        right: 20px;
-        font-size: 13px;
-        padding: 7px 14px;
-      }
+    .nav-drawer a:hover { background: var(--coral); color: var(--white); }
+    .nav-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: transparent;
+      display: none;
     }
+    body.nav-open .nav-scrim { display: block; }
 
     /* ========================================
        SECTION 1: HERO
@@ -1471,11 +1533,18 @@
   <!-- ============ SITE LOGO ============ -->
   <a href="/" class="site-logo">Laura Treto</a>
 
-  <!-- ============ CLIENT PILL ============ -->
-  <a href="/client" class="client-pill">
-    <span data-lang="en">Become a client</span>
-    <span data-lang="es">Hazte cliente</span>
-  </a>
+  <!-- ============ NAV TRIGGER + DRAWER ============ -->
+  <button type="button" class="nav-trigger" id="navTrigger" aria-label="Menu" aria-expanded="false" aria-controls="navDrawer">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="nav-drawer" id="navDrawer" role="menu" aria-hidden="true">
+    <a href="/client" role="menuitem">
+      <span data-lang="en">Become a client</span>
+      <span data-lang="es">Hazte cliente</span>
+    </a>
+    <a href="/chachafit" role="menuitem">ChaChaFit</a>
+  </nav>
+  <div class="nav-scrim" id="navScrim" aria-hidden="true"></div>
 
   <!-- ============ LANGUAGE TOGGLE ============ -->
   <div class="lang-toggle">
@@ -2187,22 +2256,37 @@
       onScroll();
     })();
 
-    // Logo fade out after credentials section scrolls past
+    // Top nav (logo + lang + hamburger) fade out after credentials section scrolls past
     (function() {
-      var siteLogo = document.querySelector('.site-logo');
-      if (!siteLogo) return;
       var credSection = document.getElementById('credentials-section');
-      function updateLogo() {
+      function updateNav() {
         if (!credSection) return;
         var rect = credSection.getBoundingClientRect();
-        if (rect.bottom <= 80) {
-          siteLogo.classList.add('logo-hidden');
-        } else {
-          siteLogo.classList.remove('logo-hidden');
-        }
+        document.body.classList.toggle('nav-hidden', rect.bottom <= 80);
       }
-      window.addEventListener('scroll', updateLogo, { passive: true });
-      updateLogo();
+      window.addEventListener('scroll', updateNav, { passive: true });
+      updateNav();
+    })();
+
+    // Hamburger drawer
+    (function() {
+      var trigger = document.getElementById('navTrigger');
+      var drawer = document.getElementById('navDrawer');
+      var scrim = document.getElementById('navScrim');
+      if (!trigger || !drawer) return;
+      function close() {
+        document.body.classList.remove('nav-open');
+        trigger.setAttribute('aria-expanded', 'false');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+      function toggle() {
+        var open = document.body.classList.toggle('nav-open');
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      }
+      trigger.addEventListener('click', function(e) { e.stopPropagation(); toggle(); });
+      scrim.addEventListener('click', close);
+      document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
     })();
 
     // Credentials section: fixed background + scroll-driven frame animation + text cycling

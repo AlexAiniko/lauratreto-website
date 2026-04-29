@@ -85,6 +85,27 @@
     pointer-events: auto;
   }
   .back-btn:active { transform: scale(.92); }
+
+  .home-link {
+    position: absolute;
+    left: max(20px, env(safe-area-inset-left));
+    top: 0;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: .04em;
+    color: var(--warm-white);
+    opacity: .8;
+    text-decoration: none;
+    transition: opacity var(--dur-ui) var(--ease);
+  }
+  .home-link:hover { opacity: 1; }
+  body[data-step="choose"] .home-link { display: inline-flex; }
+  body:not([data-step="choose"]) .home-link { display: none; }
   .step-counter {
     font-family: 'Inter', sans-serif;
     font-size: 11px;
@@ -551,6 +572,7 @@
 <body data-step="choose">
 
 <header class="topbar">
+  <a href="/" class="home-link" aria-label="Laura Treto homepage">Laura Treto</a>
   <button class="back-btn" id="backBtn" type="button" aria-label="Back">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
   </button>

@@ -156,6 +156,13 @@
       font-family:"Alfa Slab One",serif;letter-spacing:.5px;
       font-size:18px;color:var(--red);text-decoration:none;
     }
+    .brand-nav .home-prefix{
+      font-family:"DM Serif Display","Playfair Display",Georgia,serif;
+      font-style:italic;font-weight:400;font-size:13px;letter-spacing:.02em;
+      color:var(--ink);opacity:.7;
+    }
+    .brand-nav:hover .home-prefix{opacity:1}
+    .brand-nav .brand-divider{color:var(--ink);opacity:.35;font-size:14px;font-family:inherit}
     .brand-nav .dot{
       width:14px;height:14px;border-radius:50%;
       background:radial-gradient(circle at 30% 30%, #fff, var(--red) 60%, var(--red-deep));
@@ -865,6 +872,8 @@
 <nav class="top">
   <div class="nav-inner">
     <a href="/" class="brand-nav" aria-label="Laura Treto Coaching home">
+      <span class="home-prefix">Laura Treto</span>
+      <span class="brand-divider">/</span>
       <span class="dot"></span>
       <span>ChaChaFit</span>
     </a>
