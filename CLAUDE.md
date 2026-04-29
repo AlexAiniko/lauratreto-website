@@ -72,7 +72,7 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 **Background:**
 - Founding member of Acosta Danza (Carlos Acosta's world-renowned Cuban dance company)
 - O-1B visa holder (extraordinary ability in arts)
-- ~1,000 international performances across 5 continents
+- 1,500+ international performances across 5 continents
 - Clinical Psychology degree, University of Havana
 - NASM Certified Personal Trainer
 - Bilingual: English/Spanish (native Spanish)

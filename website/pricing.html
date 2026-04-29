@@ -260,12 +260,31 @@
         radial-gradient(600px 400px at 0% 80%, rgba(26,122,122,.06), transparent 60%),
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.45  0 0 0 0 0.30  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
       box-shadow: 0 30px 80px -30px rgba(43,43,43,.45), 0 1px 0 rgba(43,43,43,.08);
-      padding: clamp(28px, 4vw, 44px);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      color: var(--charcoal);
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .poster-card .poster-photo {
+      position: relative;
+      flex: 0 0 56%;
+      overflow: hidden;
+    }
+    .poster-card .poster-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .poster-card .poster-body {
+      flex: 1 1 auto;
+      padding: clamp(22px, 3vw, 30px) clamp(22px, 3.4vw, 34px) clamp(24px, 3.4vw, 32px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      color: var(--charcoal);
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      gap: 10px;
+      background: var(--paper-2);
     }
     .poster-card.tilt-l { transform: rotate(-1.2deg); }
     .poster-card.tilt-r { transform: rotate(1.2deg); }
@@ -274,6 +293,7 @@
       aspect-ratio: 16 / 7;
       transform: rotate(-0.4deg);
     }
+    .poster-card.featured .poster-photo { flex: 0 0 50%; }
     .poster-card:hover { transform: rotate(0) translateY(-4px); box-shadow: 0 40px 90px -30px rgba(43,43,43,.5); }
 
     .poster-card .top-meta {
@@ -287,18 +307,19 @@
     .poster-card h3 {
       font-family: 'Alfa Slab One', serif;
       font-weight: 400;
-      font-size: clamp(28px, 3.8vw, 40px);
-      line-height: 1.0;
+      font-size: clamp(24px, 3.2vw, 32px);
+      line-height: 1.05;
       color: var(--charcoal);
       letter-spacing: -0.005em;
-      margin-top: 18px;
+      margin-top: 6px;
     }
+    .poster-card .top-meta { margin-top: 0; }
     .poster-card .price {
       font-family: 'Alfa Slab One', serif;
-      font-size: clamp(40px, 6vw, 64px);
+      font-size: clamp(32px, 5vw, 48px);
       color: var(--coral);
       line-height: 1;
-      margin-top: 18px;
+      margin-top: 12px;
       letter-spacing: -0.01em;
     }
     .poster-card .price small {
@@ -313,22 +334,22 @@
     .poster-card .desc {
       font-family: 'DM Serif Display', serif;
       font-style: italic;
-      font-size: clamp(16px, 1.7vw, 19px);
+      font-size: clamp(14px, 1.5vw, 16px);
       line-height: 1.4;
       color: var(--charcoal-70);
-      margin-top: 14px;
+      margin-top: 10px;
       max-width: 32ch;
     }
     .poster-card .features {
-      margin-top: 18px;
+      margin-top: 14px;
       font-family: 'Inter', sans-serif;
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--charcoal-70);
-      line-height: 1.7;
+      line-height: 1.65;
       list-style: none;
     }
     .poster-card .features li::before { content: '·  '; color: var(--coral); font-weight: 700; }
-    .poster-card .cta-row { margin-top: 24px; }
+    .poster-card .cta-row { margin-top: 16px; }
     .btn-pill {
       display: inline-flex;
       align-items: center;
@@ -491,115 +512,135 @@
     <div class="poster-grid">
 
       <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=c6cc4dd9fe1c4538a69d322500081e45" target="_blank" rel="noopener noreferrer" class="poster-card tilt-l">
-        <div>
-          <span class="top-meta" data-lang="en">In Person &middot; 60 min</span>
-          <span class="top-meta" data-lang="es">En Persona &middot; 60 min</span>
-          <h3 data-lang="en">Movement Assessment</h3>
-          <h3 data-lang="es">Evaluaci&oacute;n de Movimiento</h3>
-          <div class="price">$125<small data-lang="en">one session</small><small data-lang="es">una sesi&oacute;n</small></div>
-          <p class="desc" data-lang="en">One-on-one with Laura. She watches how you move, identifies patterns, and gives you a clear action plan.</p>
-          <p class="desc" data-lang="es">Uno a uno con Laura. Ella observa c&oacute;mo te mueves, identifica patrones y te da un plan claro.</p>
-          <ul class="features">
-            <li data-lang="en">60-minute private session</li>
-            <li data-lang="es">Sesi&oacute;n privada de 60 minutos</li>
-            <li data-lang="en">Personalized movement plan</li>
-            <li data-lang="es">Plan de movimiento personalizado</li>
-            <li data-lang="en">In Key West</li>
-            <li data-lang="es">En Key West</li>
-          </ul>
+        <div class="poster-photo">
+          <img src="/images/laura-portrait.jpg" alt="Laura Treto, warm portrait" loading="lazy" decoding="async" />
         </div>
-        <div class="cta-row">
-          <span class="btn-pill primary">
-            <span data-lang="en">Book the assessment</span>
-            <span data-lang="es">Reserva la evaluaci&oacute;n</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+        <div class="poster-body">
+          <div>
+            <span class="top-meta" data-lang="en">In Person &middot; 60 min</span>
+            <span class="top-meta" data-lang="es">En Persona &middot; 60 min</span>
+            <h3 data-lang="en">Movement Assessment</h3>
+            <h3 data-lang="es">Evaluaci&oacute;n de Movimiento</h3>
+            <div class="price">$125<small data-lang="en">one session</small><small data-lang="es">una sesi&oacute;n</small></div>
+            <p class="desc" data-lang="en">One-on-one with Laura. She watches how you move, identifies patterns, and gives you a clear action plan.</p>
+            <p class="desc" data-lang="es">Uno a uno con Laura. Ella observa c&oacute;mo te mueves, identifica patrones y te da un plan claro.</p>
+            <ul class="features">
+              <li data-lang="en">60-minute private session</li>
+              <li data-lang="es">Sesi&oacute;n privada de 60 minutos</li>
+              <li data-lang="en">Personalized movement plan</li>
+              <li data-lang="es">Plan de movimiento personalizado</li>
+              <li data-lang="en">In Key West</li>
+              <li data-lang="es">En Key West</li>
+            </ul>
+          </div>
+          <div class="cta-row">
+            <span class="btn-pill primary">
+              <span data-lang="en">Book the assessment</span>
+              <span data-lang="es">Reserva la evaluaci&oacute;n</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
         </div>
       </a>
 
       <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=43339acf43bc4e17b5c311029b4a6ffa" target="_blank" rel="noopener noreferrer" class="poster-card tilt-r">
         <span class="ribbon" data-lang="en">SAVE $40</span>
         <span class="ribbon" data-lang="es">AHORRA $40</span>
-        <div>
-          <span class="top-meta" data-lang="en">Most Popular &middot; 8 Weeks</span>
-          <span class="top-meta" data-lang="es">M&aacute;s Popular &middot; 8 Semanas</span>
-          <h3 data-lang="en">4-Session Pack</h3>
-          <h3 data-lang="es">Paquete de 4 Sesiones</h3>
-          <div class="price">$460<small data-lang="en">four sessions</small><small data-lang="es">cuatro sesiones</small></div>
-          <p class="desc" data-lang="en">Four private sessions with Laura. Use within eight weeks. Personalized programming included.</p>
-          <p class="desc" data-lang="es">Cuatro sesiones privadas con Laura. Usa dentro de ocho semanas. Programaci&oacute;n personalizada incluida.</p>
-          <ul class="features">
-            <li data-lang="en">Save $40 vs single sessions</li>
-            <li data-lang="es">Ahorra $40 vs sesiones sueltas</li>
-            <li data-lang="en">Custom plan between sessions</li>
-            <li data-lang="es">Plan personalizado entre sesiones</li>
-            <li data-lang="en">Use within 8 weeks</li>
-            <li data-lang="es">Usa dentro de 8 semanas</li>
-          </ul>
+        <div class="poster-photo">
+          <img src="/images/laura-fullbody.jpg" alt="Laura Treto, full body, action ready" loading="lazy" decoding="async" />
         </div>
-        <div class="cta-row">
-          <span class="btn-pill primary">
-            <span data-lang="en">Get the pack</span>
-            <span data-lang="es">Obtener el paquete</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+        <div class="poster-body">
+          <div>
+            <span class="top-meta" data-lang="en">Most Popular &middot; 8 Weeks</span>
+            <span class="top-meta" data-lang="es">M&aacute;s Popular &middot; 8 Semanas</span>
+            <h3 data-lang="en">4-Session Pack</h3>
+            <h3 data-lang="es">Paquete de 4 Sesiones</h3>
+            <div class="price">$460<small data-lang="en">four sessions</small><small data-lang="es">cuatro sesiones</small></div>
+            <p class="desc" data-lang="en">Four private sessions with Laura. Use within eight weeks. Personalized programming included.</p>
+            <p class="desc" data-lang="es">Cuatro sesiones privadas con Laura. Usa dentro de ocho semanas. Programaci&oacute;n personalizada incluida.</p>
+            <ul class="features">
+              <li data-lang="en">Save $40 vs single sessions</li>
+              <li data-lang="es">Ahorra $40 vs sesiones sueltas</li>
+              <li data-lang="en">Custom plan between sessions</li>
+              <li data-lang="es">Plan personalizado entre sesiones</li>
+              <li data-lang="en">Use within 8 weeks</li>
+              <li data-lang="es">Usa dentro de 8 semanas</li>
+            </ul>
+          </div>
+          <div class="cta-row">
+            <span class="btn-pill primary">
+              <span data-lang="en">Get the pack</span>
+              <span data-lang="es">Obtener el paquete</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
         </div>
       </a>
 
       <a href="https://www.trainerize.me/checkout/lauratreto/Laura.Treto?planGUID=3c00802b433642dbbb89614dc8745544" target="_blank" rel="noopener noreferrer" class="poster-card tilt-l">
         <span class="ribbon" data-lang="en">SAVE $160</span>
         <span class="ribbon" data-lang="es">AHORRA $160</span>
-        <div>
-          <span class="top-meta" data-lang="en">Priority Scheduling</span>
-          <span class="top-meta" data-lang="es">Horario Prioritario</span>
-          <h3 data-lang="en">8-Session Pack</h3>
-          <h3 data-lang="es">Paquete de 8 Sesiones</h3>
-          <div class="price">$840<small data-lang="en">eight sessions</small><small data-lang="es">ocho sesiones</small></div>
-          <p class="desc" data-lang="en">Eight private sessions. Maximum results. Priority scheduling and full programming.</p>
-          <p class="desc" data-lang="es">Ocho sesiones privadas. M&aacute;ximos resultados. Horario prioritario y programaci&oacute;n completa.</p>
-          <ul class="features">
-            <li data-lang="en">Save $160 vs single sessions</li>
-            <li data-lang="es">Ahorra $160 vs sesiones sueltas</li>
-            <li data-lang="en">Priority scheduling</li>
-            <li data-lang="es">Horario prioritario</li>
-            <li data-lang="en">Custom progression every week</li>
-            <li data-lang="es">Progresi&oacute;n personalizada cada semana</li>
-          </ul>
+        <div class="poster-photo">
+          <img src="/images/laura-silhouette.jpg" alt="Laura Treto, sunset kettlebell squat" loading="lazy" decoding="async" />
         </div>
-        <div class="cta-row">
-          <span class="btn-pill primary">
-            <span data-lang="en">Get the pack</span>
-            <span data-lang="es">Obtener el paquete</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+        <div class="poster-body">
+          <div>
+            <span class="top-meta" data-lang="en">Priority Scheduling</span>
+            <span class="top-meta" data-lang="es">Horario Prioritario</span>
+            <h3 data-lang="en">8-Session Pack</h3>
+            <h3 data-lang="es">Paquete de 8 Sesiones</h3>
+            <div class="price">$840<small data-lang="en">eight sessions</small><small data-lang="es">ocho sesiones</small></div>
+            <p class="desc" data-lang="en">Eight private sessions. Maximum results. Priority scheduling and full programming.</p>
+            <p class="desc" data-lang="es">Ocho sesiones privadas. M&aacute;ximos resultados. Horario prioritario y programaci&oacute;n completa.</p>
+            <ul class="features">
+              <li data-lang="en">Save $160 vs single sessions</li>
+              <li data-lang="es">Ahorra $160 vs sesiones sueltas</li>
+              <li data-lang="en">Priority scheduling</li>
+              <li data-lang="es">Horario prioritario</li>
+              <li data-lang="en">Custom progression every week</li>
+              <li data-lang="es">Progresi&oacute;n personalizada cada semana</li>
+            </ul>
+          </div>
+          <div class="cta-row">
+            <span class="btn-pill primary">
+              <span data-lang="en">Get the pack</span>
+              <span data-lang="es">Obtener el paquete</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
         </div>
       </a>
 
       <a href="#" class="poster-card sla-card tilt-r">
         <span class="ribbon" data-lang="en">DIGITAL</span>
         <span class="ribbon" data-lang="es">DIGITAL</span>
-        <div>
-          <span class="top-meta" data-lang="en">12-Week Program &middot; Online</span>
-          <span class="top-meta" data-lang="es">Programa de 12 Semanas &middot; Online</span>
-          <h3>Strong Lean Athletic</h3>
-          <div class="price">$149<small data-lang="en">one-time</small><small data-lang="es">pago &uacute;nico</small></div>
-          <p class="desc" data-lang="en">Twelve-week digital program. Video-guided workouts, progressive programming. Train anywhere.</p>
-          <p class="desc" data-lang="es">Programa digital de doce semanas. Entrenamientos guiados por video, programaci&oacute;n progresiva. Entrena donde quieras.</p>
-          <ul class="features">
-            <li data-lang="en">Video-guided workouts</li>
-            <li data-lang="es">Entrenamientos guiados por video</li>
-            <li data-lang="en">Train anywhere, any time</li>
-            <li data-lang="es">Entrena donde y cuando quieras</li>
-            <li data-lang="en">No live coaching required</li>
-            <li data-lang="es">No requiere coaching en vivo</li>
-          </ul>
+        <div class="poster-photo">
+          <img src="/images/laura-fullbody.jpg" alt="Laura Treto, full body, action ready" loading="lazy" decoding="async" />
         </div>
-        <div class="cta-row">
-          <span class="btn-pill primary">
-            <span data-lang="en">Start the program</span>
-            <span data-lang="es">Comenzar el programa</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+        <div class="poster-body">
+          <div>
+            <span class="top-meta" data-lang="en">12-Week Program &middot; Online</span>
+            <span class="top-meta" data-lang="es">Programa de 12 Semanas &middot; Online</span>
+            <h3>Strong Lean Athletic</h3>
+            <div class="price">$149<small data-lang="en">one-time</small><small data-lang="es">pago &uacute;nico</small></div>
+            <p class="desc" data-lang="en">Twelve-week digital program. Video-guided workouts, progressive programming. Train anywhere.</p>
+            <p class="desc" data-lang="es">Programa digital de doce semanas. Entrenamientos guiados por video, programaci&oacute;n progresiva. Entrena donde quieras.</p>
+            <ul class="features">
+              <li data-lang="en">Video-guided workouts</li>
+              <li data-lang="es">Entrenamientos guiados por video</li>
+              <li data-lang="en">Train anywhere, any time</li>
+              <li data-lang="es">Entrena donde y cuando quieras</li>
+              <li data-lang="en">No live coaching required</li>
+              <li data-lang="es">No requiere coaching en vivo</li>
+            </ul>
+          </div>
+          <div class="cta-row">
+            <span class="btn-pill primary">
+              <span data-lang="en">Start the program</span>
+              <span data-lang="es">Comenzar el programa</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
         </div>
       </a>
 

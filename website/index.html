@@ -20,9 +20,9 @@
   </script>
 
   <title>Laura Treto | Movement Coach, Key West FL</title>
-  <meta name="description" content="World-class movement coaching in Key West. Founding Acosta Danza member, 1,000+ international performances. Private sessions for adults 45+. Meet Laura, 15 minutes on her." />
+  <meta name="description" content="World-class movement coaching in Key West. 1,500+ international performances, NASM certified, certified psychologist. Private sessions for adults 45+. Meet Laura, 15 minutes on her." />
   <meta property="og:title" content="Laura Treto | Movement Coaching, Key West" />
-  <meta property="og:description" content="World-class movement coaching in Key West. Founding Acosta Danza member, 1,000+ international performances. Private sessions for adults 45+." />
+  <meta property="og:description" content="World-class movement coaching in Key West. 1,500+ international performances, NASM certified, certified psychologist. Private sessions for adults 45+." />
   <meta property="og:url" content="https://lauratreto.com" />
   <meta property="og:image" content="https://lauratreto.com/og-image.jpg" />
   <meta property="og:type" content="website" />
@@ -316,17 +316,16 @@
       width: 100%; height: 100%;
       object-fit: cover;
       z-index: 0;
-      opacity: 0.32;
-      mix-blend-mode: multiply;
-      filter: saturate(1.05);
+      opacity: 0.62;
+      filter: saturate(1.08) contrast(1.04);
     }
     .hero-bg-veil {
       position: absolute; inset: 0;
       z-index: 1;
       pointer-events: none;
       background:
-        radial-gradient(900px 600px at 80% 20%, rgba(239,228,210,0), rgba(239,228,210,.85) 70%),
-        linear-gradient(180deg, rgba(239,228,210,.55) 0%, rgba(239,228,210,.92) 100%);
+        radial-gradient(900px 600px at 80% 20%, rgba(239,228,210,0), rgba(239,228,210,.55) 70%),
+        linear-gradient(180deg, rgba(239,228,210,.32) 0%, rgba(239,228,210,.62) 100%);
     }
     .hero-inner {
       position: relative;
@@ -528,15 +527,15 @@
     .halves-section { background: var(--warm-white); }
     .half-panel {
       position: relative;
-      min-height: 100dvh;
-      min-height: 100svh;
+      min-height: 360px;
+      min-height: 50svh;
+      min-height: 50dvh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: clamp(60px, 12vw, 100px) clamp(24px, 6vw, 40px);
+      padding: clamp(36px, 7vw, 56px) clamp(24px, 6vw, 32px);
       overflow: hidden;
       cursor: default;
-      transition: filter 0.2s var(--ease);
     }
     a.half-panel { cursor: pointer; }
     a.half-panel:active { filter: brightness(0.94); }
@@ -551,14 +550,14 @@
       text-transform: uppercase;
       color: rgba(250,247,242,0.65);
     }
-    .half-panel .corner.tl { top: clamp(24px, 6vw, 40px); left: clamp(24px, 6vw, 40px); }
-    .half-panel .corner.tr { top: clamp(24px, 6vw, 40px); right: clamp(24px, 6vw, 40px); }
+    .half-panel .corner.tl { top: clamp(16px, 4vw, 28px); left: clamp(16px, 4vw, 28px); }
+    .half-panel .corner.tr { top: clamp(16px, 4vw, 28px); right: clamp(16px, 4vw, 28px); }
     .half-panel .stack {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 18px;
-      max-width: 720px;
+      gap: 14px;
+      max-width: 640px;
       text-align: center;
     }
     .half-panel .gold-rule {
@@ -571,8 +570,8 @@
       font-family: 'Playfair Display', Georgia, serif;
       font-style: italic;
       font-weight: 800;
-      font-size: clamp(48px, 14vw, 80px);
-      line-height: 0.95;
+      font-size: clamp(36px, 9vw, 56px);
+      line-height: 0.98;
       letter-spacing: -0.02em;
       color: var(--warm-white);
     }
@@ -580,15 +579,15 @@
       font-family: 'Playfair Display', Georgia, serif;
       font-style: italic;
       font-weight: 400;
-      font-size: clamp(17px, 4.2vw, 19px);
+      font-size: clamp(15px, 3.4vw, 17px);
       line-height: 1.45;
       color: rgba(250,247,242,0.85);
       max-width: 36ch;
     }
     .half-panel .arrow {
       position: absolute;
-      bottom: clamp(24px, 5vw, 36px);
-      right: clamp(24px, 5vw, 36px);
+      bottom: clamp(16px, 3.5vw, 24px);
+      right: clamp(16px, 3.5vw, 24px);
       color: var(--warm-white);
       opacity: 0.85;
     }
@@ -653,12 +652,31 @@
         radial-gradient(600px 400px at 0% 80%, rgba(26,122,122,.06), transparent 60%),
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.45  0 0 0 0 0.30  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
       box-shadow: 0 30px 80px -30px rgba(43,43,43,.45), 0 1px 0 rgba(43,43,43,.08);
-      padding: clamp(28px, 4vw, 40px);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      color: var(--charcoal);
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .poster-card .poster-photo {
+      position: relative;
+      flex: 0 0 62%;
+      overflow: hidden;
+    }
+    .poster-card .poster-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .poster-card .poster-body {
+      flex: 1 1 auto;
+      padding: clamp(20px, 3vw, 28px) clamp(22px, 3.2vw, 30px) clamp(22px, 3.4vw, 30px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      color: var(--charcoal);
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      gap: 10px;
+      background: var(--paper-2);
     }
     .poster-card.tilt-l { transform: rotate(-1.5deg); }
     .poster-card.tilt-r { transform: rotate(1.5deg); }
@@ -674,20 +692,21 @@
     .poster-card h3 {
       font-family: 'Alfa Slab One', serif;
       font-weight: 400;
-      font-size: clamp(26px, 3.4vw, 38px);
-      line-height: 1.0;
+      font-size: clamp(22px, 2.8vw, 30px);
+      line-height: 1.05;
       color: var(--charcoal);
       letter-spacing: -0.005em;
-      margin-top: 18px;
+      margin-top: 6px;
     }
+    .poster-card .top-meta { margin-top: 0; }
     .poster-card .desc {
       font-family: 'DM Serif Display', serif;
       font-style: italic;
-      font-size: clamp(16px, 1.7vw, 19px);
+      font-size: clamp(14px, 1.5vw, 16px);
       line-height: 1.4;
       color: var(--charcoal-70);
-      margin-top: 14px;
-      max-width: 28ch;
+      margin-top: 8px;
+      max-width: 30ch;
     }
     .poster-card .cta {
       font-family: 'Inter', sans-serif;
@@ -699,7 +718,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-top: 20px;
+      margin-top: 14px;
     }
     .poster-card .cta:hover { color: var(--coral-press); }
     .poster-card .ribbon {
@@ -881,6 +900,75 @@
       letter-spacing: .04em;
       text-transform: none;
       font-size: 13px;
+    }
+
+    /* ========================================
+       PORTRAIT BREAK — full-bleed Laura photo + pull quote
+       ======================================== */
+    .portrait-break {
+      position: relative;
+      min-height: 70vh;
+      min-height: 70svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--charcoal);
+    }
+    .portrait-break img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      z-index: 0;
+    }
+    .portrait-break::after {
+      content: '';
+      position: absolute; inset: 0;
+      z-index: 1;
+      background: linear-gradient(180deg, rgba(43,43,43,.30) 0%, rgba(43,43,43,.55) 60%, rgba(43,43,43,.78) 100%);
+    }
+    .portrait-break .pb-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 880px;
+      padding: clamp(60px, 10vh, 100px) clamp(24px, 6vw, 56px);
+      text-align: center;
+      color: var(--warm-white);
+    }
+    .portrait-break .pb-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(250,247,242,0.72);
+      margin-bottom: 22px;
+    }
+    .portrait-break blockquote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      color: var(--warm-white);
+      text-shadow: 0 2px 28px rgba(0,0,0,.55);
+    }
+    .portrait-break .pb-rule {
+      width: 56px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+      margin: 26px auto 16px;
+    }
+    .portrait-break .pb-attrib {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(250,247,242,0.78);
     }
 
     /* ========================================
@@ -1247,16 +1335,18 @@
 
     <div class="cred-scroll-area">
       <div class="cred-cards-list" data-lang="en">
-        <div class="cred-text-item" data-cred="0">Acosta Danza.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="1">1,000 shows.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="0">World class dancer.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="1">1,500+ shows.<span class="gold-rule"></span></div>
         <div class="cred-text-item" data-cred="2">O-1B.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="3">Habana.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="3">NASM certified.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="4">Certified psychologist.<span class="gold-rule"></span></div>
       </div>
       <div class="cred-cards-list" data-lang="es">
-        <div class="cred-text-item" data-cred="0">Acosta Danza.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="1">1,000 funciones.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="0">Bailarina de clase mundial.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="1">1,500+ funciones.<span class="gold-rule"></span></div>
         <div class="cred-text-item" data-cred="2">O-1B.<span class="gold-rule"></span></div>
-        <div class="cred-text-item" data-cred="3">Habana.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="3">Certificada NASM.<span class="gold-rule"></span></div>
+        <div class="cred-text-item" data-cred="4">Psic&oacute;loga certificada.<span class="gold-rule"></span></div>
       </div>
     </div>
     <div class="cred-text-container" id="credTextContainer"></div>
@@ -1386,51 +1476,66 @@
 
       <div class="triptych">
         <a href="/pricing" class="poster-card tilt-l">
-          <div>
-            <span class="top-meta" data-lang="en">In Person &middot; Key West</span>
-            <span class="top-meta" data-lang="es">En Persona &middot; Key West</span>
-            <h3 data-lang="en">Private Sessions</h3>
-            <h3 data-lang="es">Sesiones Privadas</h3>
-            <p class="desc" data-lang="en">One-on-one with Laura. Movement assessment first, then packages. Built around how YOU move.</p>
-            <p class="desc" data-lang="es">Uno a uno con Laura. Evaluaci&oacute;n primero, luego paquetes. Construido alrededor de c&oacute;mo TE mueves.</p>
+          <div class="poster-photo">
+            <img src="/images/laura-silhouette.jpg" alt="Laura Treto, sunset kettlebell squat" loading="lazy" decoding="async" />
           </div>
-          <span class="cta">
-            <span data-lang="en">Learn more</span>
-            <span data-lang="es">Saber m&aacute;s</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+          <div class="poster-body">
+            <div>
+              <span class="top-meta" data-lang="en">In Person &middot; Key West</span>
+              <span class="top-meta" data-lang="es">En Persona &middot; Key West</span>
+              <h3 data-lang="en">Private Sessions</h3>
+              <h3 data-lang="es">Sesiones Privadas</h3>
+              <p class="desc" data-lang="en">One-on-one with Laura. Movement assessment first, then packages. Built around how YOU move.</p>
+              <p class="desc" data-lang="es">Uno a uno con Laura. Evaluaci&oacute;n primero, luego paquetes. Construido alrededor de c&oacute;mo TE mueves.</p>
+            </div>
+            <span class="cta">
+              <span data-lang="en">Learn more</span>
+              <span data-lang="es">Saber m&aacute;s</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
         </a>
 
         <a href="#" class="poster-card sla-card">
           <span class="ribbon">$149</span>
-          <div>
-            <span class="top-meta" data-lang="en">12-Week Digital</span>
-            <span class="top-meta" data-lang="es">12 Semanas Digital</span>
-            <h3>Strong Lean Athletic</h3>
-            <p class="desc" data-lang="en">Video-guided workouts, progressive programming. Train anywhere, at your pace.</p>
-            <p class="desc" data-lang="es">Entrenamientos guiados por video, programaci&oacute;n progresiva. Entrena donde quieras, a tu ritmo.</p>
+          <div class="poster-photo">
+            <img src="/images/laura-fullbody.jpg" alt="Laura Treto, full body, action ready" loading="lazy" decoding="async" />
           </div>
-          <span class="cta">
-            <span data-lang="en">Start the program</span>
-            <span data-lang="es">Comienza el programa</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+          <div class="poster-body">
+            <div>
+              <span class="top-meta" data-lang="en">12-Week Digital</span>
+              <span class="top-meta" data-lang="es">12 Semanas Digital</span>
+              <h3>Strong Lean Athletic</h3>
+              <p class="desc" data-lang="en">Video-guided workouts, progressive programming. Train anywhere, at your pace.</p>
+              <p class="desc" data-lang="es">Entrenamientos guiados por video, programaci&oacute;n progresiva. Entrena donde quieras, a tu ritmo.</p>
+            </div>
+            <span class="cta">
+              <span data-lang="en">Start the program</span>
+              <span data-lang="es">Comienza el programa</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
         </a>
 
         <a href="/pricing" class="poster-card tilt-r">
-          <div>
-            <span class="top-meta" data-lang="en">Virtual &middot; Worldwide</span>
-            <span class="top-meta" data-lang="es">Virtual &middot; Mundial</span>
-            <h3 data-lang="en">Online Coaching</h3>
-            <h3 data-lang="es">Coaching Online</h3>
-            <p class="desc" data-lang="en">Programming, accountability, and the eyes of a world-class mover, wherever you live.</p>
-            <p class="desc" data-lang="es">Programaci&oacute;n, responsabilidad y los ojos de una atleta de clase mundial, donde vivas.</p>
+          <div class="poster-photo">
+            <img src="/images/laura-portrait.jpg" alt="Laura Treto, warm portrait" loading="lazy" decoding="async" />
           </div>
-          <span class="cta">
-            <span data-lang="en">Learn more</span>
-            <span data-lang="es">Saber m&aacute;s</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </span>
+          <div class="poster-body">
+            <div>
+              <span class="top-meta" data-lang="en">Virtual &middot; Worldwide</span>
+              <span class="top-meta" data-lang="es">Virtual &middot; Mundial</span>
+              <h3 data-lang="en">Online Coaching</h3>
+              <h3 data-lang="es">Coaching Online</h3>
+              <p class="desc" data-lang="en">Programming, accountability, and the eyes of a world-class mover, wherever you live.</p>
+              <p class="desc" data-lang="es">Programaci&oacute;n, responsabilidad y los ojos de una atleta de clase mundial, donde vivas.</p>
+            </div>
+            <span class="cta">
+              <span data-lang="en">Learn more</span>
+              <span data-lang="es">Saber m&aacute;s</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
         </a>
       </div>
 
@@ -1520,6 +1625,19 @@
           <span class="role" data-lang="es">Artista ganador del Grammy</span>
         </p>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ PORTRAIT BREAK ============ -->
+  <section class="portrait-break" id="portraitBreak" aria-label="Meet Laura">
+    <img src="/images/laura-portrait.jpg" alt="Laura Treto, movement coach in Key West" loading="lazy" decoding="async" />
+    <div class="pb-inner">
+      <div class="pb-eyebrow" data-lang="en">Meet your coach</div>
+      <div class="pb-eyebrow" data-lang="es">Conoce a tu coach</div>
+      <blockquote data-lang="en">Move better, live longer, feel more like yourself.</blockquote>
+      <blockquote data-lang="es">Mu&eacute;vete mejor, vive m&aacute;s, si&eacute;ntete m&aacute;s t&uacute;.</blockquote>
+      <div class="pb-rule"></div>
+      <div class="pb-attrib">Laura Treto &middot; Key West</div>
     </div>
   </section>
 
@@ -1701,15 +1819,20 @@
       }
     });
 
-    // Top nav fade after credentials section scrolls past
+    // Top nav fade after credentials section scrolls past (rAF-throttled)
     (function() {
       var credSection = document.getElementById('credentials-section');
+      var ticking = false;
       function updateNav() {
         if (!credSection) return;
         var rect = credSection.getBoundingClientRect();
         document.body.classList.toggle('nav-hidden', rect.bottom <= 80);
+        ticking = false;
       }
-      window.addEventListener('scroll', updateNav, { passive: true });
+      function onScroll() {
+        if (!ticking) { ticking = true; requestAnimationFrame(updateNav); }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
       updateNav();
     })();
 
@@ -1815,14 +1938,23 @@
         }
       }
 
-      function onScroll() { updateBgVisibility(); updateFrame(); }
+      var credTicking = false;
+      function tick() {
+        updateBgVisibility();
+        updateFrame();
+        credTicking = false;
+      }
+      function onScroll() {
+        if (!credTicking) { credTicking = true; requestAnimationFrame(tick); }
+      }
       window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
+      tick();
     })();
 
-    // On-dark logo color when over charcoal sections
+    // On-dark logo color when over charcoal sections (rAF-throttled)
     (function() {
       var darkSections = ['credentials-section', 'inquiry'];
+      var dt = false;
       function checkDark() {
         var onDark = false;
         for (var i = 0; i < darkSections.length; i++) {
@@ -1832,8 +1964,12 @@
           if (rect.top < 80 && rect.bottom > 80) { onDark = true; break; }
         }
         document.body.classList.toggle('on-dark', onDark);
+        dt = false;
       }
-      window.addEventListener('scroll', checkDark, { passive: true });
+      function onScroll() {
+        if (!dt) { dt = true; requestAnimationFrame(checkDark); }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
       checkDark();
     })();
 
