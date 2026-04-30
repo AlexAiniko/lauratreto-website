@@ -14,8 +14,16 @@
 //   MAILERLITE_GROUP_TRAIN_ONLINE            — group id (TODO from Alex)
 //   MAILERLITE_GROUP_TRAIN_LOCAL             — group id (TODO from Alex)
 //   SCAN_FUNNEL_LIVE                         — 'false' to short-circuit (test mode)
+//   GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
+//   GOOGLE_REFRESH_TOKEN                     — Laura's Google OAuth (calendar + gmail)
+//   BOOKING_CALENDAR_ID                      — calendar to write events to (default: primary)
+//   BOOKING_TIMEZONE                         — IANA tz for events (default: America/New_York)
 
 import { getStore } from '@netlify/blobs';
+import { createBookingEvent } from '../lib/calendar.js';
+import { sendBookingNotification, sendBookingConfirmation } from '../lib/email.js';
+
+const BOOKING_TIMEZONE = process.env.BOOKING_TIMEZONE || 'America/New_York';
 
 const BUCKET_GROUPS = {
   'dance-online': process.env.MAILERLITE_GROUP_DANCE_ONLINE || 'TODO_DANCE_ONLINE_GROUP_ID',
@@ -217,6 +225,29 @@ export default async (request, context) => {
       return jsonResponse({ error: 'Signup service is temporarily unavailable. Please try again.', details: data }, 502);
     }
     console.log('[client-funnel] subscribed', { email, finalBucket, dedup: !!dedupBucket, eventId });
+
+    // Post-process: create Google Calendar event + send notification + send
+    // confirmation. All wrapped in Promise.allSettled so failures NEVER affect
+    // the response. If Netlify Functions v2 context.waitUntil is available we
+    // run it after returning; otherwise we await before returning.
+    const postProcess = runBookingPostProcess({
+      firstName,
+      email,
+      phone,
+      date,
+      time,
+      intent,
+      mode,
+      language,
+    });
+
+    if (typeof context?.waitUntil === 'function') {
+      context.waitUntil(postProcess);
+    } else {
+      // Functions v1 / older runtime: await so logs still attach to invocation.
+      await postProcess;
+    }
+
     return jsonResponse({
       success: true,
       bucket: finalBucket,
@@ -228,3 +259,147 @@ export default async (request, context) => {
     return jsonResponse({ error: 'Internal server error' }, 500);
   }
 };
+
+// ----- post-process: Google Calendar event + notification + confirmation -----
+
+async function runBookingPostProcess({
+  firstName, email, phone, date, time, intent, mode, language,
+}) {
+  // Compute event window from the prospect's submitted date + time.
+  // Format expected from client.html: date is an ISO timestamp (toISOString),
+  // time is "H:MM" wall-clock in BOOKING_TIMEZONE.
+  let startISO = null;
+  let endISO = null;
+  try {
+    if (date && time) {
+      const parsed = parseBookingDateTime(date, time, BOOKING_TIMEZONE);
+      if (parsed) {
+        startISO = parsed.startISO;
+        endISO = parsed.endISO;
+      }
+    }
+  } catch (err) {
+    console.error('[client-funnel] post-process: bad date/time, skipping calendar', err?.message || err);
+  }
+
+  const displayDate = formatBookingDate(date, BOOKING_TIMEZONE);
+  const displayTime = time || '';
+
+  let calendarEventLink = null;
+  let calendarEventId = null;
+
+  // 1) Create the Google Calendar event (only if we have a valid window)
+  if (startISO && endISO) {
+    try {
+      const summary = `Discovery Call: ${firstName || email}`;
+      const descriptionLines = [
+        `New booking from /client funnel.`,
+        ``,
+        `Name: ${firstName || '(not provided)'}`,
+        `Email: ${email}`,
+        `Phone: ${phone || '(not provided)'}`,
+        `Intent: ${intent}`,
+        `Mode: ${mode}`,
+        `Language: ${language}`,
+      ];
+      const event = await createBookingEvent({
+        summary,
+        description: descriptionLines.join('\n'),
+        startISO,
+        endISO,
+        attendeeEmail: email,
+        attendeeName: firstName || email,
+      });
+      calendarEventId = event?.id || null;
+      calendarEventLink = event?.htmlLink || null;
+      console.log(`[client-funnel] calendar event created: ${calendarEventId}`);
+    } catch (err) {
+      console.error(`[client-funnel] post-process error: calendar ${err?.message || err}`);
+    }
+  } else {
+    console.log('[client-funnel] post-process: no date/time, skipping calendar event');
+  }
+
+  // 2) Email Laura + email prospect in parallel.
+  const results = await Promise.allSettled([
+    sendBookingNotification({
+      prospectName: firstName,
+      prospectEmail: email,
+      prospectPhone: phone,
+      date: displayDate || date,
+      time: displayTime,
+      intent,
+      mode,
+      language,
+      calendarEventLink,
+    }),
+    sendBookingConfirmation({
+      prospectName: firstName,
+      prospectEmail: email,
+      date: displayDate || date,
+      time: displayTime,
+      language,
+      calendarEventLink,
+    }),
+  ]);
+
+  const [notifyResult, confirmResult] = results;
+  if (notifyResult.status === 'fulfilled') {
+    console.log('[client-funnel] email to laura: ok');
+  } else {
+    console.error(`[client-funnel] post-process error: email-laura ${notifyResult.reason?.message || notifyResult.reason}`);
+  }
+  if (confirmResult.status === 'fulfilled') {
+    console.log('[client-funnel] email to prospect: ok');
+  } else {
+    console.error(`[client-funnel] post-process error: email-prospect ${confirmResult.reason?.message || confirmResult.reason}`);
+  }
+}
+
+// Convert client-side ISO date + "H:MM" time string + timezone into a 15-min
+// event window. Returns null if either input is unparseable.
+function parseBookingDateTime(dateISO, timeStr, tz) {
+  const d = new Date(dateISO);
+  if (isNaN(d.getTime())) return null;
+  const m = /^(\d{1,2}):(\d{2})$/.exec(timeStr.trim());
+  if (!m) return null;
+  const hour = Number(m[1]);
+  const minute = Number(m[2]);
+  if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+
+  // Pull YMD in the target timezone for the supplied date.
+  const ymd = new Intl.DateTimeFormat('en-CA', {
+    timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit',
+  }).format(d);
+  const [y, mo, dy] = ymd.split('-').map(Number);
+
+  const fakeUtc = Date.UTC(y, mo - 1, dy, hour, minute, 0);
+  const offsetMin = tzOffsetMinutes(new Date(fakeUtc), tz);
+  const realUtc = fakeUtc - offsetMin * 60 * 1000;
+  const start = new Date(realUtc);
+  const end = new Date(realUtc + 15 * 60 * 1000);
+  return { startISO: start.toISOString(), endISO: end.toISOString() };
+}
+
+function tzOffsetMinutes(date, tz) {
+  const dtf = new Intl.DateTimeFormat('en-US', {
+    timeZone: tz, hourCycle: 'h23',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
+  const parts = Object.fromEntries(dtf.formatToParts(date).map((p) => [p.type, p.value]));
+  const asUtc = Date.UTC(
+    Number(parts.year), Number(parts.month) - 1, Number(parts.day),
+    Number(parts.hour), Number(parts.minute), Number(parts.second)
+  );
+  return Math.round((asUtc - date.getTime()) / 60000);
+}
+
+function formatBookingDate(dateISO, tz) {
+  if (!dateISO) return '';
+  const d = new Date(dateISO);
+  if (isNaN(d.getTime())) return '';
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: tz, weekday: 'long', month: 'long', day: 'numeric',
+  }).format(d);
+}

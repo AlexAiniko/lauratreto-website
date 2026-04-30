@@ -978,12 +978,14 @@
   const MONTH_ABBR_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   const MONTH_ABBR_ES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 
-  function mountBooking() {
-    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · 15 MIN MEET', es: ' · 15 MIN' });
-    state.meetingMethod = 'in-person';
-    document.querySelectorAll('.method').forEach((b) => b.classList.toggle('on', b.dataset.method === 'in-person'));
+  // Live availability feature flag — query param `?live_avail=1`. When true, mountBooking()
+  // fetches /.netlify/functions/calendar-availability and renders real slots. On any failure
+  // it falls back to the hardcoded TIMES + 14-blind-days behavior. Default is the legacy path.
+  const useLiveAvail = new URLSearchParams(location.search).get('live_avail') === '1';
 
-    // Day strip: 14 days starting tomorrow
+  // Renders the legacy hardcoded day-strip + time-grid (14 days starting tomorrow, 5 fixed times).
+  // Used when the live feature flag is off OR when the live fetch fails (graceful fallback).
+  function renderHardcodedBooking() {
     const strip = document.getElementById('dayStrip');
     strip.innerHTML = '';
     const today = new Date();
@@ -1006,12 +1008,15 @@
         state.dateEn = d.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
         state.dateEs = d.toLocaleString('es-ES', { weekday: 'long', month: 'long', day: 'numeric' });
         document.getElementById('timeGrid').classList.remove('disabled');
+        // Reset hardcoded times for this day
+        const grid = document.getElementById('timeGrid');
+        grid.querySelectorAll('.time').forEach((x) => x.classList.remove('on'));
+        state.time = null;
         updateBookingBtn();
       });
       strip.appendChild(btn);
     }
 
-    // Time grid
     const grid = document.getElementById('timeGrid');
     grid.innerHTML = '';
     grid.classList.add('disabled');
@@ -1029,18 +1034,194 @@
       });
       grid.appendChild(btn);
     });
+  }
 
-    // Reset on remount
+  // Renders the day-strip + time-grid from live availability slots returned by
+  // /.netlify/functions/calendar-availability. Slots are grouped by displayDate. Picking a day
+  // filters the time-grid to that day's slots; picking a time sets state.date to the slot's
+  // precise startISO (UTC) and state.time to its time24 ("9:00").
+  function renderLiveBooking(slots) {
+    const strip = document.getElementById('dayStrip');
+    const grid = document.getElementById('timeGrid');
+    strip.innerHTML = '';
+    grid.innerHTML = '';
+    grid.classList.add('disabled');
+
+    // Group slots by displayDate (e.g. "Fri, May 1") preserving order from the API.
+    const groups = new Map();
+    for (const s of slots) {
+      if (!groups.has(s.displayDate)) groups.set(s.displayDate, []);
+      groups.get(s.displayDate).push(s);
+    }
+
+    // ES formatters (UTC ISO -> ET wall-clock in Spanish locale)
+    const esMonthFmt = new Intl.DateTimeFormat('es-ES', { timeZone: 'America/New_York', month: 'long', day: 'numeric', weekday: 'long' });
+
+    for (const [displayDate, daySlots] of groups) {
+      const first = daySlots[0];
+      const d = new Date(first.startISO);
+
+      // EN month abbr / day-of-month / weekday-letter via Intl in America/New_York to avoid
+      // browser-local-timezone drift. The API's displayDate is the source of truth for grouping
+      // but we still derive the visual atoms from the ISO + ET tz so they match the slot's day.
+      const enMonthAbbr = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', month: 'short' }).format(d).toUpperCase();
+      const enDayNum = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', day: 'numeric' }).format(d);
+      const enWeekdayShort = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', weekday: 'short' }).format(d); // e.g. "Fri"
+      const enWeekdayLetter = enWeekdayShort.charAt(0).toUpperCase();
+
+      // Spanish abbr — derive from month index in ET. We use parts() for stable month index.
+      const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', month: 'numeric', day: 'numeric', weekday: 'short', year: 'numeric' }).formatToParts(d);
+      const monthIdx = parseInt(parts.find((p) => p.type === 'month').value, 10) - 1;
+      const weekdayShortEn = parts.find((p) => p.type === 'weekday').value; // "Fri"
+      const weekdayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+      const weekdayIdx = weekdayMap[weekdayShortEn] ?? 0;
+      const esMonthAbbr = MONTH_ABBR_ES[monthIdx] || '';
+      const esWeekdayLetter = WEEKDAY_LETTER_ES[weekdayIdx] || '';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'day';
+      btn.dataset.displayDate = displayDate;
+      btn.innerHTML =
+        '<span class="m"><span data-lang="en">' + enMonthAbbr + '</span><span data-lang="es">' + esMonthAbbr + '</span></span>' +
+        '<span class="d">' + enDayNum + '</span>' +
+        '<span class="w"><span data-lang="en">' + enWeekdayLetter + '</span><span data-lang="es">' + esWeekdayLetter + '</span></span>';
+
+      btn.addEventListener('click', () => {
+        strip.querySelectorAll('.day').forEach((x) => x.classList.remove('on'));
+        btn.classList.add('on');
+
+        // EN/ES long-form date for the booked-confirmation screen, derived in ET.
+        state.dateEn = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', weekday: 'long', month: 'long', day: 'numeric' }).format(d);
+        state.dateEs = esMonthFmt.format(d);
+        // state.date will be overwritten by the picked slot's startISO on time click.
+        state.date = first.startISO;
+        state.time = null;
+
+        // Render this day's time slots
+        grid.innerHTML = '';
+        grid.classList.remove('disabled');
+
+        const now = Date.now();
+        const future = daySlots.filter((s) => new Date(s.startISO).getTime() > now);
+
+        if (future.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'live-avail-empty';
+          empty.style.cssText = 'grid-column: 1 / -1; font-family: Inter, sans-serif; font-size: 12px; color: var(--ww-65); padding: 8px 0;';
+          empty.innerHTML =
+            '<span data-lang="en">No times left today, pick another day.</span>' +
+            '<span data-lang="es">No quedan horarios hoy, elige otro día.</span>';
+          grid.appendChild(empty);
+          updateBookingBtn();
+          return;
+        }
+
+        future.forEach((slot) => {
+          const tBtn = document.createElement('button');
+          tBtn.type = 'button';
+          tBtn.className = 'time';
+          tBtn.textContent = slot.displayTime;
+          tBtn.addEventListener('click', () => {
+            grid.querySelectorAll('.time').forEach((x) => x.classList.remove('on'));
+            tBtn.classList.add('on');
+            state.date = slot.startISO;
+            state.time = slot.time24;
+            updateBookingBtn();
+          });
+          grid.appendChild(tBtn);
+        });
+
+        updateBookingBtn();
+      });
+
+      strip.appendChild(btn);
+    }
+  }
+
+  async function mountBooking() {
+    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · 15 MIN MEET', es: ' · 15 MIN' });
+    state.meetingMethod = 'in-person';
+    document.querySelectorAll('.method').forEach((b) => b.classList.toggle('on', b.dataset.method === 'in-person'));
+
+    // Reset on remount (do this before any async work so state is clean while we fetch)
     state.date = null; state.dateEn = null; state.dateEs = null; state.time = null;
     state.name = ''; state.email = ''; state.phone = '';
     document.getElementById('bookName').value = '';
     document.getElementById('bookEmail').value = '';
     document.getElementById('bookPhone').value = '';
-    updateBookingBtn();
 
+    // Wire up form-input listeners + initial submit-button state synchronously, BEFORE any
+    // async availability fetch. Otherwise a user typing fast during a slow fetch wouldn't
+    // see the submit button update until the fetch resolves.
+    updateBookingBtn();
     ['bookName','bookEmail','bookPhone'].forEach((id) => {
-      document.getElementById(id).addEventListener('input', updateBookingBtn);
+      const el = document.getElementById(id);
+      if (!el.dataset.bookingListenerAttached) {
+        el.addEventListener('input', updateBookingBtn);
+        el.dataset.bookingListenerAttached = '1';
+      }
     });
+
+    // Ensure / clear the inline status indicator under the day-strip. The element collapses
+    // (display: none) when its message is empty so it never adds a stray gap during the
+    // happy path (clean live load).
+    const stripEl = document.getElementById('dayStrip');
+    let statusEl = document.getElementById('availStatus');
+    if (!statusEl) {
+      statusEl = document.createElement('div');
+      statusEl.id = 'availStatus';
+      statusEl.style.cssText = 'font-family: Inter, sans-serif; font-size: 11px; letter-spacing: .05em; color: var(--ww-65); padding: 6px 0 0;';
+      stripEl.parentNode.insertBefore(statusEl, stripEl.nextSibling);
+    }
+    const setAvailStatus = (html) => {
+      statusEl.innerHTML = html || '';
+      statusEl.style.display = html ? '' : 'none';
+    };
+    setAvailStatus('');
+
+    if (useLiveAvail) {
+      // Show subtle loading state while fetch is in flight.
+      stripEl.innerHTML = '';
+      const grid = document.getElementById('timeGrid');
+      grid.innerHTML = '';
+      grid.classList.add('disabled');
+      setAvailStatus(
+        '<span data-lang="en">Loading availability…</span>' +
+        '<span data-lang="es">Cargando disponibilidad…</span>'
+      );
+
+      let slots = null;
+      try {
+        const res = await fetch('/.netlify/functions/calendar-availability?days=14', {
+          headers: { 'Accept': 'application/json' },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.slots) && data.slots.length > 0) {
+            slots = data.slots;
+          }
+        }
+      } catch (err) {
+        slots = null;
+      }
+
+      if (slots) {
+        renderLiveBooking(slots);
+        setAvailStatus('');
+      } else {
+        // Graceful fallback — never leave the prospect with an empty booking page.
+        renderHardcodedBooking();
+        setAvailStatus(
+          '<span data-lang="en">Showing standard times. Laura will confirm availability.</span>' +
+          '<span data-lang="es">Mostrando horarios estándar. Laura confirmará disponibilidad.</span>'
+        );
+      }
+    } else {
+      renderHardcodedBooking();
+    }
+
+    updateBookingBtn();
   }
 
   function updateBookingBtn() {
@@ -1074,7 +1255,7 @@
     const btn = document.getElementById('bookingSubmit');
     btn.disabled = true; btn.style.opacity = '.7';
     try {
-      await submitLead({ website: hp, date: state.dateEn, time: state.time, meeting_method: state.meetingMethod || 'in-person' });
+      await submitLead({ website: hp, date: state.date, time: state.time, meeting_method: state.meetingMethod || 'in-person' });
       mountBooked();
       goto('booked');
       trackEvent('client_lead_captured', { bucket: state.track + '-' + state.mode, event_id: eventId, language: state.lang });

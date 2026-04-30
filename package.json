@@ -1,0 +1,13 @@
+{
+  "name": "lauratreto-dev-tools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dev-only tooling for Laura Treto Coaching (separate from website/package.json which is production code).",
+  "type": "module",
+  "scripts": {
+    "oauth:google": "node tools/google_oauth_capture.mjs"
+  },
+  "devDependencies": {
+    "googleapis": "^144.0.0"
+  }
+}
