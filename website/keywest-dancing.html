@@ -19,11 +19,11 @@
     };
   </script>
 
-  <title>Dance in Key West with Laura Treto | Salsa, Bachata, ChaChaFit</title>
-  <meta name="description" content="Free community dance events in Key West with Cuban dancer Laura Treto. Salsa, bachata, ChaChaFit pop-ups at White Street Pier and around the island. Bilingual, beginner friendly, all ages welcome." />
+  <title>Dance in Key West with Laura Treto | Private Salsa, Bachata, ChaChaFit Lessons</title>
+  <meta name="description" content="Private dance lessons in Key West with Cuban dancer Laura Treto. Solo, couple, and small group salsa, bachata, and ChaChaFit. Bilingual, beginner friendly, in person at your hotel, a studio, or the beach." />
 
   <meta property="og:title" content="Dance in Key West with Laura Treto" />
-  <meta property="og:description" content="Free community dance events in Key West. Salsa, bachata, ChaChaFit pop-ups led by Laura Treto, founding member of Acosta Danza." />
+  <meta property="og:description" content="Private dance lessons in Key West. Solo, couple, and small group salsa, bachata, and ChaChaFit with Cuban dancer Laura Treto." />
   <meta property="og:url" content="https://lauratreto.com/keywest-dancing" />
   <meta property="og:image" content="https://lauratreto.com/images/chachafit-poster.jpg" />
   <meta property="og:type" content="website" />
@@ -49,7 +49,7 @@
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Laura Treto Coaching",
-    "description": "Cuban dancer Laura Treto leads community dance events and private movement coaching in Key West. Salsa, bachata, ChaChaFit pop-ups.",
+    "description": "Private dance lessons with Cuban dancer Laura Treto in Key West. Solo, couple, and small group salsa, bachata, and ChaChaFit. Bilingual, in person.",
     "url": "https://lauratreto.com/keywest-dancing",
     "email": "laura@lauratreto.com",
     "image": "https://lauratreto.com/images/chachafit-poster.jpg",
@@ -430,81 +430,133 @@
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease), transform 700ms var(--ease); }
     .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
-    /* ============ UPCOMING EVENTS ============ */
-    #upcoming { background: var(--warm-white); }
-    .events-grid {
+    /* ============ LESSONS (pricing cards — primary CTA section) ============ */
+    #lessons { background: var(--warm-white); }
+    .lesson-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      margin-top: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 32px;
     }
-    .event-card {
+    @media (max-width: 880px) {
+      .lesson-grid { grid-template-columns: 1fr; gap: 16px; }
+    }
+    .lesson-card {
       position: relative;
       background: #fff;
       border: 1px solid var(--charcoal-12);
-      border-left: 4px solid var(--coral);
-      border-radius: 8px;
-      padding: 28px 24px;
-      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+      border-radius: 10px;
+      padding: 32px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
     }
-    .event-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 36px -18px rgba(43,43,43,0.22);
+    .lesson-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--coral);
+      box-shadow: 0 22px 40px -22px rgba(232,101,74,0.26);
     }
-    .event-card .ev-date {
+    .lesson-card .lesson-name {
       font-family: 'Inter', sans-serif;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: .12em;
+      letter-spacing: .22em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--turquoise);
       margin-bottom: 10px;
     }
-    .event-card .ev-title {
+    .lesson-card .lesson-headline {
       font-family: 'Playfair Display', Georgia, serif;
       font-style: italic;
       font-weight: 700;
-      font-size: clamp(22px, 2.4vw, 28px);
-      line-height: 1.2;
+      font-size: clamp(24px, 2.6vw, 30px);
+      line-height: 1.15;
       color: var(--charcoal);
-      margin-bottom: 12px;
-    }
-    .event-card .ev-meta {
-      display: grid; gap: 6px;
-      font-size: 14px;
-      color: var(--charcoal-70);
       margin-bottom: 18px;
     }
-    .event-card .ev-meta strong { color: var(--charcoal); font-weight: 600; }
-    .event-card .ev-cta {
+    .lesson-card .price-stamp {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid var(--gold);
+      border-radius: 999px;
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 22px;
+      width: max-content;
+      margin-bottom: 18px;
+      background: rgba(197, 151, 62, 0.06);
+    }
+    .lesson-card .lesson-detail {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--charcoal-70);
+      margin-bottom: 22px;
+      flex: 1;
+    }
+    .lesson-card .lesson-cta {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      padding: 10px 18px;
+      padding: 13px 22px;
       border-radius: 999px;
       background: var(--coral);
       color: var(--warm-white);
+      font-family: 'Inter', sans-serif;
       font-size: 14px;
       font-weight: 600;
-      transition: background 0.2s var(--ease);
+      letter-spacing: .02em;
+      transition: background 0.2s var(--ease), transform 0.15s var(--ease);
+      width: 100%;
     }
-    .event-card .ev-cta:hover { background: var(--coral-hover); }
+    .lesson-card .lesson-cta:hover {
+      background: var(--coral-hover);
+      transform: translateY(-1px);
+    }
 
-    .events-empty {
-      text-align: center;
-      padding: 48px 24px;
-      background: var(--sand);
-      border-radius: 12px;
-      max-width: 640px;
+    /* ============ UPCOMING EVENT (single-line banner — demoted) ============ */
+    #upcoming { background: var(--warm-white); padding-top: clamp(40px, 6vh, 64px); padding-bottom: clamp(40px, 6vh, 64px); }
+    #upcoming.hidden { display: none; }
+    .upcoming-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      max-width: 920px;
       margin: 0 auto;
+      padding: 18px 22px;
+      background: var(--sand);
+      border-radius: 10px;
+      border-left: 3px solid var(--coral);
+      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
     }
-    .events-empty p {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: clamp(18px, 2vw, 22px);
+    .upcoming-banner:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -14px rgba(43,43,43,0.18);
+    }
+    .upcoming-banner .ub-text {
+      flex: 1;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
       color: var(--charcoal);
-      margin-bottom: 20px;
-      line-height: 1.4;
+    }
+    .upcoming-banner .ub-text strong { font-weight: 700; }
+    .upcoming-banner .ub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--coral);
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color 0.2s var(--ease);
+    }
+    .upcoming-banner .ub-link:hover { color: var(--coral-hover); }
+    @media (max-width: 600px) {
+      .upcoming-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
     }
 
     /* ============ ABOUT ============ */
@@ -541,16 +593,25 @@
     }
     .about-copy .about-cta { margin-top: 18px; }
 
-    /* ============ EMAIL OPT-IN ============ */
+    /* ============ EMAIL OPT-IN (demoted, compact) ============ */
     #join {
       background: var(--turquoise);
       color: var(--warm-white);
+      padding: clamp(40px, 6vh, 64px) clamp(24px, 6vw, 56px);
     }
     #join .section-kicker { color: var(--gold-soft); }
-    #join .section-title { color: var(--warm-white); }
-    #join .section-lede { color: rgba(250,247,242,0.85); }
+    #join .section-title {
+      color: var(--warm-white);
+      font-size: clamp(22px, 2.6vw, 30px);
+      margin-bottom: 6px;
+    }
+    #join .section-lede {
+      color: rgba(250,247,242,0.85);
+      font-size: clamp(14px, 1.6vw, 16px);
+      margin-bottom: 18px;
+    }
     .join-wrap {
-      max-width: 640px;
+      max-width: 480px;
       margin: 0 auto;
       text-align: center;
     }
@@ -806,8 +867,8 @@
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="hero-inner" id="heroInner">
       <span class="hero-eyebrow">
-        <span data-lang="en">Key West &middot; Bilingual &middot; Free Community Events</span>
-        <span data-lang="es">Key West &middot; Biling&uuml;e &middot; Eventos Gratis</span>
+        <span data-lang="en">Key West &middot; Bilingual &middot; In Person</span>
+        <span data-lang="es">Key West &middot; Biling&uuml;e &middot; En Persona</span>
       </span>
 
       <h1 class="hero-title" id="heroTitle" aria-label="Dance in Key West">
@@ -816,16 +877,16 @@
       </h1>
 
       <p class="hero-sub" data-lang="en">
-        I&rsquo;m Laura. Cuban dancer, fifteen years on stage with Acosta Danza, now teaching the people of this island the language my body has spoken its whole life.
+        I&rsquo;m Laura. Cuban dancer, fifteen years on stage. Now teaching salsa, bachata, and ChaChaFit in person here on the island.
       </p>
       <p class="hero-sub" data-lang="es">
-        Soy Laura. Bailarina cubana, quince a&ntilde;os en escenarios con Acosta Danza, ahora ense&ntilde;ando a la gente de esta isla el idioma que mi cuerpo ha hablado toda la vida.
+        Soy Laura. Bailarina cubana, quince a&ntilde;os en escenarios. Ahora ense&ntilde;ando salsa, bachata, y ChaChaFit en persona aqu&iacute; en la isla.
       </p>
 
       <div class="hero-ctas">
-        <a href="#join" class="btn-pill primary" data-cta-label="hero_join" data-cta-placement="hero">
-          <span data-lang="en">Get the next dance drop</span>
-          <span data-lang="es">Av&iacute;same del pr&oacute;ximo evento</span>
+        <a href="#lessons" class="btn-pill primary" data-cta-label="hero_book" data-cta-placement="hero">
+          <span data-lang="en">Book a session</span>
+          <span data-lang="es">Reserva una sesi&oacute;n</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </a>
         <a href="#upcoming" class="btn-pill ghost" data-cta-label="hero_upcoming" data-cta-placement="hero">
@@ -836,26 +897,69 @@
     </div>
   </section>
 
-  <!-- ============ UPCOMING EVENTS ============ -->
-  <section class="section reveal" id="upcoming">
+  <!-- ============ LESSONS (primary CTA section) ============ -->
+  <section class="section reveal" id="lessons">
     <div class="container">
-      <div class="section-kicker" data-lang="en">Upcoming</div>
-      <div class="section-kicker" data-lang="es">Pr&oacute;ximos</div>
-      <h2 class="section-title" data-lang="en">Where to dance with us next.</h2>
-      <h2 class="section-title" data-lang="es">D&oacute;nde bailar con nosotros.</h2>
-      <p class="section-lede" data-lang="en">Pop-up classes, sunset socials, full-moon nights at the pier. Free to attend, beginners welcome, every event bilingual.</p>
-      <p class="section-lede" data-lang="es">Clases pop-up, noches al atardecer, eventos de luna llena en el muelle. Gratis, principiantes bienvenidos, todos los eventos biling&uuml;es.</p>
+      <div class="section-kicker" data-lang="en">Private lessons</div>
+      <div class="section-kicker" data-lang="es">Clases privadas</div>
+      <h2 class="section-title" data-lang="en">Book a private dance lesson.</h2>
+      <h2 class="section-title" data-lang="es">Reserva una clase privada.</h2>
+      <p class="section-lede" data-lang="en">Solo, with a partner, or with your group. In person here in Key West.</p>
+      <p class="section-lede" data-lang="es">Solo, en pareja, o con tu grupo. En persona aqu&iacute; en Key West.</p>
 
-      <div id="events-grid" class="events-grid"><!-- rendered by JS --></div>
+      <div class="lesson-grid">
+        <article class="lesson-card">
+          <div class="lesson-name" data-lang="en">Solo</div>
+          <div class="lesson-name" data-lang="es">Individual</div>
+          <h3 class="lesson-headline" data-lang="en">Solo Lesson</h3>
+          <h3 class="lesson-headline" data-lang="es">Clase individual</h3>
+          <div class="price-stamp">$150</div>
+          <p class="lesson-detail" data-lang="en">60 min, 1-on-1, in person.</p>
+          <p class="lesson-detail" data-lang="es">60 min, uno a uno, en persona.</p>
+          <a href="/book-dance-lesson?type=solo" class="lesson-cta" data-lesson-type="solo" data-cta-label="lesson_card_solo" data-cta-placement="lessons">
+            <span data-lang="en">Book this</span>
+            <span data-lang="es">Reservar</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </a>
+        </article>
 
-      <div id="events-empty" class="events-empty" hidden>
-        <p data-lang="en">Nothing on the calendar this week. Get on the list and you&rsquo;ll be the first to know.</p>
-        <p data-lang="es">No hay nada esta semana. Ap&uacute;ntate y ser&aacute;s la primera en saberlo.</p>
-        <a href="#join" class="btn-pill ghost-dark" data-cta-label="empty_join" data-cta-placement="upcoming_empty">
-          <span data-lang="en">Get on the list</span>
-          <span data-lang="es">Ap&uacute;ntame</span>
-        </a>
+        <article class="lesson-card">
+          <div class="lesson-name" data-lang="en">Couple</div>
+          <div class="lesson-name" data-lang="es">Pareja</div>
+          <h3 class="lesson-headline" data-lang="en">Couple Lesson</h3>
+          <h3 class="lesson-headline" data-lang="es">Clase en pareja</h3>
+          <div class="price-stamp">$200</div>
+          <p class="lesson-detail" data-lang="en">60 min, two of you, in person.</p>
+          <p class="lesson-detail" data-lang="es">60 min, los dos, en persona.</p>
+          <a href="/book-dance-lesson?type=couple" class="lesson-cta" data-lesson-type="couple" data-cta-label="lesson_card_couple" data-cta-placement="lessons">
+            <span data-lang="en">Book this</span>
+            <span data-lang="es">Reservar</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </a>
+        </article>
+
+        <article class="lesson-card">
+          <div class="lesson-name" data-lang="en">Group</div>
+          <div class="lesson-name" data-lang="es">Grupo</div>
+          <h3 class="lesson-headline" data-lang="en">Small Group</h3>
+          <h3 class="lesson-headline" data-lang="es">Grupo peque&ntilde;o</h3>
+          <div class="price-stamp">$300</div>
+          <p class="lesson-detail" data-lang="en">75 min, 3 to 6 people, in person.</p>
+          <p class="lesson-detail" data-lang="es">75 min, 3 a 6 personas, en persona.</p>
+          <a href="/book-dance-lesson?type=group" class="lesson-cta" data-lesson-type="group" data-cta-label="lesson_card_group" data-cta-placement="lessons">
+            <span data-lang="en">Book this</span>
+            <span data-lang="es">Reservar</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </a>
+        </article>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ UPCOMING (single-line community-event banner) ============ -->
+  <section class="section reveal" id="upcoming" hidden>
+    <div class="container">
+      <div id="upcoming-banner-mount"><!-- rendered by JS when an event is live --></div>
     </div>
   </section>
 
@@ -872,14 +976,11 @@
           <h2 class="section-title" data-lang="en">Cuban dancer. Coach. Neighbor.</h2>
           <h2 class="section-title" data-lang="es">Bailarina cubana. Coach. Vecina.</h2>
 
-          <p data-lang="en">Laura is a founding member of Acosta Danza, Carlos Acosta&rsquo;s world-renowned Cuban dance company. Over fifteen years she performed more than fifteen hundred shows on five continents.</p>
-          <p data-lang="es">Laura es miembro fundadora de Acosta Danza, la compa&ntilde;&iacute;a cubana de Carlos Acosta. En quince a&ntilde;os llev&oacute; m&aacute;s de mil quinientas funciones a cinco continentes.</p>
+          <p data-lang="en">Laura is a Cuban dancer with more than fifteen hundred performances on five continents. She holds a clinical psychology degree from the University of Havana and is a NASM Certified Personal Trainer.</p>
+          <p data-lang="es">Laura es una bailarina cubana con m&aacute;s de mil quinientas funciones en cinco continentes. Tiene un t&iacute;tulo en psicolog&iacute;a cl&iacute;nica de la Universidad de La Habana y es entrenadora personal certificada por NASM.</p>
 
-          <p data-lang="en">She holds a clinical psychology degree from the University of Havana and is a NASM Certified Personal Trainer. Her thesis is simple: movement is the language the body speaks before words. Teach the body, and the rest follows.</p>
-          <p data-lang="es">Tiene un t&iacute;tulo en psicolog&iacute;a cl&iacute;nica de la Universidad de La Habana y es entrenadora personal certificada por NASM. Su tesis es simple: el movimiento es el idioma que el cuerpo habla antes que las palabras. Ens&eacute;&ntilde;ale al cuerpo, y lo dem&aacute;s sigue.</p>
-
-          <p data-lang="en">Now she lives in Key West and teaches in English and Spanish, on the sand, in studios, and at the pier.</p>
-          <p data-lang="es">Ahora vive en Key West y ense&ntilde;a en ingl&eacute;s y espa&ntilde;ol, en la arena, en estudios, y en el muelle.</p>
+          <p data-lang="en">She lives in Key West and teaches in English and Spanish, on the sand, in studios, and at the pier.</p>
+          <p data-lang="es">Vive en Key West y ense&ntilde;a en ingl&eacute;s y espa&ntilde;ol, en la arena, en estudios, y en el muelle.</p>
 
           <div class="about-cta">
             <a href="/client" class="btn-pill primary" data-cta-label="about_train" data-cta-placement="about">
@@ -893,16 +994,16 @@
     </div>
   </section>
 
-  <!-- ============ EMAIL OPT-IN ============ -->
+  <!-- ============ EMAIL OPT-IN (demoted) ============ -->
   <section class="section reveal" id="join">
     <div class="container">
       <div class="join-wrap">
-        <div class="section-kicker" data-lang="en">Stay close</div>
-        <div class="section-kicker" data-lang="es">Mantente cerca</div>
-        <h2 class="section-title" data-lang="en">Get the next dance drop.</h2>
-        <h2 class="section-title" data-lang="es">Recibe el pr&oacute;ximo aviso de baile.</h2>
-        <p class="section-lede" data-lang="en">Free events, pop-up classes, and the occasional moonlit pier moment. One email when something drops, never spam.</p>
-        <p class="section-lede" data-lang="es">Eventos gratis, clases pop-up, y de vez en cuando una noche en el muelle bajo la luna. Un email cuando hay algo, nunca spam.</p>
+        <div class="section-kicker" data-lang="en">Stay in the loop</div>
+        <div class="section-kicker" data-lang="es">Mantente en la lista</div>
+        <h2 class="section-title" data-lang="en">Coming back another time?</h2>
+        <h2 class="section-title" data-lang="es">&iquest;Vuelves otra vez?</h2>
+        <p class="section-lede" data-lang="en">I&rsquo;ll let you know when there&rsquo;s a community event or a slot opens.</p>
+        <p class="section-lede" data-lang="es">Te aviso cuando haya un evento comunitario o se abra un cupo.</p>
 
         <form id="join-form" class="join-form" novalidate>
           <input type="hidden" name="event_id" value="kw-dance-events">
@@ -975,67 +1076,67 @@
       <div class="faq-list">
         <details class="faq-item">
           <summary class="faq-q">
-            <span data-lang="en">Do I need experience?</span>
-            <span data-lang="es">&iquest;Necesito experiencia?</span>
+            <span data-lang="en">Where do we meet?</span>
+            <span data-lang="es">&iquest;D&oacute;nde nos vemos?</span>
           </summary>
           <div class="faq-a">
-            <p data-lang="en">No. Beginners are always welcome. Every class breaks the basics down step by step, and Laura partners people up so no one is left standing alone.</p>
-            <p data-lang="es">No. Los principiantes siempre son bienvenidos. Cada clase desglosa lo b&aacute;sico paso a paso, y Laura empareja a la gente para que nadie se quede solo.</p>
+            <p data-lang="en">Wherever works best: your hotel, a Key West studio, or right on the beach. We confirm the spot once you book.</p>
+            <p data-lang="es">Donde mejor te funcione: tu hotel, un estudio en Key West, o directamente en la playa. Confirmamos el lugar al reservar.</p>
           </div>
         </details>
 
         <details class="faq-item">
           <summary class="faq-q">
-            <span data-lang="en">Are events free?</span>
-            <span data-lang="es">&iquest;Los eventos son gratis?</span>
+            <span data-lang="en">Do I need a partner?</span>
+            <span data-lang="es">&iquest;Necesito pareja?</span>
           </summary>
           <div class="faq-a">
-            <p data-lang="en">Community pop-ups are free. Private movement coaching is paid. The list of paid programs lives on the pricing page.</p>
-            <p data-lang="es">Los eventos comunitarios son gratis. El coaching privado de movimiento es pago. La lista de programas pagos vive en la p&aacute;gina de precios.</p>
+            <p data-lang="en">No. Solo lessons are 1-on-1 with me. Couple and group rates are for when you bring people.</p>
+            <p data-lang="es">No. Las clases solo son uno a uno conmigo. Las tarifas de pareja y grupo son para cuando vienes acompa&ntilde;ado.</p>
           </div>
         </details>
 
         <details class="faq-item">
           <summary class="faq-q">
-            <span data-lang="en">Family friendly?</span>
-            <span data-lang="es">&iquest;Apto para familia?</span>
+            <span data-lang="en">I have zero dance experience. Is that OK?</span>
+            <span data-lang="es">Nunca he bailado. &iquest;Est&aacute; bien?</span>
           </summary>
           <div class="faq-a">
-            <p data-lang="en">Yes. All ages are welcome at community events. Bring kids, partners, parents, neighbors. The pier is big enough.</p>
-            <p data-lang="es">S&iacute;. Todas las edades son bienvenidas en los eventos comunitarios. Trae a los ni&ntilde;os, parejas, padres, vecinos. El muelle es grande.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span data-lang="en">Do you teach in English or Spanish?</span>
-            <span data-lang="es">&iquest;Ense&ntilde;as en ingl&eacute;s o en espa&ntilde;ol?</span>
-          </summary>
-          <div class="faq-a">
-            <p data-lang="en">Both. Every event is bilingual. Cues, counts, and stories all run in both languages.</p>
-            <p data-lang="es">Ambos. Cada evento es biling&uuml;e. Las indicaciones, los conteos, y las historias corren en los dos idiomas.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span data-lang="en">Where in Key West?</span>
-            <span data-lang="es">&iquest;D&oacute;nde en Key West?</span>
-          </summary>
-          <div class="faq-a">
-            <p data-lang="en">It varies. White Street Pier, Mallory Square, occasional studio sessions. Sign up to get the location with each event.</p>
-            <p data-lang="es">Var&iacute;a. White Street Pier, Mallory Square, sesiones ocasionales en estudio. Ap&uacute;ntate para recibir la ubicaci&oacute;n con cada evento.</p>
+            <p data-lang="en">Yes. Most of my Key West lessons are first-timers. We start where you start.</p>
+            <p data-lang="es">S&iacute;. La mayor&iacute;a de mis clases en Key West son con principiantes. Empezamos donde est&eacute;s.</p>
           </div>
         </details>
 
         <details class="faq-item">
           <summary class="faq-q">
             <span data-lang="en">What should I wear?</span>
-            <span data-lang="es">&iquest;Qu&eacute; debo ponerme?</span>
+            <span data-lang="es">&iquest;Qu&eacute; me pongo?</span>
           </summary>
           <div class="faq-a">
-            <p data-lang="en">Comfortable clothes you can move in. Soft soles or bare feet for pier nights. Bring water, it stays warm at sundown.</p>
-            <p data-lang="es">Ropa c&oacute;moda en la que te puedas mover. Suelas suaves o pies descalzos para las noches en el muelle. Trae agua, hace calor al atardecer.</p>
+            <p data-lang="en">Comfortable clothes you can move in. Smooth-soled shoes if you have them, sandals or barefoot if you don&rsquo;t.</p>
+            <p data-lang="es">Ropa c&oacute;moda con la que te muevas a gusto. Zapatos de suela lisa si tienes, sandalias o descalzo si no.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span data-lang="en">How far in advance should I book?</span>
+            <span data-lang="es">&iquest;Con cu&aacute;nta anticipaci&oacute;n reservo?</span>
+          </summary>
+          <div class="faq-a">
+            <p data-lang="en">Same-day if I have an open slot. 24 to 48 hours ahead is safer if your dates are tight.</p>
+            <p data-lang="es">El mismo d&iacute;a si tengo un espacio abierto. 24 a 48 horas antes es m&aacute;s seguro si tus fechas est&aacute;n justas.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span data-lang="en">Do you teach in English or Spanish?</span>
+            <span data-lang="es">&iquest;Ense&ntilde;as en ingl&eacute;s o espa&ntilde;ol?</span>
+          </summary>
+          <div class="faq-a">
+            <p data-lang="en">Both. I&rsquo;ll match the language to your group.</p>
+            <p data-lang="es">Los dos. Adapto el idioma a tu grupo.</p>
           </div>
         </details>
       </div>
@@ -1188,11 +1289,11 @@
       });
     })();
 
-    // ----- Render upcoming events -----
-    (function renderEvents() {
-      var grid = document.getElementById('events-grid');
-      var empty = document.getElementById('events-empty');
-      if (!grid) return;
+    // ----- Render upcoming community-event banner (single line, demoted) -----
+    (function renderUpcomingBanner() {
+      var section = document.getElementById('upcoming');
+      var mount = document.getElementById('upcoming-banner-mount');
+      if (!section || !mount) return;
 
       var now = Date.now();
       var live = KW_DANCE_EVENTS.filter(function(ev) {
@@ -1200,34 +1301,29 @@
         return !isNaN(when) && when > now;
       });
 
+      // No live events → keep the section hidden entirely.
       if (!live.length) {
-        grid.style.display = 'none';
-        if (empty) empty.hidden = false;
+        section.hidden = true;
+        section.classList.add('hidden');
         return;
       }
 
-      var html = live.map(function(ev) {
-        return ''
-          + '<article class="event-card">'
-          + '  <div class="ev-date" data-lang="en">' + escapeHtml(ev.date_label_en) + '</div>'
-          + '  <div class="ev-date" data-lang="es">' + escapeHtml(ev.date_label_es) + '</div>'
-          + '  <h3 class="ev-title" data-lang="en">' + escapeHtml(ev.title_en) + '</h3>'
-          + '  <h3 class="ev-title" data-lang="es">' + escapeHtml(ev.title_es) + '</h3>'
-          + '  <div class="ev-meta">'
-          + '    <div data-lang="en"><strong>Where:</strong> ' + escapeHtml(ev.location_en) + '</div>'
-          + '    <div data-lang="es"><strong>Dónde:</strong> ' + escapeHtml(ev.location_es) + '</div>'
-          + '    <div data-lang="en"><strong>Cost:</strong> ' + escapeHtml(ev.cost_en) + '</div>'
-          + '    <div data-lang="es"><strong>Costo:</strong> ' + escapeHtml(ev.cost_es) + '</div>'
-          + '  </div>'
-          + '  <a class="ev-cta" href="' + escapeAttr(ev.cta_url) + '" data-event-id="' + escapeAttr(ev.id) + '" data-cta-label="event_card" data-cta-placement="upcoming">'
-          + '    <span data-lang="en">' + escapeHtml(ev.cta_en) + '</span>'
-          + '    <span data-lang="es">' + escapeHtml(ev.cta_es) + '</span>'
-          + '    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>'
-          + '  </a>'
-          + '</article>';
-      }).join('');
-      grid.innerHTML = html;
-      if (empty) empty.hidden = true;
+      // Show the FIRST live event as a single-line banner. This page is
+      // tourist-first, so we keep it tiny — the lessons grid above is the lead.
+      var ev = live[0];
+      var html = ''
+        + '<a class="upcoming-banner" href="' + escapeAttr(ev.cta_url) + '" data-event-id="' + escapeAttr(ev.id) + '" data-cta-label="upcoming_banner" data-cta-placement="upcoming">'
+        + '  <span class="ub-text" data-lang="en">If you&rsquo;re here ' + escapeHtml(ev.date_label_en) + ': free <strong>Full Moon Salsa at White Street Pier</strong>. Open to all.</span>'
+        + '  <span class="ub-text" data-lang="es">Si est&aacute;s aqu&iacute; el ' + escapeHtml(ev.date_label_es) + ': <strong>salsa gratis de luna llena en White Street Pier</strong>. Abierto para todos.</span>'
+        + '  <span class="ub-link">'
+        + '    <span data-lang="en">ChaChaFit details</span>'
+        + '    <span data-lang="es">Detalles de ChaChaFit</span>'
+        + '    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>'
+        + '  </span>'
+        + '</a>';
+      mount.innerHTML = html;
+      section.hidden = false;
+      section.classList.remove('hidden');
 
       function escapeHtml(s) { return String(s).replace(/[&<>"']/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
       function escapeAttr(s) { return escapeHtml(s); }
@@ -1237,7 +1333,12 @@
     document.addEventListener('click', function(e) {
       var a = e.target.closest && e.target.closest('a, button');
       if (!a) return;
-      // Event card click
+      // Lesson pricing card click (new tourist-funnel signal)
+      var lessonType = a.getAttribute('data-lesson-type');
+      if (lessonType) {
+        window.ltTrack('keywest_dancing_lesson_card_click', { type: lessonType });
+      }
+      // Event card / banner click
       var eventId = a.getAttribute('data-event-id');
       if (eventId) {
         window.ltTrack('keywest_dancing_event_click', { event_id: eventId });

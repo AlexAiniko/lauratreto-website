@@ -335,6 +335,155 @@ const WELCOME_TEMPLATES = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Dance-lesson booking emails (tourist /book-dance-lesson flow)
+// ---------------------------------------------------------------------------
+
+const LESSON_LABELS = {
+  solo:   { en: 'Solo Lesson',  es: 'Clase individual', price: '$150', duration_en: '60 min', duration_es: '60 min' },
+  couple: { en: 'Couple Lesson', es: 'Clase en pareja', price: '$200', duration_en: '60 min', duration_es: '60 min' },
+  group:  { en: 'Small Group',   es: 'Grupo pequeño',    price: '$300', duration_en: '75 min', duration_es: '75 min' },
+};
+
+/**
+ * Confirmation email to a tourist who booked a dance lesson.
+ * Brief and warm, includes the date/time, notes that location is confirmed
+ * 24 hours before. FROM laura@.
+ */
+export async function sendDanceLessonConfirmation({
+  prospectName,
+  prospectEmail,
+  lessonType,
+  date,
+  time,
+  language,
+  bookedFor,
+  notes,
+  calendarEventLink,
+}) {
+  const lang = language === 'es' ? 'es' : 'en';
+  const firstName = (prospectName || '').split(' ')[0] || '';
+  const tier = LESSON_LABELS[lessonType] || LESSON_LABELS.solo;
+
+  let subject;
+  let text;
+  let html;
+
+  if (lang === 'es') {
+    subject = `Tu clase de baile está reservada, ${firstName}`.trim();
+    const greeting = firstName ? `Hola ${firstName},` : 'Hola,';
+    const lines = [
+      greeting,
+      ``,
+      `Recibí tu reserva para ${tier.es} (${tier.duration_es}). Te veo el ${date || 'día acordado'} a las ${time || 'la hora acordada'}.`,
+      ``,
+      `Te confirmo el punto de encuentro 24 horas antes (tu hotel, un estudio, o la playa, lo que mejor te quede).`,
+    ];
+    if (notes) lines.push(``, `Anotado: ${notes}`);
+    if (bookedFor) lines.push(``, `Tus fechas en Key West: ${bookedFor}`);
+    if (calendarEventLink) lines.push(``, `Evento del calendario: ${calendarEventLink}`);
+    lines.push(``, `Cualquier cambio, responde a este correo.`, ``, `Nos vemos pronto,`, `Laura`);
+    text = lines.join('\n');
+    const bodyParas = [
+      `Recibí tu reserva para <strong>${escapeHtml(tier.es)}</strong> (${escapeHtml(tier.duration_es)}). Te veo el <strong>${escapeHtml(date || 'día acordado')}</strong> a las <strong>${escapeHtml(time || 'la hora acordada')}</strong>.`,
+      `Te confirmo el punto de encuentro 24 horas antes (tu hotel, un estudio, o la playa, lo que mejor te quede).`,
+    ];
+    if (notes) bodyParas.push(`Anotado: ${escapeHtml(notes)}`);
+    if (bookedFor) bodyParas.push(`Tus fechas en Key West: ${escapeHtml(bookedFor)}`);
+    bodyParas.push(`Cualquier cambio, responde a este correo.`);
+    html = renderConfirmationHtml({
+      greeting,
+      bodyParagraphs: bodyParas,
+      ctaText: calendarEventLink ? 'Ver evento en mi calendario' : null,
+      ctaLink: calendarEventLink,
+      signoff: 'Nos vemos pronto,',
+    });
+  } else {
+    subject = `Your Key West dance lesson is booked, ${firstName}`.trim();
+    const greeting = firstName ? `Hi ${firstName},` : 'Hi there,';
+    const lines = [
+      greeting,
+      ``,
+      `Got your booking for the ${tier.en} (${tier.duration_en}). I'll see you on ${date || 'the day we picked'} at ${time || 'the time we picked'}.`,
+      ``,
+      `I'll confirm the meet-up spot 24 hours before (your hotel, a studio, or the beach, whatever works best for you).`,
+    ];
+    if (notes) lines.push(``, `Noted: ${notes}`);
+    if (bookedFor) lines.push(``, `Your dates in Key West: ${bookedFor}`);
+    if (calendarEventLink) lines.push(``, `Calendar event: ${calendarEventLink}`);
+    lines.push(``, `Anything changes on your end, just reply.`, ``, `See you soon,`, `Laura`);
+    text = lines.join('\n');
+    const bodyParas = [
+      `Got your booking for the <strong>${escapeHtml(tier.en)}</strong> (${escapeHtml(tier.duration_en)}). I'll see you on <strong>${escapeHtml(date || 'the day we picked')}</strong> at <strong>${escapeHtml(time || 'the time we picked')}</strong>.`,
+      `I'll confirm the meet-up spot 24 hours before (your hotel, a studio, or the beach, whatever works best for you).`,
+    ];
+    if (notes) bodyParas.push(`Noted: ${escapeHtml(notes)}`);
+    if (bookedFor) bodyParas.push(`Your dates in Key West: ${escapeHtml(bookedFor)}`);
+    bodyParas.push(`Anything changes on your end, just reply.`);
+    html = renderConfirmationHtml({
+      greeting,
+      bodyParagraphs: bodyParas,
+      ctaText: calendarEventLink ? 'Open calendar event' : null,
+      ctaLink: calendarEventLink,
+      signoff: 'See you soon,',
+    });
+  }
+
+  return sendAndRelabel({ to: prospectEmail, subject, text, html });
+}
+
+/**
+ * Notification email to laura@ summarizing the new dance-lesson booking.
+ */
+export async function sendDanceLessonNotification({
+  prospectName,
+  prospectEmail,
+  lessonType,
+  date,
+  time,
+  language,
+  bookedFor,
+  notes,
+  calendarEventLink,
+}) {
+  const tier = LESSON_LABELS[lessonType] || LESSON_LABELS.solo;
+  const subject = `New dance lesson: ${tier.en} ${tier.price} — ${prospectName || prospectEmail} — ${date || 'date TBD'} ${time || ''}`.trim();
+
+  const lines = [
+    `New dance lesson booking from /book-dance-lesson.`,
+    ``,
+    `Tier: ${tier.en} (${tier.price}, ${tier.duration_en})`,
+    `Name: ${prospectName || '(not provided)'}`,
+    `Email: ${prospectEmail}`,
+    `Date: ${date || '(not provided)'}`,
+    `Time: ${time || '(not provided)'}`,
+    `In Key West: ${bookedFor || '(not provided)'}`,
+    `Notes: ${notes || '(none)'}`,
+    `Language: ${language || 'en'}`,
+  ];
+  if (calendarEventLink) lines.push(``, `Calendar event: ${calendarEventLink}`);
+  const text = lines.join('\n');
+
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #2B2B2B; max-width: 560px;">
+      <p style="font-size: 15px; margin: 0 0 16px;">New dance lesson booking from <strong>/book-dance-lesson</strong>.</p>
+      <table style="border-collapse: collapse; font-size: 14px;">
+        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Tier</td><td style="padding: 4px 0;">${escapeHtml(tier.en)} (${escapeHtml(tier.price)}, ${escapeHtml(tier.duration_en)})</td></tr>
+        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Name</td><td style="padding: 4px 0;">${escapeHtml(prospectName || '(not provided)')}</td></tr>
+        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Email</td><td style="padding: 4px 0;"><a href="mailto:${escapeHtml(prospectEmail)}" style="color: #1A7A7A;">${escapeHtml(prospectEmail)}</a></td></tr>
+        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Date</td><td style="padding: 4px 0;">${escapeHtml(date || '(not provided)')}</td></tr>
+        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Time</td><td style="padding: 4px 0;">${escapeHtml(time || '(not provided)')}</td></tr>
+        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">In Key West</td><td style="padding: 4px 0;">${escapeHtml(bookedFor || '(not provided)')}</td></tr>
+        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Notes</td><td style="padding: 4px 0;">${escapeHtml(notes || '(none)')}</td></tr>
+        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Language</td><td style="padding: 4px 0;">${escapeHtml(language || 'en')}</td></tr>
+      </table>
+      ${calendarEventLink ? `<p style="margin: 20px 0 0; font-size: 14px;"><a href="${escapeHtml(calendarEventLink)}" style="color: #E8654A;">Open calendar event &rarr;</a></p>` : ''}
+    </div>
+  `.trim();
+
+  return sendAndRelabel({ to: FROM_ADDRESS, subject, text, html });
+}
+
 /**
  * One-time welcome email triggered when a prospect lands in a /client funnel
  * bucket for the first time. Should NOT fire on dedupes.

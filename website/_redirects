@@ -18,5 +18,8 @@
 /keywest-dancing    /keywest-dancing.html                  200
 /dance              /keywest-dancing.html                  200
 
+# Tourist-first dance lesson booking flow
+/book-dance-lesson  /book-dance-lesson.html                200
+
 # SPA-style catch-all (single page site)
 /*    /index.html   200

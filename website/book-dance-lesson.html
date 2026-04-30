@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D8L9H56MED"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.__LT_GA_ENABLED = (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.protocol !== 'file:');
+    gtag('js', new Date());
+    if (window.__LT_GA_ENABLED) {
+      gtag('config', 'G-D8L9H56MED', { anonymize_ip: true });
+    }
+    window.ltTrack = function(name, params){
+      try { if (window.__LT_GA_ENABLED) gtag('event', name, params || {}); } catch(e) {}
+    };
+  </script>
+
+  <title>Book a Dance Lesson in Key West | Laura Treto</title>
+  <meta name="description" content="Book a private dance lesson in Key West with Cuban dancer Laura Treto. Solo, couple, or small group. Salsa, bachata, ChaChaFit. Bilingual, in person." />
+  <meta property="og:title" content="Book a Dance Lesson in Key West | Laura Treto" />
+  <meta property="og:description" content="Solo, couple, or small group private dance lessons in Key West. Bilingual, in person." />
+  <meta property="og:url" content="https://lauratreto.com/book-dance-lesson" />
+  <meta property="og:image" content="https://lauratreto.com/images/chachafit-poster.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://lauratreto.com/images/chachafit-poster.jpg" />
+  <link rel="canonical" href="https://lauratreto.com/book-dance-lesson" />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💃</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --coral: #E8654A;
+      --coral-hover: #DC5E45;
+      --turquoise: #1A7A7A;
+      --warm-white: #FAF7F2;
+      --sand: #F0E6D8;
+      --charcoal: #2B2B2B;
+      --charcoal-70: rgba(43,43,43,0.70);
+      --charcoal-50: rgba(43,43,43,0.50);
+      --charcoal-12: rgba(43,43,43,0.12);
+      --gold: #C5973E;
+      --gold-soft: #D9B36A;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      color: var(--charcoal);
+      background: var(--warm-white);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    body { min-height: 100vh; min-height: 100dvh; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    input, textarea, select { font: inherit; color: inherit; background: none; border: none; outline: none; }
+
+    body:not(.lang-es) [data-lang="es"] { display: none !important; }
+    body.lang-es [data-lang="en"] { display: none !important; }
+
+    /* ---- TOP BAR ---- */
+    .topbar {
+      position: sticky; top: 0; z-index: 30;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px clamp(16px, 5vw, 32px);
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--charcoal-12);
+    }
+    .home-link {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--charcoal);
+    }
+    .lang-pill {
+      display: inline-flex; gap: 4px;
+      background: rgba(43,43,43,0.06);
+      padding: 4px;
+      border-radius: 999px;
+    }
+    .lang-pill button {
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      border-radius: 999px;
+      color: var(--charcoal-70);
+      transition: background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+    .lang-pill button.on { background: #fff; color: var(--coral); }
+
+    /* ---- LAYOUT ---- */
+    .wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: clamp(28px, 5vh, 48px) clamp(20px, 5vw, 40px) 80px;
+    }
+
+    .step-kicker {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 10px;
+    }
+    h1.page-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(34px, 5.5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+    .page-lede {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(16px, 1.8vw, 19px);
+      color: var(--charcoal-70);
+      line-height: 1.45;
+      max-width: 56ch;
+      margin-bottom: 28px;
+    }
+
+    /* ---- LESSON HEADER (selected tier + price) ---- */
+    .lesson-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      padding: 18px 20px;
+      background: #fff;
+      border: 1px solid var(--charcoal-12);
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    .lesson-header .lh-name {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--charcoal);
+    }
+    .lesson-header .lh-detail {
+      font-size: 13px;
+      color: var(--charcoal-70);
+      margin-top: 2px;
+    }
+    .lesson-header .lh-price {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--gold);
+      letter-spacing: 0.01em;
+    }
+
+    /* ---- TYPE TOGGLE ---- */
+    .type-toggle {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    .type-toggle button {
+      padding: 14px 8px;
+      border: 1px solid var(--charcoal-12);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease), transform 0.15s var(--ease);
+    }
+    .type-toggle button .tt-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .03em;
+    }
+    .type-toggle button .tt-price {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .type-toggle button.on {
+      background: var(--coral);
+      color: var(--warm-white);
+      border-color: var(--coral);
+    }
+    .type-toggle button.on .tt-price { color: var(--gold-soft); }
+    .type-toggle button:not(.on):hover {
+      border-color: var(--coral);
+      transform: translateY(-1px);
+    }
+
+    /* ---- FORM ---- */
+    .field { display: grid; gap: 6px; margin-bottom: 18px; }
+    label.field-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--charcoal-70);
+    }
+    .input, .textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--charcoal-12);
+      border-radius: 8px;
+      color: var(--charcoal);
+      font-size: 16px;
+      transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+    }
+    .textarea {
+      resize: vertical;
+      min-height: 88px;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+    .input:focus, .textarea:focus {
+      border-color: var(--coral);
+      background: #fff;
+    }
+    .input::placeholder, .textarea::placeholder { color: var(--charcoal-50); }
+    .field-hint { font-size: 12px; color: var(--charcoal-50); }
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 540px) { .row-2 { grid-template-columns: 1fr; } }
+    .bot-trap {
+      position: absolute; left: -10000px; top: auto;
+      width: 1px; height: 1px; overflow: hidden;
+    }
+
+    /* ---- DAY/TIME PICKER (matches client.html aesthetic, light variant) ---- */
+    .pick-section {
+      margin-top: 8px;
+      margin-bottom: 24px;
+    }
+    .pick-section h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--charcoal-70);
+      margin-bottom: 10px;
+    }
+    .day-strip {
+      display: flex; gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 4px 4px 8px;
+      margin: 0 -4px;
+    }
+    .day-strip::-webkit-scrollbar { display: none; }
+    .day {
+      flex: 0 0 auto;
+      width: 56px;
+      min-height: 78px;
+      border: 1px solid var(--charcoal-12);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--charcoal);
+      padding: 10px 6px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px;
+      transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+    .day .m { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--charcoal-50); }
+    .day .d { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px; line-height: 1; color: var(--charcoal); }
+    .day .w { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--charcoal-50); }
+    .day.on { background: var(--coral); border-color: var(--coral); }
+    .day.on .m, .day.on .w { color: var(--warm-white); opacity: .85; }
+    .day.on .d { color: var(--warm-white); }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+    @media (max-width: 480px) { .time-grid { grid-template-columns: repeat(2, 1fr); } }
+    .time {
+      border: 1px solid var(--charcoal-12);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--charcoal);
+      padding: 14px 8px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 17px;
+      transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease), opacity 0.2s var(--ease);
+    }
+    .time.on { background: var(--coral); color: var(--warm-white); border-color: var(--coral); }
+    .time-grid.disabled .time { opacity: .4; pointer-events: none; }
+    .avail-loading, .avail-fallback {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--charcoal-70);
+      padding: 8px 0;
+    }
+    .avail-fallback {
+      border: 1px solid var(--coral);
+      background: var(--sand);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .avail-fallback strong { color: var(--coral); }
+    .live-avail-empty {
+      grid-column: 1 / -1;
+      font-size: 13px;
+      color: var(--charcoal-50);
+      padding: 8px 0;
+    }
+
+    /* ---- SUBMIT ---- */
+    .submit-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .small-note {
+      font-size: 12px;
+      color: var(--charcoal-50);
+    }
+    .btn-pill {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: .02em;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      cursor: pointer;
+      background: var(--coral);
+      color: var(--warm-white);
+      box-shadow: 0 10px 30px -12px rgba(232,101,74,.55);
+    }
+    .btn-pill:hover { background: var(--coral-hover); transform: translateY(-1px); }
+    .btn-pill:disabled, .btn-pill.is-disabled {
+      background: var(--charcoal-12);
+      color: var(--charcoal-50);
+      box-shadow: none;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    /* ---- SUCCESS / ERROR ---- */
+    .form-success, .form-error { display: none; margin-top: 24px; padding: 22px; border-radius: 10px; }
+    .form-success.visible, .form-error.visible { display: block; }
+    .form-success {
+      background: var(--sand);
+      border: 1px solid var(--gold);
+    }
+    .form-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: var(--charcoal);
+    }
+    .form-success p {
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--charcoal-70);
+      margin-bottom: 6px;
+    }
+    .form-error {
+      background: rgba(232,101,74,0.08);
+      border: 1px solid var(--coral);
+    }
+    .form-error h3 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 6px;
+      color: var(--coral);
+    }
+    .form-error p { color: var(--charcoal-70); font-size: 14px; margin-bottom: 10px; }
+    .form-error button {
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: var(--warm-white);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ---- FOOTER ---- */
+    .foot {
+      text-align: center;
+      padding: 24px 16px 32px;
+      font-size: 12px;
+      color: var(--charcoal-50);
+    }
+    .foot a { color: var(--charcoal-70); }
+    .foot a:hover { color: var(--coral); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="/keywest-dancing" class="home-link">Laura Treto</a>
+    <div class="lang-pill" role="tablist">
+      <button type="button" class="on" data-set-lang="en">EN</button>
+      <button type="button" data-set-lang="es">ES</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="step-kicker" data-lang="en">Book a dance lesson</div>
+    <div class="step-kicker" data-lang="es">Reservar clase</div>
+    <h1 class="page-title" data-lang="en">Pick your tier and a time.</h1>
+    <h1 class="page-title" data-lang="es">Elige tu tarifa y un horario.</h1>
+    <p class="page-lede" data-lang="en">Same-day if a slot is open. I confirm the meet-up spot 24 hours before, your hotel, a studio, or the beach.</p>
+    <p class="page-lede" data-lang="es">El mismo d&iacute;a si hay un espacio abierto. Confirmo el punto de encuentro 24 horas antes: tu hotel, un estudio, o la playa.</p>
+
+    <!-- Selected tier card -->
+    <div class="lesson-header" id="lessonHeader">
+      <div>
+        <div class="lh-name" id="lhName">Solo Lesson</div>
+        <div class="lh-detail" id="lhDetail">60 min, 1-on-1, in person</div>
+      </div>
+      <div class="lh-price" id="lhPrice">$150</div>
+    </div>
+
+    <!-- Type toggle -->
+    <div class="type-toggle" role="radiogroup" aria-label="Lesson type">
+      <button type="button" data-type="solo" class="on" aria-pressed="true">
+        <span class="tt-name" data-lang="en">Solo</span>
+        <span class="tt-name" data-lang="es">Individual</span>
+        <span class="tt-price">$150</span>
+      </button>
+      <button type="button" data-type="couple" aria-pressed="false">
+        <span class="tt-name" data-lang="en">Couple</span>
+        <span class="tt-name" data-lang="es">Pareja</span>
+        <span class="tt-price">$200</span>
+      </button>
+      <button type="button" data-type="group" aria-pressed="false">
+        <span class="tt-name" data-lang="en">Group</span>
+        <span class="tt-name" data-lang="es">Grupo</span>
+        <span class="tt-price">$300</span>
+      </button>
+    </div>
+
+    <!-- Form -->
+    <form id="bookForm" novalidate>
+      <p class="bot-trap" aria-hidden="true">
+        <label>Don&rsquo;t fill this out: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+      </p>
+
+      <div class="row-2">
+        <div class="field">
+          <label class="field-label" for="firstName" data-lang="en">First name</label>
+          <label class="field-label" for="firstName" data-lang="es">Nombre</label>
+          <input id="firstName" name="first_name" class="input" type="text" required maxlength="60" autocomplete="given-name"
+            data-placeholder-en="Your first name" data-placeholder-es="Tu nombre" placeholder="Your first name">
+        </div>
+        <div class="field">
+          <label class="field-label" for="email" data-lang="en">Email</label>
+          <label class="field-label" for="email" data-lang="es">Correo</label>
+          <input id="email" name="email" class="input" type="email" required maxlength="120" autocomplete="email"
+            data-placeholder-en="you@email.com" data-placeholder-es="tu@email.com" placeholder="you@email.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="bookedFor" data-lang="en">When are you in Key West?</label>
+        <label class="field-label" for="bookedFor" data-lang="es">&iquest;Cu&aacute;ndo est&aacute;s en Key West?</label>
+        <input id="bookedFor" name="booked_for" class="input" type="text" maxlength="80"
+          data-placeholder-en="e.g. Wed to Sun this week" data-placeholder-es="ej. mi&eacute;rcoles a domingo esta semana"
+          placeholder="e.g. Wed to Sun this week">
+        <span class="field-hint" data-lang="en">Free text. Loose dates are fine.</span>
+        <span class="field-hint" data-lang="es">Texto libre. Fechas aproximadas est&aacute;n bien.</span>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="notes" data-lang="en">Anything I should know? (optional)</label>
+        <label class="field-label" for="notes" data-lang="es">&iquest;Algo que deba saber? (opcional)</label>
+        <textarea id="notes" name="notes" class="textarea" maxlength="280"
+          data-placeholder-en="It&rsquo;s our anniversary, complete beginner, we want to dance to a specific song..."
+          data-placeholder-es="Es nuestro aniversario, principiantes totales, queremos bailar una canci&oacute;n espec&iacute;fica..."
+          placeholder="It's our anniversary, complete beginner..."></textarea>
+      </div>
+
+      <!-- Calendar slot picker -->
+      <div class="pick-section">
+        <h3 data-lang="en">Pick a day</h3>
+        <h3 data-lang="es">Elige un d&iacute;a</h3>
+        <div id="availFallbackBanner" class="avail-fallback" style="display:none;"></div>
+        <div id="availLoading" class="avail-loading" style="display:none;"></div>
+        <div class="day-strip" id="dayStrip" role="listbox" aria-label="Pick a day"></div>
+      </div>
+
+      <div class="pick-section">
+        <h3 data-lang="en">Pick a time</h3>
+        <h3 data-lang="es">Elige un horario</h3>
+        <div class="time-grid disabled" id="timeGrid"></div>
+      </div>
+
+      <div class="submit-row">
+        <span class="small-note" data-lang="en">Times are Eastern Time (Key West).</span>
+        <span class="small-note" data-lang="es">Horario del Este (Key West).</span>
+        <button type="submit" class="btn-pill is-disabled" id="submitBtn" disabled>
+          <span data-lang="en">Confirm booking</span>
+          <span data-lang="es">Confirmar reserva</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </button>
+      </div>
+
+      <div class="form-success" id="successBox" role="status" aria-live="polite">
+        <h3 data-lang="en">You&rsquo;re booked.</h3>
+        <h3 data-lang="es">Reserva confirmada.</h3>
+        <p id="successLine" data-lang="en">I&rsquo;ll see you in Key West.</p>
+        <p id="successLineEs" data-lang="es">Te veo en Key West.</p>
+        <p data-lang="en">I&rsquo;ll confirm the meet-up location 24 hours before. Check your email for the calendar invite.</p>
+        <p data-lang="es">Te confirmo el punto de encuentro 24 horas antes. Revisa tu correo para la invitaci&oacute;n del calendario.</p>
+      </div>
+
+      <div class="form-error" id="errorBox" role="alert" aria-live="assertive">
+        <h3 data-lang="en">Something went wrong.</h3>
+        <h3 data-lang="es">Algo sali&oacute; mal.</h3>
+        <p data-lang="en">Try again or email laura@lauratreto.com.</p>
+        <p data-lang="es">Int&eacute;ntalo de nuevo o escribe a laura@lauratreto.com.</p>
+        <button type="button" id="retryBtn">
+          <span data-lang="en">Try again</span>
+          <span data-lang="es">Intentar de nuevo</span>
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="foot">
+    <span data-lang="en">&copy; 2026 Laura Treto Coaching &nbsp;&middot;&nbsp; <a href="/privacy.html">Privacy</a> &nbsp;&middot;&nbsp; <a href="/terms.html">Terms</a></span>
+    <span data-lang="es">&copy; 2026 Laura Treto Coaching &nbsp;&middot;&nbsp; <a href="/privacy.html">Privacidad</a> &nbsp;&middot;&nbsp; <a href="/terms.html">T&eacute;rminos</a></span>
+  </footer>
+
+  <script>
+    // ---------- TIER META ----------
+    const TIERS = {
+      solo:   { label_en: 'Solo Lesson',   label_es: 'Clase individual', detail_en: '60 min, 1-on-1, in person',  detail_es: '60 min, uno a uno, en persona', price: '$150' },
+      couple: { label_en: 'Couple Lesson', label_es: 'Clase en pareja',  detail_en: '60 min, two of you, in person', detail_es: '60 min, los dos, en persona', price: '$200' },
+      group:  { label_en: 'Small Group',    label_es: 'Grupo pequeño', detail_en: '75 min, 3 to 6 people, in person', detail_es: '75 min, 3 a 6 personas, en persona', price: '$300' },
+    };
+    const VALID_TYPES = new Set(['solo', 'couple', 'group']);
+
+    // ---------- PARSE ?type ----------
+    const urlParams = new URLSearchParams(location.search);
+    const initialType = (function() {
+      const t = (urlParams.get('type') || '').toLowerCase();
+      return VALID_TYPES.has(t) ? t : 'solo';
+    })();
+
+    const state = {
+      type: initialType,
+      date: null,         // ISO string from picked slot's startISO
+      time: null,         // 24h "H:MM" from slot.time24
+      dateEn: null,       // long-form for the success line
+      dateEs: null,
+      displayTimeEn: null, // pretty time, e.g. "9:30 AM"
+    };
+
+    // ---------- LANG ----------
+    function setLang(lang) {
+      document.body.classList.toggle('lang-es', lang === 'es');
+      document.querySelectorAll('.lang-pill button').forEach(function(btn){
+        btn.classList.toggle('on', btn.getAttribute('data-set-lang') === lang);
+      });
+      document.documentElement.lang = lang;
+      // Swap placeholders
+      document.querySelectorAll('[data-placeholder-en]').forEach(function(el){
+        el.placeholder = lang === 'es'
+          ? (el.getAttribute('data-placeholder-es') || el.getAttribute('data-placeholder-en'))
+          : el.getAttribute('data-placeholder-en');
+      });
+      try { localStorage.setItem('ltc-lang', lang); } catch(e) {}
+      if (window.__ltLangReady) {
+        window.ltTrack('book_dance_lesson_lang_switch', { to: lang });
+      }
+    }
+    window.setLang = setLang;
+    document.querySelectorAll('.lang-pill button').forEach(function(btn){
+      btn.addEventListener('click', function(){ setLang(btn.getAttribute('data-set-lang')); });
+    });
+    try {
+      if (localStorage.getItem('ltc-lang') === 'es') setLang('es');
+      else setLang('en');
+    } catch(e) { setLang('en'); }
+    window.__ltLangReady = true;
+
+    // ---------- TYPE TOGGLE ----------
+    function applyType(type, source) {
+      const prior = state.type;
+      state.type = type;
+      const tier = TIERS[type];
+      // Update header
+      document.getElementById('lhName').innerHTML =
+        '<span data-lang="en">' + tier.label_en + '</span>' +
+        '<span data-lang="es">' + tier.label_es + '</span>';
+      document.getElementById('lhDetail').innerHTML =
+        '<span data-lang="en">' + tier.detail_en + '</span>' +
+        '<span data-lang="es">' + tier.detail_es + '</span>';
+      document.getElementById('lhPrice').textContent = tier.price;
+      // Toggle buttons
+      document.querySelectorAll('.type-toggle button').forEach(function(b){
+        const on = b.getAttribute('data-type') === type;
+        b.classList.toggle('on', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      // Re-apply lang to make sure new spans hide correctly under .lang-es
+      const isEs = document.body.classList.contains('lang-es');
+      if (isEs) setLang('es'); else setLang('en');
+      if (source === 'click' && prior !== type) {
+        window.ltTrack('book_dance_lesson_type_switch', { from: prior, to: type });
+      }
+    }
+    document.querySelectorAll('.type-toggle button').forEach(function(b){
+      b.addEventListener('click', function(){
+        applyType(b.getAttribute('data-type'), 'click');
+      });
+    });
+    applyType(initialType, 'init');
+
+    // ---------- LIVE AVAILABILITY (forked from client.html, tourist-tuned: weekends=1) ----------
+    const useLiveAvail = new URLSearchParams(location.search).get('legacy_avail') !== '1';
+    const WEEKDAY_LETTER_EN = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    const WEEKDAY_LETTER_ES = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+    const MONTH_ABBR_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const MONTH_ABBR_ES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+    const FALLBACK_TIMES = ['9:00', '11:00', '13:00', '15:00', '17:00'];
+
+    function renderHardcodedBooking() {
+      const strip = document.getElementById('dayStrip');
+      const grid = document.getElementById('timeGrid');
+      strip.innerHTML = '';
+      const today = new Date();
+      for (let i = 1; i <= 14; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'day';
+        btn.dataset.iso = d.toISOString();
+        btn.innerHTML =
+          '<span class="m"><span data-lang="en">' + MONTH_ABBR_EN[d.getMonth()] + '</span><span data-lang="es">' + MONTH_ABBR_ES[d.getMonth()] + '</span></span>' +
+          '<span class="d">' + d.getDate() + '</span>' +
+          '<span class="w"><span data-lang="en">' + WEEKDAY_LETTER_EN[d.getDay()] + '</span><span data-lang="es">' + WEEKDAY_LETTER_ES[d.getDay()] + '</span></span>';
+        btn.addEventListener('click', () => {
+          strip.querySelectorAll('.day').forEach((x) => x.classList.remove('on'));
+          btn.classList.add('on');
+          state.date = d.toISOString();
+          state.dateEn = d.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+          state.dateEs = d.toLocaleString('es-ES', { weekday: 'long', month: 'long', day: 'numeric' });
+          state.time = null; state.displayTimeEn = null;
+          grid.innerHTML = ''; grid.classList.remove('disabled');
+          FALLBACK_TIMES.forEach((tm) => {
+            const tBtn = document.createElement('button');
+            tBtn.type = 'button';
+            tBtn.className = 'time';
+            tBtn.textContent = tm;
+            tBtn.addEventListener('click', () => {
+              grid.querySelectorAll('.time').forEach((x) => x.classList.remove('on'));
+              tBtn.classList.add('on');
+              state.time = tm;
+              state.displayTimeEn = tm;
+              window.ltTrack('book_dance_lesson_slot_pick', { day: state.dateEn, slot: tm });
+              updateSubmitBtn();
+            });
+            grid.appendChild(tBtn);
+          });
+          updateSubmitBtn();
+        });
+        strip.appendChild(btn);
+      }
+    }
+
+    function renderLiveBooking(slots) {
+      const strip = document.getElementById('dayStrip');
+      const grid = document.getElementById('timeGrid');
+      strip.innerHTML = '';
+      grid.innerHTML = '';
+      grid.classList.add('disabled');
+
+      // Group slots by displayDate
+      const groups = new Map();
+      for (const s of slots) {
+        if (!groups.has(s.displayDate)) groups.set(s.displayDate, []);
+        groups.get(s.displayDate).push(s);
+      }
+
+      const esMonthFmt = new Intl.DateTimeFormat('es-ES', { timeZone: 'America/New_York', month: 'long', day: 'numeric', weekday: 'long' });
+
+      for (const [displayDate, daySlots] of groups) {
+        const first = daySlots[0];
+        const d = new Date(first.startISO);
+        const enMonthAbbr = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', month: 'short' }).format(d).toUpperCase();
+        const enDayNum = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', day: 'numeric' }).format(d);
+        const enWeekdayShort = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', weekday: 'short' }).format(d);
+        const enWeekdayLetter = enWeekdayShort.charAt(0).toUpperCase();
+
+        const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', month: 'numeric', weekday: 'short' }).formatToParts(d);
+        const monthIdx = parseInt(parts.find((p) => p.type === 'month').value, 10) - 1;
+        const weekdayShortEn = parts.find((p) => p.type === 'weekday').value;
+        const weekdayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+        const weekdayIdx = weekdayMap[weekdayShortEn] !== undefined ? weekdayMap[weekdayShortEn] : 0;
+        const esMonthAbbr = MONTH_ABBR_ES[monthIdx] || '';
+        const esWeekdayLetter = WEEKDAY_LETTER_ES[weekdayIdx] || '';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'day';
+        btn.dataset.displayDate = displayDate;
+        btn.innerHTML =
+          '<span class="m"><span data-lang="en">' + enMonthAbbr + '</span><span data-lang="es">' + esMonthAbbr + '</span></span>' +
+          '<span class="d">' + enDayNum + '</span>' +
+          '<span class="w"><span data-lang="en">' + enWeekdayLetter + '</span><span data-lang="es">' + esWeekdayLetter + '</span></span>';
+
+        btn.addEventListener('click', () => {
+          strip.querySelectorAll('.day').forEach((x) => x.classList.remove('on'));
+          btn.classList.add('on');
+
+          state.dateEn = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', weekday: 'long', month: 'long', day: 'numeric' }).format(d);
+          state.dateEs = esMonthFmt.format(d);
+          state.date = first.startISO;
+          state.time = null; state.displayTimeEn = null;
+
+          grid.innerHTML = '';
+          grid.classList.remove('disabled');
+
+          const now = Date.now();
+          const future = daySlots.filter((s) => new Date(s.startISO).getTime() > now);
+
+          if (future.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'live-avail-empty';
+            empty.innerHTML =
+              '<span data-lang="en">No times left today, pick another day.</span>' +
+              '<span data-lang="es">No quedan horarios hoy, elige otro d&iacute;a.</span>';
+            grid.appendChild(empty);
+            updateSubmitBtn();
+            return;
+          }
+
+          future.forEach((slot) => {
+            const tBtn = document.createElement('button');
+            tBtn.type = 'button';
+            tBtn.className = 'time';
+            tBtn.textContent = slot.displayTime;
+            tBtn.addEventListener('click', () => {
+              grid.querySelectorAll('.time').forEach((x) => x.classList.remove('on'));
+              tBtn.classList.add('on');
+              state.date = slot.startISO;
+              state.time = slot.time24;
+              state.displayTimeEn = slot.displayTime;
+              window.ltTrack('book_dance_lesson_slot_pick', { day: displayDate, slot: slot.time24 });
+              updateSubmitBtn();
+            });
+            grid.appendChild(tBtn);
+          });
+
+          updateSubmitBtn();
+        });
+        strip.appendChild(btn);
+      }
+    }
+
+    async function mountAvailability() {
+      const stripEl = document.getElementById('dayStrip');
+      const grid = document.getElementById('timeGrid');
+      const loadingEl = document.getElementById('availLoading');
+      const bannerEl = document.getElementById('availFallbackBanner');
+
+      const setLoading = (html) => {
+        loadingEl.innerHTML = html || '';
+        loadingEl.style.display = html ? '' : 'none';
+      };
+      const setBanner = (html) => {
+        bannerEl.innerHTML = html || '';
+        bannerEl.style.display = html ? 'block' : 'none';
+      };
+      setLoading('');
+      setBanner('');
+
+      if (!useLiveAvail) {
+        renderHardcodedBooking();
+        return;
+      }
+
+      stripEl.innerHTML = '';
+      grid.innerHTML = '';
+      grid.classList.add('disabled');
+      setLoading(
+        '<span data-lang="en">Loading availability...</span>' +
+        '<span data-lang="es">Cargando disponibilidad...</span>'
+      );
+
+      let slots = null;
+      try {
+        const res = await fetch('/.netlify/functions/calendar-availability?days=14&weekends=1', {
+          headers: { 'Accept': 'application/json' },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.slots) && data.slots.length > 0) {
+            slots = data.slots;
+          }
+        }
+      } catch (err) {
+        slots = null;
+      }
+
+      setLoading('');
+      if (slots) {
+        renderLiveBooking(slots);
+      } else {
+        renderHardcodedBooking();
+        setBanner(
+          '<span data-lang="en"><strong>Live availability isn&rsquo;t loading.</strong> These are placeholder times. I&rsquo;ll confirm your slot after you submit.</span>' +
+          '<span data-lang="es"><strong>La disponibilidad en vivo no carga ahora.</strong> Estos son horarios de muestra. Confirmo personalmente despu&eacute;s del env&iacute;o.</span>'
+        );
+      }
+    }
+
+    // ---------- SUBMIT ----------
+    function updateSubmitBtn() {
+      const firstName = document.getElementById('firstName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const ready = firstName && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && state.date && state.time && state.type;
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = !ready;
+      btn.classList.toggle('is-disabled', !ready);
+    }
+    ['firstName','email','bookedFor','notes'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateSubmitBtn);
+    });
+
+    function showState(which) {
+      const success = document.getElementById('successBox');
+      const error = document.getElementById('errorBox');
+      success.classList.toggle('visible', which === 'success');
+      error.classList.toggle('visible', which === 'error');
+      if (which === 'success') {
+        // Hide form interactive bits
+        document.querySelectorAll('#bookForm .row-2, #bookForm .field, #bookForm .pick-section, #bookForm .submit-row, #bookForm .type-toggle, #lessonHeader').forEach((el) => {
+          el.style.display = 'none';
+        });
+        // Update success line with date/time
+        const lineEn = document.getElementById('successLine');
+        const lineEs = document.getElementById('successLineEs');
+        if (state.dateEn && state.displayTimeEn) {
+          lineEn.textContent = "I'll see you " + state.dateEn + ' at ' + state.displayTimeEn + ' in Key West.';
+        }
+        if (state.dateEs && state.displayTimeEn) {
+          lineEs.textContent = 'Te veo ' + state.dateEs + ' a las ' + state.displayTimeEn + ' en Key West.';
+        }
+      }
+    }
+
+    document.getElementById('retryBtn').addEventListener('click', function(){
+      const error = document.getElementById('errorBox');
+      error.classList.remove('visible');
+    });
+
+    document.getElementById('bookForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const lang = document.body.classList.contains('lang-es') ? 'es' : 'en';
+      const submitBtn = document.getElementById('submitBtn');
+      const origHTML = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.classList.add('is-disabled');
+      submitBtn.innerHTML = lang === 'es' ? 'Enviando...' : 'Submitting...';
+
+      const honeypot = (e.target.elements['bot-field'] && e.target.elements['bot-field'].value) || '';
+      const payload = {
+        first_name: document.getElementById('firstName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        lesson_type: state.type,
+        booked_for: document.getElementById('bookedFor').value.trim(),
+        notes: document.getElementById('notes').value.trim(),
+        date: state.date,
+        time: state.time,
+        language: lang,
+        website: honeypot,
+      };
+
+      window.ltTrack('book_dance_lesson_submit_attempt', { type: state.type, language: lang });
+
+      try {
+        const res = await fetch('/.netlify/functions/book-dance-lesson', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-disabled');
+        submitBtn.innerHTML = origHTML;
+        if (res.ok && data && data.success) {
+          showState('success');
+          window.ltTrack('book_dance_lesson_submit_success', { type: state.type, language: lang });
+        } else {
+          showState('error');
+          const reason = (data && (data.error || data.message)) || ('http_' + res.status);
+          window.ltTrack('book_dance_lesson_submit_error', { type: state.type, language: lang, reason: String(reason) });
+        }
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-disabled');
+        submitBtn.innerHTML = origHTML;
+        showState('error');
+        const reason = (err && err.message) ? String(err.message) : 'network_error';
+        window.ltTrack('book_dance_lesson_submit_error', { type: state.type, language: lang, reason: reason });
+      }
+    });
+
+    // ---------- KICKOFF ----------
+    document.addEventListener('DOMContentLoaded', function() {
+      window.ltTrack('book_dance_lesson_page_view', {
+        language: document.documentElement.lang || 'en',
+        type: state.type,
+      });
+      mountAvailability();
+    });
+  </script>
+</body>
+</html>
