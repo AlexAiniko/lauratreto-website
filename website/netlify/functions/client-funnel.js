@@ -21,7 +21,7 @@
 
 import { getStore } from '@netlify/blobs';
 import { createBookingEvent } from '../lib/calendar.js';
-import { sendBookingNotification, sendBookingConfirmation } from '../lib/email.js';
+import { sendBookingNotification, sendBookingConfirmation, sendWelcomeEmail } from '../lib/email.js';
 
 const BOOKING_TIMEZONE = process.env.BOOKING_TIMEZONE || 'America/New_York';
 
@@ -239,6 +239,8 @@ export default async (request, context) => {
       intent,
       mode,
       language,
+      finalBucket,
+      dedupBucket,
     });
 
     if (typeof context?.waitUntil === 'function') {
@@ -264,6 +266,7 @@ export default async (request, context) => {
 
 async function runBookingPostProcess({
   firstName, email, phone, date, time, intent, mode, language,
+  finalBucket, dedupBucket,
 }) {
   // Compute event window from the prospect's submitted date + time.
   // Format expected from client.html: date is an ISO timestamp (toISOString),
@@ -320,8 +323,11 @@ async function runBookingPostProcess({
     console.log('[client-funnel] post-process: no date/time, skipping calendar event');
   }
 
-  // 2) Email Laura + email prospect in parallel.
-  const results = await Promise.allSettled([
+  // 2) Email Laura + email prospect + welcome (first-scan only) in parallel.
+  // Welcome email skipped on dedupe — they were welcomed when they first
+  // landed in their original bucket.
+  const sendWelcome = !dedupBucket && finalBucket;
+  const tasks = [
     sendBookingNotification({
       prospectName: firstName,
       prospectEmail: email,
@@ -341,9 +347,19 @@ async function runBookingPostProcess({
       language,
       calendarEventLink,
     }),
-  ]);
+  ];
+  if (sendWelcome) {
+    tasks.push(sendWelcomeEmail({
+      bucket: finalBucket,
+      prospectName: firstName,
+      prospectEmail: email,
+      language,
+    }));
+  }
 
-  const [notifyResult, confirmResult] = results;
+  const results = await Promise.allSettled(tasks);
+
+  const [notifyResult, confirmResult, welcomeResult] = results;
   if (notifyResult.status === 'fulfilled') {
     console.log('[client-funnel] email to laura: ok');
   } else {
@@ -353,6 +369,15 @@ async function runBookingPostProcess({
     console.log('[client-funnel] email to prospect: ok');
   } else {
     console.error(`[client-funnel] post-process error: email-prospect ${confirmResult.reason?.message || confirmResult.reason}`);
+  }
+  if (sendWelcome) {
+    if (welcomeResult.status === 'fulfilled') {
+      console.log(`[client-funnel] welcome email to ${email} (${finalBucket}): ok`);
+    } else {
+      console.error(`[client-funnel] welcome email to ${email} (${finalBucket}): failed: ${welcomeResult.reason?.message || welcomeResult.reason}`);
+    }
+  } else {
+    console.log(`[client-funnel] welcome email skipped (dedup=${!!dedupBucket}, bucket=${finalBucket || 'none'})`);
   }
 }
 
