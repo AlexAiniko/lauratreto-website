@@ -1,8 +1,10 @@
 [build]
-  publish = "website"
+  base = "website"
+  publish = "."
+  command = "npm install"
 
 [functions]
-  directory = "website/netlify/functions"
+  directory = "netlify/functions"
 
 [[headers]]
   for = "/*"
