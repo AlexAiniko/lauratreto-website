@@ -8,6 +8,12 @@ import { getGoogleClient } from './google.js';
  * over the next `days` days, computed against Laura's primary calendar
  * busy times. Slots in the past are excluded.
  *
+ * Working hours default to 9am-7pm local (last slot starts 6:45pm, ends 7:00pm)
+ * and weekends (Sun + Sat) are skipped by default. Both are env-var driven:
+ *   - BOOKING_HOURS:     "9-19"  (start-end, 24-hour, end-exclusive)
+ *   - BOOKING_SKIP_DAYS: "0,6"   (comma-separated weekday nums, 0=Sun..6=Sat)
+ * Malformed or missing env vars fall back to those same defaults.
+ *
  * Each slot: { startISO, endISO, displayDate, displayTime, time24, weekday }
  *   - time24: wall-clock time in `H:MM` 24-hour format (no leading zero on hour),
  *     in the configured `timezone`. Designed to be submitted back to
@@ -16,10 +22,11 @@ import { getGoogleClient } from './google.js';
 export async function getAvailableSlots({
   days = 14,
   calendarId = process.env.BOOKING_CALENDAR_ID || 'primary',
-  workingHours = { start: 7, end: 19 }, // 7am-7pm local
+  workingHours = parseBookingHours(process.env.BOOKING_HOURS, { start: 9, end: 19 }),
   slotMinutes = 15,
   bufferMinutes = 15,
   timezone = process.env.BOOKING_TIMEZONE || 'America/New_York',
+  skipDays = parseSkipDays(process.env.BOOKING_SKIP_DAYS, new Set([0, 6])),
 } = {}) {
   const { calendar } = getGoogleClient();
 
@@ -50,6 +57,11 @@ export async function getAvailableSlots({
   for (let dayOffset = 0; dayOffset <= days; dayOffset++) {
     const dayDate = new Date(now.getTime() + dayOffset * 24 * 60 * 60 * 1000);
     const ymd = formatYMDInTz(dayDate, timezone);
+
+    // Skip configured weekdays (default Sun + Sat). Use the timezone-aware
+    // weekday so an instant late on Friday ET doesn't get bucketed as Saturday.
+    const weekdayNum = getWeekdayInTz(ymd, timezone);
+    if (skipDays.has(weekdayNum)) continue;
 
     for (let hour = workingHours.start; hour < workingHours.end; hour++) {
       for (let minute = 0; minute < 60; minute += slotMinutes) {
@@ -136,7 +148,53 @@ export async function createBookingEvent({
   return res.data;
 }
 
+// ---------- env parsers ----------
+
+// Parses BOOKING_HOURS like "9-19" -> { start: 9, end: 19 }.
+// Falls back to `fallback` if missing, malformed, or out of range.
+function parseBookingHours(raw, fallback) {
+  if (!raw || typeof raw !== 'string') return fallback;
+  const m = raw.trim().match(/^(\d{1,2})\s*-\s*(\d{1,2})$/);
+  if (!m) return fallback;
+  const start = Number(m[1]);
+  const end = Number(m[2]);
+  if (!Number.isInteger(start) || !Number.isInteger(end)) return fallback;
+  if (start < 0 || start > 23 || end < 1 || end > 24) return fallback;
+  if (end <= start) return fallback;
+  return { start, end };
+}
+
+// Parses BOOKING_SKIP_DAYS like "0,6" -> Set{0, 6}.
+// Falls back to `fallback` if missing or no valid weekday numbers found.
+function parseSkipDays(raw, fallback) {
+  if (!raw || typeof raw !== 'string') return fallback;
+  const out = new Set();
+  for (const part of raw.split(',')) {
+    const n = Number(part.trim());
+    if (Number.isInteger(n) && n >= 0 && n <= 6) out.add(n);
+  }
+  return out.size ? out : fallback;
+}
+
 // ---------- timezone helpers ----------
+
+// Returns the weekday (0=Sun..6=Sat) for the given YYYY-MM-DD in `tz`.
+// Anchors at 12:00 local that day (well clear of DST transitions) and reads
+// the weekday short-name in `tz`, then maps it. This avoids the bug where
+// using `new Date(ymd)` parses as UTC midnight and shifts by a day in
+// negative-offset zones.
+function getWeekdayInTz(ymd, tz) {
+  const [y, m, d] = ymd.split('-').map(Number);
+  // Anchor at noon UTC for the date — converting to any IANA zone keeps the
+  // calendar date intact (no DST gap can swing a noon by 12+ hours).
+  const anchor = new Date(Date.UTC(y, m - 1, d, 12, 0, 0));
+  const short = new Intl.DateTimeFormat('en-US', {
+    timeZone: tz,
+    weekday: 'short',
+  }).format(anchor);
+  const map = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  return map[short];
+}
 
 // Returns 'YYYY-MM-DD' for `date` in `tz`.
 function formatYMDInTz(date, tz) {

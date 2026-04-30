@@ -925,11 +925,11 @@
     const isDance = state.track === 'dance';
     document.getElementById('captureOnlineTrack').innerHTML = trackLabel({ en: ' · ONLINE', es: ' · ONLINE' });
     document.getElementById('captureOnlineSubEn').textContent = isDance
-      ? 'Give me your info and I\'ll email you my online dance programs.'
-      : 'Give me your info and I\'ll email you my online training programs.';
+      ? 'Add your info and I\'ll send you my online dance programs.'
+      : 'Add your info and I\'ll send you my online training programs.';
     document.getElementById('captureOnlineSubEs').textContent = isDance
-      ? 'Déjame tus datos y te envío mis programas de baile online.'
-      : 'Déjame tus datos y te envío mis programas de entrenamiento online.';
+      ? 'Déjame tus datos y te envío mis programas de baile.'
+      : 'Déjame tus datos y te envío mis programas de entrenamiento.';
   }
 
   document.getElementById('captureOnlineForm').addEventListener('submit', async (e) => {
@@ -978,10 +978,11 @@
   const MONTH_ABBR_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   const MONTH_ABBR_ES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
 
-  // Live availability feature flag — query param `?live_avail=1`. When true, mountBooking()
-  // fetches /.netlify/functions/calendar-availability and renders real slots. On any failure
-  // it falls back to the hardcoded TIMES + 14-blind-days behavior. Default is the legacy path.
-  const useLiveAvail = new URLSearchParams(location.search).get('live_avail') === '1';
+  // Live availability is the DEFAULT path. mountBooking() fetches
+  // /.netlify/functions/calendar-availability and renders real slots. On any failure it falls
+  // back to the hardcoded TIMES + 14-blind-days behavior with a prominent coral banner.
+  // Engineering escape hatch: append `?legacy_avail=1` to force the hardcoded path (skips fetch).
+  const useLiveAvail = new URLSearchParams(location.search).get('legacy_avail') !== '1';
 
   // Renders the legacy hardcoded day-strip + time-grid (14 days starting tomorrow, 5 fixed times).
   // Used when the live feature flag is off OR when the live fetch fails (graceful fallback).
@@ -1163,22 +1164,35 @@
       }
     });
 
-    // Ensure / clear the inline status indicator under the day-strip. The element collapses
-    // (display: none) when its message is empty so it never adds a stray gap during the
-    // happy path (clean live load).
+    // Two status elements:
+    //  - `loadingEl` (small, subtle, ABOVE the day-strip) for the brief loading state.
+    //  - `bannerEl`  (loud, coral-bordered, ABOVE the day-strip) for the fallback notice
+    //    when live availability fails. Both collapse (display: none) when empty.
     const stripEl = document.getElementById('dayStrip');
-    let statusEl = document.getElementById('availStatus');
-    if (!statusEl) {
-      statusEl = document.createElement('div');
-      statusEl.id = 'availStatus';
-      statusEl.style.cssText = 'font-family: Inter, sans-serif; font-size: 11px; letter-spacing: .05em; color: var(--ww-65); padding: 6px 0 0;';
-      stripEl.parentNode.insertBefore(statusEl, stripEl.nextSibling);
+    let bannerEl = document.getElementById('availFallbackBanner');
+    if (!bannerEl) {
+      bannerEl = document.createElement('div');
+      bannerEl.id = 'availFallbackBanner';
+      bannerEl.style.cssText = 'display:none; margin: 0 0 16px; padding: 14px 16px; border: 2px solid #E8654A; background: #FAF7F2; border-radius: 6px; font-family: Inter, sans-serif; font-size: 13px; line-height: 1.45; color: #2B2B2B;';
+      stripEl.parentNode.insertBefore(bannerEl, stripEl);
     }
-    const setAvailStatus = (html) => {
-      statusEl.innerHTML = html || '';
-      statusEl.style.display = html ? '' : 'none';
+    let loadingEl = document.getElementById('availLoading');
+    if (!loadingEl) {
+      loadingEl = document.createElement('div');
+      loadingEl.id = 'availLoading';
+      loadingEl.style.cssText = 'display:none; font-family: Inter, sans-serif; font-size: 11px; letter-spacing: .05em; color: var(--ww-65); padding: 0 0 6px;';
+      stripEl.parentNode.insertBefore(loadingEl, stripEl);
+    }
+    const setLoading = (html) => {
+      loadingEl.innerHTML = html || '';
+      loadingEl.style.display = html ? '' : 'none';
     };
-    setAvailStatus('');
+    const setFallbackBanner = (html) => {
+      bannerEl.innerHTML = html || '';
+      bannerEl.style.display = html ? 'block' : 'none';
+    };
+    setLoading('');
+    setFallbackBanner('');
 
     if (useLiveAvail) {
       // Show subtle loading state while fetch is in flight.
@@ -1186,9 +1200,9 @@
       const grid = document.getElementById('timeGrid');
       grid.innerHTML = '';
       grid.classList.add('disabled');
-      setAvailStatus(
-        '<span data-lang="en">Loading availability…</span>' +
-        '<span data-lang="es">Cargando disponibilidad…</span>'
+      setLoading(
+        '<span data-lang="en">Loading availability...</span>' +
+        '<span data-lang="es">Cargando disponibilidad...</span>'
       );
 
       let slots = null;
@@ -1206,15 +1220,19 @@
         slots = null;
       }
 
+      setLoading('');
+
       if (slots) {
         renderLiveBooking(slots);
-        setAvailStatus('');
+        setFallbackBanner('');
       } else {
         // Graceful fallback — never leave the prospect with an empty booking page.
+        // Loud, coral-bordered banner above the day strip so prospects know these
+        // are placeholder times and Laura will confirm.
         renderHardcodedBooking();
-        setAvailStatus(
-          '<span data-lang="en">Showing standard times. Laura will confirm availability.</span>' +
-          '<span data-lang="es">Mostrando horarios estándar. Laura confirmará disponibilidad.</span>'
+        setFallbackBanner(
+          '<span data-lang="en"><strong style="color:#E8654A;">Live availability isn\'t loading right now.</strong> These are placeholder times. Laura will personally confirm your slot after you submit.</span>' +
+          '<span data-lang="es"><strong style="color:#E8654A;">La disponibilidad en vivo no está cargando ahora mismo.</strong> Estos son horarios de muestra. Laura confirmará personalmente tu cita después de tu envío.</span>'
         );
       }
     } else {

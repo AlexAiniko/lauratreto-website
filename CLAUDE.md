@@ -208,6 +208,19 @@ All agents ARE Claude. They have ALL capabilities: vision, code generation, reas
 - Webhook hosted on Netlify function
 - See `website/netlify/functions/` for implementation
 
+### Booking v2 (Google Calendar + Gmail + MailerLite)
+The `/client` funnel creates real Google Calendar events and sends transactional emails.
+
+- **Auth:** single OAuth2 refresh token authorized as `laura@lauratreto.com` (3 scopes: calendar, gmail.send, gmail.modify)
+- **Backend libs:** `website/netlify/lib/{google,calendar,email,sanitize}.js`
+- **New endpoint:** `/.netlify/functions/calendar-availability` returns 15-min slots for next 14 days
+- **Submit handler:** `client-funnel.js` writes MailerLite + Blob (must succeed) → fires Calendar event create + 2 emails via `Promise.allSettled` (failures logged, never block response)
+- **Slot config:** 9am-7pm ET, Sun + Sat skipped (env-driven via `BOOKING_HOURS`, `BOOKING_SKIP_DAYS`)
+- **Sender:** all transactional emails go FROM `Laura Treto <laura@lauratreto.com>`. Sent folder stays clean via `Booking-Bot` label rewrite
+- **MailerLite buckets:** 4 client-funnel groups (`dance-online`, `dance-local`, `train-online`, `train-local`) with welcome automations
+- **Refresh-token rotation:** see memory `reference_google_oauth_rotation.md`. GCP app must be in **Production** mode, not Testing (Testing tokens expire every 7 days)
+- **Build config:** `netlify.toml` has `base = "website"` so functions resolve deps from `website/package.json`. Don't add a competing root-level `package.json` for production deps
+
 ### Higgsfield AI (Project MCP)
 - Config: `.mcp.json` in project root (gitignored)
 - API key and secret stored in env vars
