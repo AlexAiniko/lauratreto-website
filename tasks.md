@@ -21,6 +21,9 @@
 | 8 | Design group coaching product | medium | 2026-04-25 | Alpha/Laura | todo | |
 | 9 | Salsa Sunset Event logistics (talk to Derek) | medium | 2026-04-28 | Alex | todo | |
 | 65 | Booking v2: rotate GCP refresh token (chat exposure) | medium | | Alex | todo | Wait ~1 week from 2026-04-30 once booking is stable in prod |
+| 84 | Lux build /keywest-dancing evergreen landing (bilingual, upcoming KW dance events, MailerLite opt-in) | high | 2026-05-07 | Lux | todo | keywestdancing.com has 11wk Trends volume, build before forwarding |
+| 85 | QA /keywest-dancing on mobile EN/ES, verify opt-in lands in MailerLite | high | 2026-05-08 | Lux | blocked | Waits on #84 |
+| 86 | GoDaddy 301: forward keywestdancing.com → lauratreto.com/keywest-dancing | high | 2026-05-09 | Alex | blocked | Only after #85 verified live |
 | 24 | Outreach: Bone Island MMA | low | 2026-04-20 | Laura/Alex | todo | |
 | 25 | Outreach: Lazy Dog Adventures (paddleboard yoga) | low | 2026-04-20 | Laura/Alex | todo | |
 | 29 | Run workspace-surface-audit (monthly) | low | 2026-05-01 | Alpha | todo | |
