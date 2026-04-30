@@ -1332,14 +1332,89 @@
     if (langField) langField.value = lang;
 
     try { localStorage.setItem('ltc-lang', lang); } catch(e) {}
+
+    if (window.__ltLangReady) {
+      window.ltTrack('chachafit_lang_switch', { to: lang });
+    }
   }
   window.setLang = setLang;
 
-  // Restore saved language
+  // Restore saved language (initial call should NOT fire the lang-switch event)
   try {
     if (localStorage.getItem('ltc-lang') === 'es') setLang('es');
     else setLang('en');
   } catch(e) { setLang('en'); }
+  window.__ltLangReady = true;
+
+  // --- GA4: page view (custom, with language bucket) ---
+  document.addEventListener('DOMContentLoaded', function() {
+    window.ltTrack('chachafit_page_view', { language: document.documentElement.lang || 'en' });
+  });
+
+  // --- GA4: CTA click tracking (hero + footer) ---
+  (function ctaTracking() {
+    function fire(label, placement) {
+      window.ltTrack('chachafit_cta_click', { label: label, placement: placement });
+    }
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest && e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href') || '';
+      // Hero CTAs live inside .cta-row, footer ghost CTAs live inside .qr-card
+      var inHero = !!a.closest('.cta-row');
+      var inQrFooter = !!a.closest('.qr-card');
+      if (href === '#rsvp' && inHero) fire('rsvp', 'hero');
+      else if (href === '#schedule' && inHero) fire('schedule', 'hero');
+      else if (href === '#rsvp' && inQrFooter) fire('rsvp_footer', 'footer');
+    }, true);
+  })();
+
+  // --- GA4: QR funnel section in-view ---
+  (function qrFunnelView() {
+    var qr = document.getElementById('qr-funnel');
+    if (!qr || !('IntersectionObserver' in window)) return;
+    var fired = false;
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !fired) {
+          fired = true;
+          window.ltTrack('chachafit_qr_view', {});
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(qr);
+  })();
+
+  // --- GA4: scroll depth (25 / 50 / 75 / 100) ---
+  (function scrollDepth() {
+    var thresholds = [25, 50, 75, 100];
+    var fired = {};
+    var ticking = false;
+    function check() {
+      ticking = false;
+      var doc = document.documentElement;
+      var scrollTop = window.pageYOffset || doc.scrollTop || 0;
+      var viewport = window.innerHeight || doc.clientHeight || 0;
+      var full = Math.max(doc.scrollHeight, document.body.scrollHeight) - viewport;
+      if (full <= 0) return;
+      var pct = Math.min(100, Math.round((scrollTop / full) * 100));
+      thresholds.forEach(function(t) {
+        if (!fired[t] && pct >= t) {
+          fired[t] = true;
+          window.ltTrack('chachafit_scroll_depth', { depth: t });
+        }
+      });
+    }
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(check);
+      }
+    }, { passive: true });
+    // Run once in case the page loads already past a threshold (deep-link)
+    check();
+  })();
 
   // --- Poster + About bg + Laura video: autoplay reliability ---
   (function videoAutoplay() {
@@ -1445,7 +1520,11 @@
       successBox.classList.toggle('visible', which === 'success');
       errorBox.classList.toggle('visible', which === 'error');
     }
-    window.retrySubmit = function() { showState('form'); };
+    window.retrySubmit = function() {
+      var lang = document.documentElement.lang || (document.body.classList.contains('lang-es') ? 'es' : 'en');
+      window.ltTrack('chachafit_rsvp_error', { language: lang, reason: 'retry_clicked' });
+      showState('form');
+    };
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -1464,6 +1543,8 @@
         website: honeypot
       };
 
+      window.ltTrack('chachafit_rsvp_submit_attempt', { language: payload.language });
+
       fetch('/.netlify/functions/event-signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1475,6 +1556,7 @@
         submitBtn.innerHTML = origHTML;
         if (r.ok && r.body && r.body.success) {
           showState('success');
+          window.ltTrack('chachafit_rsvp_success', { language: payload.language });
           try { window.ltTrack('event_rsvp_submit', { event_id: payload.event_id, language: payload.language }); } catch(e) {}
 
           // Netlify Forms classic fallback for redundancy
@@ -1494,12 +1576,16 @@
           } catch(e) {}
         } else {
           showState('error');
+          var reason = (r && r.body && (r.body.error || r.body.message)) || 'server_error';
+          window.ltTrack('chachafit_rsvp_error', { language: payload.language, reason: String(reason) });
         }
       })
-      .catch(function() {
+      .catch(function(err) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = origHTML;
         showState('error');
+        var reason = (err && err.message) ? String(err.message) : 'network_error';
+        window.ltTrack('chachafit_rsvp_error', { language: payload.language, reason: reason });
       });
     });
   })();
