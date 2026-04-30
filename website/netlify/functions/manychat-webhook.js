@@ -460,6 +460,29 @@ export default async (request, context) => {
     }
 
     // -----------------------------------------------------------------------
+    // Per-subscriber concurrent request lock — written IMMEDIATELY on arrival.
+    // Prevents duplicate responses when ManyChat fires the webhook multiple
+    // times for the same subscriber before the first response completes.
+    // -----------------------------------------------------------------------
+    const SUBSCRIBER_LOCK_TTL_MS = 15_000; // 15 seconds
+    const subscriberLockKey = `lock:${subscriberId}`;
+
+    try {
+      const lockStore = getStore("dedup");
+      const lock = await lockStore.get(subscriberLockKey, { type: "json" });
+      if (lock && (Date.now() - lock.ts) < SUBSCRIBER_LOCK_TTL_MS) {
+        console.log(`[sub-lock] sub=${subscriberId} — request blocked by per-subscriber lock (${Math.round((Date.now() - lock.ts)/1000)}s ago)`);
+        return jsonResponse({ claude_response: "" }); // empty = ManyChat sends nothing
+      }
+      // Claim the lock immediately
+      await lockStore.setJSON(subscriberLockKey, { ts: Date.now() });
+      console.log(`[sub-lock] sub=${subscriberId} — lock acquired`);
+    } catch (lockErr) {
+      // Blob error — proceed without lock (better to reply than to drop)
+      console.warn('[sub-lock-fail]', lockErr.message);
+    }
+
+    // -----------------------------------------------------------------------
     // Deduplication — prevents double replies when ManyChat retries a slow
     // request or fires the webhook twice for the same message.
     // Uses Blobs so it works across concurrent Lambda instances.
@@ -468,7 +491,7 @@ export default async (request, context) => {
       .update(`${subscriberId}:${sanitizedMessage}`)
       .digest('hex')
       .slice(0, 16);
-    const DEDUP_TTL_MS = 30_000; // 30 seconds
+    const DEDUP_TTL_MS = 120_000; // 120 seconds (was 30)
 
     try {
       const dedupStore = getStore("dedup");
@@ -613,6 +636,16 @@ export default async (request, context) => {
       await dedupStore.setJSON(dedupHash, { ts: Date.now(), reply: replyText });
     } catch (dedupWriteErr) {
       console.warn('[dedup-write-fail]', dedupWriteErr.message);
+    }
+
+    // Release per-subscriber lock so they can message again after 15 seconds
+    // (lock auto-expires via TTL, but also clear it explicitly for fast turnaround)
+    try {
+      const lockStore = getStore("dedup");
+      await lockStore.delete(subscriberLockKey);
+      console.log(`[sub-lock] sub=${subscriberId} — lock released`);
+    } catch (lockReleaseErr) {
+      console.warn('[sub-lock-release-fail]', lockReleaseErr.message);
     }
 
     // Return flat JSON for ManyChat Actions External Request.
