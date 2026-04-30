@@ -22,6 +22,11 @@ import { sendDanceLessonConfirmation, sendDanceLessonNotification } from '../lib
 
 const BOOKING_TIMEZONE = process.env.BOOKING_TIMEZONE || 'America/New_York';
 const KW_DANCE_GROUP = process.env.MAILERLITE_GROUP_KW_DANCE || '186207950945126028';
+// MailerLite uses Groups (not Tags) for segmentation in the Connect API.
+// `dance-lesson-booked` is a group, not a tag — same intent (segment all
+// bookers regardless of tier so an automation can fire), surfaced via the
+// MailerLite API contract that actually exists.
+const DANCE_BOOKED_GROUP = process.env.MAILERLITE_GROUP_DANCE_BOOKED || '186211048518321222';
 const VALID_TYPES = new Set(['solo', 'couple', 'group']);
 
 const TIER_META = {
@@ -97,7 +102,7 @@ export default async (request, context) => {
       source: 'book-dance-lesson',
       last_lesson_booking_at: new Date().toISOString(),
     },
-    groups: [KW_DANCE_GROUP],
+    groups: [KW_DANCE_GROUP, DANCE_BOOKED_GROUP],
     status: 'active',
   };
 
@@ -124,13 +129,14 @@ export default async (request, context) => {
     return jsonResponse({ error: 'Internal server error' }, 500);
   }
 
-  // 1b) Tag with dance-lesson-booked (best-effort — non-blocking).
-  // MailerLite v2 API: POST /api/subscribers/{id}/tags with { name }
-  // We do this as fire-and-forget inside post-process.
+  // 1b) The dance-lesson-booked GROUP assignment happens above as part of
+  // the subscribers POST (groups: [KW_DANCE_GROUP, DANCE_BOOKED_GROUP]).
+  // MailerLite Connect API doesn't have separate "tags" — groups are the
+  // segmentation primitive — so the bucket-based group is the correct
+  // equivalent of the briefed `dance-lesson-booked` tag.
 
   // 2) Calendar + emails — Promise.allSettled so failures never break response.
   const postProcess = runDanceLessonPostProcess({
-    apiKey: API_KEY,
     subscriberId,
     firstName,
     email,
@@ -157,7 +163,7 @@ export default async (request, context) => {
 };
 
 async function runDanceLessonPostProcess({
-  apiKey, subscriberId, firstName, email, lessonType, tier,
+  subscriberId, firstName, email, lessonType, tier,
   date, time, bookedFor, notes, language,
 }) {
   // Compute event window using the slot's submitted ISO + H:MM in BOOKING_TIMEZONE.
@@ -217,32 +223,6 @@ async function runDanceLessonPostProcess({
     console.error(`[book-dance-lesson] calendar create failed: ${err?.message || err}`);
   }
 
-  // 2b) Tag the subscriber with dance-lesson-booked.
-  // Endpoint: POST https://connect.mailerlite.com/api/subscribers/{id}/tags  body: { name: '...' }
-  // MailerLite auto-creates the tag if it doesn't exist.
-  const tagTask = (async () => {
-    if (!subscriberId) return;
-    try {
-      const tagRes = await fetch(`https://connect.mailerlite.com/api/subscribers/${subscriberId}/tags`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({ name: 'dance-lesson-booked' }),
-      });
-      if (!tagRes.ok) {
-        const txt = await tagRes.text();
-        console.error('[book-dance-lesson] tag failed:', tagRes.status, txt);
-      } else {
-        console.log('[book-dance-lesson] tagged dance-lesson-booked', { subscriberId });
-      }
-    } catch (err) {
-      console.error('[book-dance-lesson] tag error:', err?.message || err);
-    }
-  })();
-
   const tasks = [
     sendDanceLessonNotification({
       prospectName: firstName,
@@ -266,11 +246,10 @@ async function runDanceLessonPostProcess({
       notes,
       calendarEventLink,
     }),
-    tagTask,
   ];
 
   const results = await Promise.allSettled(tasks);
-  const [notifyResult, confirmResult, tagResult] = results;
+  const [notifyResult, confirmResult] = results;
   if (notifyResult.status === 'fulfilled') {
     console.log('[book-dance-lesson] email to laura: ok');
   } else {
@@ -280,9 +259,6 @@ async function runDanceLessonPostProcess({
     console.log('[book-dance-lesson] email to prospect: ok');
   } else {
     console.error(`[book-dance-lesson] email-prospect failed: ${confirmResult.reason?.message || confirmResult.reason}`);
-  }
-  if (tagResult.status !== 'fulfilled') {
-    console.error(`[book-dance-lesson] tag task error: ${tagResult.reason?.message || tagResult.reason}`);
   }
 }
 
