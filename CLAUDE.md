@@ -217,7 +217,7 @@ The `/client` funnel creates real Google Calendar events and sends transactional
 - **Submit handler:** `client-funnel.js` writes MailerLite + Blob (must succeed) → fires Calendar event create + 2 emails via `Promise.allSettled` (failures logged, never block response)
 - **Slot config:** 9am-7pm ET, Sun + Sat skipped (env-driven via `BOOKING_HOURS`, `BOOKING_SKIP_DAYS`)
 - **Sender:** all transactional emails go FROM `Laura Treto <laura@lauratreto.com>`. Sent folder stays clean via `Booking-Bot` label rewrite
-- **MailerLite buckets:** 4 client-funnel groups (`dance-online`, `dance-local`, `train-online`, `train-local`) with welcome automations
+- **MailerLite buckets:** 4 client-funnel groups (`dance-online`, `dance-local`, `train-online`, `train-local`) with welcome automations + 1 evergreen `KW Dance Events` group (`186207950945126028`) feeding `/keywest-dancing` opt-in
 - **Refresh-token rotation:** see memory `reference_google_oauth_rotation.md`. GCP app must be in **Production** mode, not Testing (Testing tokens expire every 7 days)
 - **Build config:** `netlify.toml` has `base = "website"` so functions resolve deps from `website/package.json`. Don't add a competing root-level `package.json` for production deps
 

@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D8L9H56MED"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.__LT_GA_ENABLED = (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1' && location.protocol !== 'file:');
+    gtag('js', new Date());
+    if (window.__LT_GA_ENABLED) {
+      gtag('config', 'G-D8L9H56MED', { anonymize_ip: true });
+    }
+    window.ltTrack = function(name, params){
+      try { if (window.__LT_GA_ENABLED) gtag('event', name, params || {}); } catch(e) {}
+    };
+  </script>
+
+  <title>Dance in Key West with Laura Treto | Salsa, Bachata, ChaChaFit</title>
+  <meta name="description" content="Free community dance events in Key West with Cuban dancer Laura Treto. Salsa, bachata, ChaChaFit pop-ups at White Street Pier and around the island. Bilingual, beginner friendly, all ages welcome." />
+
+  <meta property="og:title" content="Dance in Key West with Laura Treto" />
+  <meta property="og:description" content="Free community dance events in Key West. Salsa, bachata, ChaChaFit pop-ups led by Laura Treto, founding member of Acosta Danza." />
+  <meta property="og:url" content="https://lauratreto.com/keywest-dancing" />
+  <meta property="og:image" content="https://lauratreto.com/images/chachafit-poster.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://lauratreto.com/images/chachafit-poster.jpg" />
+  <link rel="canonical" href="https://lauratreto.com/keywest-dancing" />
+  <link rel="alternate" hreflang="en" href="https://lauratreto.com/keywest-dancing" />
+  <link rel="alternate" hreflang="es" href="https://lauratreto.com/keywest-dancing" />
+  <link rel="alternate" hreflang="x-default" href="https://lauratreto.com/keywest-dancing" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤍</text></svg>">
+
+  <!-- Fonts: Playfair Display Italic + Inter (matches brand site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Hero image preload -->
+  <link rel="preload" as="image" href="/images/chachafit-poster.jpg" fetchpriority="high">
+
+  <!-- Structured data: LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Laura Treto Coaching",
+    "description": "Cuban dancer Laura Treto leads community dance events and private movement coaching in Key West. Salsa, bachata, ChaChaFit pop-ups.",
+    "url": "https://lauratreto.com/keywest-dancing",
+    "email": "laura@lauratreto.com",
+    "image": "https://lauratreto.com/images/chachafit-poster.jpg",
+    "areaServed": {
+      "@type": "City",
+      "name": "Key West, FL"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Key West",
+      "addressRegion": "FL",
+      "addressCountry": "US"
+    },
+    "sameAs": [
+      "https://www.tiktok.com/@coachlauratreto",
+      "https://www.instagram.com/coachlauratreto/",
+      "https://www.facebook.com/profile.php?id=100063583289825"
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --coral: #E8654A;
+      --coral-hover: #DC5E45;
+      --turquoise: #1A7A7A;
+      --warm-white: #FAF7F2;
+      --sand: #F0E6D8;
+      --charcoal: #2B2B2B;
+      --charcoal-70: rgba(43,43,43,0.70);
+      --charcoal-12: rgba(43,43,43,0.12);
+      --gold: #C5973E;
+      --gold-soft: #D9B36A;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      color: var(--charcoal);
+      background: var(--warm-white);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    body { overflow-x: hidden; min-height: 100vh; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    input { font: inherit; color: inherit; background: none; border: none; outline: none; }
+
+    /* bilingual toggle: only top-level [data-lang] on EN body show, ES hidden */
+    body:not(.lang-es) [data-lang="es"] { display: none !important; }
+    body.lang-es [data-lang="en"] { display: none !important; }
+
+    /* ============ NAV (slim, edge-tab style matching index.html) ============ */
+    .site-logo {
+      position: fixed;
+      top: max(22px, env(safe-area-inset-top));
+      left: max(22px, env(safe-area-inset-left));
+      z-index: 60;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+      color: var(--charcoal);
+      transition: opacity 0.25s var(--ease), color 0.25s var(--ease);
+    }
+    body.on-dark .site-logo { color: var(--warm-white); }
+
+    .lang-toggle {
+      position: fixed;
+      top: max(20px, env(safe-area-inset-top));
+      right: max(64px, env(safe-area-inset-right));
+      z-index: 60;
+      display: inline-flex;
+      gap: 4px;
+      background: rgba(43,43,43,0.10);
+      padding: 4px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+    .lang-toggle button {
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      border-radius: 999px;
+      color: var(--charcoal-70);
+      transition: background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+    .lang-toggle button.active {
+      background: var(--warm-white);
+      color: var(--coral);
+    }
+
+    /* edge tab slide-in */
+    .edge-tab {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 1000;
+      width: 36px;
+      padding: 22px 0;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--gold);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      box-shadow: -2px 4px 14px rgba(43,43,43,0.10);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.25s var(--ease);
+    }
+    .edge-tab:hover { background: var(--warm-white); transform: translateY(-50%) translateX(-2px); }
+    .edge-tab .label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--charcoal);
+    }
+    .edge-tab .label::before {
+      content: '';
+      display: inline-block;
+      width: 1px; height: 18px;
+      background: var(--gold);
+      margin-bottom: 8px;
+      vertical-align: middle;
+    }
+    body.edge-open .edge-tab { opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+
+    .edge-panel {
+      position: fixed; top: 0; right: 0;
+      height: 100vh; height: 100dvh;
+      width: min(60vw, 360px);
+      background: var(--warm-white);
+      border-left: 1px solid var(--gold);
+      box-shadow: -16px 0 48px rgba(43,43,43,0.18);
+      z-index: 1101;
+      padding: max(48px, env(safe-area-inset-top)) clamp(28px, 6vw, 48px) max(28px, env(safe-area-inset-bottom));
+      display: flex; flex-direction: column; gap: 28px;
+      transform: translateX(100%);
+      transition: transform 0.4s var(--ease);
+    }
+    @media (max-width: 480px) { .edge-panel { width: 80vw; } }
+    body.edge-open .edge-panel { transform: translateX(0); }
+
+    .edge-scrim {
+      position: fixed; inset: 0;
+      z-index: 1100;
+      background: rgba(43,43,43,0.30);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    body.edge-open .edge-scrim { opacity: 1; pointer-events: auto; }
+
+    .edge-panel .close-row { display: flex; justify-content: flex-end; }
+    .edge-panel .close-btn {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--charcoal);
+      opacity: 0.65;
+      padding: 4px 8px;
+      transition: opacity 0.2s;
+    }
+    .edge-panel .close-btn:hover { opacity: 1; }
+    .edge-panel .links { display: flex; flex-direction: column; gap: 32px; margin-top: 12px; }
+    .edge-panel .links a {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(34px, 7.5vw, 48px);
+      line-height: 1.0;
+      color: var(--charcoal);
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+      display: block;
+    }
+    .edge-panel .links a:hover { color: var(--coral); }
+    .edge-panel .links .rule {
+      display: block; width: 56px; height: 1px;
+      background: var(--gold); opacity: 0.55; margin-top: 10px;
+    }
+    .edge-panel .links .sub {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-style: normal; font-weight: 500;
+      font-size: 12px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--charcoal); opacity: 0.55;
+      margin-top: 8px;
+    }
+
+    /* ============ HERO (clip-reveal) ============ */
+    .hero {
+      position: relative;
+      min-height: 75vh;
+      min-height: 75svh;
+      padding: clamp(120px, 16vh, 180px) clamp(24px, 6vw, 56px) clamp(60px, 9vh, 100px);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      isolation: isolate;
+      color: var(--warm-white);
+      background: var(--charcoal);
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(180deg, rgba(43,43,43,.55) 0%, rgba(43,43,43,.78) 100%),
+        url('/images/chachafit-poster.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      filter: saturate(0.6) contrast(1.05);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--warm-white);
+      opacity: 0.85;
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 36px; height: 1px;
+      background: var(--gold);
+    }
+    h1.hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 800;
+      color: var(--warm-white);
+      font-size: clamp(56px, 10vw, 132px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin: 22px 0 6px;
+      text-shadow: 0 2px 24px rgba(0,0,0,.45);
+      max-width: 14ch;
+    }
+    h1.hero-title .reveal-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(22px);
+      clip-path: inset(0 100% 0 0);
+      will-change: clip-path, transform, opacity;
+    }
+    h1.hero-title.in [data-lang="en"] .reveal-word:nth-child(1),
+    h1.hero-title.in [data-lang="es"] .reveal-word:nth-child(1) {
+      animation: revealWord 720ms var(--ease) 220ms forwards;
+    }
+    h1.hero-title.in [data-lang="en"] .reveal-word:nth-child(2),
+    h1.hero-title.in [data-lang="es"] .reveal-word:nth-child(2) {
+      animation: revealWord 720ms var(--ease) 380ms forwards;
+    }
+    h1.hero-title.in [data-lang="en"] .reveal-word:nth-child(3),
+    h1.hero-title.in [data-lang="es"] .reveal-word:nth-child(3) {
+      animation: revealWord 720ms var(--ease) 540ms forwards;
+    }
+    @keyframes revealWord {
+      to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); }
+    }
+
+    .hero-sub {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(18px, 2.4vw, 24px);
+      line-height: 1.4;
+      color: var(--warm-white);
+      opacity: 0.95;
+      max-width: 56ch;
+      margin: 22px 0 36px;
+      text-shadow: 0 2px 18px rgba(0,0,0,.45);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 700ms var(--ease) 900ms, transform 700ms var(--ease) 900ms;
+    }
+    .hero-inner.in .hero-sub { opacity: 0.95; transform: translateY(0); }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 700ms var(--ease) 1100ms, transform 700ms var(--ease) 1100ms;
+    }
+    .hero-inner.in .hero-ctas { opacity: 1; transform: translateY(0); }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 26px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: .02em;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-pill.primary {
+      background: var(--coral);
+      color: var(--warm-white);
+      box-shadow: 0 10px 30px -12px rgba(232,101,74,.6);
+    }
+    .btn-pill.primary:hover { transform: translateY(-1px); background: var(--coral-hover); }
+    .btn-pill.primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-pill.ghost {
+      background: transparent;
+      color: var(--warm-white);
+      border: 1.5px solid var(--warm-white);
+    }
+    .btn-pill.ghost:hover { background: var(--warm-white); color: var(--charcoal); }
+    .btn-pill.ghost-dark {
+      background: transparent;
+      color: var(--charcoal);
+      border: 1.5px solid var(--charcoal);
+    }
+    .btn-pill.ghost-dark:hover { background: var(--charcoal); color: var(--warm-white); }
+
+    /* ============ SECTIONS (shared) ============ */
+    section.section {
+      padding: clamp(72px, 12vh, 132px) clamp(24px, 6vw, 56px);
+      position: relative;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-kicker {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(36px, 5.5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+      max-width: 18ch;
+    }
+    .section-lede {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(17px, 2vw, 21px);
+      color: var(--charcoal-70);
+      max-width: 56ch;
+      margin-bottom: 36px;
+      line-height: 1.45;
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease), transform 700ms var(--ease); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* ============ UPCOMING EVENTS ============ */
+    #upcoming { background: var(--warm-white); }
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .event-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--charcoal-12);
+      border-left: 4px solid var(--coral);
+      border-radius: 8px;
+      padding: 28px 24px;
+      transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    }
+    .event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px -18px rgba(43,43,43,0.22);
+    }
+    .event-card .ev-date {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .event-card .ev-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(22px, 2.4vw, 28px);
+      line-height: 1.2;
+      color: var(--charcoal);
+      margin-bottom: 12px;
+    }
+    .event-card .ev-meta {
+      display: grid; gap: 6px;
+      font-size: 14px;
+      color: var(--charcoal-70);
+      margin-bottom: 18px;
+    }
+    .event-card .ev-meta strong { color: var(--charcoal); font-weight: 600; }
+    .event-card .ev-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: var(--warm-white);
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s var(--ease);
+    }
+    .event-card .ev-cta:hover { background: var(--coral-hover); }
+
+    .events-empty {
+      text-align: center;
+      padding: 48px 24px;
+      background: var(--sand);
+      border-radius: 12px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .events-empty p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2vw, 22px);
+      color: var(--charcoal);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    /* ============ ABOUT ============ */
+    #about { background: var(--sand); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(32px, 6vw, 72px);
+      align-items: center;
+    }
+    @media (max-width: 800px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+    .about-photo {
+      position: relative;
+      aspect-ratio: 4/5;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--charcoal);
+      transform: rotate(-1deg);
+      box-shadow: 0 30px 60px -30px rgba(43,43,43,0.4);
+    }
+    .about-photo img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .about-copy h2 { margin-bottom: 24px; }
+    .about-copy p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--charcoal);
+      margin-bottom: 18px;
+      max-width: 56ch;
+    }
+    .about-copy .about-cta { margin-top: 18px; }
+
+    /* ============ EMAIL OPT-IN ============ */
+    #join {
+      background: var(--turquoise);
+      color: var(--warm-white);
+    }
+    #join .section-kicker { color: var(--gold-soft); }
+    #join .section-title { color: var(--warm-white); }
+    #join .section-lede { color: rgba(250,247,242,0.85); }
+    .join-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .join-wrap .section-title,
+    .join-wrap .section-lede { margin-left: auto; margin-right: auto; }
+    .join-form {
+      display: grid;
+      gap: 16px;
+      margin-top: 28px;
+      text-align: left;
+    }
+    .join-form .field { display: grid; gap: 6px; }
+    .join-form label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(250,247,242,0.85);
+    }
+    .join-form input[type="text"],
+    .join-form input[type="email"] {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(250,247,242,0.10);
+      border: 1px solid rgba(250,247,242,0.32);
+      border-radius: 8px;
+      color: var(--warm-white);
+      font-size: 16px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .join-form input::placeholder { color: rgba(250,247,242,0.55); }
+    .join-form input:focus {
+      border-color: var(--gold-soft);
+      background: rgba(250,247,242,0.16);
+    }
+    .join-form .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 14px;
+    }
+    @media (max-width: 540px) {
+      .join-form .row-2 { grid-template-columns: 1fr; }
+    }
+    .join-form .submit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 6px;
+    }
+    .join-form .small-note {
+      font-size: 12px;
+      color: rgba(250,247,242,0.65);
+      font-style: italic;
+    }
+    .join-form .bot-trap {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .form-success, .form-error { display: none; padding: 24px; border-radius: 10px; text-align: center; }
+    .form-success.visible, .form-error.visible { display: block; }
+    .form-success {
+      background: rgba(250,247,242,0.10);
+      border: 1px solid var(--gold-soft);
+    }
+    .form-success h3 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: var(--warm-white);
+    }
+    .form-success p { color: rgba(250,247,242,0.85); font-size: 15px; }
+    .form-error {
+      background: rgba(232,101,74,0.18);
+      border: 1px solid rgba(232,101,74,0.6);
+    }
+    .form-error h3 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: var(--warm-white);
+    }
+    .form-error p { color: rgba(250,247,242,0.85); font-size: 15px; margin-bottom: 12px; }
+    .form-error button {
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: var(--warm-white);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ============ FAQ ============ */
+    #faq { background: var(--warm-white); }
+    .faq-list { max-width: 760px; }
+    .faq-item {
+      border-top: 1px solid var(--charcoal-12);
+      padding: 20px 0;
+    }
+    .faq-item:last-child { border-bottom: 1px solid var(--charcoal-12); }
+    .faq-q {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(18px, 2.2vw, 22px);
+      color: var(--charcoal);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .faq-q::-webkit-details-marker { display: none; }
+    .faq-q::after {
+      content: '+';
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      color: var(--coral);
+      flex-shrink: 0;
+      transition: transform 0.25s var(--ease);
+    }
+    details[open] .faq-q::after { transform: rotate(45deg); }
+    .faq-a {
+      margin-top: 12px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--charcoal-70);
+      max-width: 60ch;
+    }
+
+    /* ============ FOOTER ============ */
+    .footer {
+      background: var(--charcoal);
+      color: rgba(250,247,242,0.65);
+      padding: 56px clamp(24px, 6vw, 56px) 32px;
+    }
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 32px;
+    }
+    @media (max-width: 720px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+    .footer h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--warm-white);
+      margin-bottom: 12px;
+    }
+    .footer .brand-mark {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--warm-white);
+      margin-bottom: 8px;
+    }
+    .footer p { font-size: 14px; line-height: 1.6; }
+    .footer a {
+      color: rgba(250,247,242,0.65);
+      transition: color 0.2s ease;
+    }
+    .footer a:hover { color: var(--warm-white); }
+    .footer ul { list-style: none; display: grid; gap: 8px; }
+    .footer ul a { font-size: 14px; }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 32px auto 0;
+      padding-top: 20px;
+      border-top: 1px solid rgba(250,247,242,0.10);
+      font-size: 12px;
+      color: rgba(250,247,242,0.45);
+    }
+    .footer-bottom a { color: rgba(250,247,242,0.55); }
+    .footer-bottom a:hover { color: var(--warm-white); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      h1.hero-title .reveal-word { opacity: 1; transform: none; clip-path: none; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site logo -->
+  <a href="/" class="site-logo">Laura Treto</a>
+
+  <!-- Edge tab nav -->
+  <button type="button" class="edge-tab" id="edgeTab" aria-label="Open menu" aria-expanded="false" aria-controls="edgePanel">
+    <span class="label">menu</span>
+  </button>
+  <div class="edge-scrim" id="edgeScrim" aria-hidden="true"></div>
+  <aside class="edge-panel" id="edgePanel" role="dialog" aria-modal="true" aria-label="Site menu">
+    <div class="close-row">
+      <button type="button" class="close-btn" id="edgeClose" aria-label="Close menu">close.</button>
+    </div>
+    <nav class="links">
+      <a href="/client">
+        <span data-lang="en">Become a client.</span>
+        <span data-lang="es">Hazte cliente.</span>
+        <span class="rule"></span>
+        <span class="sub" data-lang="en">Be part of the family</span>
+        <span class="sub" data-lang="es">Forma parte de la familia</span>
+      </a>
+      <a href="/chachafit">
+        <span>ChaChaFit.</span>
+        <span class="rule"></span>
+        <span class="sub" data-lang="en">May 1, full moon at the pier</span>
+        <span class="sub" data-lang="es">1 de mayo, luna llena en el muelle</span>
+      </a>
+      <a href="/pricing">
+        <span data-lang="en">Training options.</span>
+        <span data-lang="es">Opciones de entrenamiento.</span>
+        <span class="rule"></span>
+        <span class="sub" data-lang="en">All paid programs</span>
+        <span class="sub" data-lang="es">Todos los programas pagos</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Language toggle -->
+  <div class="lang-toggle">
+    <button class="active" type="button" onclick="setLang('en')">EN</button>
+    <button type="button" onclick="setLang('es')">ES</button>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner" id="heroInner">
+      <span class="hero-eyebrow">
+        <span data-lang="en">Key West &middot; Bilingual &middot; Free Community Events</span>
+        <span data-lang="es">Key West &middot; Biling&uuml;e &middot; Eventos Gratis</span>
+      </span>
+
+      <h1 class="hero-title" id="heroTitle" aria-label="Dance in Key West">
+        <span data-lang="en"><span class="reveal-word">Dance</span> <span class="reveal-word">in</span> <span class="reveal-word">Key&nbsp;West.</span></span>
+        <span data-lang="es"><span class="reveal-word">Bailar</span> <span class="reveal-word">en</span> <span class="reveal-word">Key&nbsp;West.</span></span>
+      </h1>
+
+      <p class="hero-sub" data-lang="en">
+        I&rsquo;m Laura. Cuban dancer, fifteen years on stage with Acosta Danza, now teaching the people of this island the language my body has spoken its whole life.
+      </p>
+      <p class="hero-sub" data-lang="es">
+        Soy Laura. Bailarina cubana, quince a&ntilde;os en escenarios con Acosta Danza, ahora ense&ntilde;ando a la gente de esta isla el idioma que mi cuerpo ha hablado toda la vida.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#join" class="btn-pill primary" data-cta-label="hero_join" data-cta-placement="hero">
+          <span data-lang="en">Get the next dance drop</span>
+          <span data-lang="es">Av&iacute;same del pr&oacute;ximo evento</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </a>
+        <a href="#upcoming" class="btn-pill ghost" data-cta-label="hero_upcoming" data-cta-placement="hero">
+          <span data-lang="en">What&rsquo;s coming up</span>
+          <span data-lang="es">Qu&eacute; viene</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UPCOMING EVENTS ============ -->
+  <section class="section reveal" id="upcoming">
+    <div class="container">
+      <div class="section-kicker" data-lang="en">Upcoming</div>
+      <div class="section-kicker" data-lang="es">Pr&oacute;ximos</div>
+      <h2 class="section-title" data-lang="en">Where to dance with us next.</h2>
+      <h2 class="section-title" data-lang="es">D&oacute;nde bailar con nosotros.</h2>
+      <p class="section-lede" data-lang="en">Pop-up classes, sunset socials, full-moon nights at the pier. Free to attend, beginners welcome, every event bilingual.</p>
+      <p class="section-lede" data-lang="es">Clases pop-up, noches al atardecer, eventos de luna llena en el muelle. Gratis, principiantes bienvenidos, todos los eventos biling&uuml;es.</p>
+
+      <div id="events-grid" class="events-grid"><!-- rendered by JS --></div>
+
+      <div id="events-empty" class="events-empty" hidden>
+        <p data-lang="en">Nothing on the calendar this week. Get on the list and you&rsquo;ll be the first to know.</p>
+        <p data-lang="es">No hay nada esta semana. Ap&uacute;ntate y ser&aacute;s la primera en saberlo.</p>
+        <a href="#join" class="btn-pill ghost-dark" data-cta-label="empty_join" data-cta-placement="upcoming_empty">
+          <span data-lang="en">Get on the list</span>
+          <span data-lang="es">Ap&uacute;ntame</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section reveal" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-photo">
+          <img src="/images/laura-portrait.jpg" alt="Laura Treto, Cuban dancer and movement coach in Key West" loading="lazy" />
+        </div>
+        <div class="about-copy">
+          <div class="section-kicker" data-lang="en">Who is Laura</div>
+          <div class="section-kicker" data-lang="es">Qui&eacute;n es Laura</div>
+          <h2 class="section-title" data-lang="en">Cuban dancer. Coach. Neighbor.</h2>
+          <h2 class="section-title" data-lang="es">Bailarina cubana. Coach. Vecina.</h2>
+
+          <p data-lang="en">Laura is a founding member of Acosta Danza, Carlos Acosta&rsquo;s world-renowned Cuban dance company. Over fifteen years she performed more than fifteen hundred shows on five continents.</p>
+          <p data-lang="es">Laura es miembro fundadora de Acosta Danza, la compa&ntilde;&iacute;a cubana de Carlos Acosta. En quince a&ntilde;os llev&oacute; m&aacute;s de mil quinientas funciones a cinco continentes.</p>
+
+          <p data-lang="en">She holds a clinical psychology degree from the University of Havana and is a NASM Certified Personal Trainer. Her thesis is simple: movement is the language the body speaks before words. Teach the body, and the rest follows.</p>
+          <p data-lang="es">Tiene un t&iacute;tulo en psicolog&iacute;a cl&iacute;nica de la Universidad de La Habana y es entrenadora personal certificada por NASM. Su tesis es simple: el movimiento es el idioma que el cuerpo habla antes que las palabras. Ens&eacute;&ntilde;ale al cuerpo, y lo dem&aacute;s sigue.</p>
+
+          <p data-lang="en">Now she lives in Key West and teaches in English and Spanish, on the sand, in studios, and at the pier.</p>
+          <p data-lang="es">Ahora vive en Key West y ense&ntilde;a en ingl&eacute;s y espa&ntilde;ol, en la arena, en estudios, y en el muelle.</p>
+
+          <div class="about-cta">
+            <a href="/client" class="btn-pill primary" data-cta-label="about_train" data-cta-placement="about">
+              <span data-lang="en">Train with me one on one</span>
+              <span data-lang="es">Entrena conmigo uno a uno</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EMAIL OPT-IN ============ -->
+  <section class="section reveal" id="join">
+    <div class="container">
+      <div class="join-wrap">
+        <div class="section-kicker" data-lang="en">Stay close</div>
+        <div class="section-kicker" data-lang="es">Mantente cerca</div>
+        <h2 class="section-title" data-lang="en">Get the next dance drop.</h2>
+        <h2 class="section-title" data-lang="es">Recibe el pr&oacute;ximo aviso de baile.</h2>
+        <p class="section-lede" data-lang="en">Free events, pop-up classes, and the occasional moonlit pier moment. One email when something drops, never spam.</p>
+        <p class="section-lede" data-lang="es">Eventos gratis, clases pop-up, y de vez en cuando una noche en el muelle bajo la luna. Un email cuando hay algo, nunca spam.</p>
+
+        <form id="join-form" class="join-form" novalidate>
+          <input type="hidden" name="event_id" value="kw-dance-events">
+          <input type="hidden" name="language" id="join-language" value="en">
+          <p class="bot-trap" aria-hidden="true">
+            <label>Don&rsquo;t fill this out: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+          </p>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="join-firstname" data-lang="en">First name</label>
+              <label for="join-firstname" data-lang="es">Nombre</label>
+              <input id="join-firstname" type="text" name="first_name"
+                data-placeholder-en="Your first name"
+                data-placeholder-es="Tu nombre"
+                placeholder="Your first name"
+                required maxlength="60" autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label for="join-email" data-lang="en">Email</label>
+              <label for="join-email" data-lang="es">Correo electr&oacute;nico</label>
+              <input id="join-email" type="email" name="email"
+                data-placeholder-en="you@email.com"
+                data-placeholder-es="tu@email.com"
+                placeholder="you@email.com"
+                required maxlength="120" autocomplete="email">
+            </div>
+          </div>
+
+          <div class="submit-row">
+            <span class="small-note" data-lang="en">No spam. Unsubscribe anytime.</span>
+            <span class="small-note" data-lang="es">Sin spam. Cancela cuando quieras.</span>
+            <button type="submit" class="btn-pill primary" id="join-submit">
+              <span data-lang="en">Get the next drop</span>
+              <span data-lang="es">Reci&iacute;belo</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </button>
+          </div>
+
+          <div class="form-success" id="join-success" role="status" aria-live="polite">
+            <h3 data-lang="en">You&rsquo;re on the list.</h3>
+            <h3 data-lang="es">Ya est&aacute;s en la lista.</h3>
+            <p data-lang="en">I&rsquo;ll write when the next event is on the calendar.</p>
+            <p data-lang="es">Te escribo cuando el pr&oacute;ximo evento est&eacute; en el calendario.</p>
+          </div>
+
+          <div class="form-error" id="join-error" role="alert" aria-live="assertive">
+            <h3 data-lang="en">Something went wrong.</h3>
+            <h3 data-lang="es">Algo sali&oacute; mal.</h3>
+            <p data-lang="en">Please try again, or email laura@lauratreto.com.</p>
+            <p data-lang="es">Int&eacute;ntalo de nuevo, o escribe a laura@lauratreto.com.</p>
+            <button type="button" id="join-retry">
+              <span data-lang="en">Try again</span>
+              <span data-lang="es">Intentar de nuevo</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section reveal" id="faq">
+    <div class="container">
+      <div class="section-kicker" data-lang="en">Common questions</div>
+      <div class="section-kicker" data-lang="es">Preguntas comunes</div>
+      <h2 class="section-title" data-lang="en">Quick answers.</h2>
+      <h2 class="section-title" data-lang="es">Respuestas r&aacute;pidas.</h2>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span data-lang="en">Do I need experience?</span>
+            <span data-lang="es">&iquest;Necesito experiencia?</span>
+          </summary>
+          <div class="faq-a">
+            <p data-lang="en">No. Beginners are always welcome. Every class breaks the basics down step by step, and Laura partners people up so no one is left standing alone.</p>
+            <p data-lang="es">No. Los principiantes siempre son bienvenidos. Cada clase desglosa lo b&aacute;sico paso a paso, y Laura empareja a la gente para que nadie se quede solo.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span data-lang="en">Are events free?</span>
+            <span data-lang="es">&iquest;Los eventos son gratis?</span>
+          </summary>
+          <div class="faq-a">
+            <p data-lang="en">Community pop-ups are free. Private movement coaching is paid. The list of paid programs lives on the pricing page.</p>
+            <p data-lang="es">Los eventos comunitarios son gratis. El coaching privado de movimiento es pago. La lista de programas pagos vive en la p&aacute;gina de precios.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span data-lang="en">Family friendly?</span>
+            <span data-lang="es">&iquest;Apto para familia?</span>
+          </summary>
+          <div class="faq-a">
+            <p data-lang="en">Yes. All ages are welcome at community events. Bring kids, partners, parents, neighbors. The pier is big enough.</p>
+            <p data-lang="es">S&iacute;. Todas las edades son bienvenidas en los eventos comunitarios. Trae a los ni&ntilde;os, parejas, padres, vecinos. El muelle es grande.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span data-lang="en">Do you teach in English or Spanish?</span>
+            <span data-lang="es">&iquest;Ense&ntilde;as en ingl&eacute;s o en espa&ntilde;ol?</span>
+          </summary>
+          <div class="faq-a">
+            <p data-lang="en">Both. Every event is bilingual. Cues, counts, and stories all run in both languages.</p>
+            <p data-lang="es">Ambos. Cada evento es biling&uuml;e. Las indicaciones, los conteos, y las historias corren en los dos idiomas.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span data-lang="en">Where in Key West?</span>
+            <span data-lang="es">&iquest;D&oacute;nde en Key West?</span>
+          </summary>
+          <div class="faq-a">
+            <p data-lang="en">It varies. White Street Pier, Mallory Square, occasional studio sessions. Sign up to get the location with each event.</p>
+            <p data-lang="es">Var&iacute;a. White Street Pier, Mallory Square, sesiones ocasionales en estudio. Ap&uacute;ntate para recibir la ubicaci&oacute;n con cada evento.</p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span data-lang="en">What should I wear?</span>
+            <span data-lang="es">&iquest;Qu&eacute; debo ponerme?</span>
+          </summary>
+          <div class="faq-a">
+            <p data-lang="en">Comfortable clothes you can move in. Soft soles or bare feet for pier nights. Bring water, it stays warm at sundown.</p>
+            <p data-lang="es">Ropa c&oacute;moda en la que te puedas mover. Suelas suaves o pies descalzos para las noches en el muelle. Trae agua, hace calor al atardecer.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-grid" data-lang="en">
+      <div>
+        <div class="brand-mark">Laura Treto</div>
+        <p>Cuban dancer, movement coach, and host of free community dance events in Key West, FL. Bilingual classes for every body, every level.</p>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/client">Become a client</a></li>
+          <li><a href="/chachafit">ChaChaFit</a></li>
+          <li><a href="/pricing">Training options</a></li>
+          <li><a href="/quiz.html">Movement quiz</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+          <li><a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+          <li><a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-grid" data-lang="es">
+      <div>
+        <div class="brand-mark">Laura Treto</div>
+        <p>Bailarina cubana, coach de movimiento, y anfitriona de eventos gratis de baile en Key West, FL. Clases biling&uuml;es para cada cuerpo, cada nivel.</p>
+      </div>
+      <div>
+        <h4>Visita</h4>
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/client">Hazte cliente</a></li>
+          <li><a href="/chachafit">ChaChaFit</a></li>
+          <li><a href="/pricing">Opciones de entrenamiento</a></li>
+          <li><a href="/quiz.html">Test de movimiento</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>S&iacute;gueme</h4>
+        <ul>
+          <li><a href="https://www.tiktok.com/@coachlauratreto" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+          <li><a href="https://www.instagram.com/coachlauratreto/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=100063583289825" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+          <li><a href="mailto:laura@lauratreto.com">laura@lauratreto.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-lang="en">&copy; 2026 Laura Treto Coaching. All rights reserved. &nbsp;&middot;&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="/terms.html">Terms of Service</a> &nbsp;&middot;&nbsp; Built by <a href="https://ainiko.ai">Ainiko.ai</a></span>
+      <span data-lang="es">&copy; 2026 Laura Treto Coaching. Todos los derechos reservados. &nbsp;&middot;&nbsp; <a href="/privacy.html">Pol&iacute;tica de Privacidad</a> &nbsp;&middot;&nbsp; <a href="/terms.html">T&eacute;rminos del Servicio</a> &nbsp;&middot;&nbsp; Creado por <a href="https://ainiko.ai">Ainiko.ai</a></span>
+    </div>
+  </footer>
+
+  <!-- ============ JAVASCRIPT ============ -->
+  <script>
+    // ----- Event registry (edit this to add/remove events) -----
+    const KW_DANCE_EVENTS = [
+      {
+        id: "chachafit-fullmoon-may-1-2026",
+        title_en: "ChaChaFit: Full Moon Salsa at the Pier",
+        title_es: "ChaChaFit: Salsa de Luna Llena en el Muelle",
+        date_iso: "2026-05-01T18:00:00-04:00",
+        date_label_en: "Friday, May 1 · 6:00 PM",
+        date_label_es: "Viernes, 1 de mayo · 6:00 PM",
+        location_en: "White Street Pier, Key West",
+        location_es: "White Street Pier, Key West",
+        cost_en: "Free",
+        cost_es: "Gratis",
+        cta_en: "RSVP",
+        cta_es: "Confirma tu lugar",
+        cta_url: "/chachafit"
+      }
+      // future events appended here
+    ];
+
+    // ----- Language toggle -----
+    function setLang(lang) {
+      document.body.classList.toggle('lang-es', lang === 'es');
+      document.querySelectorAll('.lang-toggle button').forEach(function(btn) {
+        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+      });
+      document.documentElement.lang = lang;
+
+      // Swap placeholders for inputs
+      document.querySelectorAll('[data-placeholder-en]').forEach(function(el) {
+        el.placeholder = lang === 'es'
+          ? (el.getAttribute('data-placeholder-es') || el.getAttribute('data-placeholder-en'))
+          : el.getAttribute('data-placeholder-en');
+      });
+
+      var langField = document.getElementById('join-language');
+      if (langField) langField.value = lang;
+
+      try { localStorage.setItem('ltc-lang', lang); } catch(e) {}
+
+      if (window.__ltLangReady) {
+        window.ltTrack('keywest_dancing_lang_switch', { to: lang });
+      }
+    }
+    window.setLang = setLang;
+
+    // Restore saved language (initial call should NOT fire the lang-switch event)
+    try {
+      if (localStorage.getItem('ltc-lang') === 'es') setLang('es');
+      else setLang('en');
+    } catch(e) { setLang('en'); }
+    window.__ltLangReady = true;
+
+    // ----- Hero reveal -----
+    document.addEventListener('DOMContentLoaded', function() {
+      var t = document.getElementById('heroTitle');
+      var i = document.getElementById('heroInner');
+      if (t) requestAnimationFrame(function() { t.classList.add('in'); if (i) i.classList.add('in'); });
+      window.ltTrack('keywest_dancing_page_view', { language: document.documentElement.lang || 'en' });
+    });
+
+    // ----- Edge tab nav -----
+    (function() {
+      var tab = document.getElementById('edgeTab');
+      var panel = document.getElementById('edgePanel');
+      var scrim = document.getElementById('edgeScrim');
+      var closeBtn = document.getElementById('edgeClose');
+      if (!tab || !panel) return;
+      function open() {
+        document.body.classList.add('edge-open');
+        tab.setAttribute('aria-expanded', 'true');
+        panel.setAttribute('aria-hidden', 'false');
+      }
+      function close() {
+        document.body.classList.remove('edge-open');
+        tab.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
+      }
+      tab.addEventListener('click', open);
+      if (closeBtn) closeBtn.addEventListener('click', close);
+      if (scrim) scrim.addEventListener('click', close);
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') close();
+      });
+    })();
+
+    // ----- Render upcoming events -----
+    (function renderEvents() {
+      var grid = document.getElementById('events-grid');
+      var empty = document.getElementById('events-empty');
+      if (!grid) return;
+
+      var now = Date.now();
+      var live = KW_DANCE_EVENTS.filter(function(ev) {
+        var when = Date.parse(ev.date_iso);
+        return !isNaN(when) && when > now;
+      });
+
+      if (!live.length) {
+        grid.style.display = 'none';
+        if (empty) empty.hidden = false;
+        return;
+      }
+
+      var html = live.map(function(ev) {
+        return ''
+          + '<article class="event-card">'
+          + '  <div class="ev-date" data-lang="en">' + escapeHtml(ev.date_label_en) + '</div>'
+          + '  <div class="ev-date" data-lang="es">' + escapeHtml(ev.date_label_es) + '</div>'
+          + '  <h3 class="ev-title" data-lang="en">' + escapeHtml(ev.title_en) + '</h3>'
+          + '  <h3 class="ev-title" data-lang="es">' + escapeHtml(ev.title_es) + '</h3>'
+          + '  <div class="ev-meta">'
+          + '    <div data-lang="en"><strong>Where:</strong> ' + escapeHtml(ev.location_en) + '</div>'
+          + '    <div data-lang="es"><strong>Dónde:</strong> ' + escapeHtml(ev.location_es) + '</div>'
+          + '    <div data-lang="en"><strong>Cost:</strong> ' + escapeHtml(ev.cost_en) + '</div>'
+          + '    <div data-lang="es"><strong>Costo:</strong> ' + escapeHtml(ev.cost_es) + '</div>'
+          + '  </div>'
+          + '  <a class="ev-cta" href="' + escapeAttr(ev.cta_url) + '" data-event-id="' + escapeAttr(ev.id) + '" data-cta-label="event_card" data-cta-placement="upcoming">'
+          + '    <span data-lang="en">' + escapeHtml(ev.cta_en) + '</span>'
+          + '    <span data-lang="es">' + escapeHtml(ev.cta_es) + '</span>'
+          + '    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>'
+          + '  </a>'
+          + '</article>';
+      }).join('');
+      grid.innerHTML = html;
+      if (empty) empty.hidden = true;
+
+      function escapeHtml(s) { return String(s).replace(/[&<>"']/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+      function escapeAttr(s) { return escapeHtml(s); }
+    })();
+
+    // ----- GA4 CTA tracking -----
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest && e.target.closest('a, button');
+      if (!a) return;
+      // Event card click
+      var eventId = a.getAttribute('data-event-id');
+      if (eventId) {
+        window.ltTrack('keywest_dancing_event_click', { event_id: eventId });
+      }
+      // Generic CTA
+      var label = a.getAttribute('data-cta-label');
+      var placement = a.getAttribute('data-cta-placement');
+      if (label && placement) {
+        window.ltTrack('keywest_dancing_cta_click', { label: label, placement: placement });
+      }
+    }, true);
+
+    // ----- Scroll depth -----
+    (function scrollDepth() {
+      var thresholds = [25, 50, 75, 100];
+      var fired = {};
+      var ticking = false;
+      function check() {
+        ticking = false;
+        var doc = document.documentElement;
+        var scrollTop = window.pageYOffset || doc.scrollTop || 0;
+        var viewport = window.innerHeight || doc.clientHeight || 0;
+        var full = Math.max(doc.scrollHeight, document.body.scrollHeight) - viewport;
+        if (full <= 0) return;
+        var pct = Math.min(100, Math.round((scrollTop / full) * 100));
+        thresholds.forEach(function(t) {
+          if (!fired[t] && pct >= t) {
+            fired[t] = true;
+            window.ltTrack('keywest_dancing_scroll_depth', { depth: t });
+          }
+        });
+      }
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          ticking = true;
+          window.requestAnimationFrame(check);
+        }
+      }, { passive: true });
+      check();
+    })();
+
+    // ----- Reveal-on-scroll -----
+    (function scrollReveal() {
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var els = document.querySelectorAll('.reveal');
+      if (!els.length) return;
+      if (reduced.matches || !('IntersectionObserver' in window)) {
+        els.forEach(function(el) { el.classList.add('is-visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+      els.forEach(function(el) { io.observe(el); });
+    })();
+
+    // ----- Email opt-in form -----
+    (function joinForm() {
+      var form = document.getElementById('join-form');
+      var submitBtn = document.getElementById('join-submit');
+      var successBox = document.getElementById('join-success');
+      var errorBox = document.getElementById('join-error');
+      var retryBtn = document.getElementById('join-retry');
+      if (!form || !submitBtn) return;
+
+      function showState(which) {
+        form.querySelectorAll('.row-2, .submit-row').forEach(function(el) {
+          el.style.display = (which === 'form') ? '' : 'none';
+        });
+        successBox.classList.toggle('visible', which === 'success');
+        errorBox.classList.toggle('visible', which === 'error');
+      }
+      if (retryBtn) retryBtn.addEventListener('click', function() {
+        var lang = document.documentElement.lang || (document.body.classList.contains('lang-es') ? 'es' : 'en');
+        window.ltTrack('keywest_dancing_optin_error', { language: lang, reason: 'retry_clicked' });
+        showState('form');
+      });
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var isEs = document.body.classList.contains('lang-es');
+        var origHTML = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = isEs ? 'Enviando...' : 'Sending...';
+
+        var honeypot = (form.elements['bot-field'] && form.elements['bot-field'].value) || '';
+        var payload = {
+          email: (form.elements['email'].value || '').trim(),
+          first_name: (form.elements['first_name'].value || '').trim(),
+          language: form.elements['language'].value || (isEs ? 'es' : 'en'),
+          future_events: true,
+          event_id: form.elements['event_id'].value,
+          website: honeypot
+        };
+
+        window.ltTrack('keywest_dancing_optin_attempt', { language: payload.language });
+
+        fetch('/.netlify/functions/event-signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        .then(function(res) { return res.json().then(function(j) { return { ok: res.ok, body: j }; }); })
+        .then(function(r) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origHTML;
+          if (r.ok && r.body && r.body.success) {
+            showState('success');
+            window.ltTrack('keywest_dancing_optin_success', { language: payload.language });
+          } else {
+            showState('error');
+            var reason = (r && r.body && (r.body.error || r.body.message)) || 'server_error';
+            window.ltTrack('keywest_dancing_optin_error', { language: payload.language, reason: String(reason) });
+          }
+        })
+        .catch(function(err) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origHTML;
+          showState('error');
+          var reason = (err && err.message) ? String(err.message) : 'network_error';
+          window.ltTrack('keywest_dancing_optin_error', { language: payload.language, reason: reason });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

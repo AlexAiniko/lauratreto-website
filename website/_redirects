@@ -14,5 +14,9 @@
 # Pricing page
 /pricing            /pricing.html                          200
 
+# Key West Dancing evergreen landing page
+/keywest-dancing    /keywest-dancing.html                  200
+/dance              /keywest-dancing.html                  200
+
 # SPA-style catch-all (single page site)
 /*    /index.html   200

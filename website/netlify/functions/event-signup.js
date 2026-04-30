@@ -15,8 +15,12 @@
 // ---------------------------------------------------------------------------
 // Extend this map as new events ship. Keep the default pointing to the
 // current active event so a missing event_id still routes to something real.
+//
+// Group IDs can be overridden by Netlify env vars (preferred for prod):
+//   MAILERLITE_GROUP_KW_DANCE   → kw-dance-events bucket
 const EVENT_GROUPS = {
   'chachafit-fullmoon-may-2026': '185598986321659436', // ChaChaFit: Full Moon May 1 2026
+  'kw-dance-events': process.env.MAILERLITE_GROUP_KW_DANCE || '186207950945126028', // /keywest-dancing evergreen list
 };
 const DEFAULT_EVENT_ID = 'chachafit-fullmoon-may-2026';
 
@@ -116,10 +120,11 @@ export default async (request, context) => {
   }
 
   const groupId = EVENT_GROUPS[eventIdInput] || EVENT_GROUPS[DEFAULT_EVENT_ID];
-  const eventName =
-    eventIdInput === 'chachafit-fullmoon-may-2026'
-      ? 'ChaChaFit Full Moon May 1'
-      : eventIdInput;
+  const EVENT_NAMES = {
+    'chachafit-fullmoon-may-2026': 'ChaChaFit Full Moon May 1',
+    'kw-dance-events': 'KW Dance Events (evergreen)',
+  };
+  const eventName = EVENT_NAMES[eventIdInput] || eventIdInput;
 
   // MailerLite upsert: POST /api/subscribers creates or updates by email.
   // Assigning groups[] on the payload is the documented way to add the
