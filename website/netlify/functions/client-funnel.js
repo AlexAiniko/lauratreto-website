@@ -326,6 +326,11 @@ async function runBookingPostProcess({
   // 2) Email Laura + email prospect + welcome (first-scan only) in parallel.
   // Welcome email skipped on dedupe — they were welcomed when they first
   // landed in their original bucket.
+  //
+  // Confirmation email ("You're booked, Name") only fires when a real slot
+  // was picked. Online prospects don't pick a slot, so the welcome email
+  // (which IS the CTA to come back and book) is the only thing they receive.
+  const hasBooking = !!(startISO && endISO);
   const sendWelcome = !dedupBucket && finalBucket;
   const tasks = [
     sendBookingNotification({
@@ -339,15 +344,17 @@ async function runBookingPostProcess({
       language,
       calendarEventLink,
     }),
-    sendBookingConfirmation({
+  ];
+  if (hasBooking) {
+    tasks.push(sendBookingConfirmation({
       prospectName: firstName,
       prospectEmail: email,
       date: displayDate || date,
       time: displayTime,
       language,
       calendarEventLink,
-    }),
-  ];
+    }));
+  }
   if (sendWelcome) {
     tasks.push(sendWelcomeEmail({
       bucket: finalBucket,
@@ -359,16 +366,25 @@ async function runBookingPostProcess({
 
   const results = await Promise.allSettled(tasks);
 
-  const [notifyResult, confirmResult, welcomeResult] = results;
+  // Order in results matches order in tasks: notify, [confirm?], [welcome?]
+  let cursor = 0;
+  const notifyResult = results[cursor++];
+  const confirmResult = hasBooking ? results[cursor++] : null;
+  const welcomeResult = sendWelcome ? results[cursor++] : null;
+
   if (notifyResult.status === 'fulfilled') {
     console.log('[client-funnel] email to laura: ok');
   } else {
     console.error(`[client-funnel] post-process error: email-laura ${notifyResult.reason?.message || notifyResult.reason}`);
   }
-  if (confirmResult.status === 'fulfilled') {
-    console.log('[client-funnel] email to prospect: ok');
+  if (hasBooking) {
+    if (confirmResult.status === 'fulfilled') {
+      console.log('[client-funnel] email to prospect: ok');
+    } else {
+      console.error(`[client-funnel] post-process error: email-prospect ${confirmResult.reason?.message || confirmResult.reason}`);
+    }
   } else {
-    console.error(`[client-funnel] post-process error: email-prospect ${confirmResult.reason?.message || confirmResult.reason}`);
+    console.log('[client-funnel] confirmation email skipped (no slot picked, online flow)');
   }
   if (sendWelcome) {
     if (welcomeResult.status === 'fulfilled') {

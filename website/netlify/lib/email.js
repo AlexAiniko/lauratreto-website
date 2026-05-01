@@ -71,6 +71,11 @@ async function sendAndRelabel({ to, subject, text, html }) {
 
 /**
  * Self-addressed memo to laura@lauratreto.com summarizing a new booking.
+ *
+ * Two shapes:
+ *   - Local lead with picked slot: "New booking: Name, Saturday, May 3 11:30"
+ *   - Online lead, no slot: "New online lead: Name (no slot picked)"
+ * Body always lists what was captured; missing fields render as "(not provided)".
  */
 export async function sendBookingNotification({
   prospectName,
@@ -83,10 +88,17 @@ export async function sendBookingNotification({
   language,
   calendarEventLink,
 }) {
-  const subject = `New booking: ${prospectName || prospectEmail} — ${date || 'date TBD'} ${time || ''}`.trim();
+  const hasSlot = !!(date && time);
+  const subject = hasSlot
+    ? `New booking: ${prospectName || prospectEmail}, ${date} ${time}`.trim()
+    : `New online lead: ${prospectName || prospectEmail} (no slot picked)`;
+
+  const intro = hasSlot
+    ? `New booking from the /client funnel.`
+    : `New online lead from the /client funnel. No calendar slot picked, the prospect received the welcome email as the CTA to come back and book.`;
 
   const lines = [
-    `New booking from the /client funnel.`,
+    intro,
     ``,
     `Name: ${prospectName || '(not provided)'}`,
     `Email: ${prospectEmail}`,
@@ -104,7 +116,7 @@ export async function sendBookingNotification({
 
   const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #2B2B2B; max-width: 560px;">
-      <p style="font-size: 15px; margin: 0 0 16px;">New booking from the /client funnel.</p>
+      <p style="font-size: 15px; margin: 0 0 16px;">${escapeHtml(intro)}</p>
       <table style="border-collapse: collapse; font-size: 14px;">
         <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Name</td><td style="padding: 4px 0;">${escapeHtml(prospectName || '(not provided)')}</td></tr>
         <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Email</td><td style="padding: 4px 0;"><a href="mailto:${escapeHtml(prospectEmail)}" style="color: #1A7A7A;">${escapeHtml(prospectEmail)}</a></td></tr>
