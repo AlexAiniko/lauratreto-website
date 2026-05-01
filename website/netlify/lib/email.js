@@ -357,7 +357,6 @@ export async function sendDanceLessonConfirmation({
   date,
   time,
   language,
-  bookedFor,
   notes,
   calendarEventLink,
 }) {
@@ -380,7 +379,6 @@ export async function sendDanceLessonConfirmation({
       `Te confirmo el punto de encuentro 24 horas antes (tu hotel, un estudio, o la playa, lo que mejor te quede).`,
     ];
     if (notes) lines.push(``, `Anotado: ${notes}`);
-    if (bookedFor) lines.push(``, `Tus fechas en Key West: ${bookedFor}`);
     if (calendarEventLink) lines.push(``, `Evento del calendario: ${calendarEventLink}`);
     lines.push(``, `Cualquier cambio, responde a este correo.`, ``, `Nos vemos pronto,`, `Laura`);
     text = lines.join('\n');
@@ -389,7 +387,6 @@ export async function sendDanceLessonConfirmation({
       `Te confirmo el punto de encuentro 24 horas antes (tu hotel, un estudio, o la playa, lo que mejor te quede).`,
     ];
     if (notes) bodyParas.push(`Anotado: ${escapeHtml(notes)}`);
-    if (bookedFor) bodyParas.push(`Tus fechas en Key West: ${escapeHtml(bookedFor)}`);
     bodyParas.push(`Cualquier cambio, responde a este correo.`);
     html = renderConfirmationHtml({
       greeting,
@@ -409,7 +406,6 @@ export async function sendDanceLessonConfirmation({
       `I'll confirm the meet-up spot 24 hours before (your hotel, a studio, or the beach, whatever works best for you).`,
     ];
     if (notes) lines.push(``, `Noted: ${notes}`);
-    if (bookedFor) lines.push(``, `Your dates in Key West: ${bookedFor}`);
     if (calendarEventLink) lines.push(``, `Calendar event: ${calendarEventLink}`);
     lines.push(``, `Anything changes on your end, just reply.`, ``, `See you soon,`, `Laura`);
     text = lines.join('\n');
@@ -418,7 +414,6 @@ export async function sendDanceLessonConfirmation({
       `I'll confirm the meet-up spot 24 hours before (your hotel, a studio, or the beach, whatever works best for you).`,
     ];
     if (notes) bodyParas.push(`Noted: ${escapeHtml(notes)}`);
-    if (bookedFor) bodyParas.push(`Your dates in Key West: ${escapeHtml(bookedFor)}`);
     bodyParas.push(`Anything changes on your end, just reply.`);
     html = renderConfirmationHtml({
       greeting,
@@ -442,7 +437,6 @@ export async function sendDanceLessonNotification({
   date,
   time,
   language,
-  bookedFor,
   notes,
   calendarEventLink,
 }) {
@@ -457,7 +451,6 @@ export async function sendDanceLessonNotification({
     `Email: ${prospectEmail}`,
     `Date: ${date || '(not provided)'}`,
     `Time: ${time || '(not provided)'}`,
-    `In Key West: ${bookedFor || '(not provided)'}`,
     `Notes: ${notes || '(none)'}`,
     `Language: ${language || 'en'}`,
   ];
@@ -473,7 +466,6 @@ export async function sendDanceLessonNotification({
         <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Email</td><td style="padding: 4px 0;"><a href="mailto:${escapeHtml(prospectEmail)}" style="color: #1A7A7A;">${escapeHtml(prospectEmail)}</a></td></tr>
         <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Date</td><td style="padding: 4px 0;">${escapeHtml(date || '(not provided)')}</td></tr>
         <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Time</td><td style="padding: 4px 0;">${escapeHtml(time || '(not provided)')}</td></tr>
-        <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">In Key West</td><td style="padding: 4px 0;">${escapeHtml(bookedFor || '(not provided)')}</td></tr>
         <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Notes</td><td style="padding: 4px 0;">${escapeHtml(notes || '(none)')}</td></tr>
         <tr><td style="padding: 4px 12px 4px 0; color: #6b6b6b;">Language</td><td style="padding: 4px 0;">${escapeHtml(language || 'en')}</td></tr>
       </table>

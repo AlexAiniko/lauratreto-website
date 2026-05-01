@@ -497,16 +497,6 @@
       </div>
 
       <div class="field">
-        <label class="field-label" for="bookedFor" data-lang="en">When are you in Key West?</label>
-        <label class="field-label" for="bookedFor" data-lang="es">&iquest;Cu&aacute;ndo est&aacute;s en Key West?</label>
-        <input id="bookedFor" name="booked_for" class="input" type="text" maxlength="80"
-          data-placeholder-en="e.g. Wed to Sun this week" data-placeholder-es="ej. mi&eacute;rcoles a domingo esta semana"
-          placeholder="e.g. Wed to Sun this week">
-        <span class="field-hint" data-lang="en">Free text. Loose dates are fine.</span>
-        <span class="field-hint" data-lang="es">Texto libre. Fechas aproximadas est&aacute;n bien.</span>
-      </div>
-
-      <div class="field">
         <label class="field-label" for="notes" data-lang="en">Anything I should know? (optional)</label>
         <label class="field-label" for="notes" data-lang="es">&iquest;Algo que deba saber? (opcional)</label>
         <textarea id="notes" name="notes" class="textarea" maxlength="280"
@@ -862,7 +852,7 @@
       btn.disabled = !ready;
       btn.classList.toggle('is-disabled', !ready);
     }
-    ['firstName','email','bookedFor','notes'].forEach((id) => {
+    ['firstName','email','notes'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.addEventListener('input', updateSubmitBtn);
     });
@@ -908,7 +898,6 @@
         first_name: document.getElementById('firstName').value.trim(),
         email: document.getElementById('email').value.trim(),
         lesson_type: state.type,
-        booked_for: document.getElementById('bookedFor').value.trim(),
         notes: document.getElementById('notes').value.trim(),
         date: state.date,
         time: state.time,

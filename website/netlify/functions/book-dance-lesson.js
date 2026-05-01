@@ -63,7 +63,6 @@ export default async (request, context) => {
   const email = sanitize(body.email, 120).toLowerCase();
   const firstName = sanitize(body.first_name, 60);
   const lessonType = sanitize(body.lesson_type, 10).toLowerCase();
-  const bookedFor = sanitize(body.booked_for, 80);
   const notes = sanitize(body.notes, 280);
   const language = sanitize(body.language, 10) || 'en';
   const date = sanitize(body.date, 80);
@@ -94,7 +93,6 @@ export default async (request, context) => {
     fields: {
       name: firstName || undefined,
       lesson_type: lessonType,
-      booked_for: bookedFor || undefined,
       booking_date: date || undefined,
       booking_time: time || undefined,
       lesson_notes: notes || undefined,
@@ -144,7 +142,6 @@ export default async (request, context) => {
     tier,
     date,
     time,
-    bookedFor,
     notes,
     language,
   });
@@ -164,7 +161,7 @@ export default async (request, context) => {
 
 async function runDanceLessonPostProcess({
   subscriberId, firstName, email, lessonType, tier,
-  date, time, bookedFor, notes, language,
+  date, time, notes, language,
 }) {
   // Compute event window using the slot's submitted ISO + H:MM in BOOKING_TIMEZONE.
   let startISO = null;
@@ -197,7 +194,6 @@ async function runDanceLessonPostProcess({
       `Tier: ${tier.label} (${tier.price}, ${tier.durationMin} min)`,
       `Name: ${firstName || '(not provided)'}`,
       `Email: ${email}`,
-      `In Key West: ${bookedFor || '(not provided)'}`,
       `Notes: ${notes || '(none)'}`,
       `Language: ${language}`,
     ];
@@ -231,7 +227,6 @@ async function runDanceLessonPostProcess({
       date: displayDate || date,
       time: displayTime,
       language,
-      bookedFor,
       notes,
       calendarEventLink,
     }),
@@ -242,7 +237,6 @@ async function runDanceLessonPostProcess({
       date: displayDate || date,
       time: displayTime,
       language,
-      bookedFor,
       notes,
       calendarEventLink,
     }),
