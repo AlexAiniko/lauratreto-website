@@ -59,3 +59,6 @@ Claude Haiku: roughly $0.001-0.003 per DM response. At 100 DMs/day that is about
 ## Model
 
 Uses `claude-haiku-4-5-20251001` for speed (sub-second) and low cost. Can be upgraded to Sonnet if response quality needs improvement.
+
+<!-- preview-trigger: stripe-e2e-test 2026-04-30 -->
+
