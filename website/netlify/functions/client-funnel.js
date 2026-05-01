@@ -285,7 +285,7 @@ async function runBookingPostProcess({
     console.error('[client-funnel] post-process: bad date/time, skipping calendar', err?.message || err);
   }
 
-  const displayDate = formatBookingDate(date, BOOKING_TIMEZONE);
+  const displayDate = formatBookingDate(date, BOOKING_TIMEZONE, language);
   const displayTime = time || '';
 
   let calendarEventLink = null;
@@ -455,11 +455,12 @@ function tzOffsetMinutes(date, tz) {
   return Math.round((asUtc - date.getTime()) / 60000);
 }
 
-function formatBookingDate(dateISO, tz) {
+function formatBookingDate(dateISO, tz, language) {
   if (!dateISO) return '';
   const d = new Date(dateISO);
   if (isNaN(d.getTime())) return '';
-  return new Intl.DateTimeFormat('en-US', {
+  const locale = language === 'es' ? 'es-ES' : 'en-US';
+  return new Intl.DateTimeFormat(locale, {
     timeZone: tz, weekday: 'long', month: 'long', day: 'numeric',
   }).format(d);
 }
