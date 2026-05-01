@@ -25,10 +25,10 @@
   <meta property="og:title" content="Dance in Key West with Laura Treto" />
   <meta property="og:description" content="Private dance lessons in Key West. Solo, couple, and small group salsa, bachata, and ChaChaFit with Cuban dancer Laura Treto." />
   <meta property="og:url" content="https://lauratreto.com/keywest-dancing" />
-  <meta property="og:image" content="https://lauratreto.com/images/chachafit-poster.jpg" />
+  <meta property="og:image" content="https://lauratreto.com/images/keywest-dancing-poster.jpg" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://lauratreto.com/images/chachafit-poster.jpg" />
+  <meta name="twitter:image" content="https://lauratreto.com/images/keywest-dancing-poster.jpg" />
   <link rel="canonical" href="https://lauratreto.com/keywest-dancing" />
   <link rel="alternate" hreflang="en" href="https://lauratreto.com/keywest-dancing" />
   <link rel="alternate" hreflang="es" href="https://lauratreto.com/keywest-dancing" />
@@ -40,8 +40,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,400;1,700;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Hero image preload -->
-  <link rel="preload" as="image" href="/images/chachafit-poster.jpg" fetchpriority="high">
+  <!-- Hero poster preload (used until video is decoded) -->
+  <link rel="preload" as="image" href="/images/keywest-dancing-poster.jpg" fetchpriority="high">
 
   <!-- Structured data: LocalBusiness -->
   <script type="application/ld+json">
@@ -52,7 +52,7 @@
     "description": "Private dance lessons with Cuban dancer Laura Treto in Key West. Solo, couple, and small group salsa, bachata, and ChaChaFit. Bilingual, in person.",
     "url": "https://lauratreto.com/keywest-dancing",
     "email": "laura@lauratreto.com",
-    "image": "https://lauratreto.com/images/chachafit-poster.jpg",
+    "image": "https://lauratreto.com/images/keywest-dancing-poster.jpg",
     "areaServed": {
       "@type": "City",
       "name": "Key West, FL"
@@ -266,12 +266,23 @@
     .hero-bg {
       position: absolute; inset: 0;
       z-index: 0;
-      background-image:
-        linear-gradient(180deg, rgba(43,43,43,.55) 0%, rgba(43,43,43,.78) 100%),
-        url('/images/chachafit-poster.jpg');
-      background-size: cover;
-      background-position: center 30%;
-      filter: saturate(0.6) contrast(1.05);
+      overflow: hidden;
+      background: #1a0d0a url('/images/keywest-dancing-poster.jpg') center 30% / cover no-repeat;
+    }
+    .hero-bg video {
+      position: absolute; inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      filter: saturate(0.78) contrast(1.04);
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      z-index: 1;
+      background: linear-gradient(180deg, rgba(43,43,43,.55) 0%, rgba(43,43,43,.78) 100%);
+      pointer-events: none;
     }
     .hero-inner {
       position: relative;
@@ -712,6 +723,50 @@
       font-weight: 600;
     }
 
+    /* ============ MID VIDEO STRIP (B&W La Múcura solo) ============ */
+    .video-strip {
+      position: relative;
+      width: 100%;
+      height: 56vh;
+      min-height: 360px;
+      max-height: 640px;
+      background: #0d0d0d;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .video-strip video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .video-strip::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.30) 0%, rgba(0,0,0,.10) 50%, rgba(0,0,0,.45) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .video-strip .strip-quote {
+      position: absolute;
+      left: 0; right: 0; bottom: clamp(28px, 5vh, 56px);
+      z-index: 2;
+      text-align: center;
+      padding: 0 clamp(24px, 6vw, 56px);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(20px, 2.6vw, 28px);
+      letter-spacing: 0.01em;
+      color: var(--warm-white);
+      text-shadow: 0 2px 22px rgba(0,0,0,.6);
+      opacity: 0.95;
+    }
+    @media (max-width: 600px) {
+      .video-strip { height: 50vh; min-height: 320px; }
+    }
+
     /* ============ FAQ ============ */
     #faq { background: var(--warm-white); }
     .faq-list { max-width: 760px; }
@@ -864,7 +919,18 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero" id="hero">
-    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-bg" aria-hidden="true">
+      <video autoplay muted loop playsinline webkit-playsinline
+             preload="auto"
+             disablePictureInPicture disableRemotePlayback
+             x-webkit-airplay="deny"
+             controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+             poster="/images/keywest-dancing-poster.jpg"
+             aria-hidden="true">
+        <source src="/videos/laura-dancing-keywest-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
+        <source src="/videos/laura-dancing-keywest.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="hero-inner" id="heroInner">
       <span class="hero-eyebrow">
         <span data-lang="en">Key West &middot; Bilingual &middot; In Person</span>
@@ -954,6 +1020,24 @@
         </article>
       </div>
     </div>
+  </section>
+
+  <!-- ============ MID-PAGE VIDEO STRIP (B&W La Múcura solo, full bleed) ============ -->
+  <section class="video-strip reveal" aria-label="Laura on stage">
+    <video autoplay muted loop playsinline webkit-playsinline
+           disablePictureInPicture disableRemotePlayback
+           x-webkit-airplay="deny"
+           controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+           preload="metadata"
+           poster="/videos/chachafit-pier-laura-poster.jpg"
+           aria-hidden="true">
+      <source src="/videos/chachafit-pier-laura-mobile.mp4" media="(max-width: 640px)" type="video/mp4">
+      <source src="/videos/chachafit-pier-laura.mp4" type="video/mp4">
+    </video>
+    <p class="strip-quote">
+      <span data-lang="en">Fifteen years on stage.</span>
+      <span data-lang="es">Quince a&ntilde;os en escenarios.</span>
+    </p>
   </section>
 
   <!-- ============ UPCOMING (single-line community-event banner) ============ -->
