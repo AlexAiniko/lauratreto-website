@@ -241,6 +241,7 @@ export default async (request, context) => {
       language,
       finalBucket,
       dedupBucket,
+      meetingMethod,
     });
 
     if (typeof context?.waitUntil === 'function') {
@@ -266,7 +267,7 @@ export default async (request, context) => {
 
 async function runBookingPostProcess({
   firstName, email, phone, date, time, intent, mode, language,
-  finalBucket, dedupBucket,
+  finalBucket, dedupBucket, meetingMethod,
 }) {
   // Compute event window from the prospect's submitted date + time.
   // Format expected from client.html: date is an ISO timestamp (toISOString),
@@ -365,6 +366,7 @@ async function runBookingPostProcess({
       time: displayTime,
       language,
       calendarEventLink,
+      meetingMethod,
     }));
   }
   if (sendWelcome) {
@@ -378,6 +380,7 @@ async function runBookingPostProcess({
       bookingDate: displayDate || date,
       bookingTime: displayTime,
       calendarEventLink,
+      meetingMethod,
     }));
   }
 

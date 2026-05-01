@@ -141,6 +141,10 @@ export async function sendBookingNotification({
 
 /**
  * Friendly first-person confirmation to the prospect.
+ *
+ * meetingMethod swaps the opener verb only:
+ *   'call'   -> "I'll call you ..." / "Te llamo el ..."
+ *   anything else (default, in-person, unknown) -> "I'll see you ..." / "Te veo el ..."
  */
 export async function sendBookingConfirmation({
   prospectName,
@@ -149,9 +153,11 @@ export async function sendBookingConfirmation({
   time,
   language,
   calendarEventLink,
+  meetingMethod,
 }) {
   const lang = language === 'es' ? 'es' : 'en';
   const firstName = (prospectName || '').split(' ')[0] || '';
+  const isCall = meetingMethod === 'call';
 
   let subject;
   let text;
@@ -160,10 +166,18 @@ export async function sendBookingConfirmation({
   if (lang === 'es') {
     subject = `Cita confirmada, ${firstName}`;
     const greeting = firstName ? `Hola ${firstName},` : 'Hola,';
+    const dateStr = date || 'día acordado';
+    const timeStr = time || 'la hora acordada';
+    const opener = isCall
+      ? `Recibí tu reserva. Te llamo el ${dateStr} a las ${timeStr}.`
+      : `Recibí tu reserva. Te veo el ${dateStr} a las ${timeStr}.`;
+    const openerHtml = isCall
+      ? `Recibí tu reserva. Te llamo el <strong>${escapeHtml(dateStr)}</strong> a las <strong>${escapeHtml(timeStr)}</strong>.`
+      : `Recibí tu reserva. Te veo el <strong>${escapeHtml(dateStr)}</strong> a las <strong>${escapeHtml(timeStr)}</strong>.`;
     const lines = [
       greeting,
       ``,
-      `Recibí tu reserva. Te veo el ${date || 'día acordado'} a las ${time || 'la hora acordada'}.`,
+      opener,
       ``,
       `Si necesitas cambiar la hora o cancelar, responde a este correo y lo arreglamos.`,
     ];
@@ -175,7 +189,7 @@ export async function sendBookingConfirmation({
     html = renderConfirmationHtml({
       greeting,
       bodyParagraphs: [
-        `Recibí tu reserva. Te veo el <strong>${escapeHtml(date || 'día acordado')}</strong> a las <strong>${escapeHtml(time || 'la hora acordada')}</strong>.`,
+        openerHtml,
         `Si necesitas cambiar la hora o cancelar, responde a este correo y lo arreglamos.`,
       ],
       ctaText: calendarEventLink ? 'Ver evento en mi calendario' : null,
@@ -185,10 +199,18 @@ export async function sendBookingConfirmation({
   } else {
     subject = `You're booked, ${firstName}`.trim();
     const greeting = firstName ? `Hi ${firstName},` : 'Hi there,';
+    const dateStr = date || 'the day we picked';
+    const timeStr = time || 'the time we picked';
+    const opener = isCall
+      ? `Got your booking. I'll call you ${dateStr} at ${timeStr}.`
+      : `Got your booking. I'll see you on ${dateStr} at ${timeStr}.`;
+    const openerHtml = isCall
+      ? `Got your booking. I'll call you <strong>${escapeHtml(dateStr)}</strong> at <strong>${escapeHtml(timeStr)}</strong>.`
+      : `Got your booking. I'll see you on <strong>${escapeHtml(dateStr)}</strong> at <strong>${escapeHtml(timeStr)}</strong>.`;
     const lines = [
       greeting,
       ``,
-      `Got your booking. I'll see you on ${date || 'the day we picked'} at ${time || 'the time we picked'}.`,
+      opener,
       ``,
       `If anything changes on your end, just reply to this email and we'll sort it out.`,
     ];
@@ -200,7 +222,7 @@ export async function sendBookingConfirmation({
     html = renderConfirmationHtml({
       greeting,
       bodyParagraphs: [
-        `Got your booking. I'll see you on <strong>${escapeHtml(date || 'the day we picked')}</strong> at <strong>${escapeHtml(time || 'the time we picked')}</strong>.`,
+        openerHtml,
         `If anything changes on your end, just reply to this email and we'll sort it out.`,
       ],
       ctaText: calendarEventLink ? 'Open calendar event' : null,
@@ -281,6 +303,21 @@ const WELCOME_TEMPLATES = {
         'P.S. Hablamos español también, si lo prefieres.',
       ],
       signoff: 'Laura',
+      byMethod: {
+        call: {
+          subject: 'Talk soon',
+          preview: "I'll call you {{date}} at {{time}}.",
+          paragraphs: [
+            "You're booked. I'll call you {{date}} at {{time}}.",
+            "I'm Laura. Cuban dancer, fifteen years on stage. Now teaching here in Key West.",
+            'Quick call. We talk about what you want, what you have tried, and we both decide if we click.',
+            "Even if we don't end up working together, I'll make sure you walk away with something.",
+            'If anything changes on your end, just reply to this email.',
+            'Talk soon,',
+            'P.S. Hablamos español también, si lo prefieres.',
+          ],
+        },
+      },
     },
     es: {
       subject: 'Un café en Key West',
@@ -297,6 +334,21 @@ const WELCOME_TEMPLATES = {
         'P.D. We also coach in English, if you prefer.',
       ],
       signoff: 'Laura',
+      byMethod: {
+        call: {
+          subject: 'Hablamos pronto',
+          preview: 'Te llamo el {{date}} a las {{time}}.',
+          paragraphs: [
+            'Estás reservada. Te llamo el {{date}} a las {{time}}.',
+            'Soy Laura. Bailarina cubana, quince años en escenarios. Ahora enseñando aquí en Key West.',
+            'Una llamada rápida. Hablamos de lo que buscas, lo que has probado, y los dos decidimos si encajamos.',
+            'Aunque no terminemos trabajando juntas, te aseguro que sales con algo.',
+            'Si algo cambia, responde a este correo.',
+            'Hablamos pronto,',
+            'P.D. We also coach in English, if you prefer.',
+          ],
+        },
+      },
     },
   },
   'train-online': {
@@ -357,6 +409,21 @@ const WELCOME_TEMPLATES = {
         'P.S. Hablamos español también, si lo prefieres.',
       ],
       signoff: 'Laura',
+      byMethod: {
+        call: {
+          subject: 'Talk soon',
+          preview: "I'll call you {{date}} at {{time}}.",
+          paragraphs: [
+            "You're booked. I'll call you {{date}} at {{time}}.",
+            "I'm Laura. NASM-certified strength coach. Local in Key West.",
+            'Quick call. We talk about your goals, what hurts, what you have tried. We both decide if private training is the right fit.',
+            "Even if we don't end up training together, you walk away with something useful.",
+            'If anything changes on your end, just reply to this email.',
+            'Talk soon,',
+            'P.S. Hablamos español también, si lo prefieres.',
+          ],
+        },
+      },
     },
     es: {
       subject: 'Primero, un café',
@@ -373,6 +440,21 @@ const WELCOME_TEMPLATES = {
         'P.D. We also coach in English, if you prefer.',
       ],
       signoff: 'Laura',
+      byMethod: {
+        call: {
+          subject: 'Hablamos pronto',
+          preview: 'Te llamo el {{date}} a las {{time}}.',
+          paragraphs: [
+            'Estás reservada. Te llamo el {{date}} a las {{time}}.',
+            'Soy Laura. Coach de fuerza certificada NASM. Local en Key West.',
+            'Una llamada rápida. Hablamos de tus metas, qué te duele, qué has probado. Los dos decidimos si entrenar privado es lo que necesitas.',
+            'Aunque no terminemos entrenando juntas, te vas con algo útil.',
+            'Si algo cambia, responde a este correo.',
+            'Hablamos pronto,',
+            'P.D. We also coach in English, if you prefer.',
+          ],
+        },
+      },
     },
   },
 };
@@ -535,6 +617,11 @@ export async function sendDanceLessonNotification({
  * params get substituted in subject, preview, paragraphs, ctaText, and ctaUrl
  * at send time. Missing booking values fall back to "soon" / "pronto" so the
  * email never shows raw {{placeholder}} text.
+ *
+ * meetingMethod is used only by local buckets. When set to 'call', the
+ * bucket's `byMethod.call` overrides (subject, preview, paragraphs) replace
+ * the in-person defaults. Any other value (including null/undefined/unknown)
+ * falls back to in-person rendering, matching the form's default state.
  */
 export async function sendWelcomeEmail({
   bucket,
@@ -544,12 +631,18 @@ export async function sendWelcomeEmail({
   bookingDate,
   bookingTime,
   calendarEventLink,
+  meetingMethod,
 }) {
   const lang = language === 'es' ? 'es' : 'en';
-  const tpl = WELCOME_TEMPLATES[bucket]?.[lang];
-  if (!tpl) {
+  const baseTpl = WELCOME_TEMPLATES[bucket]?.[lang];
+  if (!baseTpl) {
     throw new Error(`sendWelcomeEmail: unknown bucket "${bucket}"`);
   }
+  // Apply meeting-method override only for 'call'. Anything else (null,
+  // undefined, 'in-person', unknown values) renders the in-person default.
+  const methodOverride =
+    meetingMethod === 'call' && baseTpl.byMethod?.call ? baseTpl.byMethod.call : null;
+  const tpl = methodOverride ? { ...baseTpl, ...methodOverride } : baseTpl;
   const firstName = (prospectName || '').split(' ')[0] || '';
   const greeting = lang === 'es'
     ? (firstName ? `Hola ${firstName},` : 'Hola,')
