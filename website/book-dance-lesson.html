@@ -413,6 +413,16 @@
       font-size: 13px;
       font-weight: 600;
     }
+    .pay-summary {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: var(--warm-white);
+      border: 1px solid var(--charcoal-12);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--charcoal-70);
+      line-height: 1.5;
+    }
 
     /* ---- FOOTER ---- */
     .foot {
@@ -521,35 +531,48 @@
       </div>
 
       <div class="submit-row">
-        <span class="small-note" data-lang="en">Times are Eastern Time (Key West).</span>
-        <span class="small-note" data-lang="es">Horario del Este (Key West).</span>
+        <span class="small-note" data-lang="en">Times are Eastern Time (Key West). Secure payment via Stripe.</span>
+        <span class="small-note" data-lang="es">Horario del Este (Key West). Pago seguro v&iacute;a Stripe.</span>
         <button type="submit" class="btn-pill is-disabled" id="submitBtn" disabled>
-          <span data-lang="en">Confirm booking</span>
-          <span data-lang="es">Confirmar reserva</span>
+          <span class="btn-label" id="submitBtnLabel">
+            <span data-lang="en">Pay $150</span>
+            <span data-lang="es">Pagar $150</span>
+          </span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
         </button>
-      </div>
-
-      <div class="form-success" id="successBox" role="status" aria-live="polite">
-        <h3 data-lang="en">You&rsquo;re booked.</h3>
-        <h3 data-lang="es">Reserva confirmada.</h3>
-        <p id="successLine" data-lang="en">I&rsquo;ll see you in Key West.</p>
-        <p id="successLineEs" data-lang="es">Te veo en Key West.</p>
-        <p data-lang="en">I&rsquo;ll confirm the meet-up location 24 hours before. Check your email for the calendar invite.</p>
-        <p data-lang="es">Te confirmo el punto de encuentro 24 horas antes. Revisa tu correo para la invitaci&oacute;n del calendario.</p>
       </div>
 
       <div class="form-error" id="errorBox" role="alert" aria-live="assertive">
         <h3 data-lang="en">Something went wrong.</h3>
         <h3 data-lang="es">Algo sali&oacute; mal.</h3>
-        <p data-lang="en">Try again or email laura@lauratreto.com.</p>
-        <p data-lang="es">Int&eacute;ntalo de nuevo o escribe a laura@lauratreto.com.</p>
+        <p id="errorBoxMsgEn" data-lang="en">Try again or email laura@lauratreto.com.</p>
+        <p id="errorBoxMsgEs" data-lang="es">Int&eacute;ntalo de nuevo o escribe a laura@lauratreto.com.</p>
         <button type="button" id="retryBtn">
           <span data-lang="en">Try again</span>
           <span data-lang="es">Intentar de nuevo</span>
         </button>
       </div>
     </form>
+
+    <!-- Post-payment screens, only one visible at a time, shown when ?status= is present -->
+    <div class="form-success" id="paySuccessBox" role="status" aria-live="polite">
+      <h3 data-lang="en">Payment confirmed.</h3>
+      <h3 data-lang="es">Pago confirmado.</h3>
+      <p id="paySuccessLineEn" data-lang="en">Check your email for the booking confirmation and calendar invite. I&rsquo;ll confirm the meet-up location 24 hours before.</p>
+      <p id="paySuccessLineEs" data-lang="es">Revisa tu correo para la confirmaci&oacute;n y la invitaci&oacute;n del calendario. Te confirmo el punto de encuentro 24 horas antes.</p>
+      <p id="paySuccessSummary" class="pay-summary" style="display:none;"></p>
+    </div>
+
+    <div class="form-error" id="payCancelBox" role="status" aria-live="polite">
+      <h3 data-lang="en">Payment was cancelled.</h3>
+      <h3 data-lang="es">El pago fue cancelado.</h3>
+      <p data-lang="en">Your slot was not booked. No charge was made.</p>
+      <p data-lang="es">Tu horario no fue reservado. No se hizo ning&uacute;n cargo.</p>
+      <button type="button" id="payRetryBtn">
+        <span data-lang="en">Try again</span>
+        <span data-lang="es">Intentar de nuevo</span>
+      </button>
+    </div>
   </main>
 
   <footer class="foot">
@@ -560,9 +583,9 @@
   <script>
     // ---------- TIER META ----------
     const TIERS = {
-      solo:   { label_en: 'Solo Lesson',   label_es: 'Clase individual', detail_en: '60 min, 1-on-1, in person',  detail_es: '60 min, uno a uno, en persona', price: '$150' },
-      couple: { label_en: 'Couple Lesson', label_es: 'Clase en pareja',  detail_en: '60 min, two of you, in person', detail_es: '60 min, los dos, en persona', price: '$200' },
-      group:  { label_en: 'Small Group',    label_es: 'Grupo pequeño', detail_en: '75 min, 3 to 6 people, in person', detail_es: '75 min, 3 a 6 personas, en persona', price: '$300' },
+      solo:   { label_en: 'Solo Lesson',   label_es: 'Clase individual', detail_en: '60 min, 1-on-1, in person',  detail_es: '60 min, uno a uno, en persona', price: '$150', priceLabel_en: 'Pay $150', priceLabel_es: 'Pagar $150' },
+      couple: { label_en: 'Couple Lesson', label_es: 'Clase en pareja',  detail_en: '60 min, two of you, in person', detail_es: '60 min, los dos, en persona', price: '$200', priceLabel_en: 'Pay $200', priceLabel_es: 'Pagar $200' },
+      group:  { label_en: 'Small Group',    label_es: 'Grupo pequeño', detail_en: '75 min, 3 to 6 people, in person', detail_es: '75 min, 3 a 6 personas, en persona', price: '$300', priceLabel_en: 'Pay $300', priceLabel_es: 'Pagar $300' },
     };
     const VALID_TYPES = new Set(['solo', 'couple', 'group']);
 
@@ -623,6 +646,13 @@
         '<span data-lang="en">' + tier.detail_en + '</span>' +
         '<span data-lang="es">' + tier.detail_es + '</span>';
       document.getElementById('lhPrice').textContent = tier.price;
+      // Update Pay $X button label live
+      const btnLabel = document.getElementById('submitBtnLabel');
+      if (btnLabel) {
+        btnLabel.innerHTML =
+          '<span data-lang="en">' + tier.priceLabel_en + '</span>' +
+          '<span data-lang="es">' + tier.priceLabel_es + '</span>';
+      }
       // Toggle buttons
       document.querySelectorAll('.type-toggle button').forEach(function(b){
         const on = b.getAttribute('data-type') === type;
@@ -857,26 +887,22 @@
       if (el) el.addEventListener('input', updateSubmitBtn);
     });
 
-    function showState(which) {
-      const success = document.getElementById('successBox');
-      const error = document.getElementById('errorBox');
-      success.classList.toggle('visible', which === 'success');
-      error.classList.toggle('visible', which === 'error');
-      if (which === 'success') {
-        // Hide form interactive bits
-        document.querySelectorAll('#bookForm .row-2, #bookForm .field, #bookForm .pick-section, #bookForm .submit-row, #bookForm .type-toggle, #lessonHeader').forEach((el) => {
-          el.style.display = 'none';
-        });
-        // Update success line with date/time
-        const lineEn = document.getElementById('successLine');
-        const lineEs = document.getElementById('successLineEs');
-        if (state.dateEn && state.displayTimeEn) {
-          lineEn.textContent = "I'll see you " + state.dateEn + ' at ' + state.displayTimeEn + ' in Key West.';
-        }
-        if (state.dateEs && state.displayTimeEn) {
-          lineEs.textContent = 'Te veo ' + state.dateEs + ' a las ' + state.displayTimeEn + ' en Key West.';
-        }
+    function setErrorMessage(textEn, textEs) {
+      const en = document.getElementById('errorBoxMsgEn');
+      const es = document.getElementById('errorBoxMsgEs');
+      if (en) en.textContent = textEn;
+      if (es) es.textContent = textEs;
+    }
+
+    function showError(textEn, textEs) {
+      if (textEn || textEs) {
+        setErrorMessage(
+          textEn || 'Try again or email laura@lauratreto.com.',
+          textEs || 'Inténtalo de nuevo o escribe a laura@lauratreto.com.'
+        );
       }
+      const error = document.getElementById('errorBox');
+      error.classList.add('visible');
     }
 
     document.getElementById('retryBtn').addEventListener('click', function(){
@@ -891,52 +917,115 @@
       const origHTML = submitBtn.innerHTML;
       submitBtn.disabled = true;
       submitBtn.classList.add('is-disabled');
-      submitBtn.innerHTML = lang === 'es' ? 'Enviando...' : 'Submitting...';
+      submitBtn.innerHTML = lang === 'es' ? 'Redirigiendo a pago...' : 'Redirecting to payment...';
 
       const honeypot = (e.target.elements['bot-field'] && e.target.elements['bot-field'].value) || '';
       const payload = {
+        tier: state.type,
         first_name: document.getElementById('firstName').value.trim(),
         email: document.getElementById('email').value.trim(),
-        lesson_type: state.type,
         notes: document.getElementById('notes').value.trim(),
         date: state.date,
         time: state.time,
         language: lang,
+        meeting_method: 'in-person',
         website: honeypot,
       };
 
       window.ltTrack('book_dance_lesson_submit_attempt', { type: state.type, language: lang });
 
       try {
-        const res = await fetch('/.netlify/functions/book-dance-lesson', {
+        const res = await fetch('/.netlify/functions/create-stripe-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
         const data = await res.json().catch(() => ({}));
+        if (res.ok && data && data.ok && data.url) {
+          window.ltTrack('book_dance_lesson_checkout_redirect', { type: state.type, language: lang });
+          window.location.href = data.url;
+          return;
+        }
+        // Failure path: re-enable button, surface error.
         submitBtn.disabled = false;
         submitBtn.classList.remove('is-disabled');
         submitBtn.innerHTML = origHTML;
-        if (res.ok && data && data.success) {
-          showState('success');
-          window.ltTrack('book_dance_lesson_submit_success', { type: state.type, language: lang });
-        } else {
-          showState('error');
-          const reason = (data && (data.error || data.message)) || ('http_' + res.status);
-          window.ltTrack('book_dance_lesson_submit_error', { type: state.type, language: lang, reason: String(reason) });
-        }
+        const reason = (data && (data.error || data.message)) || ('http_' + res.status);
+        setErrorMessage(
+          'Could not start checkout. ' + (data && data.error ? data.error : 'Please try again.'),
+          'No pudimos iniciar el pago. ' + (data && data.error ? data.error : 'Por favor inténtalo de nuevo.')
+        );
+        showError();
+        window.ltTrack('book_dance_lesson_submit_error', { type: state.type, language: lang, reason: String(reason) });
       } catch (err) {
         submitBtn.disabled = false;
         submitBtn.classList.remove('is-disabled');
         submitBtn.innerHTML = origHTML;
-        showState('error');
+        showError();
         const reason = (err && err.message) ? String(err.message) : 'network_error';
         window.ltTrack('book_dance_lesson_submit_error', { type: state.type, language: lang, reason: reason });
       }
     });
 
+    // ---------- POST-PAYMENT (?status=success | ?status=cancel) ----------
+    function hideBookingForm() {
+      document.querySelectorAll('#bookForm, #lessonHeader, .type-toggle').forEach((el) => {
+        if (el) el.style.display = 'none';
+      });
+    }
+    function showPaySuccess() {
+      hideBookingForm();
+      document.getElementById('paySuccessBox').classList.add('visible');
+      const sid = urlParams.get('session_id');
+      if (sid) {
+        // Best-effort summary fetch. If it fails, the page still works.
+        fetch('/.netlify/functions/get-checkout-session?session_id=' + encodeURIComponent(sid), {
+          headers: { 'Accept': 'application/json' },
+        })
+          .then((r) => r.ok ? r.json() : null)
+          .then((data) => {
+            if (!data || !data.ok) return;
+            const summaryEl = document.getElementById('paySuccessSummary');
+            if (!summaryEl) return;
+            const isEs = document.body.classList.contains('lang-es');
+            const tierLabel = data.tier_label || '';
+            const amount = data.amount_total != null ? '$' + (data.amount_total / 100).toFixed(0) : '';
+            const lines = [];
+            if (tierLabel) lines.push(tierLabel);
+            if (amount) lines.push(amount);
+            if (data.booking_date && data.booking_time) {
+              lines.push(data.booking_date + ' ' + data.booking_time + ' ET');
+            }
+            const sep = isEs ? ' · ' : ' · ';
+            summaryEl.textContent = lines.join(sep);
+            if (lines.length) summaryEl.style.display = 'block';
+          })
+          .catch(() => {});
+      }
+      window.ltTrack('book_dance_lesson_pay_success_view', { session_id: sid || null });
+    }
+    function showPayCancel() {
+      hideBookingForm();
+      document.getElementById('payCancelBox').classList.add('visible');
+      window.ltTrack('book_dance_lesson_pay_cancel_view', {});
+    }
+    document.getElementById('payRetryBtn').addEventListener('click', function(){
+      // Strip ?status=cancel from the URL and reload the form.
+      const cleanUrl = location.pathname;
+      location.href = cleanUrl;
+    });
+
     // ---------- KICKOFF ----------
     document.addEventListener('DOMContentLoaded', function() {
+      const status = urlParams.get('status');
+      if (status === 'success') {
+        showPaySuccess();
+        return;
+      }
+      if (status === 'cancel') {
+        showPayCancel();
+        return;
+      }
       window.ltTrack('book_dance_lesson_page_view', {
         language: document.documentElement.lang || 'en',
         type: state.type,
