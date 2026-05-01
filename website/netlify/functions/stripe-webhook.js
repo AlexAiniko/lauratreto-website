@@ -2,11 +2,15 @@
 // and on checkout.session.completed creates the dance-lesson booking
 // (MailerLite + Calendar + Emails) by calling the shared lib helper.
 //
-// Security boundary: in production, missing STRIPE_WEBHOOK_SECRET means we
-// cannot verify event authenticity, so we refuse to process. In non-production
-// contexts (deploy-preview, branch-deploy, dev) we log a loud warning and
-// skip verification so the function can be wired up + smoke-tested before
-// the real secret is registered.
+// Security boundary: when the Stripe key is a LIVE key (sk_live_* / rk_live_*),
+// missing STRIPE_WEBHOOK_SECRET means we cannot verify event authenticity, so
+// we refuse to process, period. With a TEST key (sk_test_* / rk_test_*) we log
+// a loud warning and skip verification so the function can be wired up and
+// smoke-tested before the real secret is registered.
+//
+// Why prefix-based, not Netlify CONTEXT: Netlify v2 functions do not see
+// CONTEXT at runtime, only at build time. The Stripe key prefix is the
+// authoritative signal for "are we handling real money right now."
 //
 // Idempotency: every processed checkout session id is recorded in the
 // `stripe-webhook-processed` blob store. A duplicate delivery short-circuits.
@@ -14,9 +18,10 @@
 // Endpoint: /.netlify/functions/stripe-webhook
 //
 // Env:
-//   STRIPE_SECRET_KEY     (required)
-//   STRIPE_WEBHOOK_SECRET (required in production, optional otherwise)
-//   CONTEXT               (Netlify-provided: 'production' | 'deploy-preview' | 'branch-deploy' | 'dev')
+//   STRIPE_SECRET_KEY     (required, sk_live_* or rk_live_* in production,
+//                          sk_test_* / rk_test_* in deploy-preview)
+//   STRIPE_WEBHOOK_SECRET (required when STRIPE_SECRET_KEY is a live key,
+//                          optional with a test key)
 
 import Stripe from 'stripe';
 import { getStore } from '@netlify/blobs';
@@ -34,8 +39,7 @@ export default async (request) => {
 
   const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
   const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
-  const ctx = (process.env.CONTEXT || process.env.NETLIFY_ENV || 'unknown').toLowerCase();
-  const isProd = ctx === 'production';
+  const isLiveKey = typeof STRIPE_KEY === 'string' && /^(sk|rk)_live_/.test(STRIPE_KEY);
 
   if (!STRIPE_KEY) {
     console.error('[stripe-webhook] STRIPE_SECRET_KEY missing');
@@ -45,8 +49,8 @@ export default async (request) => {
     });
   }
 
-  if (!WEBHOOK_SECRET && isProd) {
-    console.error('[stripe-webhook] STRIPE_WEBHOOK_SECRET not set, refusing to process unverified events in production');
+  if (!WEBHOOK_SECRET && isLiveKey) {
+    console.error('[stripe-webhook] STRIPE_WEBHOOK_SECRET not set with a LIVE key, refusing to process unverified events');
     return new Response(
       JSON.stringify({ error: 'STRIPE_WEBHOOK_SECRET not set, webhook events cannot be verified, refusing to process.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
@@ -82,9 +86,9 @@ export default async (request) => {
       });
     }
   } else {
-    // Non-prod fallback: parse the JSON body but flag it loudly. Never reach
-    // this branch in production thanks to the guard above.
-    console.warn('[stripe-webhook] STRIPE_WEBHOOK_SECRET missing in non-prod, skipping signature verification');
+    // Test-key fallback: parse the JSON body but flag it loudly. Never reach
+    // this branch with a live key thanks to the guard above.
+    console.warn('[stripe-webhook] STRIPE_WEBHOOK_SECRET missing with a test key, skipping signature verification');
     try {
       event = JSON.parse(rawBody);
     } catch (err) {
