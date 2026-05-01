@@ -324,14 +324,26 @@ async function runBookingPostProcess({
   }
 
   // 2) Email Laura + email prospect + welcome (first-scan only) in parallel.
-  // Welcome email skipped on dedupe — they were welcomed when they first
-  // landed in their original bucket.
   //
-  // Confirmation email ("You're booked, Name") only fires when a real slot
-  // was picked. Online prospects don't pick a slot, so the welcome email
-  // (which IS the CTA to come back and book) is the only thing they receive.
+  // Prospect-facing email rules:
+  //   LOCAL + first scan + booking  → MERGED welcome (booking baked in). NO separate confirmation.
+  //   LOCAL + dedupe   + booking    → standalone confirmation (welcome already sent on first scan).
+  //   LOCAL + first scan + NO slot  → welcome only (defensive fallback rendering).
+  //   ONLINE + first scan           → welcome only (no booking line, original CTA to /client).
+  //   ONLINE + dedupe               → nothing to the prospect (already welcomed, no slot to confirm).
+  //
+  // The welcome email is the bucket's tailored content; for local buckets it
+  // now includes the booking confirmation line and a calendar-event CTA.
   const hasBooking = !!(startISO && endISO);
-  const sendWelcome = !dedupBucket && finalBucket;
+  const isLocalBucket = finalBucket === 'dance-local' || finalBucket === 'train-local';
+  const sendWelcome = !dedupBucket && !!finalBucket;
+  // Standalone confirmation only fires when (a) we have a booking AND (b) the
+  // welcome email was NOT already sent in this same run for a local bucket.
+  // i.e. dedupe re-scans of a local-bucket prospect get the bare "you're
+  // booked" confirmation; everyone else either gets the merged welcome
+  // (covers it) or no slot (skip).
+  const sendConfirmation = hasBooking && !(sendWelcome && isLocalBucket);
+
   const tasks = [
     sendBookingNotification({
       prospectName: firstName,
@@ -345,7 +357,7 @@ async function runBookingPostProcess({
       calendarEventLink,
     }),
   ];
-  if (hasBooking) {
+  if (sendConfirmation) {
     tasks.push(sendBookingConfirmation({
       prospectName: firstName,
       prospectEmail: email,
@@ -361,6 +373,11 @@ async function runBookingPostProcess({
       prospectName: firstName,
       prospectEmail: email,
       language,
+      // Local-bucket welcome templates render booking date/time/link inline.
+      // Online buckets ignore these (their templates have no placeholders).
+      bookingDate: displayDate || date,
+      bookingTime: displayTime,
+      calendarEventLink,
     }));
   }
 
@@ -369,7 +386,7 @@ async function runBookingPostProcess({
   // Order in results matches order in tasks: notify, [confirm?], [welcome?]
   let cursor = 0;
   const notifyResult = results[cursor++];
-  const confirmResult = hasBooking ? results[cursor++] : null;
+  const confirmResult = sendConfirmation ? results[cursor++] : null;
   const welcomeResult = sendWelcome ? results[cursor++] : null;
 
   if (notifyResult.status === 'fulfilled') {
@@ -377,14 +394,16 @@ async function runBookingPostProcess({
   } else {
     console.error(`[client-funnel] post-process error: email-laura ${notifyResult.reason?.message || notifyResult.reason}`);
   }
-  if (hasBooking) {
+  if (sendConfirmation) {
     if (confirmResult.status === 'fulfilled') {
-      console.log('[client-funnel] email to prospect: ok');
+      console.log('[client-funnel] standalone confirmation email to prospect: ok');
     } else {
       console.error(`[client-funnel] post-process error: email-prospect ${confirmResult.reason?.message || confirmResult.reason}`);
     }
+  } else if (hasBooking && sendWelcome && isLocalBucket) {
+    console.log('[client-funnel] standalone confirmation skipped (merged into local-bucket welcome)');
   } else {
-    console.log('[client-funnel] confirmation email skipped (no slot picked, online flow)');
+    console.log('[client-funnel] standalone confirmation skipped (no slot picked)');
   }
   if (sendWelcome) {
     if (welcomeResult.status === 'fulfilled') {

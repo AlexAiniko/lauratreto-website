@@ -268,30 +268,32 @@ const WELCOME_TEMPLATES = {
   'dance-local': {
     en: {
       subject: 'Coffee in Key West',
-      preview: 'Quick chat. Either way you walk away with something.',
-      ctaText: 'Book the call',
-      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=dance-local',
+      preview: "I'll see you {{date}} at {{time}}.",
+      ctaText: 'Open calendar event',
+      ctaUrl: '{{calendarEventLink}}',
       paragraphs: [
-        "You're in Key West. So am I.",
-        'Easiest first step is a quick coffee. On me, somewhere on the island. We chat about what you want and what you have tried, we both decide if we click.',
+        "You're booked. I'll see you {{date}} at {{time}}.",
+        "I'm Laura. Cuban dancer, fifteen years on stage. Now teaching here in Key West.",
+        'Coffee on me, somewhere on the island. We chat about what you want, what you have tried, and we both decide if we click.',
         "Even if we don't end up working together, I'll make sure you walk away with something.",
-        'I keep my client list small. Worth booking early.',
-        'Looking forward to it.',
+        'If anything changes on your end, just reply to this email.',
+        'Looking forward to it,',
         'P.S. Hablamos español también, si lo prefieres.',
       ],
       signoff: 'Laura',
     },
     es: {
       subject: 'Un café en Key West',
-      preview: 'Una charla rápida. De cualquier forma, te vas con algo.',
-      ctaText: 'Reservar la llamada',
-      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=dance-local',
+      preview: 'Nos vemos el {{date}} a las {{time}}.',
+      ctaText: 'Ver evento del calendario',
+      ctaUrl: '{{calendarEventLink}}',
       paragraphs: [
-        'Estás en Key West. Yo también.',
-        'El primer paso más fácil es un café rápido. Te invito yo, en algún lugar de la isla. Hablamos de lo que buscas y de lo que has probado, los dos decidimos si encajamos.',
-        'Aunque no terminemos trabajando juntas, la conversación aterriza. Te vas con algo.',
-        'Mi lista de clientes es pequeña. Vale la pena reservar pronto.',
-        'Hablamos pronto.',
+        'Estás reservada. Nos vemos el {{date}} a las {{time}}.',
+        'Soy Laura. Bailarina cubana, quince años en escenarios. Ahora enseñando aquí en Key West.',
+        'Café por mi cuenta, en algún lugar de la isla. Hablamos de lo que buscas, lo que has probado, y los dos decidimos si encajamos.',
+        'Aunque no terminemos trabajando juntas, te aseguro que sales con algo.',
+        'Si algo cambia, responde a este correo.',
+        'Hablamos pronto,',
         'P.D. We also coach in English, if you prefer.',
       ],
       signoff: 'Laura',
@@ -342,30 +344,32 @@ const WELCOME_TEMPLATES = {
   'train-local': {
     en: {
       subject: 'Coffee first',
-      preview: 'Quick chat. Either way you walk away with something useful.',
-      ctaText: 'Book the call',
-      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=train-local',
+      preview: "I'll see you {{date}} at {{time}}.",
+      ctaText: 'Open calendar event',
+      ctaUrl: '{{calendarEventLink}}',
       paragraphs: [
-        "You're in Key West. You want private training. Easiest first step is a quick coffee.",
-        "On me, somewhere on the island. We chat about your goals, what hurts, what you've tried. We both decide if private training is the right fit.",
+        "You're booked. I'll see you {{date}} at {{time}}.",
+        "I'm Laura. NASM-certified strength coach. Local in Key West.",
+        'Coffee on me, somewhere on the island. We chat about your goals, what hurts, what you have tried. We both decide if private training is the right fit.',
         "Even if we don't end up training together, you walk away with something useful.",
-        'My calendar runs about a week or two out. Worth booking early.',
-        'See you soon.',
+        'If anything changes on your end, just reply to this email.',
+        'See you soon,',
         'P.S. Hablamos español también, si lo prefieres.',
       ],
       signoff: 'Laura',
     },
     es: {
       subject: 'Primero, un café',
-      preview: 'Una charla rápida. De cualquier forma, te vas con algo útil.',
-      ctaText: 'Reservar la llamada',
-      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=train-local',
+      preview: 'Nos vemos el {{date}} a las {{time}}.',
+      ctaText: 'Ver evento del calendario',
+      ctaUrl: '{{calendarEventLink}}',
       paragraphs: [
-        'Estás en Key West. Quieres entrenar privado. El primer paso más fácil es un café rápido.',
-        'Te invito yo, en algún lugar de la isla. Hablamos de tus metas, qué te duele, qué has probado. Los dos decidimos si entrenar privado es la decisión correcta.',
+        'Estás reservada. Nos vemos el {{date}} a las {{time}}.',
+        'Soy Laura. Coach de fuerza certificada NASM. Local en Key West.',
+        'Café por mi cuenta, en algún lugar de la isla. Hablamos de tus metas, qué te duele, qué has probado. Los dos decidimos si entrenar privado es lo que necesitas.',
         'Aunque no terminemos entrenando juntas, te vas con algo útil.',
-        'Mi agenda corre con una o dos semanas de adelanto. Vale la pena reservar pronto.',
-        'Nos vemos pronto.',
+        'Si algo cambia, responde a este correo.',
+        'Nos vemos pronto,',
         'P.D. We also coach in English, if you prefer.',
       ],
       signoff: 'Laura',
@@ -525,12 +529,21 @@ export async function sendDanceLessonNotification({
 /**
  * One-time welcome email triggered when a prospect lands in a /client funnel
  * bucket for the first time. Should NOT fire on dedupes.
+ *
+ * For local-bucket templates that reference {{date}} / {{time}} /
+ * {{calendarEventLink}}, the optional bookingDate/bookingTime/calendarEventLink
+ * params get substituted in subject, preview, paragraphs, ctaText, and ctaUrl
+ * at send time. Missing booking values fall back to "soon" / "pronto" so the
+ * email never shows raw {{placeholder}} text.
  */
 export async function sendWelcomeEmail({
   bucket,
   prospectName,
   prospectEmail,
   language = 'en',
+  bookingDate,
+  bookingTime,
+  calendarEventLink,
 }) {
   const lang = language === 'es' ? 'es' : 'en';
   const tpl = WELCOME_TEMPLATES[bucket]?.[lang];
@@ -542,36 +555,64 @@ export async function sendWelcomeEmail({
     ? (firstName ? `Hola ${firstName},` : 'Hola,')
     : (firstName ? `Hi ${firstName},` : 'Hi there,');
 
+  // Defensive fallbacks: if the template uses {{date}} / {{time}} but the
+  // values weren't passed (impossible from the current frontend, but just in
+  // case), swap to "soon" / "pronto" so the user never sees raw placeholders.
+  const fallbackDate = lang === 'es' ? 'pronto' : 'soon';
+  const fallbackTime = lang === 'es' ? 'pronto' : 'soon';
+  const subVars = {
+    date: bookingDate || fallbackDate,
+    time: bookingTime || fallbackTime,
+    calendarEventLink: calendarEventLink || 'https://lauratreto.com/client',
+  };
+  const subst = (s) => substituteVars(s, subVars);
+
+  const subject = subst(tpl.subject);
+  const preview = subst(tpl.preview);
+  const paragraphs = tpl.paragraphs.map(subst);
+  const ctaText = tpl.ctaText ? subst(tpl.ctaText) : tpl.ctaText;
+  const ctaUrl = tpl.ctaUrl ? subst(tpl.ctaUrl) : tpl.ctaUrl;
+  const ctaSecondaryText = tpl.ctaSecondaryText ? subst(tpl.ctaSecondaryText) : tpl.ctaSecondaryText;
+  const ctaSecondaryUrl = tpl.ctaSecondaryUrl ? subst(tpl.ctaSecondaryUrl) : tpl.ctaSecondaryUrl;
+
   // Plain-text fallback: greeting, body paragraphs, primary CTA URL, optional
   // secondary CTA URL, signoff, then the signature block. Email clients that
   // strip HTML still get something readable.
-  const textLines = [greeting, '', ...tpl.paragraphs.flatMap((p) => [p, ''])];
-  if (tpl.ctaText && tpl.ctaUrl) {
-    textLines.push(`${tpl.ctaText}: ${tpl.ctaUrl}`, '');
+  const textLines = [greeting, '', ...paragraphs.flatMap((p) => [p, ''])];
+  if (ctaText && ctaUrl) {
+    textLines.push(`${ctaText}: ${ctaUrl}`, '');
   }
-  if (tpl.ctaSecondaryText && tpl.ctaSecondaryUrl) {
-    textLines.push(`${tpl.ctaSecondaryText}: ${tpl.ctaSecondaryUrl}`, '');
+  if (ctaSecondaryText && ctaSecondaryUrl) {
+    textLines.push(`${ctaSecondaryText}: ${ctaSecondaryUrl}`, '');
   }
   textLines.push(tpl.signoff, '', ...WELCOME_SIGNATURE_LINES);
   const text = textLines.join('\n').replace(/\n{3,}/g, '\n\n');
 
   const html = renderWelcomeHtml({
-    preview: tpl.preview,
+    preview,
     greeting,
-    paragraphs: tpl.paragraphs,
-    ctaText: tpl.ctaText,
-    ctaUrl: tpl.ctaUrl,
-    ctaSecondaryText: tpl.ctaSecondaryText,
-    ctaSecondaryUrl: tpl.ctaSecondaryUrl,
+    paragraphs,
+    ctaText,
+    ctaUrl,
+    ctaSecondaryText,
+    ctaSecondaryUrl,
     signoff: tpl.signoff,
   });
 
   return sendAndRelabel({
     to: prospectEmail,
-    subject: tpl.subject,
+    subject,
     text,
     html,
   });
+}
+
+// Replace {{key}} occurrences in a string with values from vars. Missing keys
+// are left intact so we can spot rendering bugs in test rather than silently
+// dropping content.
+function substituteVars(s, vars) {
+  if (typeof s !== 'string') return s;
+  return s.replace(/\{\{(\w+)\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(vars, k) ? String(vars[k]) : m));
 }
 
 function renderWelcomeHtml({ preview, greeting, paragraphs, ctaText, ctaUrl, ctaSecondaryText, ctaSecondaryUrl, signoff }) {
