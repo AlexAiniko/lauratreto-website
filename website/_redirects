@@ -21,5 +21,4 @@
 # Tourist-first dance lesson booking flow
 /book-dance-lesson  /book-dance-lesson.html                200
 
-# SPA-style catch-all (single page site)
-/*    /index.html   200
+# No SPA catch-all. Unknown routes serve /404.html with HTTP 404 (Netlify default).

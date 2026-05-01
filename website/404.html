@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Analytics 4 (gtag.js) — swap G-D8L9H56MED for the real Measurement ID to activate -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>Not Found | Laura Treto</title>
+  <meta name="robots" content="noindex" />
+
+  <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-D8L9H56MED"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -17,53 +21,315 @@
       try { if (window.__LT_GA_ENABLED) gtag('event', name, params || {}); } catch(e) {}
     };
   </script>
-  <title>Page Not Found - Laura Treto Coaching</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#129293;</text></svg>">
+
+  <!-- Fonts: Playfair Display Italic + Inter (matches brand site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: #FAF7F2;
-      color: #2B2B2B;
+    :root {
+      --coral: #E8654A;
+      --coral-hover: #DC5E45;
+      --turquoise: #1A7A7A;
+      --warm-white: #FAF7F2;
+      --sand: #F0E6D8;
+      --charcoal: #2B2B2B;
+      --charcoal-70: rgba(43,43,43,0.70);
+      --charcoal-12: rgba(43,43,43,0.12);
+      --gold: #C5973E;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      color: var(--charcoal);
+      background: var(--warm-white);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    body { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+
+    /* bilingual toggle: only top-level [data-lang] on EN body show, ES hidden */
+    body:not(.lang-es) [data-lang="es"] { display: none !important; }
+    body.lang-es [data-lang="en"] { display: none !important; }
+
+    /* ============ Top chrome ============ */
+    .site-logo {
+      position: fixed;
+      top: max(22px, env(safe-area-inset-top));
+      left: max(22px, env(safe-area-inset-left));
+      z-index: 60;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+      color: var(--charcoal);
+    }
+    .lang-toggle {
+      position: fixed;
+      top: max(20px, env(safe-area-inset-top));
+      right: max(22px, env(safe-area-inset-right));
+      z-index: 60;
+      display: inline-flex;
+      gap: 4px;
+      background: rgba(43,43,43,0.10);
+      padding: 4px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+    .lang-toggle button {
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      border-radius: 999px;
+      color: var(--charcoal-70);
+      transition: background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+    .lang-toggle button.active {
+      background: var(--warm-white);
+      color: var(--coral);
+    }
+
+    /* ============ Hero / not-found block ============ */
+    .nf {
+      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      padding: clamp(96px, 14vh, 140px) clamp(24px, 6vw, 56px) clamp(56px, 9vh, 96px);
+      position: relative;
+      isolation: isolate;
+      background:
+        radial-gradient(60% 50% at 50% 0%, rgba(245,231,213,0.6) 0%, rgba(250,247,242,0) 70%),
+        var(--warm-white);
+    }
+    .nf-inner {
+      max-width: 720px;
+      width: 100%;
       text-align: center;
-      padding: 24px;
     }
-    .container { max-width: 480px; }
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 48px;
-      margin-bottom: 16px;
-      color: #2B2B2B;
-    }
-    p {
-      font-size: 17px;
-      line-height: 1.6;
-      margin-bottom: 32px;
-      color: #666;
-    }
-    a {
-      display: inline-block;
-      background: #E8654A;
-      color: #fff;
-      text-decoration: none;
-      padding: 14px 32px;
-      border-radius: 8px;
+    .nf-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
       font-weight: 600;
-      font-size: 16px;
-      transition: background 0.2s ease-out;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--charcoal-70);
+      margin-bottom: 24px;
     }
-    a:hover { background: #D4553B; }
+    .nf-eyebrow::before,
+    .nf-eyebrow::after {
+      content: ''; width: 32px; height: 1px;
+      background: var(--gold); opacity: 0.85;
+    }
+    h1.nf-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 800;
+      color: var(--charcoal);
+      font-size: clamp(40px, 7vw, 84px);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin: 0 0 18px;
+    }
+    .nf-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 1.4vw, 17px);
+      line-height: 1.55;
+      color: var(--charcoal-70);
+      max-width: 520px;
+      margin: 0 auto 36px;
+    }
+    .nf-divider {
+      width: 56px; height: 1px;
+      background: var(--gold); opacity: 0.6;
+      margin: 0 auto 28px;
+    }
+
+    .nf-ctas {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin: 0 auto;
+    }
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 26px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: .02em;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-pill.primary {
+      background: var(--coral);
+      color: var(--warm-white);
+      box-shadow: 0 10px 30px -12px rgba(232,101,74,.55);
+    }
+    .btn-pill.primary:hover {
+      transform: translateY(-1px);
+      background: var(--coral-hover);
+    }
+    .btn-pill.ghost-dark {
+      background: transparent;
+      color: var(--charcoal);
+      border: 1.5px solid var(--charcoal);
+    }
+    .btn-pill.ghost-dark:hover {
+      background: var(--charcoal);
+      color: var(--warm-white);
+    }
+
+    .nf-ps {
+      margin-top: 44px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(14px, 1.2vw, 16px);
+      line-height: 1.55;
+      color: var(--charcoal-70);
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .nf-ps a {
+      color: var(--turquoise);
+      border-bottom: 1px solid rgba(26,122,122,0.35);
+      transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+    .nf-ps a:hover {
+      color: var(--coral);
+      border-color: var(--coral);
+    }
+
+    /* small footer */
+    .nf-foot {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: max(20px, env(safe-area-inset-bottom));
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--charcoal-70);
+      opacity: 0.7;
+    }
+    .nf-foot a:hover { color: var(--coral); }
+
+    @media (max-width: 480px) {
+      .btn-pill { padding: 14px 22px; font-size: 14px; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Page Not Found</h1>
-    <p>The page you're looking for doesn't exist. Let's get you back to Laura's coaching site.</p>
-    <a href="/">Back to Home</a>
+  <a href="/" class="site-logo" aria-label="Laura Treto, home">Laura Treto</a>
+
+  <div class="lang-toggle" role="group" aria-label="Language">
+    <button class="active" type="button" onclick="setLang('en')">EN</button>
+    <button type="button" onclick="setLang('es')">ES</button>
   </div>
+
+  <main class="nf">
+    <div class="nf-inner">
+      <span class="nf-eyebrow">
+        <span data-lang="en">404</span>
+        <span data-lang="es">404</span>
+      </span>
+
+      <h1 class="nf-title">
+        <span data-lang="en">This page doesn&rsquo;t exist.</span>
+        <span data-lang="es">Esta p&aacute;gina no existe.</span>
+      </h1>
+
+      <div class="nf-divider" aria-hidden="true"></div>
+
+      <p class="nf-sub">
+        <span data-lang="en">Maybe a typo, maybe a stale link. Let&rsquo;s get you back on track.</span>
+        <span data-lang="es">Quiz&aacute;s un error de tipeo, quiz&aacute;s un enlace viejo. Te llevamos de regreso.</span>
+      </p>
+
+      <div class="nf-ctas">
+        <a href="/" class="btn-pill primary" data-cta-label="nf_home" data-cta-placement="404">
+          <span data-lang="en">Take me home</span>
+          <span data-lang="es">Ll&eacute;vame a inicio</span>
+        </a>
+        <a href="/client" class="btn-pill ghost-dark" data-cta-label="nf_book" data-cta-placement="404">
+          <span data-lang="en">Book a session</span>
+          <span data-lang="es">Reserva una sesi&oacute;n</span>
+        </a>
+      </div>
+
+      <p class="nf-ps">
+        <span data-lang="en">If you got here from one of my emails, please <a href="mailto:laura@lauratreto.com?subject=Broken%20link%20on%20lauratreto.com">reply and let me know which link broke</a>. I&rsquo;ll fix it.</span>
+        <span data-lang="es">Si llegaste aqu&iacute; desde uno de mis correos, <a href="mailto:laura@lauratreto.com?subject=Enlace%20roto%20en%20lauratreto.com">escr&iacute;beme y dime cu&aacute;l enlace fall&oacute;</a>. Yo lo arreglo.</span>
+      </p>
+    </div>
+
+    <div class="nf-foot">
+      <a href="/">lauratreto.com</a>
+    </div>
+  </main>
+
+  <script>
+    function setLang(lang) {
+      document.body.classList.toggle('lang-es', lang === 'es');
+      document.querySelectorAll('.lang-toggle button').forEach(function(btn) {
+        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+      });
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('ltc-lang', lang); } catch(e) {}
+      if (window.__ltLangReady) {
+        window.ltTrack('not_found_lang_switch', { to: lang });
+      }
+    }
+    window.setLang = setLang;
+
+    // Restore saved language
+    try {
+      if (localStorage.getItem('ltc-lang') === 'es') setLang('es');
+      else setLang('en');
+    } catch(e) { setLang('en'); }
+    window.__ltLangReady = true;
+
+    // Track 404 hits with the path that missed
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        window.ltTrack('not_found_view', {
+          missed_path: location.pathname,
+          missed_query: location.search || '',
+          referrer: document.referrer || ''
+        });
+      } catch(e) {}
+    });
+
+    // CTA telemetry (matches keywest-dancing pattern)
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest('a[data-cta-label]');
+      if (!a) return;
+      var label = a.getAttribute('data-cta-label');
+      var placement = a.getAttribute('data-cta-placement') || '';
+      try {
+        window.ltTrack('cta_click', { label: label, placement: placement, page: '404' });
+      } catch(err) {}
+    });
+  </script>
 </body>
 </html>
