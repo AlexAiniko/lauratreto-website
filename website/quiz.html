@@ -838,6 +838,26 @@
     </div>
   </div>
 
+  <!-- Email Gate Card -->
+  <div id="gateCard" class="question-card" style="display:none; text-align:center; padding: 40px 28px;">
+    <div style="font-size:48px; margin-bottom:20px;">&#10003;</div>
+    <div class="question-text" data-lang="en" style="margin-bottom:8px;">You finished! Enter your info to see your score.</div>
+    <div class="question-text" data-lang="es" style="margin-bottom:8px;">&#161;Terminaste! Ingresa tus datos para ver tu puntuaci&#243;n.</div>
+    <p style="font-size:13px; color:var(--text-light); margin-bottom:28px; line-height:1.6;">
+      <span data-lang="en">Your personalized results are ready. We'll also send you a free movement tip.</span>
+      <span data-lang="es">Tus resultados personalizados est&#225;n listos. Tambi&#233;n te enviaremos un consejo de movimiento gratis.</span>
+    </p>
+    <form class="email-form" id="gateForm" style="margin:0 auto;" onsubmit="submitGate(event)">
+      <input type="text" id="gateName" placeholder="First name" autocomplete="given-name" required>
+      <input type="email" id="gateEmail" placeholder="Email address" autocomplete="email" required>
+      <button type="submit" id="gateSubmitBtn" class="btn btn-next" style="width:100%; margin-left:0; border-radius:10px; padding:14px;">
+        <span data-lang="en">See My Results</span>
+        <span data-lang="es">Ver Mis Resultados</span>
+      </button>
+      <div id="gateError" style="display:none; color:#e74c3c; font-size:13px; margin-top:8px;"></div>
+    </form>
+  </div>
+
   <!-- Results -->
   <div class="results-page" id="resultsPage">
 
@@ -863,21 +883,6 @@
       <h3 id="ctaPrimaryTitle">Ready to understand your body?</h3>
       <p id="ctaPrimaryDesc">In a 60-minute private movement assessment, I'll map your movement patterns, find the gaps, and give you a clear plan to move and feel better.</p>
       <a href="/#inquiry" class="cta-btn cta-btn-coral" id="bookBtn">Book Your Assessment ($125)</a>
-    </div>
-
-    <div class="cta-card cta-secondary">
-      <h3 id="ctaSecondaryTitle">Get My Free 5-Day Movement Guide</h3>
-      <p id="ctaSecondaryDesc">One exercise per day, tailored to your score range. Delivered straight to your inbox.</p>
-      <form class="email-form" id="emailForm" onsubmit="submitEmail(event)">
-        <input type="text" name="first_name" id="inputFirstName" placeholder="First name" required>
-        <input type="email" name="email" id="inputEmail" placeholder="Email address" required>
-        <input type="hidden" name="score" id="hiddenScore">
-        <input type="hidden" name="tier" id="hiddenTier">
-        <input type="hidden" name="goal_tag" id="hiddenGoal">
-        <input type="hidden" name="weakest" id="hiddenWeakest">
-        <button type="submit" id="emailSubmitBtn">Send Me the Guide</button>
-        <div class="form-success" id="formSuccess">You're in! Check your inbox.</div>
-      </form>
     </div>
 
     <div class="credential-bar" data-lang="en">
@@ -932,18 +937,6 @@
       en: 'Book Your Assessment ($125)',
       es: 'Reserva Tu Evaluaci\u00f3n ($125)'
     },
-    ctaSecondaryTitle: {
-      en: 'Get My Free 5-Day Movement Guide',
-      es: 'Obt\u00e9n Mi Gu\u00eda Gratuita de Movimiento de 5 D\u00edas'
-    },
-    ctaSecondaryDesc: {
-      en: 'One exercise per day, tailored to your score range. Delivered straight to your inbox.',
-      es: 'Un ejercicio por d\u00eda, adaptado a tu rango de puntuaci\u00f3n. Directo a tu bandeja de entrada.'
-    },
-    emailSubmitBtn: {
-      en: 'Send Me the Guide',
-      es: 'Env\u00edame la Gu\u00eda'
-    },
     inputFirstName: {
       en: 'First name',
       es: 'Nombre'
@@ -951,10 +944,6 @@
     inputEmail: {
       en: 'Email address',
       es: 'Correo electr\u00f3nico'
-    },
-    formSuccess: {
-      en: 'You\'re in! Check your inbox.',
-      es: '\u00a1Listo! Revisa tu bandeja de entrada.'
     },
     tiers: {
       en: {
@@ -1006,7 +995,7 @@
     }
   };
 
-  // ── Last results cache (for re-rendering on lang switch) ──
+  // ── Last results cache (for re-rendering on lang switch + gate reveal) ──
   var lastScore = null;
   var lastTierKey = null;
   var lastTierColor = null;
@@ -1057,12 +1046,12 @@
     document.getElementById('ctaPrimaryTitle').textContent = T.ctaPrimaryTitle[currentLang];
     document.getElementById('ctaPrimaryDesc').textContent = T.ctaPrimaryDesc[currentLang];
     document.getElementById('bookBtn').textContent = T.bookBtn[currentLang];
-    document.getElementById('ctaSecondaryTitle').textContent = T.ctaSecondaryTitle[currentLang];
-    document.getElementById('ctaSecondaryDesc').textContent = T.ctaSecondaryDesc[currentLang];
-    document.getElementById('emailSubmitBtn').textContent = T.emailSubmitBtn[currentLang];
-    document.getElementById('inputFirstName').placeholder = T.inputFirstName[currentLang];
-    document.getElementById('inputEmail').placeholder = T.inputEmail[currentLang];
-    document.getElementById('formSuccess').textContent = T.formSuccess[currentLang];
+
+    // Gate card inputs
+    var gateName = document.getElementById('gateName');
+    var gateEmail = document.getElementById('gateEmail');
+    if (gateName) gateName.placeholder = T.inputFirstName[currentLang];
+    if (gateEmail) gateEmail.placeholder = T.inputEmail[currentLang];
   }
 
   // Initialize language on load
@@ -1147,12 +1136,11 @@
     document.getElementById('progressPct').textContent = pct + '%';
   }
 
-  window.showResults = function() {
-    // Calculate score
+  // ── _renderResults: compute + paint results page (does NOT show it) ──
+  function _renderResults() {
     var rawScore = answers.slice(0, SCORED_Q).reduce(function(a, b) { return a + (b || 0); }, 0);
     var normalizedScore = Math.round((rawScore / MAX_RAW) * 100);
 
-    // Determine tier
     var tierKey, tierColor;
     if (normalizedScore >= 85) {
       tierKey = 'strong';
@@ -1168,15 +1156,10 @@
       tierColor = '#e74c3c';
     }
 
-    // Cache for lang-switch re-render
+    // Cache for lang-switch re-render and gate submit
     lastScore = normalizedScore;
     lastTierKey = tierKey;
     lastTierColor = tierColor;
-
-    // Hide quiz, show results
-    document.querySelectorAll('.question-card').forEach(function(c) { c.classList.remove('active'); });
-    document.getElementById('progressWrapper').style.display = 'none';
-    document.getElementById('resultsPage').classList.add('active');
 
     // Score label
     document.getElementById('scoreLabelTop').textContent = T.scoreLabelTop[currentLang];
@@ -1201,12 +1184,6 @@
     document.getElementById('ctaPrimaryTitle').textContent = T.ctaPrimaryTitle[currentLang];
     document.getElementById('ctaPrimaryDesc').textContent = T.ctaPrimaryDesc[currentLang];
     document.getElementById('bookBtn').textContent = T.bookBtn[currentLang];
-    document.getElementById('ctaSecondaryTitle').textContent = T.ctaSecondaryTitle[currentLang];
-    document.getElementById('ctaSecondaryDesc').textContent = T.ctaSecondaryDesc[currentLang];
-    document.getElementById('emailSubmitBtn').textContent = T.emailSubmitBtn[currentLang];
-    document.getElementById('inputFirstName').placeholder = T.inputFirstName[currentLang];
-    document.getElementById('inputEmail').placeholder = T.inputEmail[currentLang];
-    document.getElementById('formSuccess').textContent = T.formSuccess[currentLang];
 
     // Animate arc meter
     var arc = document.getElementById('meterArc');
@@ -1221,17 +1198,101 @@
     // Build recommendations
     buildRecommendations(normalizedScore);
 
-    // Fill hidden fields (always English for data)
-    document.getElementById('hiddenScore').value = normalizedScore;
-    document.getElementById('hiddenTier').value = T.tiers.en[tierKey];
-    document.getElementById('hiddenGoal').value = goalTag;
-    document.getElementById('hiddenWeakest').value = getWeakestAreas().join(',');
-
     // Update progress to 100%
     document.getElementById('progressFill').style.width = '100%';
+  }
 
-    // Scroll to top
+  // ── showResults: called by Q7 Next button — shows gate card ──
+  window.showResults = function() {
+    _renderResults();
+
+    // Hide questions + progress
+    document.querySelectorAll('.question-card').forEach(function(c) { c.classList.remove('active'); });
+    document.getElementById('progressWrapper').style.display = 'none';
+
+    // Show gate card
+    var gate = document.getElementById('gateCard');
+    gate.style.display = 'flex';
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // ── submitGate: gate form submission handler ──
+  window.submitGate = function(e) {
+    e.preventDefault();
+
+    var nameVal = document.getElementById('gateName').value.trim();
+    var emailVal = document.getElementById('gateEmail').value.trim();
+    var errorEl = document.getElementById('gateError');
+    var submitBtn = document.getElementById('gateSubmitBtn');
+
+    // Clear previous error
+    errorEl.style.display = 'none';
+    errorEl.textContent = '';
+
+    // Validate
+    if (!nameVal) {
+      errorEl.textContent = currentLang === 'es' ? 'Por favor ingresa tu nombre.' : 'Please enter your first name.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    var emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRx.test(emailVal)) {
+      errorEl.textContent = currentLang === 'es' ? 'Por favor ingresa un correo válido.' : 'Please enter a valid email address.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    // Loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = currentLang === 'es' ? 'Un momento...' : '...';
+
+    // GA4: quiz_complete fires here (gate form submitted = real completion)
+    if (window.ltTrack) ltTrack('quiz_complete', {
+      score: lastScore || 0,
+      tier: T.tiers.en[lastTierKey] || '',
+      goal_tag: goalTag || '',
+      language: currentLang
+    });
+
+    fetch('/.netlify/functions/quiz-subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: emailVal,
+        first_name: nameVal,
+        score: String(lastScore || 0),
+        tier: T.tiers.en[lastTierKey] || '',
+        goal_tag: goalTag || '',
+        weakest_areas: getWeakestAreas().join(','),
+        language: currentLang
+      })
+    }).then(function(r) {
+      if (!r.ok) throw new Error('Subscribe failed with ' + r.status);
+      return r.json();
+    }).then(function() {
+      // GA4: email_signup fires on successful MailerLite subscribe
+      if (window.ltTrack) ltTrack('email_signup', {
+        method: 'quiz',
+        tier: T.tiers.en[lastTierKey] || '',
+        language: currentLang
+      });
+
+      // Hide gate, reveal results
+      document.getElementById('gateCard').style.display = 'none';
+      document.getElementById('resultsPage').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }).catch(function(err) {
+      console.error('Quiz gate submit error:', err);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = currentLang === 'es'
+        ? '<span data-lang="en">See My Results</span><span data-lang="es">Ver Mis Resultados</span>'
+        : '<span data-lang="en">See My Results</span><span data-lang="es">Ver Mis Resultados</span>';
+      errorEl.textContent = currentLang === 'es'
+        ? 'Algo salió mal. Por favor inténtalo de nuevo.'
+        : 'Something went wrong. Please try again.';
+      errorEl.style.display = 'block';
+    });
   };
 
   function animateNumber(el, from, to, duration) {
@@ -1329,59 +1390,6 @@
       div.innerHTML = '<div class="rec-icon" style="background:' + r.bg + '">' + r.icon + '</div><div class="rec-text">' + r.text + '</div>';
       container.appendChild(div);
     });
-  }
-
-  window.submitEmail = function(e) {
-    e.preventDefault();
-    var form = document.getElementById('emailForm');
-    var data = new FormData(form);
-
-    // GA4: fires once user submits the email form (end of quiz funnel)
-    if (window.ltTrack) ltTrack('quiz_complete', {
-      score: Number(data.get('score')) || 0,
-      tier: data.get('tier') || '',
-      goal_tag: data.get('goal_tag') || '',
-      language: currentLang
-    });
-
-    // ── MailerLite Integration via Netlify Function ──
-    // The function routes subscribers to the correct Movement tier group
-    // based on their score, which triggers the welcome email automation.
-    fetch('/.netlify/functions/quiz-subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: data.get('email'),
-        first_name: data.get('first_name'),
-        score: data.get('score'),
-        tier: data.get('tier'),
-        goal_tag: data.get('goal_tag'),
-        weakest_areas: data.get('weakest'),
-        language: currentLang
-      })
-    }).then(function(r) {
-      if (!r.ok) throw new Error('Subscribe failed with ' + r.status);
-      return r.json();
-    }).then(function() {
-      // GA4: fires only on successful MailerLite subscribe (real conversion)
-      if (window.ltTrack) ltTrack('email_signup', {
-        method: 'quiz',
-        tier: data.get('tier') || '',
-        language: currentLang
-      });
-      showSuccess();
-    }).catch(function(err) {
-      console.error('Quiz subscribe error:', err);
-      alert('Something went wrong. Please try again or email laura@lauratreto.com directly.');
-    });
-  };
-
-  function showSuccess() {
-    var form = document.getElementById('emailForm');
-    form.querySelector('input[name="first_name"]').style.display = 'none';
-    form.querySelector('input[name="email"]').style.display = 'none';
-    form.querySelector('button[type="submit"]').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
   }
 
   // Wrap words in <span> on intro headline so each word can stagger in via CSS.
