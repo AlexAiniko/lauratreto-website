@@ -464,7 +464,7 @@ export default async (request, context) => {
     // Prevents duplicate responses when ManyChat fires the webhook multiple
     // times for the same subscriber before the first response completes.
     // -----------------------------------------------------------------------
-    const SUBSCRIBER_LOCK_TTL_MS = 15_000; // 15 seconds
+    const SUBSCRIBER_LOCK_TTL_MS = 30_000; // 30 seconds
     const subscriberLockKey = `lock:${subscriberId}`;
 
     try {
@@ -497,8 +497,8 @@ export default async (request, context) => {
       const dedupStore = getStore("dedup");
       const existing   = await dedupStore.get(dedupHash, { type: "json" });
       if (existing && (Date.now() - existing.ts) < DEDUP_TTL_MS) {
-        console.log(`[dedup] sub=${subscriberId} hash=${dedupHash} — duplicate request, returning cached reply`);
-        return jsonResponse({ claude_response: existing.reply });
+        console.log(`[dedup] sub=${subscriberId} hash=${dedupHash} — duplicate suppressed`);
+        return jsonResponse({ claude_response: "" });
       }
     } catch (dedupErr) {
       // Blob read failed — proceed without dedup (better to reply than to drop)
