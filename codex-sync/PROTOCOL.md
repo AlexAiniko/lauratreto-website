@@ -1,65 +1,60 @@
-# Cross-Model Protocol -- Claude (Alpha) <-> Codex (Laura)
+# Cross-Model Bridge Protocol -- Codex (Laura) <-> Alpha (Alex)
 
-**Purpose:** Define how files flow between Alex's Claude org (Alpha) and Laura's Codex workspace.
+**Purpose:** Define how files flow between Laura's Codex CLI and Alex's Claude Code (Alpha) now that Laura's Codex commits directly to the repo.
 
-## How It Works
+## What changed (May 2026)
 
-Laura runs her business with Codex (OpenAI) on her computer. Alex runs his org with Claude (Alpha). This workspace is the shared bridge. Neither system contaminates the other.
+Before May 2026, Alex was the single bridge: Laura emailed files, Alex dropped them in `Input/`, Alpha processed and deposited deliverables in `Output/`, Alex carried them back to Laura's separate workspace.
 
-## Folder Structure
+After May 2026, Laura's Codex CLI runs on her own Mac with full access to this repo. She commits website + email work directly to `main`. The `Input/` and `Output/` folders are now a **cross-domain deliverable bridge**, not a primary work channel.
+
+## Ownership (the short version)
+
+- **Codex (Laura) owns:** the website, the booking + email automation, the quiz, the MailerLite drip copy, the Google OAuth rotation. She edits files in this repo and pushes to `main`. Netlify auto-deploys.
+- **Alpha (Alex) owns:** Trainerize, the Instagram bot, ManyChat, TikTok, Meta API posting, `alpha.db` operational state, GA4 reporting, social-content tooling (Higgsfield, Fal, Firecrawl), `.credentials/`.
+
+See `HANDOFF.md` at the repo root for the full table.
+
+## When to use the cross-model bridge
+
+Only when work crosses ownership boundaries. Examples:
+
+### Alpha -> Codex
+- Alpha drafts a research memo on a competitor in Key West and wants Laura's Codex to fold the findings into website copy. Alpha writes `Output/LAURA-competitor-research-<date>.md`. Laura tells Codex: "Alpha left me a research memo, take a look and update the differentiator section on the homepage."
+- Alpha generates Instagram caption drafts for week N. Alpha writes `Output/LAURA-instagram-week-N-captions.md`. Laura reviews, schedules the posts in her own tooling. (If Laura wants the captions to also appear as testimonials or social proof on the site, Codex pulls from this file.)
+- Alpha produces a Romy research memo (e.g., barefoot-shoe ambassador opportunities). Alpha writes `Output/LAURA-<topic>-Research-<date>.md`.
+
+### Codex -> Alpha
+- Codex pulls a MailerLite performance summary while writing email copy variants. Drops the numbers in `Input/mailerlite-week-N-summary.md` so Alpha can fold it into `alpha.db` KPI tracking.
+- Codex updates a customer-facing booking-flow copy line that should also be mirrored in Trainerize email templates. Drops a note in `Input/booking-copy-changed-<date>.md` so Alpha syncs Trainerize.
+- Codex notices a content opportunity from a website analytics signal (e.g., the quiz dropoff page has a spike). Drops a brief in `Input/content-signal-<date>.md`.
+
+## Folder structure
 
 ```
-codex-sync/                 <- Laura/Codex -> Alpha direction
-├── PROTOCOL.md             <- This file
-├── codex-database/         <- Exports from Laura's Codex knowledge base
-└── inbox/                  <- Raw Codex outputs for Alpha to review/improve
+codex-sync/
+├── PROTOCOL.md           <- This file
+├── codex-database/       <- (Optional) Exports from Laura's Codex KB if she ever wants Alpha to review them
+└── inbox/                <- (Legacy) Pre-handoff Codex outputs. Kept for historical reference.
+
+Input/                    <- Codex -> Alpha. Gitignored. Manual file drop.
+Output/                   <- Alpha -> Codex. Gitignored. Manual file drop.
 ```
-
-## Flow
-
-### Codex -> Alpha (Laura's work comes to us)
-1. Alex drops files in `Input/` and tells Alpha "this is from Laura" (or any reference to Laura/her business)
-2. Alpha routes the files to `codex-sync/` internally
-3. Alpha processes within the Laura project context ONLY
-4. Alpha places deliverables in `Output/` with `LAURA-` prefix (e.g., `LAURA-content-review.md`)
-
-### Alpha -> Codex (Our work goes to Laura)
-1. Alpha creates deliverables and places them in `Output/` with `LAURA-` prefix
-2. Alex picks them up from Output and brings to Laura's Codex workspace
-3. Output files are formatted for Codex consumption (plain markdown, no Alpha-specific references)
-
-### Naming Convention
-- **Output files for Laura:** `LAURA-{description}.md` (e.g., `LAURA-instagram-scripts.md`, `LAURA-codex-improvements.md`)
-- **Input files from Laura:** Any name -- Alex just tells Alpha it's from Laura
-
-### Why This Works
-- Alex uses the same Input/Output workflow for everything -- no extra folders to navigate
-- Alpha handles all internal routing and isolation automatically
-- The `codex-sync/` folder exists as Alpha's internal workspace for Laura's project
-- Clean separation: Alex never needs to go inside the project folder structure
 
 ## Rules
 
-1. **Isolation is absolute.** Alpha never loads Laura's Codex context at boot. Only when Alex says "let's work on Laura."
-2. **No cross-contamination.** Laura's Codex instructions do not influence Alpha's operating rules. Alpha's CLAUDE.md does not get shared with Codex.
-3. **Alex is the bridge.** Alex drops Laura files in Input/ and picks up deliverables from Output/. Alpha handles internal routing. No automated sync between Claude and Codex.
-4. **Codex database stays in codex-sync/.** If Alex brings Laura's full Codex KB, it goes in `codex-database/`. Alpha can read, analyze, and suggest improvements but does not modify the originals.
-5. **Format for Codex consumption.** When Alpha outputs files meant for Codex to read, use plain markdown with clear headers. No Alpha-specific references (no agent names, no task IDs, no database references).
-6. **Version awareness.** When analyzing Codex outputs, note the date. Codex context may be newer or older than what Alpha knows.
+1. **No cross-contamination.** Codex never loads Alpha's CLAUDE.md or memory. Alpha never loads AGENTS.md as its primary brief. Each side has its own canonical project brief.
+2. **Manual bridge only.** No automated sync between `Input/` and `Output/` and any other system. Laura tells Codex what arrived; Alex tells Alpha what arrived. (If we ever want to automate, that's a separate decision.)
+3. **Naming convention:**
+   - `Output/LAURA-<topic>.md` -- from Alpha to Codex
+   - `Input/<topic>.md` -- from Codex to Alpha (no special prefix needed; Alex's Input is unambiguous)
+4. **Format for the other side's consumption.** Plain markdown with clear headers. No model-specific references (don't reference Alpha's `alpha.db` schema in `Output/`; don't reference Codex's local MCP setup in `Input/`).
+5. **Date-stamp memos.** Include the date in the filename (e.g., `Output/LAURA-competitor-research-2026-05-16.md`) so older deliverables don't get re-applied by accident.
+6. **Both sides commit to `main` directly.** Pull before pushing. No PR workflow.
+7. **Announce cross-side changes that affect both surfaces.** If Codex changes a function signature in `website/netlify/lib/email.js` that Alpha was importing into a script, drop a note in `Input/` so Alpha updates its caller.
 
-## What Alpha Can Do With Codex Files
+## What this protocol does NOT cover
 
-- Read and understand Codex's knowledge base structure
-- Identify gaps, redundancies, or contradictions
-- Suggest better prompts/instructions for Laura's Codex setup
-- Improve content quality (scripts, captions, posts)
-- Build automations and integrations (social media tools)
-- Provide strategic analysis (positioning, audience, competitive)
-- Format outputs so Codex can easily consume them
-
-## What Alpha Cannot Do
-
-- Modify Laura's Codex configuration directly
-- Send files to Laura's Codex automatically
-- Override Laura's Codex decisions or instructions
-- Load Laura's context during non-Laura sessions
+- Direct customer-facing decisions (those go through Laura and Alex talking to each other, not through the file bridge)
+- Time-sensitive incidents (use Slack/text, not file drops)
+- Sensitive credentials (use 1Password, never the file bridge)

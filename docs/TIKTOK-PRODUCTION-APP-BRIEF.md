@@ -56,7 +56,7 @@ Use this verbatim in the "App Description" field:
 
 ## 4. Privacy Policy Assessment
 
-**Location reviewed:** `/Users/paymore/Desktop/LAURA TRETO COACHING/website/privacy.html`
+**Location reviewed:** `$PROJECT_ROOT/website/privacy.html`
 **Live URL:** https://lauratreto.com/privacy.html
 
 **What it covers (passing):**

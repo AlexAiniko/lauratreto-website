@@ -3,8 +3,11 @@
 One-shot helper to capture a Google OAuth refresh token authorized as
 `laura@lauratreto.com`. The token is used by Netlify functions on
 `lauratreto.com` to read/write Laura's Google Calendar and send transactional
-emails via Gmail. Run this **once** on Alex's laptop and copy the printed
-refresh token into Netlify env. The script never writes the token to disk.
+emails via Gmail. Run this **once** on a trusted local machine and copy the
+printed refresh token into Netlify env. The script never writes the token to
+disk.
+
+> `$PROJECT_ROOT` below = the local clone of this repo, e.g. `~/lauratreto-website`.
 
 ## Prerequisites
 
@@ -25,14 +28,14 @@ The repo has a root `package.json` with `googleapis` as a dev dependency
 (separate from `website/package.json`, which is for production code).
 
 ```bash
-cd "/Users/paymore/Desktop/LAURA TRETO COACHING"
+cd "$PROJECT_ROOT"
 npm install
 ```
 
 ## Run
 
 ```bash
-cd "/Users/paymore/Desktop/LAURA TRETO COACHING"
+cd "$PROJECT_ROOT"
 GOOGLE_CLIENT_ID=...apps.googleusercontent.com \
 GOOGLE_CLIENT_SECRET=GOCSPX-... \
   node tools/google_oauth_capture.mjs

@@ -1,0 +1,17 @@
+{
+  "_comment": "Codex MCP config template. Copy this file to .mcp.json (gitignored) and fill in keys from the 1Password 'Laura Treto Coaching' vault. NEVER commit real keys. Playwright requires no key. Firecrawl is optional and only needed if you want competitor-research scraping from inside Codex.",
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    },
+    "firecrawl-mcp": {
+      "_optional": "Only if you want competitor scraping for copy work. Paste FIRECRAWL_API_KEY from 1Password.",
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "<PASTE_FIRECRAWL_KEY_FROM_1PASSWORD>"
+      }
+    }
+  }
+}

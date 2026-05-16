@@ -1,4 +1,6 @@
+import argparse
 import math
+import sys
 from PIL import Image, ImageDraw
 from pathlib import Path
 
@@ -104,8 +106,37 @@ d.ellipse(
 
 img = img.resize((SIZE, SIZE), Image.LANCZOS)
 
-out_dir = Path("/Users/paymore/Desktop/LAURA TRETO COACHING/Output")
-out_dir.mkdir(exist_ok=True)
-out = out_dir / "LAURA-tiktok-app-icon-1024.png"
-img.save(out, "PNG")
-print(f"saved {out} {img.size}")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=(
+            "Render the Laura Treto kettlebell app-icon PNG to the given output path. "
+            "The path can be a directory (writes LAURA-tiktok-app-icon-1024.png inside) "
+            "or a full .png file path."
+        )
+    )
+    parser.add_argument(
+        "output",
+        help="Output directory or .png file path",
+    )
+    args = parser.parse_args()
+
+    out_path = Path(args.output).expanduser()
+    if out_path.suffix.lower() != ".png":
+        out_path.mkdir(parents=True, exist_ok=True)
+        out_path = out_path / "LAURA-tiktok-app-icon-1024.png"
+    else:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    img.save(out_path, "PNG")
+    print(f"saved {out_path} {img.size}")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print(
+            "usage: python tools/make_app_icon.py <output_dir_or_png_path>",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    main()
