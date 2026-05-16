@@ -746,9 +746,9 @@
           <input type="email" name="email" id="bookEmail" autocomplete="email" inputmode="email" required maxlength="120">
         </div>
         <div class="field">
-          <label data-lang="en">PHONE</label>
-          <label data-lang="es">TELÉFONO</label>
-          <input type="tel" name="phone" id="bookPhone" autocomplete="tel" inputmode="tel" required maxlength="20">
+          <label data-lang="en">PHONE <span style="opacity:.6;font-weight:400;"> (optional)</span></label>
+          <label data-lang="es">TELÉFONO <span style="opacity:.6;font-weight:400;"> (opcional)</span></label>
+          <input type="tel" name="phone" id="bookPhone" autocomplete="tel" inputmode="tel" maxlength="20">
         </div>
         <div class="hp" aria-hidden="true">
           <label>Website<input type="text" name="website" id="bookHp" tabindex="-1" autocomplete="off"></label>
@@ -1246,7 +1246,7 @@
     const name = document.getElementById('bookName').value.trim();
     const email = document.getElementById('bookEmail').value.trim();
     const phone = document.getElementById('bookPhone').value.trim();
-    const ready = name && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && phone && state.date && state.time;
+    const ready = name && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && state.date && state.time;
     const btn = document.getElementById('bookingSubmit');
     btn.disabled = !ready;
     document.getElementById('bookingBtnLabelEn').textContent = ready ? 'Confirm booking' : 'Pick a day & time';
