@@ -258,7 +258,7 @@ const WELCOME_TEMPLATES = {
       subject: 'You moved. I noticed.',
       preview: 'Quick chat to start. The rest follows.',
       ctaText: 'Book the call',
-      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=dance-online',
+      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=dance-online&intent=dance#book-call',
       paragraphs: [
         'You moved. I noticed.',
         "I'm Laura. I've spent my life in dance. Performing, teaching, helping people find what their bodies are actually capable of.",
@@ -274,7 +274,7 @@ const WELCOME_TEMPLATES = {
       subject: 'Te moviste. Lo noté.',
       preview: 'Una llamada rápida para empezar. Lo demás sigue.',
       ctaText: 'Reservar la llamada',
-      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=dance-online',
+      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=dance-online&intent=dance#book-call',
       paragraphs: [
         'Te moviste. Lo noté.',
         'Soy Laura. Llevo toda la vida bailando. Actuando, enseñando, ayudando a la gente a descubrir de qué son capaces sus cuerpos.',
@@ -356,7 +356,7 @@ const WELCOME_TEMPLATES = {
       subject: 'PT ended. Now what.',
       preview: 'Quick read. The first step is a phone call.',
       ctaText: 'Book the call',
-      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=train-online&utm_content=call',
+      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=train-online&utm_content=call&intent=train#book-call',
       ctaSecondaryText: 'Browse the programs',
       ctaSecondaryUrl: 'https://lauratreto.com/pricing?utm_source=welcome&utm_medium=email&utm_campaign=train-online&utm_content=programs',
       paragraphs: [
@@ -376,7 +376,7 @@ const WELCOME_TEMPLATES = {
       subject: 'Terminó la fisio. ¿Y ahora?',
       preview: 'Lectura corta. El primer paso es una llamada.',
       ctaText: 'Reservar la llamada',
-      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=train-online&utm_content=call',
+      ctaUrl: 'https://lauratreto.com/client?utm_source=welcome&utm_medium=email&utm_campaign=train-online&utm_content=call&intent=train#book-call',
       ctaSecondaryText: 'Ver los programas',
       ctaSecondaryUrl: 'https://lauratreto.com/pricing?utm_source=welcome&utm_medium=email&utm_campaign=train-online&utm_content=programs',
       paragraphs: [

@@ -1389,7 +1389,7 @@
     const isInitial = !!(opts && opts.initial);
     const hash = (location.hash || '').replace('#', '');
     if (!hash) return;
-    const supported = ['booking', 'capture-online', 'mode', 'choose'];
+    const supported = ['booking', 'capture-online', 'mode', 'choose', 'book-call'];
     // Fire deep_link_booking ONLY on initial page-load entry via a supported hash.
     // Subsequent hashchange events (back/forward inside the funnel) are excluded so
     // the event reflects true entry attribution, not in-page navigation.
@@ -1405,6 +1405,21 @@
       // local-mode path; meeting method ('in-person' vs 'call') is selectable inside.
       if (!state.mode) state.mode = 'local';
       mountBooking();
+      goto('booking');
+    } else if (hash === 'book-call') {
+      // Deep-link from train-online / dance-online welcome email.
+      // Skip track+mode pickers and drop straight on the slot-picker with
+      // method preset to 'call' (they're online — they want a phone call).
+      // Track ('train' or 'dance') is parsed from the ?intent= query param so
+      // the booking page label reads correctly. Falls back to current state
+      // or 'train' if absent.
+      const params = new URLSearchParams(location.search);
+      const intent = params.get('intent');
+      if (intent === 'train' || intent === 'dance') state.track = intent;
+      if (!state.mode) state.mode = 'local';
+      mountBooking();
+      state.meetingMethod = 'call';
+      document.querySelectorAll('.method').forEach((b) => b.classList.toggle('on', b.dataset.method === 'call'));
       goto('booking');
     } else if (hash === 'capture-online') {
       if (!state.mode) state.mode = 'online';
