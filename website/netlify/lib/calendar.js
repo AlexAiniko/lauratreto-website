@@ -56,7 +56,7 @@ export async function getAvailableSlots({
   // Build candidate working-hour slots in the configured timezone for each day.
   const slots = [];
   const slotMs = slotMinutes * 60 * 1000;
-  const stepMinutes = Math.max(slotMinutes, Number(slotStepMinutes) || slotMinutes);
+  const stepMinutes = Math.max(1, Number(slotStepMinutes) || slotMinutes);
   const bufMs = bufferMinutes * 60 * 1000;
   const effectiveSkipDays =
     skipDays instanceof Set
