@@ -169,11 +169,11 @@ export async function sendBookingConfirmation({
     const dateStr = date || 'día acordado';
     const timeStr = time || 'la hora acordada';
     const opener = isCall
-      ? `Recibí tu reserva. Te llamo el ${dateStr} a las ${timeStr}.`
-      : `Recibí tu reserva. Te veo el ${dateStr} a las ${timeStr}.`;
+      ? `Recibí tu reserva. Te llamo el ${dateStr} a las ${timeStr} para una llamada de 30 minutos.`
+      : `Recibí tu reserva. Te veo el ${dateStr} a las ${timeStr} para conversar 30 minutos.`;
     const openerHtml = isCall
-      ? `Recibí tu reserva. Te llamo el <strong>${escapeHtml(dateStr)}</strong> a las <strong>${escapeHtml(timeStr)}</strong>.`
-      : `Recibí tu reserva. Te veo el <strong>${escapeHtml(dateStr)}</strong> a las <strong>${escapeHtml(timeStr)}</strong>.`;
+      ? `Recibí tu reserva. Te llamo el <strong>${escapeHtml(dateStr)}</strong> a las <strong>${escapeHtml(timeStr)}</strong> para una llamada de 30 minutos.`
+      : `Recibí tu reserva. Te veo el <strong>${escapeHtml(dateStr)}</strong> a las <strong>${escapeHtml(timeStr)}</strong> para conversar 30 minutos.`;
     const lines = [
       greeting,
       ``,
@@ -202,11 +202,11 @@ export async function sendBookingConfirmation({
     const dateStr = date || 'the day we picked';
     const timeStr = time || 'the time we picked';
     const opener = isCall
-      ? `Got your booking. I'll call you ${dateStr} at ${timeStr}.`
-      : `Got your booking. I'll see you on ${dateStr} at ${timeStr}.`;
+      ? `Got your booking. I'll call you ${dateStr} at ${timeStr} for a 30-minute chat.`
+      : `Got your booking. I'll see you on ${dateStr} at ${timeStr} for a 30-minute chat.`;
     const openerHtml = isCall
-      ? `Got your booking. I'll call you <strong>${escapeHtml(dateStr)}</strong> at <strong>${escapeHtml(timeStr)}</strong>.`
-      : `Got your booking. I'll see you on <strong>${escapeHtml(dateStr)}</strong> at <strong>${escapeHtml(timeStr)}</strong>.`;
+      ? `Got your booking. I'll call you <strong>${escapeHtml(dateStr)}</strong> at <strong>${escapeHtml(timeStr)}</strong> for a 30-minute chat.`
+      : `Got your booking. I'll see you on <strong>${escapeHtml(dateStr)}</strong> at <strong>${escapeHtml(timeStr)}</strong> for a 30-minute chat.`;
     const lines = [
       greeting,
       ``,
@@ -294,7 +294,7 @@ const WELCOME_TEMPLATES = {
       ctaText: 'Open calendar event',
       ctaUrl: '{{calendarEventLink}}',
       paragraphs: [
-        "You're booked. I'll see you {{date}} at {{time}}.",
+        "You're booked. I'll see you {{date}} at {{time}} for a 30-minute chat.",
         "I'm Laura. Cuban dancer, fifteen years on stage. Now teaching here in Key West.",
         'Coffee on me, somewhere on the island. We chat about what you want, what you have tried, and we both decide if we click.',
         "Even if we don't end up working together, I'll make sure you walk away with something.",
@@ -308,7 +308,7 @@ const WELCOME_TEMPLATES = {
           subject: 'Talk soon',
           preview: "I'll call you {{date}} at {{time}}.",
           paragraphs: [
-            "You're booked. I'll call you {{date}} at {{time}}.",
+            "You're booked. I'll call you {{date}} at {{time}} for a 30-minute chat.",
             "I'm Laura. Cuban dancer, fifteen years on stage. Now teaching here in Key West.",
             'Quick call. We talk about what you want, what you have tried, and we both decide if we click.',
             "Even if we don't end up working together, I'll make sure you walk away with something.",
@@ -325,7 +325,7 @@ const WELCOME_TEMPLATES = {
       ctaText: 'Ver evento del calendario',
       ctaUrl: '{{calendarEventLink}}',
       paragraphs: [
-        'Estás reservada. Nos vemos el {{date}} a las {{time}}.',
+        'Estás reservada. Nos vemos el {{date}} a las {{time}} para conversar 30 minutos.',
         'Soy Laura. Bailarina cubana, quince años en escenarios. Ahora enseñando aquí en Key West.',
         'Café por mi cuenta, en algún lugar de la isla. Hablamos de lo que buscas, lo que has probado, y los dos decidimos si encajamos.',
         'Aunque no terminemos trabajando juntas, te aseguro que sales con algo.',
@@ -339,7 +339,7 @@ const WELCOME_TEMPLATES = {
           subject: 'Hablamos pronto',
           preview: 'Te llamo el {{date}} a las {{time}}.',
           paragraphs: [
-            'Estás reservada. Te llamo el {{date}} a las {{time}}.',
+            'Estás reservada. Te llamo el {{date}} a las {{time}} para una llamada de 30 minutos.',
             'Soy Laura. Bailarina cubana, quince años en escenarios. Ahora enseñando aquí en Key West.',
             'Una llamada rápida. Hablamos de lo que buscas, lo que has probado, y los dos decidimos si encajamos.',
             'Aunque no terminemos trabajando juntas, te aseguro que sales con algo.',
@@ -400,7 +400,7 @@ const WELCOME_TEMPLATES = {
       ctaText: 'Open calendar event',
       ctaUrl: '{{calendarEventLink}}',
       paragraphs: [
-        "You're booked. I'll see you {{date}} at {{time}}.",
+        "You're booked. I'll see you {{date}} at {{time}} for a 30-minute chat.",
         "I'm Laura. NASM-certified strength coach. Local in Key West.",
         'Coffee on me, somewhere on the island. We chat about your goals, what hurts, what you have tried. We both decide if private training is the right fit.',
         "Even if we don't end up training together, you walk away with something useful.",
@@ -414,7 +414,7 @@ const WELCOME_TEMPLATES = {
           subject: 'Talk soon',
           preview: "I'll call you {{date}} at {{time}}.",
           paragraphs: [
-            "You're booked. I'll call you {{date}} at {{time}}.",
+            "You're booked. I'll call you {{date}} at {{time}} for a 30-minute chat.",
             "I'm Laura. NASM-certified strength coach. Local in Key West.",
             'Quick call. We talk about your goals, what hurts, what you have tried. We both decide if private training is the right fit.',
             "Even if we don't end up training together, you walk away with something useful.",
@@ -431,7 +431,7 @@ const WELCOME_TEMPLATES = {
       ctaText: 'Ver evento del calendario',
       ctaUrl: '{{calendarEventLink}}',
       paragraphs: [
-        'Estás reservada. Nos vemos el {{date}} a las {{time}}.',
+        'Estás reservada. Nos vemos el {{date}} a las {{time}} para conversar 30 minutos.',
         'Soy Laura. Coach de fuerza certificada NASM. Local en Key West.',
         'Café por mi cuenta, en algún lugar de la isla. Hablamos de tus metas, qué te duele, qué has probado. Los dos decidimos si entrenar privado es lo que necesitas.',
         'Aunque no terminemos entrenando juntas, te vas con algo útil.',
@@ -445,7 +445,7 @@ const WELCOME_TEMPLATES = {
           subject: 'Hablamos pronto',
           preview: 'Te llamo el {{date}} a las {{time}}.',
           paragraphs: [
-            'Estás reservada. Te llamo el {{date}} a las {{time}}.',
+            'Estás reservada. Te llamo el {{date}} a las {{time}} para una llamada de 30 minutos.',
             'Soy Laura. Coach de fuerza certificada NASM. Local en Key West.',
             'Una llamada rápida. Hablamos de tus metas, qué te duele, qué has probado. Los dos decidimos si entrenar privado es lo que necesitas.',
             'Aunque no terminemos entrenando juntas, te vas con algo útil.',

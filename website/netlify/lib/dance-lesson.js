@@ -134,7 +134,7 @@ export async function createDanceLessonBooking({
   }
 
   const displayDate = formatBookingDate(date, BOOKING_TIMEZONE);
-  const displayTime = time || '';
+  const displayTime = formatBookingTime(time);
 
   let calendarEventId = null;
   let calendarEventLink = null;
@@ -266,4 +266,17 @@ function formatBookingDate(dateISO, tz) {
   return new Intl.DateTimeFormat('en-US', {
     timeZone: tz, weekday: 'long', month: 'long', day: 'numeric',
   }).format(d);
+}
+
+function formatBookingTime(time24) {
+  if (!time24 || typeof time24 !== 'string') return time24 || '';
+  const match = time24.match(/^(\d{1,2}):(\d{2})$/);
+  if (!match) return time24;
+  const hour = Number(match[1]);
+  const minute = Number(match[2]);
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) return time24;
+  if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return time24;
+  const period = hour >= 12 ? 'PM' : 'AM';
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+  return `${hour12}:${match[2]} ${period}`;
 }
