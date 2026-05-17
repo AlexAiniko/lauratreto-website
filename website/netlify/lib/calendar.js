@@ -4,15 +4,18 @@
 import { getGoogleClient } from './google.js';
 
 /**
- * Returns an array of available 15-minute (or slotMinutes) time slots
+ * Returns an array of available 20-minute consultation time slots
  * over the next `days` days, computed against Laura's primary calendar
  * busy times. Slots in the past are excluded.
  *
- * Working hours default to 9am-7pm local (last slot starts 6:45pm, ends 7:00pm)
- * and weekends (Sun + Sat) are skipped by default. Both are env-var driven:
- *   - BOOKING_HOURS:     "9-19"  (start-end, 24-hour, end-exclusive)
- *   - BOOKING_SKIP_DAYS: "0,6"   (comma-separated weekday nums, 0=Sun..6=Sat)
- * Malformed or missing env vars fall back to those same defaults.
+ * The default weekly windows mirror Laura's Google Calendar appointment
+ * schedule for Initial Consultation:
+ *   - 20-minute appointments
+ *   - 45-minute start cadence
+ *   - Sunday unavailable
+ *
+ * The legacy 9am-7pm, 15-minute grid can still be requested by passing
+ * availabilityWindows: null. /book-dance-lesson uses that path.
  *
  * Each slot: { startISO, endISO, displayDate, displayTime, time24, weekday }
  *   - time24: wall-clock time in `H:MM` 24-hour format (no leading zero on hour),
@@ -23,10 +26,12 @@ export async function getAvailableSlots({
   days = 14,
   calendarId = process.env.BOOKING_CALENDAR_ID || 'primary',
   workingHours = parseBookingHours(process.env.BOOKING_HOURS, { start: 9, end: 19 }),
-  slotMinutes = 15,
+  availabilityWindows = DEFAULT_CONSULT_WINDOWS,
+  slotMinutes = 20,
+  slotStepMinutes = 45,
   bufferMinutes = 15,
   timezone = process.env.BOOKING_TIMEZONE || 'America/New_York',
-  skipDays = parseSkipDays(process.env.BOOKING_SKIP_DAYS, new Set([0, 6])),
+  skipDays = null,
 } = {}) {
   const { calendar } = getGoogleClient();
 
@@ -51,20 +56,38 @@ export async function getAvailableSlots({
   // Build candidate working-hour slots in the configured timezone for each day.
   const slots = [];
   const slotMs = slotMinutes * 60 * 1000;
+  const stepMinutes = Math.max(slotMinutes, Number(slotStepMinutes) || slotMinutes);
   const bufMs = bufferMinutes * 60 * 1000;
+  const effectiveSkipDays =
+    skipDays instanceof Set
+      ? skipDays
+      : availabilityWindows
+        ? new Set()
+        : parseSkipDays(process.env.BOOKING_SKIP_DAYS, new Set([0, 6]));
 
   // Iterate day-by-day starting today (in the configured timezone)
   for (let dayOffset = 0; dayOffset <= days; dayOffset++) {
     const dayDate = new Date(now.getTime() + dayOffset * 24 * 60 * 60 * 1000);
     const ymd = formatYMDInTz(dayDate, timezone);
 
-    // Skip configured weekdays (default Sun + Sat). Use the timezone-aware
-    // weekday so an instant late on Friday ET doesn't get bucketed as Saturday.
+    // Skip configured weekdays. Use the timezone-aware weekday so an instant
+    // late on Friday ET doesn't get bucketed as Saturday.
     const weekdayNum = getWeekdayInTz(ymd, timezone);
-    if (skipDays.has(weekdayNum)) continue;
+    if (effectiveSkipDays.has(weekdayNum)) continue;
 
-    for (let hour = workingHours.start; hour < workingHours.end; hour++) {
-      for (let minute = 0; minute < 60; minute += slotMinutes) {
+    const dayWindows = availabilityWindows
+      ? availabilityWindows.get(weekdayNum) || []
+      : [{ start: workingHours.start * 60, end: workingHours.end * 60 }];
+    if (!dayWindows.length) continue;
+
+    for (const window of dayWindows) {
+      for (
+        let startMinute = window.start;
+        startMinute + slotMinutes <= window.end;
+        startMinute += stepMinutes
+      ) {
+        const hour = Math.floor(startMinute / 60);
+        const minute = startMinute % 60;
         const slotStart = isoFromYMDHMTz(ymd, hour, minute, timezone);
         const slotEnd = new Date(new Date(slotStart).getTime() + slotMs);
         const slotStartMs = new Date(slotStart).getTime();
@@ -106,6 +129,19 @@ export async function getAvailableSlots({
 
   return slots;
 }
+
+const DEFAULT_CONSULT_WINDOWS = new Map([
+  [1, [toWindow('8:00', '15:30')]],
+  [2, [
+    toWindow('8:30', '9:00'),
+    toWindow('11:30', '12:00'),
+    toWindow('16:00', '21:00'),
+  ]],
+  [3, [toWindow('9:00', '14:00')]],
+  [4, [toWindow('8:00', '17:00')]],
+  [5, [toWindow('12:00', '17:00')]],
+  [6, [toWindow('12:00', '15:30')]],
+]);
 
 /**
  * Creates an event on the configured calendar with attendee invite + ICS
@@ -149,6 +185,21 @@ export async function createBookingEvent({
 }
 
 // ---------- env parsers ----------
+
+function toWindow(start, end) {
+  return { start: parseClockMinutes(start), end: parseClockMinutes(end) };
+}
+
+function parseClockMinutes(raw) {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(String(raw).trim());
+  if (!m) throw new Error(`Invalid booking window time: ${raw}`);
+  const hour = Number(m[1]);
+  const minute = Number(m[2]);
+  if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+    throw new Error(`Invalid booking window time: ${raw}`);
+  }
+  return hour * 60 + minute;
+}
 
 // Parses BOOKING_HOURS like "9-19" -> { start: 9, end: 19 }.
 // Falls back to `fallback` if missing, malformed, or out of range.

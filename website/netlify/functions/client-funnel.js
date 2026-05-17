@@ -24,6 +24,7 @@ import { createBookingEvent } from '../lib/calendar.js';
 import { sendBookingNotification, sendBookingConfirmation, sendWelcomeEmail } from '../lib/email.js';
 
 const BOOKING_TIMEZONE = process.env.BOOKING_TIMEZONE || 'America/New_York';
+const BOOKING_DURATION_MINUTES = 20;
 
 const BUCKET_GROUPS = {
   'dance-online': process.env.MAILERLITE_GROUP_DANCE_ONLINE || 'TODO_DANCE_ONLINE_GROUP_ID',
@@ -419,7 +420,7 @@ async function runBookingPostProcess({
   }
 }
 
-// Convert client-side ISO date + "H:MM" time string + timezone into a 15-min
+// Convert client-side ISO date + "H:MM" time string + timezone into a 20-min
 // event window. Returns null if either input is unparseable.
 function parseBookingDateTime(dateISO, timeStr, tz) {
   const d = new Date(dateISO);
@@ -440,7 +441,7 @@ function parseBookingDateTime(dateISO, timeStr, tz) {
   const offsetMin = tzOffsetMinutes(new Date(fakeUtc), tz);
   const realUtc = fakeUtc - offsetMin * 60 * 1000;
   const start = new Date(realUtc);
-  const end = new Date(realUtc + 15 * 60 * 1000);
+  const end = new Date(realUtc + BOOKING_DURATION_MINUTES * 60 * 1000);
   return { startISO: start.toISOString(), endISO: end.toISOString() };
 }
 

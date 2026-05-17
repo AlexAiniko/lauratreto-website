@@ -722,8 +722,8 @@
         <span id="bookingTrack"></span>
       </div>
       <h2 class="headline">Key West.</h2>
-      <p class="subhead" data-lang="en">15 min meet, on me. Just to say hi and hear what you want.</p>
-      <p class="subhead" data-lang="es">15 min, te invito el café. Solo para saludarnos y escuchar qué quieres.</p>
+      <p class="subhead" data-lang="en">20 min chat, on me. Just to say hi and hear what you want.</p>
+      <p class="subhead" data-lang="es">20 min para conversar, te invito yo. Solo para saludarnos y escuchar qué quieres.</p>
 
       <div class="method-toggle" role="radiogroup" aria-label="How to meet">
         <button type="button" class="method on" data-method="in-person">
@@ -1141,7 +1141,7 @@
   }
 
   async function mountBooking() {
-    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · 15 MIN MEET', es: ' · 15 MIN' });
+    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · 20 MIN CHAT', es: ' · 20 MIN' });
     state.meetingMethod = 'in-person';
     document.querySelectorAll('.method').forEach((b) => b.classList.toggle('on', b.dataset.method === 'in-person'));
 
@@ -1286,15 +1286,15 @@
   function mountBooked() {
     const isCall = state.meetingMethod === 'call';
     document.getElementById('bookedTrack').innerHTML = trackLabel({
-      en: isCall ? ' · 15 MIN CALL' : ' · 15 MIN MEET',
-      es: isCall ? ' · 15 MIN' : ' · 15 MIN',
+      en: isCall ? ' · 20 MIN CALL' : ' · 20 MIN CHAT',
+      es: isCall ? ' · 20 MIN' : ' · 20 MIN',
     });
     document.getElementById('bookedDateEn').textContent = state.dateEn || '';
     document.getElementById('bookedDateEs').textContent = state.dateEs || '';
     document.getElementById('bookedTime').textContent = state.time || '';
     document.getElementById('bookedMethodRow').innerHTML = isCall
-      ? '<span data-lang="en">15 min, on a call</span><span data-lang="es">15 min, por llamada</span>'
-      : '<span data-lang="en">15 min, in Key West</span><span data-lang="es">15 min, en Key West</span>';
+      ? '<span data-lang="en">20 min chat, on a call</span><span data-lang="es">20 min, por llamada</span>'
+      : '<span data-lang="en">20 min chat, in Key West</span><span data-lang="es">20 min, en Key West</span>';
     document.getElementById('bookedClosingEn').textContent = isCall
       ? "I'll call you. We'll talk and figure out where to start. I'll text you tonight to confirm."
       : "Coffee's on me when we meet. I'll text you tonight to confirm.";

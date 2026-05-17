@@ -7,8 +7,8 @@
 //
 // Query flags:
 //   days=14       window length (max 30)
-//   weekends=1    override BOOKING_SKIP_DAYS for this request — include Sat+Sun.
-//                 Used by /book-dance-lesson (tourists are weekend-heavy).
+//   weekends=1    legacy wide-grid mode for /book-dance-lesson: 15-minute slots,
+//                 9am-7pm, and Sat+Sun included.
 //
 // Errors return 200 with { slots: [], error: '...' } so the client can fall
 // back gracefully (e.g. show a static time list).
@@ -42,11 +42,17 @@ export default async (request) => {
   if (!Number.isFinite(days) || days < 1) days = 14;
   if (days > 30) days = 30; // hard cap
 
-  // weekends=1 → empty skipDays set, every weekday shows up. Anything else
-  // falls through to BOOKING_SKIP_DAYS (default Sun + Sat).
+  // Default path mirrors Laura's Google Calendar appointment schedule for the
+  // Initial Consultation. weekends=1 is the older dance-lesson path and keeps
+  // the broad 15-minute grid with Sat+Sun included.
   const includeWeekends = url.searchParams.get('weekends') === '1';
   const slotOpts = { days };
-  if (includeWeekends) slotOpts.skipDays = new Set();
+  if (includeWeekends) {
+    slotOpts.availabilityWindows = null;
+    slotOpts.slotMinutes = 15;
+    slotOpts.slotStepMinutes = 15;
+    slotOpts.skipDays = new Set();
+  }
 
   try {
     const slots = await getAvailableSlots(slotOpts);
