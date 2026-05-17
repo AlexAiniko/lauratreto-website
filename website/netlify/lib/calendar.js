@@ -4,13 +4,13 @@
 import { getGoogleClient } from './google.js';
 
 /**
- * Returns an array of available 20-minute consultation time slots
+ * Returns an array of available 30-minute consultation time slots
  * over the next `days` days, computed against Laura's primary calendar
  * busy times. Slots in the past are excluded.
  *
  * The default weekly windows mirror Laura's Google Calendar appointment
  * schedule for Initial Consultation:
- *   - 20-minute appointments
+ *   - 30-minute appointments
  *   - 45-minute start cadence
  *   - Sunday unavailable
  *
@@ -27,7 +27,7 @@ export async function getAvailableSlots({
   calendarId = process.env.BOOKING_CALENDAR_ID || 'primary',
   workingHours = parseBookingHours(process.env.BOOKING_HOURS, { start: 9, end: 19 }),
   availabilityWindows = DEFAULT_CONSULT_WINDOWS,
-  slotMinutes = 20,
+  slotMinutes = 30,
   slotStepMinutes = 45,
   bufferMinutes = 0,
   timezone = process.env.BOOKING_TIMEZONE || 'America/New_York',
@@ -185,6 +185,44 @@ export async function createBookingEvent({
   });
 
   return res.data;
+}
+
+/**
+ * Returns true when the requested event window has no busy overlap on the
+ * configured booking calendar. Used at submit/checkout time so a stale open
+ * browser tab cannot book a slot Laura has since blocked on Google Calendar.
+ */
+export async function isCalendarWindowAvailable({
+  startISO,
+  endISO,
+  calendarId = process.env.BOOKING_CALENDAR_ID || 'primary',
+  timezone = process.env.BOOKING_TIMEZONE || 'America/New_York',
+  bufferMinutes = 0,
+} = {}) {
+  const start = new Date(startISO);
+  const end = new Date(endISO);
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return false;
+  if (end.getTime() <= start.getTime()) return false;
+
+  const bufMs = Math.max(0, Number(bufferMinutes) || 0) * 60 * 1000;
+  const queryStart = new Date(start.getTime() - bufMs);
+  const queryEnd = new Date(end.getTime() + bufMs);
+
+  const { calendar } = getGoogleClient();
+  const fb = await calendar.freebusy.query({
+    requestBody: {
+      timeMin: queryStart.toISOString(),
+      timeMax: queryEnd.toISOString(),
+      timeZone: timezone,
+      items: [{ id: calendarId }],
+    },
+  });
+
+  const busyRanges = (fb.data?.calendars?.[calendarId]?.busy || []).map((b) => ({
+    start: new Date(b.start).getTime(),
+    end: new Date(b.end).getTime(),
+  }));
+  return !busyRanges.some((b) => queryStart.getTime() < b.end && queryEnd.getTime() > b.start);
 }
 
 // ---------- env parsers ----------

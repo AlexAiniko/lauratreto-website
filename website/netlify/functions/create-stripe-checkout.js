@@ -17,10 +17,12 @@
 
 import Stripe from 'stripe';
 import { sanitize, isValidEmail, jsonResponse, rateLimit } from '../lib/sanitize.js';
-import { VALID_TIERS, TIER_META } from '../lib/dance-lesson.js';
+import { isCalendarWindowAvailable } from '../lib/calendar.js';
+import { VALID_TIERS, TIER_META, parseDanceLessonBookingDateTime } from '../lib/dance-lesson.js';
 
 const SUCCESS_URL = 'https://lauratreto.com/book-dance-lesson?status=success&session_id={CHECKOUT_SESSION_ID}';
 const CANCEL_URL = 'https://lauratreto.com/book-dance-lesson?status=cancel';
+const BOOKING_TIMEZONE = process.env.BOOKING_TIMEZONE || 'America/New_York';
 
 const TIER_DESCRIPTION = {
   solo:   '60-min private dance lesson with Laura Treto in Key West.',
@@ -78,6 +80,31 @@ export default async (request) => {
   const tierMeta = TIER_META[tier];
   const tierLabel = tierMeta.label;
   const description = TIER_DESCRIPTION[tier] || tierLabel;
+
+  let requestedWindow = null;
+  try {
+    requestedWindow = parseDanceLessonBookingDateTime(date, time, BOOKING_TIMEZONE, tierMeta.durationMin);
+  } catch (err) {
+    console.error('[create-stripe-checkout] bad booking window:', err?.message || err);
+  }
+  if (!requestedWindow) {
+    return jsonResponse({ ok: false, error: 'Invalid booking time' }, 400);
+  }
+
+  try {
+    const available = await isCalendarWindowAvailable({
+      startISO: requestedWindow.startISO,
+      endISO: requestedWindow.endISO,
+      timezone: BOOKING_TIMEZONE,
+      bufferMinutes: 15,
+    });
+    if (!available) {
+      return jsonResponse({ ok: false, error: 'That time is no longer available. Pick another time.' }, 409);
+    }
+  } catch (err) {
+    console.error('[create-stripe-checkout] availability recheck failed:', err?.message || err);
+    return jsonResponse({ ok: false, error: 'Could not confirm that time. Please try again.' }, 502);
+  }
 
   // Stripe metadata has a 500-char limit per value, plus a 50-key max. Trim
   // notes hard so we never blow past it. Field count well under 50.

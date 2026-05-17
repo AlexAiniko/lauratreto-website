@@ -722,8 +722,8 @@
         <span id="bookingTrack"></span>
       </div>
       <h2 class="headline">Key West.</h2>
-      <p class="subhead" data-lang="en">20 min chat, on me. Just to say hi and hear what you want.</p>
-      <p class="subhead" data-lang="es">20 min para conversar, te invito yo. Solo para saludarnos y escuchar qué quieres.</p>
+      <p class="subhead" data-lang="en">30 min chat, on me. Just to say hi and hear what you want.</p>
+      <p class="subhead" data-lang="es">30 min para conversar, te invito yo. Solo para saludarnos y escuchar qué quieres.</p>
 
       <div class="method-toggle" role="radiogroup" aria-label="How to meet">
         <button type="button" class="method on" data-method="in-person">
@@ -822,6 +822,7 @@
     dateEn: null,
     dateEs: null,
     time: null,
+    timeLabel: null,
     lang: 'en',
   };
 
@@ -977,6 +978,21 @@
   const WEEKDAY_LETTER_ES = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
   const MONTH_ABBR_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   const MONTH_ABBR_ES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  function formatTimeLabel(time24) {
+    if (!time24 || typeof time24 !== 'string') return '';
+    const match = /^(\d{1,2}):(\d{2})$/.exec(time24.trim());
+    if (!match) return time24;
+    const hour = Number(match[1]);
+    const minute = Number(match[2]);
+    if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return time24;
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+    return hour12 + ':' + match[2] + ' ' + period;
+  }
+  function bookedTimeLabel() {
+    const label = state.timeLabel || formatTimeLabel(state.time);
+    return label ? label + ' ET' : '';
+  }
 
   // Live availability is the DEFAULT path. mountBooking() fetches
   // /.netlify/functions/calendar-availability and renders real slots. On any failure it falls
@@ -1013,6 +1029,7 @@
         const grid = document.getElementById('timeGrid');
         grid.querySelectorAll('.time').forEach((x) => x.classList.remove('on'));
         state.time = null;
+        state.timeLabel = null;
         updateBookingBtn();
       });
       strip.appendChild(btn);
@@ -1031,6 +1048,7 @@
         grid.querySelectorAll('.time').forEach((x) => x.classList.remove('on'));
         btn.classList.add('on');
         state.time = tm;
+        state.timeLabel = formatTimeLabel(tm);
         updateBookingBtn();
       });
       grid.appendChild(btn);
@@ -1098,6 +1116,7 @@
         // state.date will be overwritten by the picked slot's startISO on time click.
         state.date = first.startISO;
         state.time = null;
+        state.timeLabel = null;
 
         // Render this day's time slots
         grid.innerHTML = '';
@@ -1128,6 +1147,7 @@
             tBtn.classList.add('on');
             state.date = slot.startISO;
             state.time = slot.time24;
+            state.timeLabel = slot.displayTime;
             updateBookingBtn();
           });
           grid.appendChild(tBtn);
@@ -1141,12 +1161,12 @@
   }
 
   async function mountBooking() {
-    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · 20 MIN CHAT', es: ' · 20 MIN' });
+    document.getElementById('bookingTrack').innerHTML = trackLabel({ en: ' · 30 MIN CHAT', es: ' · 30 MIN' });
     state.meetingMethod = 'in-person';
     document.querySelectorAll('.method').forEach((b) => b.classList.toggle('on', b.dataset.method === 'in-person'));
 
     // Reset on remount (do this before any async work so state is clean while we fetch)
-    state.date = null; state.dateEn = null; state.dateEs = null; state.time = null;
+    state.date = null; state.dateEn = null; state.dateEs = null; state.time = null; state.timeLabel = null;
     state.name = ''; state.email = ''; state.phone = '';
     document.getElementById('bookName').value = '';
     document.getElementById('bookEmail').value = '';
@@ -1278,7 +1298,14 @@
       goto('booked');
       trackEvent('client_lead_captured', { bucket: state.track + '-' + state.mode, event_id: eventId, language: state.lang });
     } catch (err) {
-      errEl.textContent = state.lang === 'es' ? 'Algo falló. Inténtalo otra vez.' : 'Something went wrong. Try again.';
+      const slotUnavailable = err && (err.code === 'slot_unavailable' || /no longer available/i.test(err.message || ''));
+      if (slotUnavailable) {
+        errEl.textContent = state.lang === 'es'
+          ? 'Ese horario ya no está disponible. Elige otro.'
+          : 'That time is no longer available. Pick another one.';
+      } else {
+        errEl.textContent = state.lang === 'es' ? 'Algo falló. Inténtalo otra vez.' : 'Something went wrong. Try again.';
+      }
       btn.disabled = false; btn.style.opacity = '1';
     }
   });
@@ -1286,15 +1313,15 @@
   function mountBooked() {
     const isCall = state.meetingMethod === 'call';
     document.getElementById('bookedTrack').innerHTML = trackLabel({
-      en: isCall ? ' · 20 MIN CALL' : ' · 20 MIN CHAT',
-      es: isCall ? ' · 20 MIN' : ' · 20 MIN',
+      en: isCall ? ' · 30 MIN CALL' : ' · 30 MIN CHAT',
+      es: isCall ? ' · 30 MIN' : ' · 30 MIN',
     });
     document.getElementById('bookedDateEn').textContent = state.dateEn || '';
     document.getElementById('bookedDateEs').textContent = state.dateEs || '';
-    document.getElementById('bookedTime').textContent = state.time || '';
+    document.getElementById('bookedTime').textContent = bookedTimeLabel();
     document.getElementById('bookedMethodRow').innerHTML = isCall
-      ? '<span data-lang="en">20 min chat, on a call</span><span data-lang="es">20 min, por llamada</span>'
-      : '<span data-lang="en">20 min chat, in Key West</span><span data-lang="es">20 min, en Key West</span>';
+      ? '<span data-lang="en">30 min chat, on a call</span><span data-lang="es">30 min, por llamada</span>'
+      : '<span data-lang="en">30 min chat, in Key West</span><span data-lang="es">30 min, en Key West</span>';
     document.getElementById('bookedClosingEn').textContent = isCall
       ? "I'll call you. We'll talk and figure out where to start. I'll text you tonight to confirm."
       : "Coffee's on me when we meet. I'll text you tonight to confirm.";
@@ -1309,7 +1336,7 @@
       state.history = [];
       state.track = null; state.mode = null;
       state.name = ''; state.email = ''; state.phone = '';
-      state.date = null; state.dateEn = null; state.dateEs = null; state.time = null;
+      state.date = null; state.dateEn = null; state.dateEs = null; state.time = null; state.timeLabel = null;
       document.getElementById('captureOnlineForm').reset();
       goto('choose', { back: true });
     });
@@ -1335,7 +1362,11 @@
       body: JSON.stringify(body),
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || 'submit failed');
+    if (!res.ok) {
+      const error = new Error(data.error || 'submit failed');
+      error.code = data.code || '';
+      throw error;
+    }
     return data;
   }
 

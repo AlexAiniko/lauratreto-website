@@ -14,12 +14,13 @@
 // back gracefully (e.g. show a static time list).
 //
 // Rate limit: 60 GETs / minute / IP.
-// Cache: private, max-age=60 (slots refresh frequently).
+// Cache: no-store. Availability should reflect Google Calendar changes on each
+// fresh page load instead of waiting on CDN/browser cache.
 
 import { rateLimit, jsonResponse } from '../lib/sanitize.js';
 import { getAvailableSlots } from '../lib/calendar.js';
 
-const CACHE_HEADERS = { 'Cache-Control': 'private, max-age=60' };
+const CACHE_HEADERS = { 'Cache-Control': 'no-store, max-age=0' };
 
 export default async (request) => {
   if (request.method === 'OPTIONS') {

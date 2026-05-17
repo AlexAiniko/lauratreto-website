@@ -20,11 +20,11 @@
 //   BOOKING_TIMEZONE                         — IANA tz for events (default: America/New_York)
 
 import { getStore } from '@netlify/blobs';
-import { createBookingEvent } from '../lib/calendar.js';
+import { createBookingEvent, isCalendarWindowAvailable } from '../lib/calendar.js';
 import { sendBookingNotification, sendBookingConfirmation, sendWelcomeEmail } from '../lib/email.js';
 
 const BOOKING_TIMEZONE = process.env.BOOKING_TIMEZONE || 'America/New_York';
-const BOOKING_DURATION_MINUTES = 20;
+const BOOKING_DURATION_MINUTES = 30;
 
 const BUCKET_GROUPS = {
   'dance-online': process.env.MAILERLITE_GROUP_DANCE_ONLINE || 'TODO_DANCE_ONLINE_GROUP_ID',
@@ -140,6 +140,34 @@ export default async (request, context) => {
   if (testMode) {
     console.log('[client-funnel] TEST mode skip', { email, newBucket, eventId });
     return jsonResponse({ success: true, bucket: newBucket, dedup: false, test: true });
+  }
+
+  if (mode === 'local' && date && time) {
+    let requestedWindow = null;
+    try {
+      requestedWindow = parseBookingDateTime(date, time, BOOKING_TIMEZONE);
+    } catch (err) {
+      console.error('[client-funnel] slot validation: bad date/time', err?.message || err);
+    }
+    if (!requestedWindow) {
+      return jsonResponse({ error: 'Invalid booking time', code: 'invalid_slot' }, 400);
+    }
+    try {
+      const available = await isCalendarWindowAvailable({
+        startISO: requestedWindow.startISO,
+        endISO: requestedWindow.endISO,
+        timezone: BOOKING_TIMEZONE,
+      });
+      if (!available) {
+        return jsonResponse({
+          error: 'That time is no longer available. Please pick another time.',
+          code: 'slot_unavailable',
+        }, 409);
+      }
+    } catch (err) {
+      console.error('[client-funnel] slot validation failed:', err?.message || err);
+      return jsonResponse({ error: 'Could not confirm that time. Please try again.', code: 'slot_check_failed' }, 502);
+    }
   }
 
   const API_KEY = process.env.MAILERLITE_API_KEY;
@@ -420,7 +448,7 @@ async function runBookingPostProcess({
   }
 }
 
-// Convert client-side ISO date + "H:MM" time string + timezone into a 20-min
+// Convert client-side ISO date + "H:MM" time string + timezone into a 30-min
 // event window. Returns null if either input is unparseable.
 function parseBookingDateTime(dateISO, timeStr, tz) {
   const d = new Date(dateISO);

@@ -123,7 +123,7 @@ export async function createDanceLessonBooking({
   let endISO = null;
   try {
     if (date && time) {
-      const parsed = parseBookingDateTime(date, time, BOOKING_TIMEZONE, tierMeta.durationMin);
+      const parsed = parseDanceLessonBookingDateTime(date, time, BOOKING_TIMEZONE, tierMeta.durationMin);
       if (parsed) {
         startISO = parsed.startISO;
         endISO = parsed.endISO;
@@ -223,7 +223,7 @@ export async function createDanceLessonBooking({
 
 // ---------- helpers (mirrored from the original book-dance-lesson.js) ----------
 
-function parseBookingDateTime(dateISO, timeStr, tz, durationMinutes) {
+export function parseDanceLessonBookingDateTime(dateISO, timeStr, tz = BOOKING_TIMEZONE, durationMinutes = 60) {
   const d = new Date(dateISO);
   if (isNaN(d.getTime())) return null;
   const m = /^(\d{1,2}):(\d{2})$/.exec(String(timeStr).trim());
