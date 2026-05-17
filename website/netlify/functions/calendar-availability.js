@@ -7,8 +7,10 @@
 //
 // Query flags:
 //   days=14       window length (max 30)
-//   weekends=1    legacy wide-grid mode for /book-dance-lesson: 15-minute slots,
-//                 9am-7pm, and Sat+Sun included.
+//   weekends=1    legacy wide-grid mode for /book-dance-lesson: 30-minute start
+//                 cadence, 9am-7pm, and Sat+Sun included.
+//   duration=60   slot length for weekends=1, used to filter dance lessons
+//                 against the full paid lesson window.
 //
 // Errors return 200 with { slots: [], error: '...' } so the client can fall
 // back gracefully (e.g. show a static time list).
@@ -44,14 +46,16 @@ export default async (request) => {
   if (days > 30) days = 30; // hard cap
 
   // Default path mirrors Laura's Google Calendar appointment schedule for the
-  // Initial Consultation. weekends=1 is the older dance-lesson path and keeps
-  // the broad 15-minute grid with Sat+Sun included.
+  // Initial Consultation. weekends=1 is the dance-lesson path: broad hours,
+  // Sat+Sun included, 30-minute start cadence, and full lesson-length filtering.
   const includeWeekends = url.searchParams.get('weekends') === '1';
   const slotOpts = { days };
   if (includeWeekends) {
+    let duration = Number(url.searchParams.get('duration')) || 60;
+    if (!Number.isFinite(duration) || duration < 30 || duration > 180) duration = 60;
     slotOpts.availabilityWindows = null;
-    slotOpts.slotMinutes = 15;
-    slotOpts.slotStepMinutes = 15;
+    slotOpts.slotMinutes = duration;
+    slotOpts.slotStepMinutes = 30;
     slotOpts.bufferMinutes = 15;
     slotOpts.skipDays = new Set();
   }

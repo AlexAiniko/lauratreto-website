@@ -583,9 +583,9 @@
   <script>
     // ---------- TIER META ----------
     const TIERS = {
-      solo:   { label_en: 'Solo Lesson',   label_es: 'Clase individual', detail_en: '60 min, 1-on-1, in person',  detail_es: '60 min, uno a uno, en persona', price: '$150', priceLabel_en: 'Pay $150', priceLabel_es: 'Pagar $150' },
-      couple: { label_en: 'Couple Lesson', label_es: 'Clase en pareja',  detail_en: '60 min, two of you, in person', detail_es: '60 min, los dos, en persona', price: '$200', priceLabel_en: 'Pay $200', priceLabel_es: 'Pagar $200' },
-      group:  { label_en: 'Small Group',    label_es: 'Grupo pequeño', detail_en: '75 min, 3 to 6 people, in person', detail_es: '75 min, 3 a 6 personas, en persona', price: '$300', priceLabel_en: 'Pay $300', priceLabel_es: 'Pagar $300' },
+      solo:   { label_en: 'Solo Lesson',   label_es: 'Clase individual', detail_en: '60 min, 1-on-1, in person',  detail_es: '60 min, uno a uno, en persona', price: '$150', priceLabel_en: 'Pay $150', priceLabel_es: 'Pagar $150', durationMin: 60 },
+      couple: { label_en: 'Couple Lesson', label_es: 'Clase en pareja',  detail_en: '60 min, two of you, in person', detail_es: '60 min, los dos, en persona', price: '$200', priceLabel_en: 'Pay $200', priceLabel_es: 'Pagar $200', durationMin: 60 },
+      group:  { label_en: 'Small Group',    label_es: 'Grupo pequeño', detail_en: '75 min, 3 to 6 people, in person', detail_es: '75 min, 3 a 6 personas, en persona', price: '$300', priceLabel_en: 'Pay $300', priceLabel_es: 'Pagar $300', durationMin: 75 },
     };
     const VALID_TYPES = new Set(['solo', 'couple', 'group']);
 
@@ -664,6 +664,9 @@
       if (isEs) setLang('es'); else setLang('en');
       if (source === 'click' && prior !== type) {
         window.ltTrack('book_dance_lesson_type_switch', { from: prior, to: type });
+        state.date = null; state.time = null; state.dateEn = null; state.dateEs = null; state.displayTimeEn = null;
+        updateSubmitBtn();
+        mountAvailability();
       }
     }
     document.querySelectorAll('.type-toggle button').forEach(function(b){
@@ -680,6 +683,16 @@
     const MONTH_ABBR_EN = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
     const MONTH_ABBR_ES = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
     const FALLBACK_TIMES = ['9:00', '11:00', '13:00', '15:00', '17:00'];
+
+    function formatTimeLabel(time24) {
+      const parts = String(time24 || '').split(':');
+      const hour = Number(parts[0]);
+      const minute = Number(parts[1] || 0);
+      if (!Number.isFinite(hour) || !Number.isFinite(minute)) return time24 || '';
+      const period = hour >= 12 ? 'PM' : 'AM';
+      const hour12 = hour % 12 || 12;
+      return hour12 + ':' + String(minute).padStart(2, '0') + ' ' + period;
+    }
 
     function renderHardcodedBooking() {
       const strip = document.getElementById('dayStrip');
@@ -709,12 +722,12 @@
             const tBtn = document.createElement('button');
             tBtn.type = 'button';
             tBtn.className = 'time';
-            tBtn.textContent = tm;
+            tBtn.textContent = formatTimeLabel(tm);
             tBtn.addEventListener('click', () => {
               grid.querySelectorAll('.time').forEach((x) => x.classList.remove('on'));
               tBtn.classList.add('on');
               state.time = tm;
-              state.displayTimeEn = tm;
+              state.displayTimeEn = formatTimeLabel(tm);
               window.ltTrack('book_dance_lesson_slot_pick', { day: state.dateEn, slot: tm });
               updateSubmitBtn();
             });
@@ -848,7 +861,8 @@
 
       let slots = null;
       try {
-        const res = await fetch('/.netlify/functions/calendar-availability?days=14&weekends=1', {
+        const duration = TIERS[state.type] && TIERS[state.type].durationMin ? TIERS[state.type].durationMin : 60;
+        const res = await fetch('/.netlify/functions/calendar-availability?days=14&weekends=1&duration=' + encodeURIComponent(duration), {
           headers: { 'Accept': 'application/json' },
         });
         if (res.ok) {
