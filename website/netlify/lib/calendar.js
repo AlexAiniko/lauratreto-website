@@ -29,7 +29,7 @@ export async function getAvailableSlots({
   availabilityWindows = DEFAULT_CONSULT_WINDOWS,
   slotMinutes = 20,
   slotStepMinutes = 45,
-  bufferMinutes = 15,
+  bufferMinutes = 0,
   timezone = process.env.BOOKING_TIMEZONE || 'America/New_York',
   skipDays = null,
 } = {}) {

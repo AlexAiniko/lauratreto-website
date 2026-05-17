@@ -51,6 +51,7 @@ export default async (request) => {
     slotOpts.availabilityWindows = null;
     slotOpts.slotMinutes = 15;
     slotOpts.slotStepMinutes = 15;
+    slotOpts.bufferMinutes = 15;
     slotOpts.skipDays = new Set();
   }
 
