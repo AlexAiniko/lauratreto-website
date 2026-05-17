@@ -138,7 +138,10 @@ const DEFAULT_CONSULT_WINDOWS = new Map([
     toWindow('16:00', '21:00'),
   ]],
   [3, [toWindow('9:00', '14:00')]],
-  [4, [toWindow('8:00', '17:00')]],
+  [4, [
+    toWindow('8:00', '10:00'),
+    toWindow('11:00', '17:00'),
+  ]],
   [5, [toWindow('12:00', '17:00')]],
   [6, [toWindow('12:00', '15:30')]],
 ]);
